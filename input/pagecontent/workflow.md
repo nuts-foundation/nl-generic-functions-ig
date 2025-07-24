@@ -30,9 +30,9 @@ More [advanced FHIR workflow patterns](https://hl7.org/fhir/R4/workflow-manageme
 <!-- 
 In Shared Care Planning, an advanced FHIR workflow pattern is used to cover all requirements for a generic workflow process between organizations. The process is based on [FHIR workflow pattern G](https://hl7.org/fhir/R4/workflow-management.html#optiong), but SCP nodes can also use pattern [F](https://hl7.org/fhir/R4/workflow-management.html#optionf) or [H](https://hl7.org/fhir/R4/workflow-management.html#optionh) depending on the capabilities of their healthcare systems. The main difference between these 3 patterns (F, G and H) is the location of the Task; it can be stored at the requester, performer or at a third party (broker). For example; if you'd want to create a Task at the performer, but their EHR does not support it, you may choose to create a Task at your own EHR and notify the performer (and thus following pattern [F](https://hl7.org/fhir/R4/workflow-management.html#optionf) in stead of [G](https://hl7.org/fhir/R4/workflow-management.html#optiong)). SCP uses [notifications](./notification.md) in between nodes to provide quick feedback/updates in initial phase of a Task (creation to acceptance/rejectance).
 
-#### Task workflow Option G: Creation of Task on performer's system
+#### Task workflow Option F: Creation of Task on performer's system
 <div>
-{% include workflow-base-g.svg %}
+{% include workflow-base-f.svg %}
 </div>
 
 #### Notification of stakeholders

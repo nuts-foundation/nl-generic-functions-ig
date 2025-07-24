@@ -1,0 +1,82 @@
+@startuml overview-task-negotiation-1-2
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+
+
+!pragma teoz true
+
+box Care Provider 1 #e8d0a9
+    actor "Practitioner" as Practitioner1
+    participant "Care Plan Contributor" as CPC1 #LightGray
+    participant "<font color=white>Care Plan Service" as CPS #Gray
+end box
+box Care Provider 2 #acd1e9
+     participant "Care Plan Contributor" as CPC2 #LightGray
+    participant "Task manager" as EHR2
+    actor "Practitioner" as Practitioner2
+end box
+
+activate Practitioner1
+autonumber
+Practitioner1 -> CPC1 : Start Request\nreferral
+& CPC1 -> CPS : Find/select CarePlan
+
+CPC1 -> CPS : Create Task\n referring Request,\n Condition and CarePlan\n (if any)
+& CPS -> CPS  : Update CareTeam, CarePlan\n and Subscriptions
+CPS o-> CPC1 : Notify CareTeam update,\n CarePlan update
+& CPS o-> CPC2  : Notify Task created
+& CPC2 -> EHR2  : Notify Task created
+& note right EHR2 #WhiteSmoke
+<color #DarkSlateGray>Actions in gray
+ <color #DarkSlateGray>are optional
+end note
+
+autonumber 10 "<font color=DarkSlateGray>0"
+ EHR2 -[#DarkSlateGray]> EHR2 : <color #DarkSlateGray>evaluate Task\n <color #DarkSlateGray>(required data,\n <color #DarkSlateGray>capacity, etc)
+&EHR2 -[#DarkSlateGray]> CPC2 : <color #DarkSlateGray>Need more information
+& CPC2 -[#DarkSlateGray]> CPS  : <color #DarkSlateGray>Create (sub-)Task2: do\n <color #DarkSlateGray> Questionnaire 'required data'
+& CPS -[#DarkSlateGray]> CPC1 : <color #DarkSlateGray>Notify Task2 created
+& CPC1 -[#DarkSlateGray]> Practitioner1 : <color #DarkSlateGray>Present Questionnaire\n<color #DarkSlateGray>(prefill data from EHR)
+
+Practitioner1 -[#DarkSlateGray]> CPC1 : <color #DarkSlateGray>Complete\n <color #DarkSlateGray>QuestionnaireResponse
+& CPC1 -[#DarkSlateGray]> CPS : <color #DarkSlateGray>Update Task2: Add\n <color #DarkSlateGray>QuestionnaireResponse
+& CPS -[#DarkSlateGray]> CPC2 : <color #DarkSlateGray>Notify Task2 update
+& CPC2 -[#DarkSlateGray]> EHR2 : <color #DarkSlateGray>Notify Task2 update
+
+' autonumber 20 "<font color=DarkSlateGray>0"
+' EHR2 -[#DarkSlateGray]> EHR2 : <color #DarkSlateGray>evaluate Task\n <color #DarkSlateGray>(required data,\n <color #DarkSlateGray>capacity, etc)
+' & EHR2 -[#DarkSlateGray]> CPC2 : <color #DarkSlateGray>need patient\n <color #DarkSlateGray>contact details
+' & CPC2 -[#DarkSlateGray]> CPS : <color #DarkSlateGray>Create (sub-)Task3: \n <color #DarkSlateGray>status 'ready',\n <color #DarkSlateGray> Questionnaire patient\n <color #DarkSlateGray>contact details in Task3.input
+' & CPS -[#DarkSlateGray]> CPC1 :<color #DarkSlateGray>Notify Task3 created
+' & CPC1 -[#DarkSlateGray]> Practitioner1 : <color #DarkSlateGray>Present Questionnaire\n<color #DarkSlateGray>(prefill data from EHR)
+
+' Practitioner1 -[#DarkSlateGray]> CPC1 : <color #DarkSlateGray>Complete\n <color #DarkSlateGray>QuestionnaireResponse
+' & CPC1 -[#DarkSlateGray]> CPS : <color #DarkSlateGray>Update Task3: \n <color #DarkSlateGray>status 'completed', Add\n <color #DarkSlateGray>QuestionnaireResponse\n <color #DarkSlateGray>to Task3.output
+' & CPS -[#DarkSlateGray]> CPC2 : <color #DarkSlateGray>Notify Task3 update
+' & CPC2 -[#DarkSlateGray]> EHR2 : <color #DarkSlateGray>Notify Task3 update
+
+autonumber 30
+EHR2 -> EHR2 : evaluate Task:\n status 'accepted'
+& EHR2 -> CPC2 : Notify Task update
+& CPC2 -> CPS : Update Task: \n status 'accepted'
+CPS -> CPS  : Update CareTeam, CarePlan
+CPS o-> CPC1 :Notify Task accepted\n CareTeam updated\n CarePlan updated
+& CPS o-> CPC2 :Notify CareTeam updated\n CarePlan updated
+& CPC1 -> Practitioner1 : Your order \nis accepted
+deactivate Practitioner1
+
+== waiting for Task to start ==
+activate Practitioner2
+Practitioner2 -> EHR2 : starting with Task
+& EHR2 -> CPC2 : Task in-progress
+& CPC2 -> CPS : Update Task: status in-progress
+& CPS -> CPC1 : Notify Task update
+
+== waiting for Task to finish ==
+Practitioner2 -> EHR2 : Task done
+& EHR2 -> CPC2 : Task is done
+& CPC2 -> CPS : Update Task: status complete
+& CPS -> CPC1 : Notify Task update
+deactivate Practitioner2
+@enduml
