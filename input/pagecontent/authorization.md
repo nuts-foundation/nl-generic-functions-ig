@@ -1,4 +1,4 @@
-### The authorization model
+### Authorization specifications
 
 <!-- The Shared Care Planning (SCP) authorization model is based on the authority of the Care Plan Service (CPS). This service maintains the Care Plan and is responsible for all the due diligence that is required to build up the required trust for all Care Plan Contributors (CPC) in the network.
 

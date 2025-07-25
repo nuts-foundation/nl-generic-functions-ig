@@ -1,4 +1,6 @@
-### Summary of IHE mobile Care Service Discovery
+### Care Service Discovery specifications
+
+<!-- ### Summary of IHE mobile Care Service Discovery
 The [IHE mCSD (Mobile Care Services Discovery)](https://profiles.ihe.net/ITI/mCSD/ImplementationGuide/ihe.iti.mcsd|3.9.0) specification is part of the Integrating the Healthcare Enterprise (IHE) initiative. It focusses on how it enables healthcare organizations to discover and address care services. It includes FHIR R4-based resourcetypes Organization, OrganizationAffiliation, Location, Practitioner, PractitionerRole, HealthcareService and Endpoints. IHE mCSD has defined profiles for concepts Facility and Jurisdiction.
 IHE mCSD uses standard FHIR REST queries to, periodically, collect/update all resources in a central (e.g. National) repository. It also uses standard FHIR REST queries to search/select resources from a central repository. Key features for resourcetypes used in SCP:
 - Organization: Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An organization has a unique identifier and may have additional administrative attributes such as contact person, mailing address, etc. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
@@ -84,4 +86,4 @@ A CSD endpoint will perform the IHE mCSD role of 'Care Services Selective Suppli
 
 ### requirements for Care Service Directory service
 
-A CSD node/client will perform the IHE mCSD role of 'Care Services Update Consumer'. It should periodically loop through all SCP node and fetch any changes in the registered entities and merging those in the repoository of the CSD. 
+A CSD node/client will perform the IHE mCSD role of 'Care Services Update Consumer'. It should periodically loop through all SCP node and fetch any changes in the registered entities and merging those in the repoository of the CSD.  -->

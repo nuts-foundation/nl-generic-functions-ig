@@ -1,5 +1,5 @@
-
-# Motivation for NL Generic Functions IG.
+# Placeholder for introductory motivation, concepts, organization, etc
+<!-- # Motivation for NL Generic Functions IG. -->
 <!-- Rising healthcare costs are unsustainable in the long term. By making healthcare more efficient, we can ensure the sustainability of healthcare systems, safeguarding access to care for future generations. In The Netherlands, many patients visit multiple practitioners during their treatment, at different organizations. Continuous care coordination and/or collaboration comes with high costs. Currently, these practitioners either handover the patient to a different care-provider or practitioners use the same IT-system for collaboration. Both methods have severe disadvantages. 
 
 Using the Dutch handover-process, it requires the initiating party to write a hand-over-letter, collect and send data. The 'receiving' party has to read this letter and decide what to do with the data; either reconciliate (copy) the data in their own system or discard the data. The receiving party is often required to send back a 'discharge' letter after treatment. The process of handovers involves a significant amount of administrative work. When two practitioners would like to collaborate (back and forth) using this handover-process, the administrative burden increases because data might be duplicated at every handover. When more than two parties are involved in a collaboration, the handover-process is even more challenging to coordinate care and relevant/up-to-date data.
@@ -7,7 +7,7 @@ When practitioners of different organizations use the same IT-system, collaborat
 
 Shared Care Planning (SCP) provides the structures and transactions for care planning, collaboration between practitioners by cross-organizational ordering processes, data localization and authorization of members involved in the careteam of a patient. Improved collaboration between different types of care providers (e.g. GP, homecare or hospitals) should improve efficiency in hybrid or network-care settings. It should lower the administrative burden for practitioners without having to switch to auxillary collaboration-systems. For practitioners and patients, Shared Care Planning provides an overview of related activities and participants in a care plan and care team. Shared Care Planning lowers the barriers that may exists between care organisations. Cross-organization referrals, communication or data access should be as simple and ubiquitous as a practitioner would do within a single care organization. -->
 
-### Concepts
+<!-- ### Concepts -->
 <!-- In order to create a standard for cross-organizational workflow and data access, we'll set some guiding principles:
 - Data at the source system remains the single-point-of-truth. Data may be copied from one to the other organization, but these copies are just to reduce operational dependencies (i.e. cache). An update should be always be applied on the original instance.
 - Shared Care Planning builds on international standards HL7 FHIR and IHE profiles. It is basically a selection (not an extension) of existing specifications which are used/combined to create a guide for cross-organizational workflow and data access.

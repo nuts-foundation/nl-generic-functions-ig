@@ -1,4 +1,6 @@
-### Summary of workflow in FHIR core specification
+### Workflow specification
+
+<!-- ### Summary of workflow in FHIR core specification
 The FHIR R4 Workflow Module provides a standardized approach to managing processes and workflows within healthcare systems using FHIR standards. It defines a set of resources and operations to model, manage, and track workflow activities across various healthcare applications. This can be used for several use cases, to basically, 'ask for stuff' like:
 - Here's a drug prescription/lab order
 - Referrals
@@ -26,7 +28,7 @@ Another option would be to just use a Task resource without the 'request' resour
 
 More [advanced FHIR workflow patterns](https://hl7.org/fhir/R4/workflow-management.html) make use of a Task resource to enable negotiation and state-management for a specific request (e.g. ServiceRequest or MedicationRequest). It 'solves' the limitations of the simpler workflows, but it adds extra overhead and may add requirements for the healthcare systems of requester and performer.
 
-### Workflow in NL Generic Functions IG
+### Workflow in NL Generic Functions IG -->
 <!-- 
 In Shared Care Planning, an advanced FHIR workflow pattern is used to cover all requirements for a generic workflow process between organizations. The process is based on [FHIR workflow pattern G](https://hl7.org/fhir/R4/workflow-management.html#optiong), but SCP nodes can also use pattern [F](https://hl7.org/fhir/R4/workflow-management.html#optionf) or [H](https://hl7.org/fhir/R4/workflow-management.html#optionh) depending on the capabilities of their healthcare systems. The main difference between these 3 patterns (F, G and H) is the location of the Task; it can be stored at the requester, performer or at a third party (broker). For example; if you'd want to create a Task at the performer, but their EHR does not support it, you may choose to create a Task at your own EHR and notify the performer (and thus following pattern [F](https://hl7.org/fhir/R4/workflow-management.html#optionf) in stead of [G](https://hl7.org/fhir/R4/workflow-management.html#optiong)). SCP uses [notifications](./notification.md) in between nodes to provide quick feedback/updates in initial phase of a Task (creation to acceptance/rejectance).
 

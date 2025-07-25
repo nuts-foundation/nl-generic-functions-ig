@@ -1,4 +1,5 @@
-### Summary of IHE Dynamic Care Team Management (DCTM)
+### CareTeam specifications
+<!-- ### Summary of IHE Dynamic Care Team Management (DCTM) -->
 <!-- The FHIR CarePlan resource is a framework for documenting and managing healthcare interventions and goals. It ensures that all relevant information is available to all stakeholders, promoting coordinated and effective care delivery. -->
 
 <!-- ### Care Planning in Shared Care Planning

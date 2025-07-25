@@ -1,4 +1,5 @@
-### Summary of the notification framework in FHIR core
+### Notification specifications
+<!-- ### Summary of the notification framework in FHIR core
 
 The [FHIR Subscription Framework](https://build.fhir.org/subscriptions.html) facilitates real-time event notifications from a FHIR server to other systems. It uses three core resources: SubscriptionTopic (defining events and triggers), Subscription (describing client requests for notifications), and notification Bundles (containing an event-notification, handshake-notification or heartbeat-notification). Clients request notifications based on specific topics, and servers send them using different communication channels. There are two subscription management styles: In-Band (client-managed) and Out-of-Band (server-managed). These interactions may involve technologies like REST hooks or websockets, allowing clients to receive notifications based on predefined conditions. 
 In essence, the Out-of-Band (server-managed) style transfers much of the management burden from the client to the server, with the server being responsible for event processing, notification delivery, and system resilience.
@@ -46,4 +47,4 @@ A Shared Care Planning node shall implement the role of a **subscription client*
 The subscription client, being responsible for resolving failures, should also track the subscription's state to highlight and fix any erroneous communication.
 
 In order to implement this subscription framework in FHIR version R4, the [Subscriptions R5 Backport for R4](https://hl7.org/fhir/uv/subscriptions-backport/) is used.
-Check out the example instances for a [subscription](Subscription-cps-sub-hospitalx.json.html) or [notification-bundle](Bundle-notification-hospitalx-01.json.html).
+Check out the example instances for a [subscription](Subscription-cps-sub-hospitalx.json.html) or [notification-bundle](Bundle-notification-hospitalx-01.json.html). -->
