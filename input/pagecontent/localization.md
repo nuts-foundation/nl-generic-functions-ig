@@ -66,14 +66,6 @@ Full versioning support for audit trails:
 - **Conditional Updates with ETag**: Implementation of optimistic concurrency control using ETags to prevent lost updates when multiple clients modify the same resource. For example, when updating an EpisodeOfCare, the client must include the `If-Match` header with the current ETag value (e.g., `If-Match: W/"3"`). If the resource has been modified by another client since retrieval, the server returns HTTP 412 (Precondition Failed), preventing accidental overwrites
 - **No Pagination**: The implementation does not support pagination for search results or history operations - all matching resources are returned in a single Bundle response
 
-##### Validation and Constraints
-When creating new EpisodeOfCare resources, the system enforces uniqueness constraints on:
-- Patient BSN (Burgerservicenummer)
-- Diagnosis codes
-- Overlapping time periods for the same patient-diagnosis combination
-
-Validation failures return HTTP 422 (Unprocessable Entity) with detailed error messages.
-
 ##### Security and Privacy Considerations
 - Initial implementation uses raw BSN for patient identification
 - Future iterations will implement anonymization techniques to enhance privacy
