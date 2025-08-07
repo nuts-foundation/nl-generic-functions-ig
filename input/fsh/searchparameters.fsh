@@ -4,11 +4,11 @@
 Instance: EpisodeOfCare-patient-identifier
 InstanceOf: SearchParameter
 Usage: #definition
-* url = "http://nuts-foundation.github.io/nl-generic-functions-ig/gfdl-searchparameter-episodeofcare-subject-identifier.json"
-* name = "subject-identifier"
+* url = "http://nuts-foundation.github.io/nl-generic-functions-ig/gfdl-searchparameter-episodeofcare-patient-identifier.json"
+* name = "patient-identifier"
 * status = #active
 * description = "Search EpisodeOfCare by patient identifier"
-* code = #subject-identifier
+* code = #patient-identifier
 * base = #EpisodeOfCare
 * type = #token
 * expression = "EpisodeOfCare.patient.identifier"
