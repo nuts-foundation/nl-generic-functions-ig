@@ -1,4 +1,5 @@
 ### Patient's Data Localization
+For more details: [Generieke Functie Lokalisatie](generieke-functie-lokalisatie.html)
 
 #### Rationale for choosing Episode of Care
 For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we need a FHIR resource that can represent the relationship between a patient, their conditions, and the organizations providing care.
@@ -82,5 +83,3 @@ Authentication and authorization will likely be implemented using one of the fol
 
 ##### Implicit Period Filtering in Search
 - Should we automatically apply an additional period range search filter based on the current time (`now()`) when no period parameter is specified in the search query? This would ensure that only currently active episodes (where period includes the current date) are returned by default.
-
-
