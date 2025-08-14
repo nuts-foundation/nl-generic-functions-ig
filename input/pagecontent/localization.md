@@ -2,7 +2,7 @@
 For more details: [Generieke Functie Lokalisatie](generieke-functie-lokalisatie.html)
 
 #### Rationale for choosing Episode of Care
-For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we need a FHIR resource that can represent the relationship between a patient, their conditions, and the organizations providing care.
+For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we need a FHIR resource that can represent the relationship between a patient, the medical specialty or department, and the organizations providing care.
 
 Candidates for a FHIR resource that holds the triplet Patient - Condition - Organization are:
  * EpisodeOfCare
@@ -13,7 +13,7 @@ Candidates for a FHIR resource that holds the triplet Patient - Condition - Orga
 The EpisodeOfCare resource is designed to represent a period of care for a patient under the responsibility of a provider or organization. This aligns well with NVI requirements as it naturally includes:
 - The Patient (via `EpisodeOfCare.patient`)
 - The Managing Organization (via `EpisodeOfCare.managingOrganization`)
-- The Conditions that are the reason for the care episode (via `EpisodeOfCare.diagnosis.condition`)
+- The medical specialty or department (via `EpisodeOfCare.type` using a specific code system)
 - The temporal aspect (via `EpisodeOfCare.period`), which is crucial for NVI as it needs to track when organizations are involved in a patient's care network, allowing for proper management of care provider relationships over time
 
 ##### Distinction from Shared Care Planning
@@ -28,23 +28,23 @@ The NVI implementation exposes a subset of the FHIR API specification, focusing 
 ###### Search
 Query EpisodeOfCare resources with required and optional parameters:
 - **Required parameter**: Patient BSN (Burgerservicenummer) - all searches must include the patient identifier
-- **Common parameter**: `EpisodeOfCare.diagnosis.condition` - typically required to filter episodes by specific conditions
+- **Common parameter**: `EpisodeOfCare.type` - typically required to filter episodes by medical specialty or department
 - **Default behavior**: If status is not specified as a search parameter, the search automatically filters for `status=active` only
-- **Example**: `GET [base]/EpisodeOfCare?patient.identifier=http://fhir.nl/fhir/NamingSystem/bsn|999999999&diagnosis.condition=http://snomed.info/sct|73211009`
+- **Example**: `GET [base]/EpisodeOfCare?patient.identifier=http://fhir.nl/fhir/NamingSystem/bsn|999999999&type=http://example.org/fhir/CodeSystem/medical-specialty|cardiology`
 - Returns a Bundle containing matching EpisodeOfCare resources
 
 ###### Create
 Add new EpisodeOfCare instances with comprehensive validation:
-- **Required fields**: Patient reference (with BSN), managing organization, and diagnosis condition
-- **Validation**: System checks for uniqueness of BSN + diagnosis + overlapping periods combination
+- **Required fields**: Patient reference (with BSN), managing organization, and medical specialty/department type
+- **Validation**: System checks for uniqueness of BSN + medical specialty/department + overlapping periods combination
 - **Example**: `POST [base]/EpisodeOfCare` with EpisodeOfCare resource in request body
 - Returns HTTP 201 (Created) with the new resource, or HTTP 422 (Unprocessable Entity) if validation fails
 
 ###### Update
 Modify existing EpisodeOfCare resources with restricted field updates:
 - **Allowed updates**: Only status changes (planned, active, onhold, finished) and period adjustments are permitted
-- **Restricted fields**: Patient reference, diagnosis, and managing organization cannot be modified after creation
-- **Validation**: Same uniqueness constraints as Create operation - checks BSN + diagnosis + overlapping periods combination
+- **Restricted fields**: Patient reference, medical specialty/department type, and managing organization cannot be modified after creation
+- **Validation**: Same uniqueness constraints as Create operation - checks BSN + medical specialty/department + overlapping periods combination
 - **Required**: Resource ID and current version (via ETag for conditional updates)
 - **Example**: `PUT [base]/EpisodeOfCare/[id]` with `If-Match: W/"2"` header
 - Returns HTTP 200 (OK) with updated resource, HTTP 412 if version conflict, or HTTP 422 if validation fails or attempting to modify restricted fields

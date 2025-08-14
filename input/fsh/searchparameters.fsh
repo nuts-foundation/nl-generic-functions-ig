@@ -14,3 +14,17 @@ Usage: #definition
 * expression = "EpisodeOfCare.patient.identifier"
 * xpathUsage = #normal
 * xpath = "f:EpisodeOfCare/f:patient/f:identifier"
+
+Instance: EpisodeOfCare-type
+InstanceOf: SearchParameter
+Usage: #definition
+* url = "http://nuts-foundation.github.io/nl-generic-functions-ig/gfdl-searchparameter-episodeofcare-type.json"
+* name = "type"
+* status = #active
+* description = "Search EpisodeOfCare by medical specialty or department type"
+* code = #type
+* base = #EpisodeOfCare
+* type = #token
+* expression = "EpisodeOfCare.type"
+* xpathUsage = #normal
+* xpath = "f:EpisodeOfCare/f:type"
