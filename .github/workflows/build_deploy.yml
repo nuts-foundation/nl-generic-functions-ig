@@ -53,7 +53,12 @@ jobs:
       - name: Build
         run: |
           mkdir -p ./output
-          docker run --name=scp --rm -v ./input:/app/input -v ./output:/app/output localhost:5000/nuts-foundation/publisher:latest
+          docker run --name=scp --rm \
+            -v ${{ github.workspace }}/input:/app/input \
+            -v ${{ github.workspace }}/output:/app/output \
+            -v ${{ github.workspace }}/ig.ini:/app/ig.ini \
+            -v ${{ github.workspace }}/sushi-config.yaml:/app/sushi-config.yaml \
+            localhost:5000/nuts-foundation/publisher:latest
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
