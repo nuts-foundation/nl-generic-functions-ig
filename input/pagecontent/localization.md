@@ -4,6 +4,8 @@ For more details: [Generieke Functie Lokalisatie](generieke-functie-lokalisatie.
 #### Rationale for choosing Episode of Care
 For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we need a FHIR resource that can represent the relationship between a patient, the medical specialty or department, and the organizations providing care.
 
+The implementation is defined in the [GFDLEpisodeOfCare Profile](StructureDefinition-GFDLEpisodeOfCare.html), which constrains the standard FHIR EpisodeOfCare resource for NVI usage.
+
 Candidates for a FHIR resource that holds the triplet Patient - Condition - Organization are:
  * EpisodeOfCare
  * CarePlan
@@ -13,7 +15,7 @@ Candidates for a FHIR resource that holds the triplet Patient - Condition - Orga
 The EpisodeOfCare resource is designed to represent a period of care for a patient under the responsibility of a provider or organization. This aligns well with NVI requirements as it naturally includes:
 - The Patient (via `EpisodeOfCare.patient`)
 - The Managing Organization (via `EpisodeOfCare.managingOrganization`)
-- The medical specialty or department (via `EpisodeOfCare.type` using a specific code system)
+- The medical specialty or department (via `EpisodeOfCare.type` using the [GFDLMedicalSpecialty CodeSystem](CodeSystem-gfdl-medical-specialty.html))
 - The temporal aspect (via `EpisodeOfCare.period`), which is crucial for NVI as it needs to track when organizations are involved in a patient's care network, allowing for proper management of care provider relationships over time
 
 ##### Distinction from Shared Care Planning
@@ -23,12 +25,28 @@ An important consideration is that the [Shared Care Planning](https://santeonnl.
 
 The NVI implementation exposes a subset of the FHIR API specification, focusing on the essential operations needed for managing the network of involved care providers.
 
+##### FHIR Artifacts
+
+The following FHIR artifacts define the technical implementation:
+
+**Profiles:**
+- [GFDLEpisodeOfCare](StructureDefinition-GFDLEpisodeOfCare.html) - Constrains EpisodeOfCare for NVI usage
+
+**Code Systems and Value Sets:**
+- [GFDLMedicalSpecialty CodeSystem](CodeSystem-gfdl-medical-specialty.html) - Defines medical specialties and departments
+- [GFDLMedicalSpecialty ValueSet](ValueSet-gfdl-medical-specialty-vs.html) - Allowed values for EpisodeOfCare.type
+- [GFDLEpisodeOfCare Status ValueSet](ValueSet-gfdl-episodeofcare-status.html) - Allowed status values (excludes 'planned', 'waitlist', 'onhold')
+
+**Search Parameters:**
+- [patient-identifier](SearchParameter-EpisodeOfCare-patient-identifier.html) - Search by patient BSN
+- [type](SearchParameter-EpisodeOfCare-type.html) - Search by medical specialty/department
+
 ##### Supported Interactions
 
 ###### Search
 Query EpisodeOfCare resources with required and optional parameters:
-- **Required parameter**: Patient BSN (Burgerservicenummer) - all searches must include the patient identifier
-- **Common parameter**: `EpisodeOfCare.type` - typically required to filter episodes by medical specialty or department
+- **Required parameter**: Patient BSN (Burgerservicenummer) - all searches must include the patient identifier (see [patient-identifier SearchParameter](SearchParameter-EpisodeOfCare-patient-identifier.html))
+- **Common parameter**: `EpisodeOfCare.type` - typically required to filter episodes by medical specialty or department (see [type SearchParameter](SearchParameter-EpisodeOfCare-type.html))
 - **Default behavior**: If status is not specified as a search parameter, the search automatically filters for `status=active` only
 - **Example**: `GET [base]/EpisodeOfCare?patient.identifier=http://fhir.nl/fhir/NamingSystem/bsn|999999999&type=http://example.org/fhir/CodeSystem/medical-specialty|cardiology`
 - Returns a Bundle containing matching EpisodeOfCare resources
