@@ -1,5 +1,5 @@
 ### Patient's Data Localization
-For more details: [Generieke Functie Lokalisatie](generieke-functie-lokalisatie.html)
+For more details: [A short summary of Generieke Functie Lokalisatie (Generic Localization Function)](generieke-functie-lokalisatie.html)
 
 #### Rationale for choosing Episode of Care
 For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we need a FHIR resource that can represent the relationship between a patient, the medical specialty or department, and the organizations providing care.

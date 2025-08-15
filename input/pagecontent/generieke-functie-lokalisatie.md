@@ -1,4 +1,4 @@
-### Generieke Functie Lokalisatie (Generic Localization Function)
+### A short summary of Generieke Functie Lokalisatie (Generic Localization Function)
 
 #### Executive Summary
 
