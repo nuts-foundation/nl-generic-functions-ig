@@ -18,6 +18,28 @@ The EpisodeOfCare resource is designed to represent a period of care for a patie
 - The medical specialty or department (via `EpisodeOfCare.type` using the [GFDLMedicalSpecialty CodeSystem](CodeSystem-gfdl-medical-specialty.html))
 - The temporal aspect (via `EpisodeOfCare.period`), which is crucial for NVI as it needs to track when organizations are involved in a patient's care network, allowing for proper management of care provider relationships over time
 
+##### Considerations around CareTeam
+
+While CareTeam might initially seem like a suitable resource for tracking healthcare provider involvement, it presents several fundamental challenges for NVI implementation:
+
+**Structural Mismatch**
+The CareTeam resource holds a list of members rather than representing a single relationship. This fundamental difference creates complexity:
+- The use of CareTeam could imply consolidation of multiple providers at the condition level, joining patient/condition pairs
+- The list-based structure implies multiple parties are involved, this requires complex resource management
+- NVI needs to track individual organization-patient relationships, not collaborative groups
+
+**Management Complexity**
+The multi-party nature of CareTeam complicates essential operations:
+- **CRUD Management**: If one organization creates a CareTeam for a condition, and another organization independently creates one for the same care context (type) creates ambiguity in data management.
+- **Access Control**: With multiple members in a single resource, determining who can view, update, or delete the resource becomes complex
+- **Update Conflicts**: Changes by one member requires elaborate update logic on the implementation.
+
+**Semantic Differences**
+On a fundamental level, CareTeam and NVI serve different purposes:
+- **CareTeam** represents active collaboration between healthcare providers working together on patient care
+- **NVI** functions as an index - a registry of which organizations have data, without implying collaboration
+- While NVI could potentially serve as a seed or starting point for collaboration initiatives like SCP, conflating indexing with collaboration would compromise both functions
+
 ##### Distinction from Shared Care Planning
 An important consideration is that the [Shared Care Planning](https://santeonnl.github.io/shared-care-planning/) initiative already uses CarePlan and CareTeam resources to manage the care network of a patient. Since NVI has a different goal and scope, using EpisodeOfCare avoids semantic conflicts by not overloading the same entities (CarePlan and CareTeam) with different meanings in different contexts. For instance, SCP chooses to have one single CarePlan / CareTeam resource and add the Organizations as members. The SCP also manages Tasks, which NVI will never support.
 
