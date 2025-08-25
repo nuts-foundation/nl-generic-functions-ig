@@ -8,18 +8,18 @@ hide footbox
 
 actor  Patient as "Vera"
 actor  Doctor as "Dr. West"
-participant  EHR as "EHR (Care Services Selective Consumer)"
-participant  CSD as "Care Service Directory"
+participant  EHR as "EHR (Query Client)"
+participant  CSD as "Query Directory"
 
 activate Patient
 activate Doctor
 Patient -> Doctor: My knee hurts
 Doctor -> Doctor: diagnosis = torn ACL
 activate EHR
-Doctor -> EHR: use EHR's custom query tool \nsearch for orthopedic surgeons, \nwithin 30km of Vera's home
+Doctor -> EHR: use EHR's custom query tool \nsearch for orthopedic services, \nwithin 30km of Vera's home
 activate CSD
 EHR-> CSD: Find Matching Care Services request
-CSD -> EHR: Find Matching Care Services response\ncontaining PractitionerRole list
+CSD -> EHR: Find Matching Care Services response\ncontaining HealthcareServices list
 deactivate CSD
 EHR -> EHR: Resolve References
 EHR -> Doctor : Review results\nwith office address, hours of operation

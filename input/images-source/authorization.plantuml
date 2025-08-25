@@ -1,4 +1,4 @@
-@startuml
+@startuml authorization
 
 skinparam roundcorner 20
 skinparam maxmessagesize 128

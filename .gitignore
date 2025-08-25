@@ -1,12 +1,22 @@
-temp/
-*-temp*
-template/
-input-cache/
-.~lock*
-*.jar
-*.dtmp
-*.bkp
-.idea
+# Temporary folders #
+#####################
+temp
+template
+output
+fsh-generated
+input-cache
+
+# Windows generated files #
+###########################
+Thumbs.db
+
+# OS generated files #
+######################
 .DS_Store
-fsh-generated/
-output/
+.DS_Store?
+
+# backup files #
+################
+*.bak
+
+translations/

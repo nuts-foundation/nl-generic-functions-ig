@@ -1,3 +1,9 @@
+
+RuleSet: Expectation( conformance )
+* extension[+]
+  * url = "http://hl7.org/fhir/StructureDefinition/capabilitystatement-expectation"
+  * valueCode = #{conformance}
+
 RuleSet: SupportResource (resource)
 * rest.resource[+].type = #{resource}
 // * rest.resource[=].extension[0].url = $exp

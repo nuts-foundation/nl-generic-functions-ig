@@ -60,7 +60,7 @@ The [FHIR Workflow Mangement Communication patterns](https://hl7.org/fhir/R4/wor
 
 - [Artifacts](./artifacts.html): a comprehensive list of all artifacts that are used in SCP 
 
-- [Changes & Issues](history.html)
+<!-- - [Changes & Issues](history.html) -->
 
 
 <!-- ### Glossary
