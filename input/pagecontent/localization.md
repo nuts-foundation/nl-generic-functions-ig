@@ -76,7 +76,7 @@ The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. 
 
 ##### Authentication and Authorization
 Authentication and authorization implementation is still under consideration. Potential approaches include:
-- **NUTS URA Credential**: Utilizing verifiable credentials issued through the NUTS network for user authentication
+- **X509 URA Credential**: Utilizing verifiable credentials issued to a NUTS wallet used for authentication. This credential is signed by the URA server certificate.
 - **URA Server Certificates**: Using server-side certificates for system-to-system authentication and authorization
 - **Purpose of Use**: The API design includes consideration for Purpose of Use (PurposeOfUse) parameters to ensure data access is appropriate for the intended care scenario
 
