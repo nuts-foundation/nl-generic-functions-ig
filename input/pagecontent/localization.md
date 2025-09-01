@@ -7,7 +7,7 @@ For implementing NVI (Network of Involved Care Providers - see [detailed descrip
 
 #### API Specification
 
-The NVI API is defined using OpenAPI 3.0.2 specification (see [nvi_openapi.yaml](data/nvi_openapi.yaml)). The API provides a straightforward interface for managing the network of involved care providers using standard REST operations.
+The [NVI API](./localization.openapi.json) is defined using OpenAPI 3.0.2 specification (you may render this using [swagger.editor.html](https://editor.swagger.io/)). The API provides a straightforward interface for managing the network of involved care providers using standard REST operations.
 
 ##### Core Data Model
 
