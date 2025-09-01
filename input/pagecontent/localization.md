@@ -12,7 +12,7 @@ The NVI API is defined using OpenAPI 3.0.2 specification (see [nvi_openapi.yaml]
 ##### Core Data Model
 
 The API manages resources that represent the relationship between:
-- **Pseudo-BSN**: A pseudonymized patient identifier (replacing the actual BSN for privacy)
+- **BSN/Pseudo-BSN**: The patient identifier. The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudo-BSN in a later stage for enhanced privacy
 - **Zorgcontext (Care Context)**: The medical context or specialty, represented by SNOMED CT codes
 - **URA**: The organization identifier representing the care provider
 
@@ -72,7 +72,7 @@ Returns HTTP 200 (OK) with the matching resource data.
 #### Security and Privacy Considerations
 
 ##### Pseudonymization
-The API uses pseudo-BSN instead of actual BSN (Burgerservicenummer) to enhance patient privacy. This pseudonymization layer ensures that patient identities are protected while still allowing organizations to coordinate care.
+The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudo-BSN to enhance patient privacy. The pseudonymization layer will ensure that patient identities are protected while still allowing organizations to coordinate care.
 
 ##### Authentication and Authorization
 Authentication and authorization implementation is still under consideration. Potential approaches include:
