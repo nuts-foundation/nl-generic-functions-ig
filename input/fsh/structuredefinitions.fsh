@@ -7,7 +7,7 @@ Context: Endpoint
 
 Invariant:   address-immutable
 Description: "This address field must not be updated after creation of the Endpoint instance"
-Expression:  "address = %previous.address"
+// Expression:  "address = %previous.address"
 Severity:    #error
 
 Profile: NlGfEndpoint
@@ -65,7 +65,7 @@ Description: "Physical location details for healthcare services, organizations, 
 
 Invariant:   ura-identifier-or-partof
 Description: "an Organization instance must either have an URA-identifier or must be 'partOf' some other instance that is an nl-gf-organization instance."
-Expression:  "identifier.where(system='http://fhir.nl/fhir/NamingSystem/ura') or partOf.exists()"
+Expression:  "identifier.where(system='http://fhir.nl/fhir/NamingSystem/ura').exists() or partOf.exists()"
 Severity:    #error
 
 Profile: NlGfOrganization

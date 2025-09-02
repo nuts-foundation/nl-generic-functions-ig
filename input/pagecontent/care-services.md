@@ -1,5 +1,3 @@
-## Care Service Directory specifications
-
 ### Introduction
 
 This FHIR Implementation Guide defines the specifications for Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across systems.
@@ -96,7 +94,7 @@ Ideally, these profiles are merged in the nl-core-profiles in the future.
 
 ### Changing endpoints and the continued integrity of references
 Healthcare records (e.g. conditions, observations or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3-6516-4861-8dcd-483714b4e1f2) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3-6516-4861-8dcd-483714b4e1f2). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
-IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) in stead of incrementing numeric values. If the Endpoint.address (the base part of URLs) must be changed, use the `status` and `replacedBy` extension to properly redirect and fix broken links, ensuring continued integrity of references. Don't delete Endpoint-instances.
+IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) in stead of e.g. incrementing numeric values. If the Endpoint.address (the base part of URLs) must be changed, use the `status` and `replacedBy` extension to properly redirect and fix broken links, ensuring continued integrity of references. Don't delete Endpoint-instances.
 
 For example, care provider 'CP1' uses an EHR from software vendor 'SV1'. This vendor SV1 uses endpoint-url 'https://sv1/fhirR4' for every customer (care provider). Now if CP1 wants to switch to a new vendor, this endpoint-url may risk lots of broken references in many EHR-systems. A better option would be url 'https://sv1/**cp1**/fhirR4' where a change can be applied to all references in a system OR url 'https://cp1/fhirR4' that may prevent a change alltogether (untill fhirR4 is outdated...).
 
