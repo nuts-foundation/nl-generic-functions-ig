@@ -15,28 +15,28 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "pseudo-BSN": {
+                  "pseudoBsn": {
                     "type": "string",
                     "description": "Pseudo BSN identifier"
                   },
-                  "zorgcontext": {
-                    "$ref": "#/components/schemas/ZorgcontextEnum",
-                    "description": "Zorgcontext code"
+                  "zorgContext": {
+                    "$ref": "#/components/schemas/ZorgContextEnum",
+                    "description": "zorgContext code"
                   },
-                  "URA": {
+                  "ura": {
                     "type": "string",
                     "description": "URA identifier"
                   },
-                  "Organization-type": {
+                  "organizationType": {
                     "$ref": "#/components/schemas/OrganisatieTypeEnum",
                     "description": "Organization type"
                   }
                 },
                 "required": [
-                  "pseudo-BSN",
-                  "zorgcontext",
-                  "URA",
-                  "Organization-type"
+                  "pseudoBsn",
+                  "zorgContext",
+                  "ura",
+                  "organizationType"
                 ]
               }
             }
@@ -52,7 +52,7 @@
         "summary": "Delete an NVI resource",
         "parameters": [
           {
-            "name": "pseudo-BSN",
+            "name": "pseudoBsn",
             "in": "query",
             "required": true,
             "schema": {
@@ -61,16 +61,16 @@
             "description": "Pseudo BSN identifier"
           },
           {
-            "name": "zorgcontext",
+            "name": "zorgContext",
             "in": "query",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ZorgcontextEnum"
+              "$ref": "#/components/schemas/ZorgContextEnum"
             },
-            "description": "Zorgcontext code"
+            "description": "Zorg context code"
           },
           {
-            "name": "URA",
+            "name": "ura",
             "in": "query",
             "required": true,
             "schema": {
@@ -79,7 +79,7 @@
             "description": "URA identifier"
           },
           {
-            "name": "Organization-type",
+            "name": "organizationType",
             "in": "query",
             "required": true,
             "schema": {
@@ -98,7 +98,7 @@
         "summary": "Retrieve NVI resources",
         "parameters": [
           {
-            "name": "pseudo-BSN",
+            "name": "pseudoBsn",
             "in": "query",
             "required": true,
             "schema": {
@@ -107,16 +107,16 @@
             "description": "Pseudo BSN identifier"
           },
           {
-            "name": "zorgcontext",
+            "name": "zorgContext",
             "in": "query",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ZorgcontextEnum"
+              "$ref": "#/components/schemas/ZorgContextEnum"
             },
-            "description": "Zorgcontext code"
+            "description": "Zorg context code"
           },
           {
-            "name": "Organization-type",
+            "name": "organizationType",
             "in": "query",
             "required": true,
             "schema": {
@@ -143,20 +143,20 @@
                             "format": "date-time",
                             "description": "Creation datetime"
                           },
-                          "pseudo-BSN": {
+                          "pseudoBsn": {
                             "type": "string",
                             "description": "Pseudo BSN identifier"
                           },
-                          "zorgcontext": {
+                          "zorgContext": {
                             "type": null,
-                            "$ref": "#/components/schemas/ZorgcontextEnum",
-                            "description": "Zorgcontext identifier"
+                            "$ref": "#/components/schemas/ZorgContextEnum",
+                            "description": "zorgContext identifier"
                           },
-                          "URA": {
+                          "ura": {
                             "type": "string",
-                            "description": "URA value"
+                            "description": "ura value"
                           },
-                          "Organization-type": {
+                          "organizationType": {
                             "$ref": "#/components/schemas/OrganisatieTypeEnum",
                             "description": "Organization type"
                           }
@@ -187,7 +187,7 @@
         ],
         "description": "Enum for OrganisatieType codes<br><br> - 2.16.840.1.113883.2.4.15.1060|H1 (Huisartsinstelling)<br><br> - 2.16.840.1.113883.2.4.15.1060|V4 (Ziekenhuis)<br><br> - 2.16.840.1.113883.2.4.15.1060|A1 (Apotheekinstelling)<br><br> - 2.16.840.1.113883.2.4.15.1060|X3 (Verplegings- of verzorgingsinstelling)<br><br> - 2.16.840.1.113883.2.4.15.1060|L1 (Laboratorium)<br><br> - 2.16.840.1.113883.2.4.15.1060|G5 (Geestelijke Gezondheidszorg)<br><br> - 2.16.840.1.113883.5.1008|OTH (Overige)<br><br>"
       },
-      "ZorgcontextEnum": {
+      "ZorgContextEnum": {
         "type": "string",
         "enum": [
           "http://snomed.info/sct|721912009",
