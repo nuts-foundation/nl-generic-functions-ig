@@ -12,18 +12,30 @@ The [NVI API](./localization.openapi.json) is defined using OpenAPI 3.0.2 specif
 ##### Core Data Model
 
 The API manages resources that represent the relationship between:
-- **BSN/Pseudo-BSN**: The patient identifier. The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudo-BSN in a later stage for enhanced privacy
-- **Zorgcontext (Care Context)**: The medical context or specialty, represented by SNOMED CT codes
-- **URA**: The organization identifier representing the care provider
+- **BSN/pseudoBsn**: The patient identifier. The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy
+- **zorgContext (Care Context)**: The medical context or specialty, represented by SNOMED CT codes
+- **ura**: The organization identifier representing the care provider
+- **organizationType**: The type of healthcare organization (e.g., hospital, pharmacy, laboratory)
 
 ##### Supported Care Contexts
 
-The API supports the following care contexts (Zorgcontext), each represented by a SNOMED CT code:
+The API supports the following care contexts (zorgContext), each represented by a SNOMED CT code:
 - `http://snomed.info/sct|721912009` - Medication summary section
 - `http://snomed.info/sct|371530004` - Imaging report
 - `http://snomed.info/sct|77465005` - Patient summary document
 - `http://snomed.info/sct|721963009` - Immunization summary document
 - `http://snomed.info/sct|782671000000103` - Multidisciplinary care management
+
+##### Supported Organization Types
+
+The API supports the following organization types (OrganisatieType):
+- `2.16.840.1.113883.2.4.15.1060|H1` - Huisartsinstelling (General Practitioner)
+- `2.16.840.1.113883.2.4.15.1060|V4` - Ziekenhuis (Hospital)
+- `2.16.840.1.113883.2.4.15.1060|A1` - Apotheekinstelling (Pharmacy)
+- `2.16.840.1.113883.2.4.15.1060|X3` - Verplegings- of verzorgingsinstelling (Nursing/Care Institution)
+- `2.16.840.1.113883.2.4.15.1060|L1` - Laboratorium (Laboratory)
+- `2.16.840.1.113883.2.4.15.1060|G5` - Geestelijke Gezondheidszorg (Mental Health Care)
+- `2.16.840.1.113883.5.1008|OTH` - Overige (Other)
 
 ##### API Operations
 
@@ -33,9 +45,10 @@ Registers a new care provider relationship in the NVI network.
 **Request Body:**
 ```json
 {
-  "pseudo-BSN": "string",
-  "zorgcontext": "SNOMED_CT_CODE",
-  "URA": "string"
+  "pseudoBsn": "string",
+  "zorgContext": "SNOMED_CT_CODE",
+  "ura": "string",
+  "organizationType": "ORGANIZATION_TYPE_CODE"
 }
 ```
 - All fields are required
@@ -45,9 +58,10 @@ Registers a new care provider relationship in the NVI network.
 Removes a care provider relationship from the NVI network.
 
 **Query Parameters:**
-- `pseudo-BSN` (required): The pseudonymized patient identifier
-- `zorgcontext` (required): The care context SNOMED CT code
-- `URA` (required): The organization identifier
+- `pseudoBsn` (required): The pseudonymized patient identifier
+- `zorgContext` (required): The care context SNOMED CT code
+- `ura` (required): The organization identifier
+- `organizationType` (required): The organization type code
 
 Returns HTTP 204 (No Content) on successful deletion.
 
@@ -55,30 +69,36 @@ Returns HTTP 204 (No Content) on successful deletion.
 Queries the NVI network to find which organizations have data for a patient in a specific care context.
 
 **Query Parameters:**
-- `pseudo-BSN` (required): The pseudonymized patient identifier
-- `zorgcontext` (required): The care context SNOMED CT code
+- `pseudoBsn` (required): The pseudonymized patient identifier
+- `zorgContext` (required): The care context SNOMED CT code
+- `organizationType` (required): The organization type code
 
 **Response:**
 ```json
 {
-  "created": "2024-01-01T10:00:00Z",
-  "pseudo-BSN": "string",
-  "zorgcontext": "SNOMED_CT_CODE",
-  "URA": "string"
+  "datalocations": [
+    {
+      "created": "2024-01-01T10:00:00Z",
+      "pseudoBsn": "string",
+      "zorgContext": "SNOMED_CT_CODE",
+      "ura": "string",
+      "organizationType": "ORGANIZATION_TYPE_CODE"
+    }
+  ]
 }
 ```
-Returns HTTP 200 (OK) with the matching resource data.
+Returns HTTP 200 (OK) with an array of matching data locations.
 
 #### Security and Privacy Considerations
 
 ##### Pseudonymization
-The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudo-BSN to enhance patient privacy. The pseudonymization layer will ensure that patient identities are protected while still allowing organizations to coordinate care.
+The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudoBsn to enhance patient privacy. The pseudonymization layer will ensure that patient identities are protected while still allowing organizations to coordinate care.
 
 ##### Authentication and Authorization
-Authentication and authorization implementation is still under consideration. Potential approaches include:
-- **X509 URA Credential**: Utilizing verifiable credentials issued to a NUTS wallet used for authentication. This credential is signed by the URA server certificate.
-- **URA Server Certificates**: Using server-side certificates for system-to-system authentication and authorization
-- **Purpose of Use**: The API design includes consideration for Purpose of Use (PurposeOfUse) parameters to ensure data access is appropriate for the intended care scenario
+Authentication and authorization is described in the [GF Authorization](./authorization.html). The requirements for the NVI API are:
+* The access to the API should be restricted by mTLS and PKI Overheid certificates.
+* The authorization should be on PractitionerRole level.
+* There should be an authorization policy applicable to the relevany zorgContext, as described by the [GF Authorization](./authorization.html).
 
 #### Advantages of the JSON API Approach
 
@@ -98,60 +118,65 @@ Potential future enhancements to the API include:
 - Batch operations for registering multiple care relationships
 - Audit logging capabilities
 - Extended metadata fields for additional context
-- Support for temporal queries to track historical care relationships
 
 ---
 
-### Appendix: FHIR Resource Considerations
+### Example Use Cases
 
-During the design phase, we evaluated using FHIR resources for the NVI implementation before deciding on the simpler JSON API approach. This section documents those considerations for reference.
+#### Use Case: Physician Searching for Available Imaging Data
 
-#### Candidates Evaluated
+**Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
-The following FHIR resources were considered for representing the relationship between a patient, the medical specialty or department, and the organizations providing care:
-- EpisodeOfCare
-- CarePlan
-- CareTeam
+**Process**:
 
-#### EpisodeOfCare Analysis
+1. **Authentication**: Dr. Smith authenticates using DEZI, which uses an OIDC (OpenID Connect) flow that results in an id_token containing:
+   - **URA**: The organization identifier (linked to Hospital A)
+   - **UZI**: Dr. Smith's unique healthcare professional identifier
+   - **Rolcode**: Her professional role code (e.g., cardiologist)
 
-The EpisodeOfCare resource was initially considered appropriate because it is designed to represent a period of care for a patient under the responsibility of a provider or organization. It naturally includes:
-- The Patient (via `EpisodeOfCare.patient`)
-- The Managing Organization (via `EpisodeOfCare.managingOrganization`)
-- The medical specialty or department (via `EpisodeOfCare.type`)
-- The temporal aspect (via `EpisodeOfCare.period`), the history of of the data is important for NVI, however, there is no need to track the period of involvement of the patient.
+2. **Query the NVI**: The system authenticates to the NVI API using either an X509 certificate or PKI Overheid Server certificate (which resolves to an URA number), then sends a GET request to find all organizations that have imaging data for this patient:
+   ```
+   GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004&organizationType=2.16.840.1.113883.2.4.15.1060|V4
+   ```
+   
+   Where:
+   - `pseudoBsn`: The patient's pseudonymized BSN
+   - `zorgContext`: SNOMED code for "Imaging report" (371530004)
+   - `organizationType`: Code for "Hospital" (V4)
 
-#### CareTeam Considerations
+3. **Response**: The NVI returns a list of hospitals that have imaging data for this patient:
+   ```json
+   {
+     "datalocations": [
+       {
+         "created": "2024-01-15T14:30:00Z",
+         "pseudoBsn": "<patient-id>",
+         "zorgContext": "http://snomed.info/sct|371530004",
+         "ura": "URA-HOSPITAL-B",
+         "organizationType": "2.16.840.1.113883.2.4.15.1060|V4"
+       },
+       {
+         "created": "2024-02-20T09:15:00Z",
+         "pseudoBsn": "<patient-id>",
+         "zorgContext": "http://snomed.info/sct|371530004", 
+         "ura": "URA-HOSPITAL-C",
+         "organizationType": "2.16.840.1.113883.2.4.15.1060|V4"
+       }
+     ]
+   }
+   ```
 
-While CareTeam might initially seem like a suitable resource for tracking healthcare provider involvement, it presented several fundamental challenges for NVI implementation:
+4. **Metadata Retrieval**: Now Dr. Smith knows that Hospital B and Hospital C have imaging data for this patient. She can then:
+   - Contact these hospitals through the appropriate channels to request the imaging data
+   - Use other Generic Functions (like authorization and consent) to obtain access to the actual images
+   - Review the imaging history to determine if new scans are needed
 
-##### Structural Mismatch
-The CareTeam resource holds a list of members rather than representing a single relationship. This fundamental difference creates complexity:
-- The use of CareTeam could imply consolidation of multiple providers at the condition level, joining patient/condition pairs
-- The list-based structure implies multiple parties are involved, requiring complex resource management
-- NVI needs to track individual organization-patient relationships, not collaborative groups
+**Benefits**:
+- **Efficiency**: Avoids duplicate imaging examinations
+- **Completeness**: Ensures all relevant imaging data is considered for diagnosis
+- **Cost Reduction**: Reduces unnecessary healthcare costs
+- **Patient Safety**: Minimizes patient exposure to radiation from redundant scans
 
-##### Management Complexity
-The multi-party nature of CareTeam complicates essential operations:
-- **CRUD Management**: If one organization creates a CareTeam for a condition, and another organization independently creates one for the same care context, this creates ambiguity in data management
-- **Access Control**: With multiple members in a single resource, determining who can view, update, or delete the resource becomes complex
-- **Update Conflicts**: Changes by one member require elaborate update logic on the implementation
 
-##### Semantic Differences
-On a fundamental level, CareTeam and NVI serve different purposes:
-- **CareTeam** represents active collaboration between healthcare providers working together on patient care
-- **NVI** functions as an index - a registry of which organizations have data, without implying collaboration
-- While NVI could potentially serve as a seed or starting point for collaboration initiatives like SCP (Shared Care Planning), conflating indexing with collaboration would compromise both functions
-
-#### Distinction from Shared Care Planning
-
-An important consideration was that the [Shared Care Planning](https://santeonnl.github.io/shared-care-planning/) initiative already uses CarePlan and CareTeam resources to manage the care network of a patient. Since NVI has a different goal and scope, using different resources would avoid semantic conflicts by not overloading the same entities (CarePlan and CareTeam) with different meanings in different contexts. For instance, SCP chooses to have one single CarePlan/CareTeam resource and add the Organizations as members. The SCP also manages Tasks, which NVI will never support.
-
-#### Why We Chose JSON API Over FHIR
-
-After careful consideration of these FHIR resources, we decided that a simple JSON API better serves the NVI requirements:
-1. **Reduced Complexity**: Avoiding FHIR resource constraints and validation rules
-2. **Clear Purpose**: The API is explicitly designed for NVI without semantic ambiguity
-3. **Simpler Implementation**: Direct REST operations without FHIR overhead
-4. **Easier Integration**: Organizations can adapt the simple API to their internal systems more easily
-5. **No Semantic Conflicts**: Avoids confusion with existing FHIR-based initiatives like Shared Care Planning
+### Appendices
+[Appendix: FHIR Resource Considerations](./localization_appendix.html) 
