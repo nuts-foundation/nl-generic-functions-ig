@@ -115,8 +115,7 @@ While this API uses a simple JSON format rather than FHIR, it can still integrat
 #### Future Enhancements
 
 Potential future enhancements to the API include:
-- Batch operations for registering multiple care relationships
-- Audit logging capabilities
+- Audit logging capabilities (MUST HAVE, TODO)
 - Extended metadata fields for additional context
 
 ---
