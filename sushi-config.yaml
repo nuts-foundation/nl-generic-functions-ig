@@ -77,6 +77,9 @@ pages:
   localization.md:
     title: Data Localization
 
+  localization-appendix.md:
+    title: Data Localization - Architecture Decision Records
+
   consent.md:
     title: Consent
 
@@ -134,7 +137,8 @@ menu:
   #   Referral/Nursing handoff: usecase-nursing-handoff.html
 
   Artifacts: artifacts.html
-  Changes & Issues: history.html
+  Appendices:
+      Data Localization- Architecture Decision Records: localization-appendix.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮

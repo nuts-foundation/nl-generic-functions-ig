@@ -1,0 +1,208 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Localization API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api": {
+      "post": {
+        "summary": "Create a new NVI resource",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateNVIResource"
+        },
+        "responses": {
+          "201": {
+            "description": "Resource created"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an NVI resource",
+        "parameters": [
+          {
+            "name": "pseudoBsn",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Pseudo BSN identifier"
+          },
+          {
+            "name": "zorgContext",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ZorgContextEnum"
+            },
+            "description": "Zorg context code"
+          },
+          {
+            "name": "ura",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "URA identifier"
+          },
+          {
+            "name": "organizationType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganisatieTypeEnum"
+            },
+            "description": "Organization type"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resource deleted"
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve NVI resources",
+        "parameters": [
+          {
+            "name": "pseudoBsn",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Pseudo BSN identifier"
+          },
+          {
+            "name": "zorgContext",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ZorgContextEnum"
+            },
+            "description": "Zorg context code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/NVIResourcesResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "requestBodies": {
+      "CreateNVIResource": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NVIResourceRequest"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "NVIResourcesResponse": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NVIResourcesResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "NVIResourceRequest": {
+        "type": "object",
+        "properties": {
+          "pseudoBsn": {
+            "type": "string",
+            "description": "Pseudo BSN identifier"
+          },
+          "zorgContext": {
+            "$ref": "#/components/schemas/ZorgContextEnum"
+          },
+          "ura": {
+            "type": "string",
+            "description": "URA identifier"
+          },
+          "organizationType": {
+            "$ref": "#/components/schemas/OrganisatieTypeEnum"
+          }
+        },
+        "required": [
+          "pseudoBsn",
+          "zorgContext",
+          "ura",
+          "organizationType"
+        ]
+      },
+      "NVIResource": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation datetime"
+          },
+          "pseudoBsn": {
+            "type": "string",
+            "description": "Pseudo BSN identifier"
+          },
+          "zorgContext": {
+            "$ref": "#/components/schemas/ZorgContextEnum"
+          },
+          "ura": {
+            "type": "string",
+            "description": "URA value"
+          },
+          "organizationType": {
+            "$ref": "#/components/schemas/OrganisatieTypeEnum"
+          }
+        }
+      },
+      "NVIResourcesResponse": {
+        "type": "object",
+        "properties": {
+          "datalocations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NVIResource"
+            }
+          }
+        }
+      },
+      "OrganisatieTypeEnum": {
+        "type": "string",
+        "enum": [
+          "2.16.840.1.113883.2.4.15.1060|H1",
+          "2.16.840.1.113883.2.4.15.1060|V4",
+          "2.16.840.1.113883.2.4.15.1060|A1",
+          "2.16.840.1.113883.2.4.15.1060|X3",
+          "2.16.840.1.113883.2.4.15.1060|L1",
+          "2.16.840.1.113883.2.4.15.1060|G5",
+          "2.16.840.1.113883.5.1008|OTH"
+        ],
+        "description": "Enum for OrganisatieType codes<br><br> - 2.16.840.1.113883.2.4.15.1060|H1 (Huisartsinstelling)<br><br> - 2.16.840.1.113883.2.4.15.1060|V4 (Ziekenhuis)<br><br> - 2.16.840.1.113883.2.4.15.1060|A1 (Apotheekinstelling)<br><br> - 2.16.840.1.113883.2.4.15.1060|X3 (Verplegings- of verzorgingsinstelling)<br><br> - 2.16.840.1.113883.2.4.15.1060|L1 (Laboratorium)<br><br> - 2.16.840.1.113883.2.4.15.1060|G5 (Geestelijke Gezondheidszorg)<br><br> - 2.16.840.1.113883.5.1008|OTH (Overige)<br><br>"
+      },
+      "ZorgContextEnum": {
+        "type": "string",
+        "enum": [
+          "http://snomed.info/sct|721912009",
+          "http://snomed.info/sct|371530004",
+          "http://snomed.info/sct|77465005",
+          "http://snomed.info/sct|721963009",
+          "http://snomed.info/sct|782671000000103"
+        ],
+        "description": "Enum for Zorgcontext codes<br><br> - http://snomed.info/sct|721912009 (Medication summary section)<br><br> - http://snomed.info/sct|371530004 (Imaging report)<br><br> - http://snomed.info/sct|77465005 (Patient summary document)<br><br> - http://snomed.info/sct|721963009 (Immunization summary document)<br><br> - http://snomed.info/sct|782671000000103 (Multidisciplinary care management)<br><br>"
+      }
+    }
+  }
+}
