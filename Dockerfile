@@ -13,6 +13,11 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y ruby-full build-essential zlib1g-dev
 RUN gem install -N jekyll bundler
 
+# Build argument for IG Publisher version compatible with Nictiz/Simplifier profiles 
+# ARG PUBLISHER_VERSION=2.0.13
+# RUN curl -L https://github.com/HL7/fhir-ig-publisher/releases/download/${PUBLISHER_VERSION}/publisher.jar -o /usr/local/publisher.jar
+
+
 RUN mkdir /app
 WORKDIR /app
 

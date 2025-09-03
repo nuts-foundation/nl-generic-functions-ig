@@ -1,14 +1,12 @@
-### Patient's Data Localization
-
-#### API Implementation Approach
+### API Implementation Approach
 
 For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we have chosen to use a simple JSON-based REST API instead of FHIR resources. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of tracking which organizations have data about a patient in specific care contexts.
 
-#### API Specification
+### API Specification
 
 The [NVI API](./localization.openapi.json) is defined using OpenAPI 3.0.2 specification (you may render this using [swagger.editor.html](https://editor.swagger.io/)). The API provides a straightforward interface for managing the network of involved care providers using standard REST operations.
 
-##### Core Data Model
+#### Core Data Model
 
 The API manages resources that represent the relationship between:
 - **BSN/pseudoBsn**: The patient identifier. The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy
@@ -16,7 +14,7 @@ The API manages resources that represent the relationship between:
 - **ura**: The organization identifier representing the care provider
 - **organizationType**: The type of healthcare organization (e.g., hospital, pharmacy, laboratory)
 
-##### Supported Care Contexts
+#### Supported Care Contexts
 
 The API supports the following care contexts (zorgContext), each represented by a SNOMED CT code:
 - `http://snomed.info/sct|721912009` - Medication summary section
@@ -25,7 +23,7 @@ The API supports the following care contexts (zorgContext), each represented by 
 - `http://snomed.info/sct|721963009` - Immunization summary document
 - `http://snomed.info/sct|782671000000103` - Multidisciplinary care management
 
-##### Supported Organization Types
+#### Supported Organization Types
 
 The API supports the following organization types (OrganisatieType):
 - `2.16.840.1.113883.2.4.15.1060|H1` - Huisartsinstelling (General Practitioner)
@@ -36,9 +34,9 @@ The API supports the following organization types (OrganisatieType):
 - `2.16.840.1.113883.2.4.15.1060|G5` - Geestelijke Gezondheidszorg (Mental Health Care)
 - `2.16.840.1.113883.5.1008|OTH` - Overige (Other)
 
-##### API Operations
+#### API Operations
 
-###### Create Resource (POST /api)
+##### Create Resource (POST /api)
 Registers a new care provider relationship in the NVI network.
 
 **Request Body:**
@@ -88,18 +86,18 @@ Queries the NVI network to find which organizations have data for a patient in a
 ```
 Returns HTTP 200 (OK) with an array of matching data locations.
 
-#### Security and Privacy Considerations
+### Security and Privacy Considerations
 
-##### Pseudonymization
+#### Pseudonymization
 The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudoBsn to enhance patient privacy. The pseudonymization layer will ensure that patient identities are protected while still allowing organizations to coordinate care.
 
-##### Authentication and Authorization
+#### Authentication and Authorization
 Authentication and authorization is described in the [GF Authorization](./authorization.html). The requirements for the NVI API are:
 * The access to the API should be restricted by mTLS and PKI Overheid certificates.
 * The authorization should be on PractitionerRole level.
 * There should be an authorization policy applicable to the relevany zorgContext, as described by the [GF Authorization](./authorization.html).
 
-#### Advantages of the JSON API Approach
+### Advantages of the JSON API Approach
 
 1. **Simplicity**: The JSON-based API is straightforward to implement and integrate, reducing the learning curve for developers
 2. **Focused Functionality**: The API is purpose-built for NVI requirements without the overhead of full FHIR compliance
@@ -107,11 +105,11 @@ Authentication and authorization is described in the [GF Authorization](./author
 4. **Efficient Operations**: Direct REST operations avoid the complexity of FHIR search parameters and resource constraints
 5. **Easier Validation**: Simple JSON schema validation is sufficient, avoiding complex FHIR profile validation
 
-#### Integration Considerations
+### Integration Considerations
 
 While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
 
-#### Future Enhancements
+### Future Enhancements
 
 Potential future enhancements to the API include:
 - Audit logging capabilities (MUST HAVE, TODO)
@@ -119,9 +117,9 @@ Potential future enhancements to the API include:
 
 ---
 
-### Example Use Cases
+## Example Use Cases
 
-#### Use Case: Physician Searching for Available Imaging Data
+### Use Case: Physician Searching for Available Imaging Data
 
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
@@ -178,5 +176,5 @@ Potential future enhancements to the API include:
 - **Patient Safety**: Minimizes patient exposure to radiation from redundant scans
 
 
-### Appendices
+## Appendices
 [Appendix: FHIR Resource Considerations](./localization-appendix.html) 

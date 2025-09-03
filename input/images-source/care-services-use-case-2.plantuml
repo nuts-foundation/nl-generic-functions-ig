@@ -8,30 +8,26 @@ hide footbox
 
 actor  Doctor as "Dr. West"
 participant  EHR as "EHR"
-participant  CSD as "Care Service Directory"
-participant  EHR2 as "Orthopedic Clinic"
+participant  CSD as "Query Directory"
+participant  EHR2 as "Endpoint supporting\nTransfer of care\n@Hospital East"
 
 
 activate Doctor
 activate EHR
 group create referral 
- Doctor -> EHR: create referral for Dr. East\n at Orthopedic Clinic
+ Doctor -> EHR: create referral for Dr. East\n for Orthopedic department\n at Hospital East
 end
 activate CSD
-EHR -> CSD: Find PractitonerRole of Dr. East\n including Endpoints
-EHR -> EHR: Check for SCP notification Endpoints
-EHR -> CSD: If no endpoint found: find Organization of PractitonerRole\n including Endpoint
-EHR -> EHR: Check for SCP notification Endpoints
+EHR -> CSD: Find HealthcareService of Orthopedic department\n including Endpoints
+EHR -> EHR: Check Endpoints for 'Transfer of care' support
+EHR -> CSD: If no endpoint found: find Organization of HealthcareService\n including Endpoint
+EHR -> EHR: Check Endpoints for 'Transfer of care' support
 loop If no endpoint found and\nOrganization is part of parent Organization
     EHR -> CSD: Find parent Organization of Organization\n including Endpoints
-    EHR -> EHR: Check for SCP notification Endpoints
+    EHR -> EHR: Check Endpoints for 'Transfer of care' support
 end
 deactivate CSD
-EHR -> EHR2: Post **notification** to SCP notification Endpoint\nof Orthopedic Clinic with referral ID
-group referral response
- EHR2 -> EHR: Respond to referral
- & EHR -> Doctor: Handle referral response
-end
+EHR -> EHR2: Post **notification** to Endpoint\nof Hospital East with referral ID
 
 deactivate Doctor
 deactivate EHR
