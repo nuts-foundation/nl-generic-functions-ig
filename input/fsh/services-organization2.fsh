@@ -28,8 +28,8 @@ Instance: org2-endpoint
 InstanceOf: NlGfEndpoint
 Usage: #example
 * status = #active
-* payloadType[+].coding.system = "http://terminology.hl7.org/CodeSystem/endpoint-payload-type"
-* payloadType[=].coding.code = #Any
+* payloadType[+].coding = $sct#308292007  "Transfer of care"
+* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
 * connectionType.code = #hl7-fhir-rest

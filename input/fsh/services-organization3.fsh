@@ -23,13 +23,25 @@ Description: "Existing data in EHR of Organization 2"
 * address.postalCode = "7021 AC"
 * endpoint[+] = Reference(Endpoint/org3-endpoint)
 
+Instance: org3-organization2
+InstanceOf: NlGfOrganization
+Usage: #example
+Title: "9.03 Organization Verpleegafdeling"
+Description: "Existing data in EHR of Organization 3"
+* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
+* identifier[=].value = "33333333"
+* name = "Organization 3, Verpleegafdeling"
+* type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
+* partOf = Reference(Organization/org3-organization1)
+
 Instance: org3-endpoint
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "9.01 Endpoint Example GP"
 * status = #active
-* payloadType[+].coding.system = "http://terminology.hl7.org/CodeSystem/endpoint-payload-type"
-* payloadType[=].coding.code = #Any
+* payloadType[+].coding = $sct#308292007  "Transfer of care"
+* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
 * connectionType.code = #hl7-fhir-rest
@@ -58,6 +70,18 @@ Usage: #example
 * type = $sct#95661000146101 "Doppler ultrasonography of peripheral vascular system with pulse volume recording"
 * specialty[+].coding = $agb-specialismen#0335 "Medisch specialisten, geriatrie"
 * specialty[+].coding = $sct#394811001 "Geriatric medicine"
+
+Instance: org3-hcs2
+InstanceOf: NlGfHealthcareService
+Usage: #example
+* active = true
+* providedBy = Reference(Organization/org3-organization1)
+* name = "Verpleging"
+* type = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
+* type = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
+* type = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
+* specialty[+].coding = $agb-specialismen#0100 "Verpleegkundige"
+* specialty[+].coding = $sct#223366009 "Nursing department"
 
 Instance: org3-practitioner1
 InstanceOf: NlGfPractitioner
