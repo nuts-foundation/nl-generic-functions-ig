@@ -29,7 +29,7 @@ COPY ./_updatePublisher.sh .
 RUN bash ./_updatePublisher.sh -y
 RUN chmod +x *.sh *.bat
 
-ADD ig.ini .
-ADD sushi-config.yaml .
+# Note: ig.ini and sushi-config.yaml should be mounted as volumes when running the container
+# This allows for configuration changes without rebuilding the image
 
 CMD ["bash", "_genonce.sh"]

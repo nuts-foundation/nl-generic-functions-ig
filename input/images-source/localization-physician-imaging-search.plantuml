@@ -1,0 +1,55 @@
+@startuml
+!theme plain
+title Use Case: Physician Searching for Available Imaging Data
+
+actor "Dr. Smith\n(Cardiologist)" as doctor
+participant "Hospital A\nEHR System" as ehr
+participant "DEZI\nIdentity Provider" as dezi
+participant "NVI API\n(Localization Service)" as nvi
+participant "Hospital B\nSystem" as hospB
+participant "Hospital C\nSystem" as hospC
+
+== Authentication Phase ==
+doctor -> ehr: Login to system
+ehr -> dezi: Initiate OIDC flow
+dezi -> doctor: Authentication request
+doctor -> dezi: Provide credentials
+dezi -> ehr: Return id_token with:\n- URA (Hospital A)\n- UZI (Dr. Smith's ID)\n- Rolcode (Cardiologist)
+ehr -> ehr: Store authentication token
+
+== Query NVI for Available Data ==
+doctor -> ehr: Request imaging data\nfor patient
+ehr -> nvi: GET /api?pseudoBsn=<patient-id>&\nzorgContext=http://snomed.info/sct|371530004\n\nAuthentication:\n- X509/PKI certificate (resolves to URA)\n- Bearer token with id_token from DEZI
+note right of nvi
+  Request includes:
+
+  Authentication:
+  - X509/PKI cert for system authentication
+  - id_token for user authentication
+
+  Query parameters:
+  - pseudoBsn: Patient identifier
+  - zorgContext: Imaging report (371530004)
+end note
+nvi -> nvi: Validate authentication\nand search data locations
+
+nvi -> ehr: Return response with datalocations:\n[\n  {created: "2024-01-15", ura: "URA-HOSPITAL-B", ...},\n  {created: "2024-02-20", ura: "URA-HOSPITAL-C", ...}\n]
+
+== Display Results ==
+ehr -> doctor: Display available imaging sources:\n- Hospital B (2024-01-15)\n- Hospital C (2024-02-20)
+
+== Optional: Data Retrieval ==
+doctor -> ehr: Request images from Hospital B
+ehr -> hospB: Request imaging data\n(via appropriate channel/API)
+hospB -> ehr: Return imaging data\n(after authorization check)
+ehr -> doctor: Display imaging data
+
+note over doctor, hospC
+  Benefits:
+  - Avoids duplicate imaging examinations
+  - Ensures complete medical history
+  - Reduces healthcare costs
+  - Minimizes radiation exposure
+end note
+
+@enduml
