@@ -178,4 +178,4 @@ Potential future enhancements to the API include:
 
 
 ### Appendices
-[Appendix: FHIR Resource Considerations](./localization_appendix.html) 
+[Appendix: FHIR Resource Considerations](./localization-appendix.html) 
