@@ -62,6 +62,9 @@ pages:
   care-services.md:
     title: Care Services Directory
 
+  care-services-adrs.md:
+    title: Care Services Directory - ADRs
+
   routing.md:
     title: Routing
 
@@ -122,6 +125,9 @@ menu:
   Consent: consent.html
   Authorization: authorization.html
   Artifacts: artifacts.html
+  Appendices:
+    Care Services Directory - Architecture Decision Records: care-services-adrs.html
+
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
 # │  Uncomment the properties below to configure additional properties on the ImplementationGuide  │

@@ -12,6 +12,13 @@ Description: "The payload types supported by the NL Generic Functions."
 * $sct#721963009  "Immunization summary document"
 * $sct#782671000000103  "Multidisciplinary care management"
 * $sct#308292007  "Transfer of care"
+* nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+
+CodeSystem: NlGfCodeSystem
+Id: nl-gf-code-system
+Title: "NL GF Code System"
+Description: "Local code system for NL Generic Functions."
+* #nl-gf-care-services "Care Services Directory"
 
 
 // ValueSet: ProcedureType
