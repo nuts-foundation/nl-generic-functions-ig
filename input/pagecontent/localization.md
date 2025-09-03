@@ -130,18 +130,18 @@ Potential future enhancements to the API include:
 
 1. **Authentication**: Dr. Smith authenticates using DEZI, which uses an OIDC (OpenID Connect) flow that results in an id_token containing:
    - **URA**: The organization identifier (linked to Hospital A)
+   - **OrganizationType**: The organization type (e.g. Hospital)
    - **UZI**: Dr. Smith's unique healthcare professional identifier
    - **Rolcode**: Her professional role code (e.g., cardiologist)
 
 2. **Query the NVI**: The system authenticates to the NVI API using either an X509 certificate or PKI Overheid Server certificate (which resolves to an URA number), then sends a GET request to find all organizations that have imaging data for this patient:
    ```
-   GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004&organizationType=2.16.840.1.113883.2.4.15.1060|V4
+   GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004
    ```
    
    Where:
    - `pseudoBsn`: The patient's pseudonymized BSN
    - `zorgContext`: SNOMED code for "Imaging report" (371530004)
-   - `organizationType`: Code for "Hospital" (V4)
 
 3. **Response**: The NVI returns a list of hospitals that have imaging data for this patient:
    ```json

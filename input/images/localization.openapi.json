@@ -114,15 +114,6 @@
               "$ref": "#/components/schemas/ZorgContextEnum"
             },
             "description": "Zorg context code"
-          },
-          {
-            "name": "organizationType",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/OrganisatieTypeEnum"
-            },
-            "description": "Organization type"
           }
         ],
         "responses": {
