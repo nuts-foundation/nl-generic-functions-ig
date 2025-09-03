@@ -126,6 +126,8 @@ Potential future enhancements to the API include:
 
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
+{% include img.html img="localization-physician-imaging-search.svg" caption="Interaction diagram for physician searching for available imaging data" %}
+
 **Process**:
 
 1. **Authentication**: Dr. Smith authenticates using DEZI, which uses an OIDC (OpenID Connect) flow that results in an id_token containing:
@@ -134,7 +136,7 @@ Potential future enhancements to the API include:
    - **UZI**: Dr. Smith's unique healthcare professional identifier
    - **Rolcode**: Her professional role code (e.g., cardiologist)
 
-2. **Query the NVI**: The system authenticates to the NVI API using either an X509 certificate or PKI Overheid Server certificate (which resolves to an URA number), then sends a GET request to find all organizations that have imaging data for this patient:
+2. **Query the NVI**: The system authenticates to the NVI API using either an X509 certificate or PKI Overheid Server certificate (which resolves to an URA number), the user is authenticated with the `id_token` from the DEZI authentication. A GET is send request to find all organizations that have imaging data for this patient:
    ```
    GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004
    ```
