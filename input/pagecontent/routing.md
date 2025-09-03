@@ -1,6 +1,6 @@
 
 
-> This is a copy of the Technical Agreement "Routering" and is maintained outside of this Implementation Guide. The reason to include it in this IG:
+> This is a copy of the Technical Agreement "Routering" and is maintained outside this Implementation Guide. The reason to include it in this IG:
 > - generate examples
 > - consistency with the Generic Functions
 
@@ -13,14 +13,14 @@
 
 
 ### Introduction
-This Technical Agreement (TA) specifies responsibilities and patterns for routing referrals and orders between healthcare organizations, leveraging the IHE mCSD (Mobile Care Services Directory) model. The central principle is that routing is based on structured directory lookup.
-The initial reason for drawing up this generic technical agreement is the need for a mechanism to address the notification, as described in the TA Notified Pull, at the right place within the receiving organization. Addressing the notification at the level of a healthcare organization isn’t sufficient for end users. 
+This Technical Agreement (TA) specifies responsibilities and patterns for routing referrals and orders between healthcare organizations, leveraging the IHE mCSD (Mobile Care Services Directory) model. The central principle is that routing is based on a structured directory lookup.
+The initial reason for drawing up this generic technical agreement is the need for a mechanism to address the notification, as described in the TA Notified Pull, at the right place within the receiving organization. Addressing the notification at the level of a healthcare organization isn’t enough for end users. 
 
 
 #### Goal, scope, and principles
 
 ##### Goal
-The mechanism defined in this document is intended to provide a single and simple mechanism of routing labels (persons, sub-organizations, locations, products, and services) within an organization and to allow organizations to define such routing labels. 
+The mechanism defined in this document is intended to provide a single and simple mechanism of routing labels (persons, suborganizations, locations, products, and services) within an organization and to allow organizations to define such routing labels. 
 
 ##### Scope of this proposal
 This TA applies to scenarios where information exchange involves:
@@ -38,7 +38,7 @@ This technical agreement is intended to be infrastructure agnostic. Authorizatio
 - Requesting a specific healthcare service (e.g., CT scan)
 
 ##### Targeted FHIR-version and profiles
-This TA assumes use of FHIR STU3 or R4 resources and is compatible with IHE mCSD directory concepts. The IHE mCSD directory defines resource types for all the relevant concepts. In addition, the HCIMs define profiles on most of these resources: Location, Organization, Practitioner and PractitionerRole have HCIMs defined. Endpoint and HealthcareService are available in FHIR, but not as HCIM. 
+This TA assumes use of FHIR STU3 or R4 resources and is compatible with IHE mCSD directory concepts. The IHE mCSD directory defines resource types for all the relevant concepts. In addition, the HCIMs define profiles on most of these resources: Location, Organization, Practitioner, and PractitionerRole have HCIMs defined. Endpoint and HealthcareService are available in FHIR, but not as HCIM. 
 
 ##### Principles
 The following principles are followed in this document:
@@ -50,18 +50,18 @@ The following principles are followed in this document:
 
 #### Definition of terms
 
-| Term | Definition |
-|-|-|
-| Endpoint | The base address for interfacing with a service |
-| HealthcareService | A service offered by a healthcare organization (FHIR resource) |
-| Organization | A grouping of people or organizations with a common purpose |
-| Receiving Organization | The organization or party to receive a message or request |
-| Receiving System | The system a message or request for the receiving organization is sent to |
-| Sending Organization| The organization or party sending a message or request to the receiving organization |
-| Sending System | The system sending a message or request on behalf of the sending organization |
-| ServiceRequest | A request for service such as diagnostic investigations, treatments, or operations to be performed |
-| System | Software used by (a) healthcare organization(s), such as an electronic health record or API service |
-| Task | Workflow-related administrative activity in FHIR |
+| Term                   | Definition                                                                                          |
+|------------------------|-----------------------------------------------------------------------------------------------------|
+| Endpoint               | The base address for interfacing with a service                                                     |
+| HealthcareService      | A service offered by a healthcare organization (FHIR resource)                                      |
+| Organization           | A grouping of people or organizations with a common purpose                                         |
+| Receiving Organization | The organization or party to receive a message or request                                           |
+| Receiving System       | The system a message or request for the receiving organization is sent to                           |
+| Sending Organization   | The organization or party sending a message or request to the receiving organization                |
+| Sending System         | The system sending a message or request on behalf of the sending organization                       |
+| ServiceRequest         | A request for service such as diagnostic investigations, treatments, or operations to be performed  |
+| System                 | Software used by (a) healthcare organization(s), such as an electronic health record or API service |
+| Task                   | Workflow-related administrative activity in FHIR                                                    |
 {:.grid .table-hover}
 
 ### Routing interactions
@@ -100,7 +100,7 @@ The HealthcareService.endpoint may contain a suitable Endpoint resource (e.g. an
 
 
 #### HealthcareService profile
-The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) is based on the core FHIR R4 HealthcareService, incorporating changes from IHE mCSD, a valueset-binding on .type and .specialty and an extension on .type to refer to Activity/PlanDefinitions.
+The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) is based on the core FHIR R4 HealthcareService, incorporating changes from IHE mCSD, a valueset-binding on .type and .specialty, and an extension on .type to refer to Activity/PlanDefinitions.
 
 
 ### Document management
@@ -109,24 +109,24 @@ The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareserv
 #### Involved parties
 This document is a co-creation of the companies listed below. The following people have been involved in creating this document.
 
-|Company | Contact Person(s) | Email |
-|-|-|-|
-| Chipsoft | Olav Trauschke | o.trauschke@chipsoft.com |
-| Nedap | Pieter Bos, Roald Dijkstra | |
-| Nexus | Marcel Engels | marcel.engels@nexus-nederland.nl |
-| Nictiz | Pieter Edelman | |
-| Twiin | Marc Sandberg, Robin van Everdingen | |
-| VZVZ1 | Ron van Holland | |
-| ZorgDomein | Stephan Opdenberg, Ruben Pape | |
-| Nuts | Bram Wesselo | |
+| Company    | Contact Person(s)                   | Email                            |
+|------------|-------------------------------------|----------------------------------|
+| Chipsoft   | Olav Trauschke                      | o.trauschke@chipsoft.com         |
+| Nedap      | Pieter Bos, Roald Dijkstra          |                                  |
+| Nexus      | Marcel Engels                       | marcel.engels@nexus-nederland.nl |
+| Nictiz     | Pieter Edelman                      |                                  |
+| Twiin      | Marc Sandberg, Robin van Everdingen |                                  |
+| VZVZ1      | Ron van Holland                     |                                  |
+| ZorgDomein | Stephan Opdenberg, Ruben Pape       |                                  |
+| Nuts       | Bram Wesselo                        |                                  |
 {:.grid .table-hover}
 
 #### Version control
 
-| Rev | Release Date | Author | Description of change |
-|-|-|-|-|
-| 1.0.1 | December 19th 2024 | | An example of eOverdracht has been added. Example of BgZ has been supplemented for missing parts. An attribute in table 2.3 (assessment) has been removed because it added nothing. |
-| 1.1 | August 28th 2025 | | The role of ActivityDefinition has been revised. Some elements are now covered by the concept of the HealthcareService. |
+| Rev   | Release Date       | Author | Description of change                                                                                                                                                               |
+|-------|--------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1.0.1 | December 19th 2024 |        | An example of eOverdracht has been added. Example of BgZ has been supplemented for missing parts. An attribute in table 2.3 (assessment) has been removed because it added nothing. |
+| 1.1   | August 28th 2025   |        | The role of ActivityDefinition has been revised. Some elements are now covered by the concept of the HealthcareService.                                                             |
 {:.grid .table-hover}
 
 ### Appendix: Examples

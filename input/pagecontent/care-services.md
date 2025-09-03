@@ -14,17 +14,17 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 ### Solution overview
 
-GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices that were made for The Netherlands. Most impactful/striking choice are:
+GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices made for The Netherlands. Most impactful/striking choice are:
 - using Dutch 'nl-core' FHIR-profiles on top of IHE mCSD-profiles
 - using the Landelijke Register Zorgaanbieders (LRZa) as the source/master-list of all other sources. 
 
 Here is a brief overview of the processes that are involved: 
-1. Every care provider registers it's addressable entities in an 'Administration Directory'.
-1. Every care provider registers the endpoint (url) of it's 'Administration Directory' at the LRZa registry.
-1. An 'Update client' uses the LRZa and the Administration Directories to consolidate all data into a 'Query Directory'
-1. A practitioner and/or system (EHR) can now use the Query Directory to search for a healthcare service, organization, department, location, endpoint or practitioner
+1. Every care provider registers its addressable entities in an 'Administration Directory.'
+1. Every care provider registers the endpoint (url) of its 'Administration Directory' at the LRZa registry.
+1. An 'Update client' uses the LRZa and the Administration Directories to consolidate all data into a 'Query Directory.'
+1. A practitioner and/or system (EHR) can now use the Query Directory to search for a healthcare service, organization, department, location, endpoint, or practitioner.
 
-Each component, data model and transaction will be discussed in more detail.
+Each component, data model, and transaction will be discussed in more detail.
 
 <img src="careservices-overview-transactions.png" width="100%" style="float: none"/>
 
@@ -32,7 +32,7 @@ Each component, data model and transaction will be discussed in more detail.
 ### Components (actors)
 
 #### Administration Client
-The Administration Client is responsible for managing the registration and maintenance of addressable entities within a healthcare organization. It should be able to create, update, and delete records for healthcare services, organizations, departments, locations, endpoints or practitioners in the Administration Directory. Addressable entities MUST conform to the [Data models](#data-models).
+The Administration Client is responsible for managing the registration and maintenance of addressable entities within a healthcare organization. It should be able to create, update, and delete records for healthcare services, organizations, departments, locations, endpoints, or practitioners in the Administration Directory. Addressable entities MUST conform to the [Data models](#data-models).
 
 The Administration Client of the LRZa provides an user interface for healthcare providers to administer their Administration Directory endpoint (url).
 
@@ -74,7 +74,7 @@ The Query Directory persist all addressable entities it receives from the Update
 The Query Directory serves/exposes all addressable entities to one or more Query Clients. The Query Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-query-directory-query-client.html) for a Query Client to search and read resources. If you've implemented both an Query Client & Query Directory, you can also choose to use proprietary formats/APIs/transactions between these components. 
 
 #### Query Client
-The Query Client is used to search and retrieve information from the Query Directory, which contains consolidated data from all Administration Directories. It enables practitioners, EHR systems, and other healthcare applications to discover healthcare services, organizations, departments, locations, endpoints or practitioners across the entire ecosystem. By querying the Query Directory, users can efficiently find up-to-date and authoritative addressable entities for care coordination, referrals, and electronic data exchange.
+The Query Client is used to search and retrieve information from the Query Directory, which contains consolidated data from all Administration Directories. It enables practitioners, EHR systems, and other healthcare applications to discover healthcare services, organizations, departments, locations, endpoints, or practitioners across the entire ecosystem. By querying the Query Directory, users can efficiently find up-to-date and authoritative addressable entities for care coordination, referrals, and electronic data exchange.
 
 
 ### Data models
@@ -83,7 +83,7 @@ Within GF Addressing, profiles are used to validate data. They are based on both
 A brief description of the data models and their profile for this guide:
 
 #### Organization
-Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA identifier, type and name and may have additional attributes like the Endpoints it uses. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
+Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA identifier, type, and name and may have additional attributes like the Endpoints it uses. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
 The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) contains no extra constraints on top of mCSD & nl-core profiles. 
 
 #### Endpoint
@@ -91,7 +91,7 @@ An Organization may be reachable for electronic data exchange through electronic
 The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on .payloadType (source: [ADR-8](./care-services-adrs.html#adr-8-how-to-register-and-find-the-capabilities-of-an-endpoint)) and an additional extension 'replacedBy'. This can be used to point to a new endpoint if the old one has changed.
 
 > ##### Changing endpoints and the continued integrity of references
-> Healthcare records (e.g. conditions, observations or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
+> Healthcare records (e.g. conditions, observations, or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
 IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) in stead of e.g. incrementing numeric values. If the Endpoint.address (the base part of URLs) must be changed, use the `status` and `replacedBy` extension to properly redirect and fix broken links, ensuring continued integrity of references. Don't delete Endpoint-instances.
 >
 >For example, care provider 'CP1' uses an EHR from software vendor 'SV1'. This vendor SV1 uses endpoint-url 'https://sv1/fhirR4' for every customer (care provider). Now if CP1 wants to switch to a new vendor, this endpoint-url may risk lots of broken references in many EHR-systems. A better option would be url 'https://sv1/**cp1**/fhirR4' where a change can be applied to all references in a system OR url 'https://cp1/fhirR4' that may prevent a change altogether (until FHIR R4 is outdated...).
@@ -106,7 +106,7 @@ The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) has no e
 
 
 #### PractitionerRole
-PractitionerRole resources are used to define the specific roles, specialties, and responsibilities that a Practitioner holds within an Organization. PractitionerRole enables precise modeling of relationships between practitioners and organizations, supporting scenarios like assigning practitioners to departments, specifying their roles (e.g., surgeon, nurse), and linking them to particular healthcare services or locations. A PractitionerRole may have contact details for phone, mail or direct messaging. The information in a PractitionerRole-instance is equivalent to the info on a Dutch 'UZI-pas'.
+PractitionerRole resources are used to define the specific roles, specialties, and responsibilities that a Practitioner holds within an Organization. PractitionerRole enables precise modeling of relationships between practitioners and organizations, supporting scenarios like assigning practitioners to departments, specifying their roles (e.g., surgeon, nurse), and linking them to particular healthcare services or locations. A PractitionerRole may have contact details for phone, mail, or direct messaging. The information in a PractitionerRole-instance is equivalent to the info on a Dutch 'UZI-pas'.
 The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html): no extra constraints on top of mCSD & nl-core profiles. 
 
 
@@ -145,8 +145,8 @@ The patient, Vera Brooks, consults with her physician who recommends surgery. Th
 #### Use Case #2: Endpoint Discovery
 Dr. West just created a referral (for patient Vera Brooks from use case #1). The EHR has to notify Hospital East and the Orthopedic department of this referral. This may include some recurring requests:
 - The EHR looks up the HealthcareService instance of the Orthopedic department at the Query Directory, fetches the related endpoints and checks if these support a 'Transfer of care' payload. If none found:
-    - The EHR looks up the associated Organization of the HealthcareService at the Query Directory, fetches related endpoints and checks if these support a 'Transfer of care' payload. If none found:
-        - The EHR looks up the associated/parent Organization of the Organization at the Query Directory, fetches related endpoints and checks if these support a 'Transfer of care' payload. If none found: repeat last step.
+    - The EHR looks up the associated Organization of the HealthcareService at the Query Directory, fetches related endpoints, and checks if these support a 'Transfer of care' payload. If none found:
+        - The EHR looks up the associated/parent Organization of the Organization at the Query Directory, fetches related endpoints, and checks if these support a 'Transfer of care' payload. If none found: repeat last step.
 - As soon as an endpoint is found, the EHR sends the notification and referral-workflow continues.
 
 <div>
