@@ -28,10 +28,6 @@ loop If no endpoint found and\nOrganization is part of parent Organization
 end
 deactivate CSD
 EHR -> EHR2: Post **notification** to Endpoint\nof Hospital East with referral ID
-group referral response
- EHR2 -> EHR: Respond to referral
- & EHR -> Doctor: Handle referral response
-end
 
 deactivate Doctor
 deactivate EHR

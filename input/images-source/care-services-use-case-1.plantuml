@@ -25,7 +25,6 @@ EHR -> EHR: Resolve References
 EHR -> Doctor : Review results\nwith office address, hours of operation
 Doctor -> Patient: Review and discuss options
 deactivate Patient
-Doctor -> EHR: create Referral
 deactivate Doctor
 deactivate EHR
 @enduml
