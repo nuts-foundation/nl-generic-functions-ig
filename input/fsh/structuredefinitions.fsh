@@ -121,7 +121,7 @@ Description: "The details of a healthcare practitioner's role within an organiza
 * practitioner 1..
 * organization 1..
 * code 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
-
+* specialty from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.22--20200901000000 (required)
 
 
 

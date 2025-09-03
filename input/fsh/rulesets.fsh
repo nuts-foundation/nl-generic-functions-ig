@@ -52,14 +52,9 @@ RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
 // * participant[=].member.identifier.value = "{identifier-value}"
 // * participant[=].period.start = "{startdate}"
 
-RuleSet: ParticipantMember (startdate, resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)
+RuleSet: ParticipantMember (startdate, fhir-base-url, type, id)
 * participant[+].period.start = "{startdate}"
-* participant[=].member = Reference({{{source}-fhir-url}}{resource-type}/{{{resource-type}{instance-number}}})
-* participant[=].member.type = "{resource-type}"
-* participant[=].member.identifier.system = {identifier-system}
-* participant[=].member.identifier.value = "{identifier-value}"
-* participant[=].member.identifier.assigner.identifier.system = {assigner-system}
-* participant[=].member.identifier.assigner.identifier.value = "{assigner-value}"
+* participant[=].member = Reference("{fhir-base-url}"/{type}/{id})
 
 
 RuleSet: RefIdentifier (resource-element, resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)
@@ -72,6 +67,14 @@ RuleSet: RefIdentifier (resource-element, resource-type, instance-number, identi
 
 RuleSet: RefIdentifierContained (resource-element, resource-type, id, identifier-system, identifier-value, assigner-system, assigner-value)
 * {resource-element} = Reference({id})
+* {resource-element}.type = "{resource-type}"
+* {resource-element}.identifier.system = {identifier-system}
+* {resource-element}.identifier.value = "{identifier-value}"
+* {resource-element}.identifier.assigner.identifier.system = {assigner-system}
+* {resource-element}.identifier.assigner.identifier.value = "{assigner-value}"
+
+RuleSet: FatReference (resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)
+* {resource-element} = Reference({{{source}-fhir-url}}{resource-type}/{{{resource-type}{instance-number}}})
 * {resource-element}.type = "{resource-type}"
 * {resource-element}.identifier.system = {identifier-system}
 * {resource-element}.identifier.value = "{identifier-value}"
