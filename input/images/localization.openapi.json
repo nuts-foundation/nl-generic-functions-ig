@@ -9,38 +9,7 @@
       "post": {
         "summary": "Create a new NVI resource",
         "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "pseudoBsn": {
-                    "type": "string",
-                    "description": "Pseudo BSN identifier"
-                  },
-                  "zorgContext": {
-                    "$ref": "#/components/schemas/ZorgContextEnum",
-                    "description": "zorgContext code"
-                  },
-                  "ura": {
-                    "type": "string",
-                    "description": "URA identifier"
-                  },
-                  "organizationType": {
-                    "$ref": "#/components/schemas/OrganisatieTypeEnum",
-                    "description": "Organization type"
-                  }
-                },
-                "required": [
-                  "pseudoBsn",
-                  "zorgContext",
-                  "ura",
-                  "organizationType"
-                ]
-              }
-            }
-          }
+          "$ref": "#/components/requestBodies/CreateNVIResource"
         },
         "responses": {
           "201": {
@@ -118,53 +87,98 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "datalocations": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "created": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "Creation datetime"
-                          },
-                          "pseudoBsn": {
-                            "type": "string",
-                            "description": "Pseudo BSN identifier"
-                          },
-                          "zorgContext": {
-                            "type": null,
-                            "$ref": "#/components/schemas/ZorgContextEnum",
-                            "description": "zorgContext identifier"
-                          },
-                          "ura": {
-                            "type": "string",
-                            "description": "ura value"
-                          },
-                          "organizationType": {
-                            "$ref": "#/components/schemas/OrganisatieTypeEnum",
-                            "description": "Organization type"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/NVIResourcesResponse"
           }
         }
       }
     }
   },
   "components": {
+    "requestBodies": {
+      "CreateNVIResource": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NVIResourceRequest"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "NVIResourcesResponse": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NVIResourcesResponse"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
+      "NVIResourceRequest": {
+        "type": "object",
+        "properties": {
+          "pseudoBsn": {
+            "type": "string",
+            "description": "Pseudo BSN identifier"
+          },
+          "zorgContext": {
+            "$ref": "#/components/schemas/ZorgContextEnum"
+          },
+          "ura": {
+            "type": "string",
+            "description": "URA identifier"
+          },
+          "organizationType": {
+            "$ref": "#/components/schemas/OrganisatieTypeEnum"
+          }
+        },
+        "required": [
+          "pseudoBsn",
+          "zorgContext",
+          "ura",
+          "organizationType"
+        ]
+      },
+      "NVIResource": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation datetime"
+          },
+          "pseudoBsn": {
+            "type": "string",
+            "description": "Pseudo BSN identifier"
+          },
+          "zorgContext": {
+            "$ref": "#/components/schemas/ZorgContextEnum"
+          },
+          "ura": {
+            "type": "string",
+            "description": "URA value"
+          },
+          "organizationType": {
+            "$ref": "#/components/schemas/OrganisatieTypeEnum"
+          }
+        }
+      },
+      "NVIResourcesResponse": {
+        "type": "object",
+        "properties": {
+          "datalocations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NVIResource"
+            }
+          }
+        }
+      },
       "OrganisatieTypeEnum": {
         "type": "string",
         "enum": [
