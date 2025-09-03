@@ -125,7 +125,7 @@ Potential future enhancements to the API include:
 
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
-{% include img.html img="localization-physician-imaging-search.svg" caption="Interaction diagram for physician searching for available imaging data" %}
+{% include localization-physician-imaging-search.svg %}
 
 **Process**:
 
