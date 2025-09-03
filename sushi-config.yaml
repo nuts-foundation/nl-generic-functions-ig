@@ -80,9 +80,6 @@ pages:
   localization-appendix.md:
     title: Data Localization - Architecture Decision Records
 
-  generieke-functie-lokalisatie.md:
-    title: Generieke Functie Lokalisatie (Generic Localization Function)
-
   consent.md:
     title: Consent
 

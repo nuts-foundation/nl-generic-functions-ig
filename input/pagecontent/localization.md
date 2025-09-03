@@ -1,5 +1,4 @@
 ### Patient's Data Localization
-For more details: [A short summary of Generieke Functie Lokalisatie (Generic Localization Function)](generieke-functie-lokalisatie.html)
 
 #### API Implementation Approach
 
