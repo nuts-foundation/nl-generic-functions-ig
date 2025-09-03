@@ -9,7 +9,6 @@
 |Version| 1.1 |
 |Published by| Twiin|
 |Website| https://www.twiin.nl/ |
-
 {:.grid .table-hover}
 
 
@@ -63,7 +62,6 @@ The following principles are followed in this document:
 | ServiceRequest | A request for service such as diagnostic investigations, treatments, or operations to be performed |
 | System | Software used by (a) healthcare organization(s), such as an electronic health record or API service |
 | Task | Workflow-related administrative activity in FHIR |
-
 {:.grid .table-hover}
 
 ### Routing interactions
@@ -117,7 +115,6 @@ This document is a co-creation of the companies listed below. The following peop
 | VZVZ1 | Ron van Holland | |
 | ZorgDomein | Stephan Opdenberg, Ruben Pape | |
 | Nuts | Bram Wesselo | |
-
 {:.grid .table-hover}
 
 #### Version control
@@ -126,7 +123,6 @@ This document is a co-creation of the companies listed below. The following peop
 |-|-|-|-|
 | 1.0.1 | December 19th 2024 | | An example of eOverdracht has been added. Example of BgZ has been supplemented for missing parts. An attribute in table 2.3 (assessment) has been removed because it added nothing. |
 | 1.1 | August 28th 2025 | | The role of ActivityDefinition has been revised. Some elements are now covered by the concept of the HealthcareService. |
-
 {:.grid .table-hover}
 
 ### Appendix: Examples
