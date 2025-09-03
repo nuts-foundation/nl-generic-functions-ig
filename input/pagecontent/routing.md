@@ -71,6 +71,10 @@ This chapter describes all relevant interactions on data level.
 Routing is based on the IHE mCSD model, in which each care provider publishes Organization, Location, HealthcareService, and Endpoint resources in a mCSD Directory. 
 Users (or their systems) search the directory for a suitable HealthcareService and construct a FHIR ServiceRequest (R4) or ReferralRequest (STU3) and Task.
 
+<div>
+{% include workflow-base-f.svg %}
+</div>
+
 ##### Interaction flow:
 1. Care providers publish structured addressable resources to the directory
 1. The sender searches for the appropriate service (e.g. “initial consultation” for “radiology” near “Zwolle”)
