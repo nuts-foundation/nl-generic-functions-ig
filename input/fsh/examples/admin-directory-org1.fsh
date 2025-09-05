@@ -1,7 +1,7 @@
-Instance: org1-organization1
+Instance: 4cb35b96-f021-4e15-bf71-d67a6d4bebec
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "9.01 Organization Example GP"
+Title: "Organization 1"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
@@ -11,7 +11,7 @@ Title: "9.01 Organization Example GP"
 * telecom[=].value = "+3131599991"
 * telecom[=].use = #work
 * telecom[+].system = #email
-* telecom[=].value = "info@examplegp.nl"
+* telecom[=].value = "info@cp1.example.org"
 * telecom[=].use = #work
 * address.line = "Vogelenzangweg 31"
 * address.line[+].extension[0].url = "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName"
@@ -20,64 +20,63 @@ Title: "9.01 Organization Example GP"
 * address.line[=].extension[0].valueString = "31"
 * address.city = "Ulft"
 * address.postalCode = "7071 PT"
-* endpoint[+] = Reference(Endpoint/org1-endpoint)
+* endpoint[+] = Reference(Endpoint/59654248-477c-4694-b156-e0042f0765a6)
 
-Instance: org1-endpoint
+Instance: 59654248-477c-4694-b156-e0042f0765a6
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "9.01 Endpoint Example GP"
+Title: "Endpoint 1"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
 * connectionType.code = #hl7-fhir-rest
-* name = "Example GP FHIR Endpoint"
+* name = "FHIR Endpoint 1"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "51494752" //Pharmapartners B.V.
 * contact[0].system = #phone
 * contact[=].value = "+3131599991"
 * contact[=].use = #work
 * contact[+].system = #email
-* contact[=].value = "info@example.com"
+* contact[=].value = "info@cp1.example.org"
 * contact[=].use = #work
-* address = $endpoint1
+* address = "https://cp1-test.example.org/fhirr4"
 
 
-Instance: org1-generalpractitioner-harryarts
+Instance: 5fa4c91a-a12f-48ae-a4c7-92971dc7ab53
 InstanceOf: NlGfPractitionerRole
 Usage: #example
-Title: "9.01 PractitionerRole Harry Arts at Example GP"
+Title: "PractitionerRole Harry Arts at Organization 1"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole"
-* identifier[+].system = "http://organization1.example.org/HRM/assignments"
+* identifier[+].system = "http://cp1.example.org/HRM/assignments"
 * identifier[=].value = "654321"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
 * identifier[=].value = "UZI-2"
-* practitioner = Reference(Practitioner/org1-harryarts)
-* organization = Reference(Organization/org1-organization1)
-* code.coding = $sct#158965000 "General Practitioner"
-* specialty.coding = $sct#394814009 "General practice"
+* practitioner = Reference(Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd)
+* organization = Reference(Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec)
+* code.coding = UziRolcodesCS#01.015 "Huisarts"
 * telecom[+].system = #email
-* telecom[=].value = "h.arts@organization1.nl"
+* telecom[=].value = "h.arts@cp1.example.org"
 
-Instance: org1-harryarts
+Instance: 9a63e407-34af-4ae4-ad3c-f7107fbbc0cd
 InstanceOf: NlGfPractitioner
 Usage: #example
-Title: "9.01 Practitioner Harry Arts"
+Title: "Practitioner Harry Arts"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner"
-* identifier[+].system = "http://organization1.example.org/HRM/employees"
+* identifier[+].system = "http://cp1.example.org/HRM/employees"
 * identifier[=].value = "5678"
 * name.use = #official
 * name.text = "Hary Arts"
 * name.family = "Arts"
 * name.given = "Harry"
 
-Instance: services-organization1
+Instance: admin-directory-org1
 InstanceOf: Bundle
 Usage: #example
-Title: "9.01 Bundle of services and personal health information in EHR of Organization 1"
+Title: "Bundle of care services in HIS of Organization 1"
 * type = #transaction
-* insert BundleEntry(org1-organization1, #PUT, Organization/org1-organization1)
-* insert BundleEntry(org1-endpoint, #PUT, Endpoint/org1-endpoint)
-* insert BundleEntry(org1-generalpractitioner-harryarts, #PUT, PractitionerRole/org1-generalpractitioner-harryarts)
-* insert BundleEntry(org1-harryarts, #PUT, Practitioner/org1-harryarts)
+* insert BundleEntryPUT(Organization, 4cb35b96-f021-4e15-bf71-d67a6d4bebec)
+* insert BundleEntryPUT(Endpoint, 59654248-477c-4694-b156-e0042f0765a6)
+* insert BundleEntryPUT(PractitionerRole, 5fa4c91a-a12f-48ae-a4c7-92971dc7ab53)
+* insert BundleEntryPUT(Practitioner, 9a63e407-34af-4ae4-ad3c-f7107fbbc0cd)
 

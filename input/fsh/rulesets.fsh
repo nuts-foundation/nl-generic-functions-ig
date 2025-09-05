@@ -30,15 +30,16 @@ RuleSet: SupportCustomSearchParam (name, canonical, type)
 * rest.resource[=].searchParam[=].definition = "{canonical}"
 * rest.resource[=].searchParam[=].type = {type}
 
-RuleSet: BundleEntry (resource, method, url)
-* entry[+].resource = {resource}
-* entry[=].request.method = {method}
-* entry[=].request.url = "{url}"
+RuleSet: BundleEntryPUT (type, resource)
+* entry[+].fullUrl = "urn:uuid:{resource}"
+* entry[=].resource = {resource}
+* entry[=].request.method = #PUT
+* entry[=].request.url = "{type}/{resource}"
 
-RuleSet: BundleEntryPUT (resource, method, url, etag)
+RuleSet: BundleEntryPUTetag (resource, type, uuid, etag)
 * entry[+].resource = {resource}
-* entry[=].request.method = {method}
-* entry[=].request.url = "{url}"
+* entry[=].request.method = #PUT
+* entry[=].request.url = "{type}/{uuid}"
 * entry[=].request.ifMatch = "W/\"{etag}\""
 
 RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
@@ -46,15 +47,6 @@ RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
 * entry[=].resource = {resource}
 * entry[=].request.method = {method}
 * entry[=].request.url = "{url}"
-
-// RuleSet: ParticipantMember (identifier-system, identifier-value, startdate)
-// * participant[+].member.identifier.system = {identifier-system}
-// * participant[=].member.identifier.value = "{identifier-value}"
-// * participant[=].period.start = "{startdate}"
-
-RuleSet: ParticipantMember (startdate, fhir-base-url, type, id)
-* participant[+].period.start = "{startdate}"
-* participant[=].member = Reference("{fhir-base-url}"/{type}/{id})
 
 
 RuleSet: RefIdentifier (resource-element, resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)

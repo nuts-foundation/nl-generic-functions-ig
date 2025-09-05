@@ -1,0 +1,11 @@
+Instance: a0fc5221-bcd9-46f1-922f-c2913dae5d63
+InstanceOf: Task
+Usage: #example
+Title: "Task for ServiceRequest Nursing"
+* status = #requested
+* intent = #order
+* code = $task-code#fulfill
+* basedOn = Reference(ServiceRequest/53a41e63-e826-45fa-9076-9be4b18399c8) "ServiceRequest Nursing"
+* for = Reference(Patient/96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d)
+* requester = Reference(PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba) "Caroline van Dijk at Organization 2"
+* owner = Reference(Organization/631cf10e-42d6-4165-9907-11e2333d4a85) "Nursing department at Organization 3"

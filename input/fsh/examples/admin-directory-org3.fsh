@@ -1,12 +1,11 @@
-Instance: org3-organization1
+Instance: 3e799075-63a2-4a4c-913d-a91b8198463d
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "9.02 Organization Organization 1"
-Description: "Existing data in EHR of Organization 2"
+Title: "Organization 3"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
-* name = "Organization 3"
+* name = "example Care Institution"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * telecom[0].system = #phone
 * telecom[=].value = "+31301234567"
@@ -21,69 +20,68 @@ Description: "Existing data in EHR of Organization 2"
 * address.line.extension[=].valueString = "10"
 * address.city = "Zelhem"
 * address.postalCode = "7021 AC"
-* endpoint[+] = Reference(Endpoint/org3-endpoint)
+* endpoint[+] = Reference(Endpoint/8f224548-6d50-44b6-82c5-75826ee0900f)
 
-Instance: org3-organization2
+Instance: 631cf10e-42d6-4165-9907-11e2333d4a85
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "9.03 Organization Verpleegafdeling"
-Description: "Existing data in EHR of Organization 3"
+Title: "Organization Nursing department"
+Description: "Nursing department at Organization 3"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
-* name = "Organization 3, Verpleegafdeling"
+* name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
-* partOf = Reference(Organization/org3-organization1)
+* partOf = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 
-Instance: org3-endpoint
+Instance: 8f224548-6d50-44b6-82c5-75826ee0900f
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "9.01 Endpoint Example GP"
+Title: "Endpoint 3"
 * status = #active
 * payloadType[+].coding = $sct#308292007  "Transfer of care"
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
 * connectionType.code = #hl7-fhir-rest
-* name = "Example GP FHIR Endpoint"
+* name = "FHIR Endpoint 3"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
-* managingOrganization.identifier.value = "08013836" //Nedap N.V.
+* managingOrganization.identifier.value = "34270859" //Gerimedica
 * contact[0].system = #phone
 * contact[=].value = "+3131599991"
 * contact[=].use = #work
 * contact[+].system = #email
-* contact[=].value = "info@example.com"
+* contact[=].value = "info@example.org"
 * contact[=].use = #work
-* address = $endpoint3
+* address = "https://cp3-test.example.org/fhirr4"
 
 
-Instance: org3-hcs1
+Instance: 4fcf98c7-b198-4d61-8b3e-5ea39e33c405
 InstanceOf: NlGfHealthcareService
 Usage: #example
 * active = true
-* providedBy = Reference(Organization/org3-organization1)
+* providedBy = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
 * name = "Geriatrie"
 * type = $sct#146521000146103 "Brief comprehensive geriatric assessment"
 * type = $sct#107101000146106 "comprehensive geriatric assessment"
 * type = $sct#86944008 "Visual field study"
-* type = $sct#95661000146101 "Doppler ultrasonography of peripheral vascular system with pulse volume recording"
-* specialty[+].coding = $agb-specialismen#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = $sct#394811001 "Geriatric medicine"
+* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
 
-Instance: org3-hcs2
+
+Instance: b48826dc-2d58-479a-bfd3-80b7a9d69757
 InstanceOf: NlGfHealthcareService
 Usage: #example
 * active = true
-* providedBy = Reference(Organization/org3-organization1)
+* providedBy = Reference(Organization/631cf10e-42d6-4165-9907-11e2333d4a85)
 * name = "Verpleging"
 * type = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
 * type = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
 * type = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
-* specialty[+].coding = $agb-specialismen#0100 "Verpleegkundige"
-* specialty[+].coding = $sct#223366009 "Nursing department"
+* specialty[+].coding = AgbSpecialismenCS#0100 "Verpleegkundige"
 
-Instance: org3-practitioner1
+
+Instance: 08630c28-5e2a-4b0c-b8ce-f08f533246b9
 InstanceOf: NlGfPractitioner
 Usage: #example
 * active = true
@@ -93,35 +91,38 @@ Usage: #example
 * telecom[=].value = "+31301234568"
 * telecom[=].use = #work
 * telecom[+].system = #email
-* telecom[=].value = "john.doe@organization3.nl"
-* telecom[=].use = #work
 * address.line = "Smidsstraat 11"
 * address.city = "Zelhem"
 * address.postalCode = "7021 AC"
 
-Instance: org3-practitionerrole1
+Instance: d60525bd-5caf-4437-8f4b-4156300a27de
 InstanceOf: NlGfPractitionerRole
 Usage: #example
-* practitioner = Reference(Practitioner/org3-practitioner1)
-* organization = Reference(Organization/org3-organization1)
+* practitioner = Reference(Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9)
+* organization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
-* code.coding = $sct#69280009 "Specialized physician"
-* specialty[+].coding = $agb-specialismen#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = $sct#394811001 "Geriatric medicine"
+* code.coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
 * telecom[0].system = #phone
 * telecom[=].value = "+31301234568"
 * telecom[=].use = #work
 * telecom[+].system = #email
-* telecom[=].value = "john.doe@organization3.nl"
+* telecom[=].value = "john.doe@cp3.example.org"
+* telecom[=].use = #work
+* telecom[+].system = #url
+* telecom[=].value = "https://matrix.to/#doctorno:cp3.example.org"
 * telecom[=].use = #work
 
-Instance: services-organization3
+Instance: admin-directory-org3
 InstanceOf: Bundle
 Usage: #example
-Title: "9.01 Bundle of services and personal health information in EHR of Organization 2"
+Title: "Bundle of care services in ECD of Organization 3"
 * type = #transaction
-* insert BundleEntry(org3-organization1, #PUT, Organization/org3-organization1)
-* insert BundleEntry(org3-endpoint, #PUT, Endpoint/org3-endpoint)
-* insert BundleEntry(org3-hcs1, #PUT, HealthcareService/org3-hcs1)
-* insert BundleEntry(org3-practitioner1, #PUT, Practitioner/org3-practitioner1)
-* insert BundleEntry(org3-practitionerrole1, #PUT, PractitionerRole/org3-practitionerrole1)
+* insert BundleEntryPUT(Organization, 3e799075-63a2-4a4c-913d-a91b8198463d)
+* insert BundleEntryPUT(Organization, 631cf10e-42d6-4165-9907-11e2333d4a85)
+* insert BundleEntryPUT(Endpoint, 8f224548-6d50-44b6-82c5-75826ee0900f)
+* insert BundleEntryPUT(HealthcareService, 4fcf98c7-b198-4d61-8b3e-5ea39e33c405)
+* insert BundleEntryPUT(HealthcareService, b48826dc-2d58-479a-bfd3-80b7a9d69757)
+* insert BundleEntryPUT(Practitioner, 08630c28-5e2a-4b0c-b8ce-f08f533246b9)
+* insert BundleEntryPUT(PractitionerRole, d60525bd-5caf-4437-8f4b-4156300a27de)

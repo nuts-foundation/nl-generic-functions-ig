@@ -1,6 +1,7 @@
-Instance: org3-jaantje
+Instance: 96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d
 InstanceOf: Patient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
-Title: "9.01 Patient Jaantje Merkens"
+Title: "Patient Jaantje Merkens"
+Description: "Patient Jaantje Merkens in Organization 3"
 * meta.profile = $nl-core-Patient
 * identifier[0].system = "http://organization3.example.org/EHR/patients"
 * identifier[=].value = "126"
@@ -18,16 +19,16 @@ Title: "9.01 Patient Jaantje Merkens"
 * address.line = "Kerkstraat 18"
 * address.postalCode = "7071 WZ"
 * address.city = "Ulft"
-* managingOrganization = Reference(Organization/org3-organization1) "Organization 1"
+* managingOrganization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d) "Organization 1"
 
-Instance: org3-ms1
+Instance: 8732d369-7759-447b-af01-f3e0c601b452
 InstanceOf: MedicationStatement
-Title: "9.01 MedicationStatement for Apremilast"
+Title: "MedicationStatement for Apremilast"
 * status = #active
-* medicationCodeableConcept = $atc#L04AA32 "Apremilast (immunosuppressiva)"
-* subject = Reference(Patient/org3-jaantje)
+* medicationCodeableConcept = $atc#L04AA32 "apremilast"
+* subject = Reference(Patient/96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d)
 * dateAsserted = "2024-10-03"
-* informationSource = Reference(PractitionerRole/org3-practitionerrole1)
+* informationSource = Reference(PractitionerRole/d60525bd-5caf-4437-8f4b-4156300a27de)
 * dosage[0].text = "10 mg orally every 4 hours"
 * dosage[0].timing.repeat.frequency = 6
 * dosage[0].timing.repeat.period = 1
@@ -37,25 +38,25 @@ Title: "9.01 MedicationStatement for Apremilast"
 
 
 
-Instance: org3-ct1
+Instance: bd8f360a-7bf2-4b65-9202-f3c092525492
 InstanceOf: CareTeam
 Usage: #example
-Title: "1.43.2 CareTeam update"
-Description: "Add participant to CareTeam"
+Title: "CareTeam of Patient Jaantje Merkens"
+
 * participant[+].period.start = "2024-08-27"
-* participant[=].member = Reference(Patient/org3-jaantje)
+* participant[=].member = Reference(Patient/96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d)
 * participant[+].period.start = "2024-08-27"
-* participant[=].member = Reference(PractitionerRole/org3-practitionerrole1)
+* participant[=].member = Reference(PractitionerRole/d60525bd-5caf-4437-8f4b-4156300a27de)
 * participant[+].period.start = "2024-08-27"
-* participant[=].member = Reference(Organization/org3-organization1)
+* participant[=].member = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * participant[=].member.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
 * participant[=].member.identifier.value = "33333333"
 
-Instance: phi-organization3
+Instance: phi-org3
 InstanceOf: Bundle
 Usage: #example
-Title: "9.01 Bundle of services and personal health information in EHR of Organization 3"
+Title: "Bundle of personal health information in ECD of Organization 3"
 * type = #transaction
-* insert BundleEntry(org3-jaantje, #PUT, Patient/org3-jaantje)
-* insert BundleEntry(org3-ms1, #PUT, MedicationStatement/org3-ms1)
-* insert BundleEntry(org3-ct1, #PUT, CareTeam/org3-ct1)
+* insert BundleEntryPUT(Patient, 96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d)
+* insert BundleEntryPUT(MedicationStatement, 8732d369-7759-447b-af01-f3e0c601b452)
+* insert BundleEntryPUT(CareTeam, bd8f360a-7bf2-4b65-9202-f3c092525492)
