@@ -485,9 +485,9 @@ Usage: #example
 * providedBy = Reference(Organization/ad3-o1)
 * active = true
 * name = "Geriatrie"
-* type = $sct#146521000146103 "Brief comprehensive geriatric assessment"
-* type = $sct#107101000146106 "comprehensive geriatric assessment"
-* type = $sct#86944008 "Visual field study"
+* type[+] = $sct#146521000146103 "Brief comprehensive geriatric assessment"
+* type[+] = $sct#107101000146106 "comprehensive geriatric assessment"
+* type[+] = $sct#86944008 "Visual field study"
 * specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
 
 
@@ -498,9 +498,9 @@ Usage: #example
 * active = true
 * providedBy = Reference(Organization/ad3-o2)
 * name = "Verpleging"
-* type = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
-* type = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
-* type = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
+* type[+] = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
+* type[+] = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
+* type[+] = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
 * specialty[+].coding = AgbSpecialismenCS#0100 "Verpleegkundige"
 
 
