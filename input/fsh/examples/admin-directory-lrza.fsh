@@ -135,7 +135,7 @@ Title: "Endpoint 3"
 Instance: admin-directory-lrza
 InstanceOf: Bundle
 Usage: #example
-Title: "9.01 Bundle of services and personal health information in EHR of Organization 2"
+Title: "Bundle of care services in LRZa"
 * type = #transaction
 * insert BundleEntryPUT(Organization, 3f39dca9-a392-4eb3-8366-0c7ff53ab3a9)
 * insert BundleEntryPUT(Endpoint, ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4)
