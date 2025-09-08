@@ -79,7 +79,7 @@ The Query Client is used to search and retrieve information from the Query Direc
 
 
 ### Data models
-Within GF Addressing, profiles are used to validate data. They are based on both mCSD-profiles and nl-core-profiles (TODO: use Nictiz nl-core package as soon as dependency-bug is fixed). Ideally, these profiles are merged in the nl-core-profiles in the future. 
+Within GF Addressing, profiles are used to validate data. They are based on both mCSD-profiles and nl-core-profiles (TODO: use Nictiz nl-core package as soon as dependency-bug is fixed)([GF-Adressering, ADR#188](https://github.com/minvws/generiekefuncties-adressering/issues/188)). Ideally, these profiles are merged in the nl-core-profiles in the future. 
 
 A brief description of the data models and their profile for this guide:
 
@@ -89,7 +89,7 @@ The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) 
 
 #### Endpoint
 An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. If an Organization does not have an Endpoint, it may still be reachable via an Endpoint at its parent Organization or an affiliated Organization.
-The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on .payloadType (source: [ADR-8](./care-services-appendix.html#adr-8-how-to-register-and-find-the-capabilities-of-an-endpoint)) and an additional extension 'replacedBy'. This can be used to point to a new endpoint if the old one has changed.
+The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on .payloadType ([GF-Adressering, ADR#8](./care-services-appendix.html#adr-8-how-to-register-and-find-the-capabilities-of-an-endpoint)) and an additional extension 'replacedBy'. This can be used to point to a new endpoint if the old one has changed.
 
 > ##### Changing endpoints and the continued integrity of references
 > Healthcare records (e.g. conditions, observations, or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
