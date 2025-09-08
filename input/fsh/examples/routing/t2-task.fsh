@@ -1,7 +1,8 @@
 Instance: a0fc5221-bcd9-46f1-922f-c2913dae5d63
 InstanceOf: Task
 Usage: #example
-Title: "Task for ServiceRequest Nursing"
+Title: "Organization 2 - Task for ServiceRequest Nursing"
+Description: "Task created by Organization 2 to fulfill the ServiceRequest for nursing care at Nursing department at Organization 3"
 * status = #requested
 * intent = #order
 * code = $task-code#fulfill

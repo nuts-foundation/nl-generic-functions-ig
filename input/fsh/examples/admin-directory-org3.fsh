@@ -1,7 +1,7 @@
 Instance: 3e799075-63a2-4a4c-913d-a91b8198463d
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "Organization 3"
+Title: "Organization 3- Organization"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
@@ -25,7 +25,7 @@ Title: "Organization 3"
 Instance: 631cf10e-42d6-4165-9907-11e2333d4a85
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "Organization Nursing department"
+Title: "Organization 3 - Organization Nursing department"
 Description: "Nursing department at Organization 3"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -37,7 +37,7 @@ Description: "Nursing department at Organization 3"
 Instance: 8f224548-6d50-44b6-82c5-75826ee0900f
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "Endpoint 3"
+Title: "Organization 3 - Endpoint FHIR"
 * status = #active
 * payloadType[+].coding = $sct#308292007  "Transfer of care"
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
@@ -59,6 +59,7 @@ Title: "Endpoint 3"
 Instance: 4fcf98c7-b198-4d61-8b3e-5ea39e33c405
 InstanceOf: NlGfHealthcareService
 Usage: #example
+Title: "Organization 3 - HealthcareService Geriatrie"
 * active = true
 * providedBy = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
@@ -72,6 +73,7 @@ Usage: #example
 Instance: b48826dc-2d58-479a-bfd3-80b7a9d69757
 InstanceOf: NlGfHealthcareService
 Usage: #example
+Title: "Organization 3 - HealthcareService Verpleging"
 * active = true
 * providedBy = Reference(Organization/631cf10e-42d6-4165-9907-11e2333d4a85)
 * name = "Verpleging"
@@ -84,6 +86,7 @@ Usage: #example
 Instance: 08630c28-5e2a-4b0c-b8ce-f08f533246b9
 InstanceOf: NlGfPractitioner
 Usage: #example
+Title: "Organization 3 - Practitioner John Doe"
 * active = true
 * name.family = "Doe"
 * name.given = "John"
@@ -98,6 +101,7 @@ Usage: #example
 Instance: d60525bd-5caf-4437-8f4b-4156300a27de
 InstanceOf: NlGfPractitionerRole
 Usage: #example
+Title: "Organization 3 - PractitionerRole Klinisch Geriater John Doe"
 * practitioner = Reference(Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9)
 * organization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
@@ -118,6 +122,7 @@ Instance: admin-directory-org3
 InstanceOf: Bundle
 Usage: #example
 Title: "Bundle of care services in ECD of Organization 3"
+Description: "This bundle contains all care services for the Organization 3 Administration Directory example"
 * type = #transaction
 * insert BundleEntryPUT(Organization, 3e799075-63a2-4a4c-913d-a91b8198463d)
 * insert BundleEntryPUT(Organization, 631cf10e-42d6-4165-9907-11e2333d4a85)

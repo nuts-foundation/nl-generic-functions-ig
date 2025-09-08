@@ -1,7 +1,7 @@
 Instance: 53a41e63-e826-45fa-9076-9be4b18399c8
 InstanceOf: ServiceRequest
 Usage: #example
-Title: "ServiceRequest Nursing"
+Title: "Organisation 2 - ServiceRequest Nursing"
 Description: "Request from Organization 2 for nursing care"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure-request"
 * meta.versionId = "1"

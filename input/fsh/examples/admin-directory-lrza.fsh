@@ -1,7 +1,7 @@
 Instance: 3f39dca9-a392-4eb3-8366-0c7ff53ab3a9
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "Organization 1"
+Title: "LRZa - Organization 1 - Organization"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
@@ -25,7 +25,7 @@ Title: "Organization 1"
 Instance: ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "Endpoint 1"
+Title: "LRZa - Organization 1 - Endpoint"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
@@ -45,7 +45,7 @@ Title: "Endpoint 1"
 Instance: 4815bbe6-9fea-4875-a16c-a168d63054d4
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "Organization 2"
+Title: "LRZa - Organization 2 - Organization"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "22222222"
@@ -71,6 +71,7 @@ Title: "Organization 2"
 Instance: 960a4f8c-74d8-482c-97ab-e2a025869fee
 InstanceOf: NlGfEndpoint
 Usage: #example
+Title: "LRZa - Organization 2 - Endpoint"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
@@ -90,7 +91,7 @@ Usage: #example
 Instance: fcf55b06-f22c-4058-9051-b77368bdd26b
 InstanceOf: NlGfOrganization
 Usage: #example
-Title: "Organization 3"
+Title: "LRZa - Organization 3 - Organization"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
@@ -114,7 +115,7 @@ Title: "Organization 3"
 Instance: 553416dd-da12-40f7-a9bd-eb3e193177bd
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "Endpoint 3"
+Title: "LRZa - Organization 3 - Endpoint"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
 * payloadMimeType[+] = #application/fhir+json
@@ -136,6 +137,7 @@ Instance: admin-directory-lrza
 InstanceOf: Bundle
 Usage: #example
 Title: "Bundle of care services in LRZa"
+Description: "This bundle contains all care services for the LRZa Administration Directory example"
 * type = #transaction
 * insert BundleEntryPUT(Organization, 3f39dca9-a392-4eb3-8366-0c7ff53ab3a9)
 * insert BundleEntryPUT(Endpoint, ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4)

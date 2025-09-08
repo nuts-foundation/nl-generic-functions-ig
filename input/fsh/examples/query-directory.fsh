@@ -3,8 +3,7 @@
 
 Instance: lrza-o1
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization 1"
+Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/3f39dca9-a392-4eb3-8366-0c7ff53ab3a9"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -28,8 +27,7 @@ Title: "Organization 1"
 
 Instance: lrza-e1
 InstanceOf: NlGfEndpoint
-Usage: #example
-Title: "Endpoint 1"
+Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
@@ -49,8 +47,7 @@ Title: "Endpoint 1"
 
 Instance: lrza-o2
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization 2"
+Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/4815bbe6-9fea-4875-a16c-a168d63054d4"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -76,7 +73,7 @@ Title: "Organization 2"
 
 Instance: lrza-e2
 InstanceOf: NlGfEndpoint
-Usage: #example
+Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/960a4f8c-74d8-482c-97ab-e2a025869fee"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
@@ -96,8 +93,7 @@ Usage: #example
 
 Instance: lrza-o3
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization 3"
+Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/fcf55b06-f22c-4058-9051-b77368bdd26b"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -121,8 +117,7 @@ Title: "Organization 3"
 
 Instance: lrza-e3
 InstanceOf: NlGfEndpoint
-Usage: #example
-Title: "Endpoint 3"
+Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/553416dd-da12-40f7-a9bd-eb3e193177bd"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
@@ -145,8 +140,7 @@ Title: "Endpoint 3"
 
 Instance: ad1-o1
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization 1"
+Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/4cb35b96-f021-4e15-bf71-d67a6d4bebec"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -170,8 +164,7 @@ Title: "Organization 1"
 
 Instance: ad1-e1
 InstanceOf: NlGfEndpoint
-Usage: #example
-Title: "Endpoint 1"
+Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/59654248-477c-4694-b156-e0042f0765a6"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
@@ -192,8 +185,7 @@ Title: "Endpoint 1"
 
 Instance: ad1-pr1
 InstanceOf: NlGfPractitionerRole
-Usage: #example
-Title: "PractitionerRole Harry Arts at Organization 1"
+Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/5fa4c91a-a12f-48ae-a4c7-92971dc7ab53"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole"
 * identifier[+].system = "http://cp1.example.org/HRM/assignments"
@@ -208,8 +200,7 @@ Title: "PractitionerRole Harry Arts at Organization 1"
 
 Instance: ad1-p1
 InstanceOf: NlGfPractitioner
-Usage: #example
-Title: "Practitioner Harry Arts"
+Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner"
 * identifier[+].system = "http://cp1.example.org/HRM/employees"
@@ -224,8 +215,7 @@ Title: "Practitioner Harry Arts"
 
 Instance: ad2-o1
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -251,8 +241,7 @@ Title: "Organization 2"
 
 Instance: ad2-e1
 InstanceOf: NlGfEndpoint
-Usage: #example
-Title: "FHIR Endpoint 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/430f7379-8ec2-4e55-b096-919995da61e2"
 * status = #active
 * payloadType[+].coding = $sct#308292007  "Transfer of care"
@@ -273,8 +262,7 @@ Title: "FHIR Endpoint 2"
 
 Instance: ad2-e2
 InstanceOf: NlGfEndpoint
-Usage: #example
-Title: "DICOM-WADO-RS Endpoint"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/d4c1d657-67a9-471c-9732-9c042e9a6d43"
 * status = #active
 * payloadType[+].coding = nl-gf-code-system#nl-gf-dicom "DICOM Images"
@@ -294,9 +282,7 @@ Title: "DICOM-WADO-RS Endpoint"
 
 Instance: ad2-hs1
 InstanceOf: NlGfHealthcareService
-Usage: #example
-Title: "HealthcareService Chirurgie at Organization 2"
-Description: "Existing data in EHR of Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/5cb05355-474b-4d30-8b0e-a9ca574b8274"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
@@ -308,9 +294,7 @@ Description: "Existing data in EHR of Organization 2"
 
 Instance: ad2-hs2
 InstanceOf: NlGfHealthcareService
-Usage: #example
-Title: "9.02 HealthcareService neurochirurgie at Organization 2"
-Description: "Existing data in EHR of Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/c79125e5-739f-4238-959c-cd5872518c1f"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
@@ -322,9 +306,7 @@ Description: "Existing data in EHR of Organization 2"
 
 Instance: ad2-hs3
 InstanceOf: NlGfHealthcareService
-Usage: #example
-Title: "9.02 HealthcareService orthopedie at Organization 2"
-Description: "Existing data in EHR of Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/9d47ca45-4166-4531-a23d-ef5fa613ece4"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
@@ -336,9 +318,7 @@ Description: "Existing data in EHR of Organization 2"
 
 Instance: ad2-hs4
 InstanceOf: NlGfHealthcareService
-Usage: #example
-Title: "9.02 HealthcareService Interne geneeskunde at Organization 2"
-Description: "Existing data in EHR of Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/f6a508bd-9455-4afa-aad0-baec0833602d"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
@@ -351,9 +331,7 @@ Description: "Existing data in EHR of Organization 2"
 
 Instance: ad2-hs5
 InstanceOf: NlGfHealthcareService
-Usage: #example
-Title: "9.02 HealthcareService geriatrie at Organization 2"
-Description: "Existing data in EHR of Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/120325af-083c-40ee-b16e-01230fe65655"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
@@ -365,9 +343,7 @@ Description: "Existing data in EHR of Organization 2"
 
 Instance: ad2-hs6
 InstanceOf: NlGfHealthcareService
-Usage: #example
-Title: "9.02 HealthcareService urologie at Organization 2"
-Description: "Existing data in EHR of Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/08013141-16b2-42a0-8c9a-af57cee5511b"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
@@ -381,8 +357,7 @@ Description: "Existing data in EHR of Organization 2"
 
 Instance: ad2-pr1
 InstanceOf: NlGfPractitionerRole
-Usage: #example
-Title: "PractitionerRole Caroline van Dijk at Organization 2"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole"
 * identifier[+].system = "http://cp2.example.org/HRM/assignments"
@@ -399,8 +374,7 @@ Title: "PractitionerRole Caroline van Dijk at Organization 2"
 
 Instance: ad2-p1
 InstanceOf: NlGfPractitioner
-Usage: #example
-Title: "Practitioner Caroline van Dijk"
+Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/040b160a-6072-4244-adc0-2b786c4ef052"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner"
 * identifier[+].system = "http://cp2.example.org/HRM/employees"
@@ -418,8 +392,7 @@ Title: "Practitioner Caroline van Dijk"
 
 Instance: ad3-o1
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization 3"
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/3e799075-63a2-4a4c-913d-a91b8198463d"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -443,9 +416,7 @@ Title: "Organization 3"
 
 Instance: ad3-o2
 InstanceOf: NlGfOrganization
-Usage: #example
-Title: "Organization Nursing department"
-Description: "Nursing department at Organization 3"
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/631cf10e-42d6-4165-9907-11e2333d4a85"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
@@ -456,8 +427,7 @@ Description: "Nursing department at Organization 3"
 
 Instance: ad3-e1
 InstanceOf: NlGfEndpoint
-Usage: #example
-Title: "Endpoint 3"
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/8f224548-6d50-44b6-82c5-75826ee0900f"
 * status = #active
 * payloadType[+].coding = $sct#308292007  "Transfer of care"
@@ -479,7 +449,7 @@ Title: "Endpoint 3"
 
 Instance: ad3-hs1
 InstanceOf: NlGfHealthcareService
-Usage: #example
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/4fcf98c7-b198-4d61-8b3e-5ea39e33c405"
 * active = true
 * providedBy = Reference(Organization/ad3-o1)
@@ -493,7 +463,7 @@ Usage: #example
 
 Instance: ad3-hs2
 InstanceOf: NlGfHealthcareService
-Usage: #example
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/b48826dc-2d58-479a-bfd3-80b7a9d69757"
 * active = true
 * providedBy = Reference(Organization/ad3-o2)
@@ -506,7 +476,7 @@ Usage: #example
 
 Instance: ad3-p1
 InstanceOf: NlGfPractitioner
-Usage: #example
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/08630c28-5e2a-4b0c-b8ce-f08f533246b9"
 * active = true
 * name.family = "Doe"
@@ -521,7 +491,7 @@ Usage: #example
 
 Instance: ad3-pr1
 InstanceOf: NlGfPractitionerRole
-Usage: #example
+Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/d60525bd-5caf-4437-8f4b-4156300a27de"
 * practitioner = Reference(Practitioner/ad3-p1)
 * organization = Reference(Organization/ad3-o1)
@@ -547,6 +517,7 @@ Instance: query-directory
 InstanceOf: Bundle
 Usage: #example
 Title: "Bundle of care services in Query Directory"
+Description: "This bundle contains all care services from each Administration Directory for the Query Directory example"
 * type = #transaction
 * insert BundleEntryPUT(Organization, lrza-o1)
 * insert BundleEntryPUT(Endpoint, lrza-e1)

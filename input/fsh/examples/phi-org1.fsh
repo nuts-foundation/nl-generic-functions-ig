@@ -1,8 +1,7 @@
 Instance: 128447d2-e153-4c93-8ac6-6c357555f3db
 InstanceOf: Patient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
-Usage: #example
+Usage: #inline
 Title: "Patient Jaantje Merkens"
-Description: "Patient Jaantje Merkens at Organization 1"
 * meta.profile = $nl-core-Patient
 * identifier[0].system = "http://organization1.example.org/EHR/patients"
 * identifier[=].value = "123456"
@@ -24,7 +23,7 @@ Description: "Patient Jaantje Merkens at Organization 1"
 
 Instance: 8cdd8f8d-f75b-4285-851e-ff302dad46fb
 InstanceOf: Condition
-Usage: #example
+Usage: #inline
 Title: "Condition General Weakness"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Condition"
 * meta.versionId = "1"
@@ -40,7 +39,7 @@ Title: "Condition General Weakness"
 
 Instance: 73f4bffe-eac4-4863-8e4a-852c578f95dd
 InstanceOf: ServiceRequest
-Usage: #example
+Usage: #inline
 Title: "ServiceRequest Vascular medicine"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure-request"
 * meta.versionId = "1"
@@ -55,7 +54,7 @@ Title: "ServiceRequest Vascular medicine"
 
 Instance: d2f1d123-9bfb-485f-8b6f-2db411c4884e
 InstanceOf: ServiceRequest
-Usage: #example
+Usage: #inline
 Title: "ServiceRequest Neurological Diagnostics"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure-request"
 * meta.versionId = "1"
@@ -69,7 +68,7 @@ Title: "ServiceRequest Neurological Diagnostics"
 
 Instance: 4e4215a2-d6ff-4e53-8737-d9810a4cc3eb
 InstanceOf: ServiceRequest
-Usage: #example
+Usage: #inline
 Title: "ServiceRequest Orthoptic Diagnostics"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure-request"
 * meta.versionId = "1"
@@ -83,7 +82,7 @@ Title: "ServiceRequest Orthoptic Diagnostics"
 
 Instance: 3cb7873f-c222-4196-b441-02b3790ec97e
 InstanceOf: ServiceRequest
-Usage: #example
+Usage: #inline
 Title: "ServiceRequest Internal medicine"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure-request"
 * meta.versionId = "1"
@@ -97,7 +96,7 @@ Title: "ServiceRequest Internal medicine"
 
 Instance: 98f9d4a7-d58d-4889-8e63-0cb2d4e35144
 InstanceOf: MedicationStatement
-Usage: #example
+Usage: #inline
 Title: "MedicationStatement Urokinase"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-MedicationStatement"
 * status = #active
@@ -117,7 +116,7 @@ Title: "MedicationStatement Urokinase"
 
 Instance: f304c628-c19f-4207-adfb-ad34447ab044
 InstanceOf: CareTeam
-Usage: #example
+Usage: #inline
 Title: "CareTeam of Patient Jaantje Merkens"
 * participant[+].period.start = "2024-08-27"
 * participant[=].member = Reference(Patient/128447d2-e153-4c93-8ac6-6c357555f3db)
@@ -148,6 +147,7 @@ Instance: phi-org1
 InstanceOf: Bundle
 Usage: #example
 Title: "Bundle of personal health information in HIS of Organization 1"
+Description: "This bundle contains all personal health information for Patient Jaantje Merkens in Organization 1"
 * type = #transaction
 * insert BundleEntryPUT(Patient, 128447d2-e153-4c93-8ac6-6c357555f3db)
 * insert BundleEntryPUT(Condition, 8cdd8f8d-f75b-4285-851e-ff302dad46fb)
