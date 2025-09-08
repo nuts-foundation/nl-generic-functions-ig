@@ -42,9 +42,11 @@ The Administration Directory persist all addressable entities of one or more hea
 
 The Administration Directory MUST implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-update-client.html) to publish changes of addressable entities. These changes are consumed by an Update Client.
 
-The performance/availability requirements for an Administration Directory [GF-Adressering, ADR#177](https://github.com/minvws/generiekefuncties-adressering/issues/177):
+The performance/availability requirements for an Administration Directory ([GF-Adressering, ADR#177](https://github.com/minvws/generiekefuncties-adressering/issues/177)):
 - **Query Response Time:** 95% of _history requests should be answered within 2000ms.
-- **Availability:** Minimum uptime of 99% between 8PM and 6AM.
+- **Availability:** Minimum uptime of 99% between 8PM and 6AM.  
+
+
 
 
 #### Update Client
@@ -161,6 +163,7 @@ Dr. West just created a referral (for patient Vera Brooks from use case #1). The
 Currently, two types of Administration Directories are supported; LRZa as 'Root Administration Directory' and Care Providers having their 'Administration Directory'. In the Netherlands, there are other registries that don't fit in these two types, e.g.:  
 - [Vektis-AGB](https://www.vektis.nl/agb-register/) is the authoritative source for the care provider *type*. [GF Consent](./consent.html) uses the Organization.type element, so it is important to use the authoritative source.
 - [BIG-register](https://www.bigregister.nl/) is the authoritative source for (a part of the) Physicians/Practitioners and their qualifications.
+
 These types of Administration Directories should be supported in the near future.
 
 #### ResourceType Practitioner
