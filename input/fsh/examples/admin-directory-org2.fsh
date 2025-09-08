@@ -27,13 +27,11 @@ Title: "Organization 2 - Organization"
 Instance: 430f7379-8ec2-4e55-b096-919995da61e2
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "Organization 2 - Endpoint FHIR"
+Title: "Organization 2 - Endpoint FHIR R4"
 * status = #active
-* payloadType[+].coding = $sct#308292007  "Transfer of care"
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 2"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "08013836" //Nedap N.V.
@@ -50,9 +48,8 @@ InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 2 - Endpoint DICOM-WADO-RS"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-dicom "DICOM Images"
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #dicom-wado-rs
+* payloadType[+].coding = $endpoint-payload-type#any "Any"
+* connectionType = $endpoint-connection-type#dicom-wado-rs
 * name = "DICOM-WADO-RS Endpoint"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "08013836"
@@ -64,6 +61,24 @@ Title: "Organization 2 - Endpoint DICOM-WADO-RS"
 * contact[=].use = #work
 * address = "https://cp2-test.example.org/dicom-wado-rs"
 
+Instance: 2427ca0c-8a29-4a6a-aabd-50cf02f587a7
+InstanceOf: NlGfEndpoint
+Usage: #example
+Title: "Organization 2 - Endpoint FHIR STU3"
+* status = #active
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities|4.0.0 "Transfer of Care - eOverdracht Server"
+* payloadMimeType[+] = #application/fhir+json
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
+* name = "FHIR STU3 Endpoint"
+* managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
+* managingOrganization.identifier.value = "08013836" //Nedap N.V.
+* contact[0].system = #phone
+* contact[=].value = "+3131599991"
+* contact[=].use = #work
+* contact[+].system = #email
+* contact[=].value = "info@nedap.example.org"
+* contact[=].use = #work
+* address = "https://cp2-test.example.org/fhirstu3"
 
 Instance: 5cb05355-474b-4d30-8b0e-a9ca574b8274
 InstanceOf: NlGfHealthcareService
@@ -180,6 +195,7 @@ Description: "This bundle contains all care services for the Organization 2 Admi
 * insert BundleEntryPUT(Organization, cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * insert BundleEntryPUT(Endpoint, 430f7379-8ec2-4e55-b096-919995da61e2)
 * insert BundleEntryPUT(Endpoint, d4c1d657-67a9-471c-9732-9c042e9a6d43)
+* insert BundleEntryPUT(Endpoint, 2427ca0c-8a29-4a6a-aabd-50cf02f587a7)
 * insert BundleEntryPUT(HealthcareService, 5cb05355-474b-4d30-8b0e-a9ca574b8274)
 * insert BundleEntryPUT(HealthcareService, c79125e5-739f-4238-959c-cd5872518c1f)
 * insert BundleEntryPUT(HealthcareService, 9d47ca45-4166-4531-a23d-ef5fa613ece4)
@@ -188,4 +204,3 @@ Description: "This bundle contains all care services for the Organization 2 Admi
 * insert BundleEntryPUT(HealthcareService, 08013141-16b2-42a0-8c9a-af57cee5511b)
 * insert BundleEntryPUT(PractitionerRole, f051d3bd-26ff-4030-a5b6-fc4ef2be83ba)
 * insert BundleEntryPUT(Practitioner, 040b160a-6072-4244-adc0-2b786c4ef052)
-

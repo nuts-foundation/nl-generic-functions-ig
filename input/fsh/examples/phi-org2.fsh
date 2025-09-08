@@ -1,7 +1,8 @@
 Instance: 27e58ece-409e-44f9-8cc1-b33495a0ef9d
 InstanceOf: Patient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
-Usage: #inline
+Usage: #example
 Title: "Patient Jaantje Merkens"
+Description: "Patient Jaantje Merkens in EHR of Organization 2"
 * meta.profile = $nl-core-Patient
 * identifier[0].system = "http://organization2.example.org/EHR/patients"
 * identifier[=].value = "vdfesz"

@@ -20,7 +20,7 @@ Description: "The technical details of an endpoint that can be used for electron
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * managingOrganization 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
-* payloadType from NLGfPayloadTypes
+* payloadType from NlGfDataExchangeCapabilitiesVS (required)
 * address obeys address-immutable
 
 

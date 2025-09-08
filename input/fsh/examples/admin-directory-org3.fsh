@@ -37,14 +37,12 @@ Description: "Nursing department at Organization 3"
 Instance: 8f224548-6d50-44b6-82c5-75826ee0900f
 InstanceOf: NlGfEndpoint
 Usage: #example
-Title: "Organization 3 - Endpoint FHIR"
+Title: "Organization 3 - Endpoint FHIR R4"
 * status = #active
-* payloadType[+].coding = $sct#308292007  "Transfer of care"
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
-* name = "FHIR Endpoint 3"
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
+* name = "FHIR R4 Endpoint"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "34270859" //Gerimedica
 * contact[0].system = #phone
@@ -54,6 +52,25 @@ Title: "Organization 3 - Endpoint FHIR"
 * contact[=].value = "info@example.org"
 * contact[=].use = #work
 * address = "https://cp3-test.example.org/fhirr4"
+
+Instance: 72a349cc-7336-4a91-873d-fc9349769e1a
+InstanceOf: NlGfEndpoint
+Usage: #example
+Title: "Organization 3 - Endpoint FHIR STU3"
+* status = #active
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities|4.0.0 "Transfer of Care - eOverdracht Server"
+* payloadMimeType[+] = #application/fhir+json
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
+* name = "FHIR STU3 Endpoint"
+* managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
+* managingOrganization.identifier.value = "34270859" //Gerimedica
+* contact[0].system = #phone
+* contact[=].value = "+3131599991"
+* contact[=].use = #work
+* contact[+].system = #email
+* contact[=].value = "info@example.org"
+* contact[=].use = #work
+* address = "https://cp3-test.example.org/fhirstu3"
 
 
 Instance: 4fcf98c7-b198-4d61-8b3e-5ea39e33c405
@@ -127,6 +144,7 @@ Description: "This bundle contains all care services for the Organization 3 Admi
 * insert BundleEntryPUT(Organization, 3e799075-63a2-4a4c-913d-a91b8198463d)
 * insert BundleEntryPUT(Organization, 631cf10e-42d6-4165-9907-11e2333d4a85)
 * insert BundleEntryPUT(Endpoint, 8f224548-6d50-44b6-82c5-75826ee0900f)
+* insert BundleEntryPUT(Endpoint, 72a349cc-7336-4a91-873d-fc9349769e1a)
 * insert BundleEntryPUT(HealthcareService, 4fcf98c7-b198-4d61-8b3e-5ea39e33c405)
 * insert BundleEntryPUT(HealthcareService, b48826dc-2d58-479a-bfd3-80b7a9d69757)
 * insert BundleEntryPUT(Practitioner, 08630c28-5e2a-4b0c-b8ce-f08f533246b9)

@@ -30,10 +30,9 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 1"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "51494752" //Pharmapartners B.V.
@@ -76,10 +75,9 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/960a4f8c-74d8-482c-97ab-e2a025869fee"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 2"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "08013836" //Nedap N.V.
@@ -120,10 +118,9 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/553416dd-da12-40f7-a9bd-eb3e193177bd"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 3"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "34270859" //Gerimedica
@@ -167,10 +164,9 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/59654248-477c-4694-b156-e0042f0765a6"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 1"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "51494752" //Pharmapartners B.V.
@@ -244,11 +240,9 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/430f7379-8ec2-4e55-b096-919995da61e2"
 * status = #active
-* payloadType[+].coding = $sct#308292007  "Transfer of care"
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 2"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "08013836" //Nedap N.V.
@@ -265,9 +259,8 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/d4c1d657-67a9-471c-9732-9c042e9a6d43"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-dicom "DICOM Images"
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #dicom-wado-rs
+* payloadType[+].coding = $endpoint-payload-type#any "Any"
+* connectionType = $endpoint-connection-type#dicom-wado-rs
 * name = "DICOM-WADO-RS Endpoint"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "08013836"
@@ -278,6 +271,25 @@ Usage: #inline
 * contact[=].value = "info@nedap.example.org"
 * contact[=].use = #work
 * address = "https://cp2-test.example.org/dicom-wado-rs"
+
+Instance: ad2-e3
+InstanceOf: NlGfEndpoint
+Usage: #inline
+* meta.source = "https://cp2-test.example.org/fhirr4/2427ca0c-8a29-4a6a-aabd-50cf02f587a7"
+* status = #active
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities|4.0.0 "Transfer of Care - eOverdracht Server"
+* payloadMimeType[+] = #application/fhir+json
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
+* name = "FHIR STU3 Endpoint"
+* managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
+* managingOrganization.identifier.value = "08013836" //Nedap N.V.
+* contact[0].system = #phone
+* contact[=].value = "+3131599991"
+* contact[=].use = #work
+* contact[+].system = #email
+* contact[=].value = "info@nedap.example.org"
+* contact[=].use = #work
+* address = "https://cp2-test.example.org/fhirstu3"
 
 
 Instance: ad2-hs1
@@ -430,12 +442,10 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/8f224548-6d50-44b6-82c5-75826ee0900f"
 * status = #active
-* payloadType[+].coding = $sct#308292007  "Transfer of care"
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
-* name = "FHIR Endpoint 3"
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
+* name = "FHIR R4 Endpoint"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "34270859" //Gerimedica
 * contact[0].system = #phone
@@ -445,6 +455,25 @@ Usage: #inline
 * contact[=].value = "info@example.org"
 * contact[=].use = #work
 * address = "https://cp3-test.example.org/fhirr4"
+
+Instance: ad3-e2
+InstanceOf: NlGfEndpoint
+Usage: #inline
+* meta.source = "https://cp3-test.example.org/fhirr4/72a349cc-7336-4a91-873d-fc9349769e1a"
+* status = #active
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities|4.0.0 "Transfer of Care - eOverdracht Server"
+* payloadMimeType[+] = #application/fhir+json
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
+* name = "FHIR STU3 Endpoint"
+* managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
+* managingOrganization.identifier.value = "34270859" //Gerimedica
+* contact[0].system = #phone
+* contact[=].value = "+3131599991"
+* contact[=].use = #work
+* contact[+].system = #email
+* contact[=].value = "info@example.org"
+* contact[=].use = #work
+* address = "https://cp3-test.example.org/fhirstu3"
 
 
 Instance: ad3-hs1
@@ -534,6 +563,7 @@ Description: "This bundle contains all care services from each Administration Di
 * insert BundleEntryPUT(Organization, ad2-o1)
 * insert BundleEntryPUT(Endpoint, ad2-e1)
 * insert BundleEntryPUT(Endpoint, ad2-e2)
+* insert BundleEntryPUT(Endpoint, ad2-e3)
 * insert BundleEntryPUT(HealthcareService, ad2-hs1)
 * insert BundleEntryPUT(HealthcareService, ad2-hs2)
 * insert BundleEntryPUT(HealthcareService, ad2-hs3)
@@ -546,6 +576,7 @@ Description: "This bundle contains all care services from each Administration Di
 * insert BundleEntryPUT(Organization, ad3-o1)
 * insert BundleEntryPUT(Organization, ad3-o2)
 * insert BundleEntryPUT(Endpoint, ad3-e1)
+* insert BundleEntryPUT(Endpoint, ad3-e2)
 * insert BundleEntryPUT(HealthcareService, ad3-hs1)
 * insert BundleEntryPUT(HealthcareService, ad3-hs2)
 * insert BundleEntryPUT(Practitioner, ad3-p1)

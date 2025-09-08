@@ -14,27 +14,27 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 ### Solution overview
 
-GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices made for The Netherlands. Most impactful/striking choice are:
+GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) ([GF-Adressering, ADR-0](https://github.com/minvws/generiekefuncties-adressering/issues/166)). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices made for The Netherlands. Most impactful/striking choice are:
 - using Dutch 'nl-core' FHIR-profiles on top of IHE mCSD-profiles
 - using the Landelijke Register Zorgaanbieders (LRZa) as the source/master-list of all other sources. 
 
 Here is a brief overview of the processes that are involved: 
 1. Every care provider registers its addressable entities in an 'Administration Directory.'
-1. Every care provider registers the endpoint (url) of its 'Administration Directory' at the LRZa registry.
-1. An 'Update client' uses the LRZa and the Administration Directories to consolidate all data into a 'Query Directory.'
+1. Every care provider registers the endpoint (url) of its 'Administration Directory' at the LRZa Administration Directory. 
+1. An 'Update client' uses the LRZa ([GF-Adressering, ADR-7](https://github.com/minvws/generiekefuncties-adressering/issues/155)) and the Administration Directories to consolidate all data into a 'Query Directory.'
 1. A practitioner and/or system (EHR) can now use the Query Directory to search for a healthcare service, organization, department, location, endpoint, or practitioner.
-
-Each component, data model, and transaction will be discussed in more detail.
 
 <img src="careservices-overview-transactions.png" width="100%" style="float: none"/>
 
+This overview implies a decentralized architecture for many components. An important central component is the LRZa Administration Directory. For more detail on the topology of GF Adressing, see [GF-Adressering, ADR-5](https://github.com/minvws/generiekefuncties-adressering/issues/153).   
+Each component, data model, and transaction will be discussed in more detail.
 
 ### Components (actors)
 
 #### Administration Client
 The Administration Client is responsible for managing the registration and maintenance of addressable entities within a healthcare organization. It should be able to create, update, and delete records for healthcare services, organizations, departments, locations, endpoints, or practitioners in the Administration Directory. Addressable entities MUST conform to the [Data models](#data-models).
 
-The Administration Client of the LRZa provides an user interface for healthcare providers to administer their Administration Directory endpoint (url).
+The Administration Client of the LRZa provides an user interface for healthcare providers to administer their Administration Directory endpoint (url).([GF-Adressering, ADR-10](https://github.com/minvws/generiekefuncties-adressering/issues/159) and [GF-Adressering, ADR#167](https://github.com/minvws/generiekefuncties-adressering/issues/167))
 
 
 #### Administration Directory
@@ -42,7 +42,7 @@ The Administration Directory persist all addressable entities of one or more hea
 
 The Administration Directory MUST implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-update-client.html) to publish changes of addressable entities. These changes are consumed by an Update Client.
 
-The performance/availability requirements for an Administration Directory:
+The performance/availability requirements for an Administration Directory [GF-Adressering, ADR#177](https://github.com/minvws/generiekefuncties-adressering/issues/177):
 - **Query Response Time:** 95% of _history requests should be answered within 2000ms.
 - **Availability:** Minimum uptime of 99% between 8PM and 6AM.
 
@@ -56,16 +56,16 @@ The Update Client uses a [FHIR 'history-type' transactions](http://hl7.org/fhir/
 ```
 GET https://somecareprovider.nl/fhirR4/Organization/_history?_since=2025-02-07T13:28:17.239+02:00&_format=application/fhir+json
 ```
-Besides using the 'history-type' transaction, the Update Client should be able to do query everything in the Administration Directory using a search transaction. Either for the initial load or periodically for a full reload to fix edge-case scenario's (e.g. Administration Directory backup restores). 
+Besides using the 'history-type' transaction, the Update Client should be able to do query everything in the Administration Directory using a search transaction. Either for the initial load or periodically for a full reload to fix edge-case scenario's (e.g. Administration Directory backup restores). ([GF-Adressering, ADR-14](https://github.com/minvws/generiekefuncties-adressering/issues/163))
 
-During consolidation, multiple Administration Directories may have overlapping or conflicting entities. An Update Client MUST obey these guidelines:
+During consolidation, multiple Administration Directories may have overlapping or conflicting entities. An Update Client MUST only use data from authoritative data sources ([GF-Adressering, ADR#186](https://github.com/minvws/generiekefuncties-adressering/issues/186)) and MUST obey these guidelines:
 - The LRZa Administration Directory is authoritative for Organization instances with `identifier` of system `http://fhir.nl/fhir/NamingSystem/ura` (URA), it's `name` and `status`. When the Healthcare provider's Administration Directory also provides a `name` or `status` value (for an Organization-instance with a URA-identifier), these values should be ignored. Other elements from the Healthcare provider's Administration Directory should be added. This way, a Healthcare Provider can add an `alias` or `endpoint` using it's own Administration Directory.
 - The LRZa Administration Directory contains a list of healthcare providers (identified by a URA) and the healthcare provider's Administration Directory Endpoint (url). An Administration Directory is only authoritative for the Healthcare Providers that registered this Administration Directory Endpoint (url) at the LRZa. Information from other Healthcare Providers should be disregarded.
 - All HealthcareServices, Locations, PractitionerRoles and Organization-entities of a single healthcare provider should (indirectly) link to a top-level Organization-instance with a URA-identifier:
   - All HealthcareService, Location, PractitionerRole entities MUST be directly linked to an Organization-instance (could be 'sub-Organization' like a department).
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
 
-After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the url of that instance at the (source) Administration Directory. The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
+After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the url of that instance at the (source) Administration Directory ([GF-Adressering, ADR-6](https://github.com/minvws/generiekefuncties-adressering/issues/154)). The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
 
 
 #### Query Directory
@@ -89,7 +89,7 @@ The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) 
 
 #### Endpoint
 An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. If an Organization does not have an Endpoint, it may still be reachable via an Endpoint at its parent Organization or an affiliated Organization.
-The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on .payloadType ([GF-Adressering, ADR#8](./care-services-appendix.html#adr-8-how-to-register-and-find-the-capabilities-of-an-endpoint)) and an additional extension 'replacedBy'. This can be used to point to a new endpoint if the old one has changed.
+The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on .payloadType ([GF-Adressering, ADR-8](https://github.com/minvws/generiekefuncties-adressering/issues/156)) and an additional extension 'replacedBy'. This can be used to point to a new endpoint if the old one has changed.
 
 > ##### Changing endpoints and the continued integrity of references
 > Healthcare records (e.g. conditions, observations, or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
@@ -118,7 +118,7 @@ The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html):
 
 
 #### OrganizationAffiliation
-***This resourcetype is out-of-scope for this IG-version***
+***This resourcetype is out-of-scope for this IG-version (waiting for [GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))***
 OrganizationAffiliation resources are used to represent relationships between organizations, such as a software vendor managing the Endpoint that is used by a care provider. It could also be used the represent multiple care providers working together under some agreement (e.g. in a region).
 The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) has no extra constraints on top of mCSD & nl-core profiles.  
 
@@ -128,7 +128,7 @@ An overview of the *most common* elements and relations between data models:
 
 
 ### Security
-The service provider of an Administration Directory may choose whether to require mTLS certificates. Certificate Authority PKI-O should be trusted. For cross-border data exchange using mTLS, support for additional CA's is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone.
+The service provider of an Administration Directory may choose whether to require mTLS certificates. 'Staat der Nederlanden Root CA' should be trusted. For cross-border data exchange using mTLS, support for additional CA's is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone. ([GF-Adressering, ADR#178](https://github.com/minvws/generiekefuncties-adressering/issues/178))
 
 ### Example use cases
 
@@ -153,3 +153,20 @@ Dr. West just created a referral (for patient Vera Brooks from use case #1). The
 <div>
 {% include care-services-use-case-2.svg %}
 </div>
+
+### Roadmap for Care Services
+
+#### Alternative Administration Directories
+
+Currently, two types of Administration Directories are supported; LRZa as 'Root Administration Directory' and Care Providers having their 'Administration Directory'. In the Netherlands, there are other registries that don't fit in these two types, e.g.:  
+- [Vektis-AGB](https://www.vektis.nl/agb-register/) is the authoritative source for the care provider *type*. [GF Consent](./consent.html) uses the Organization.type element, so it is important to use the authoritative source.
+- [BIG-register](https://www.bigregister.nl/) is the authoritative source for (a part of the) Physicians/Practitioners and their qualifications.
+These types of Administration Directories should be supported in the near future.
+
+#### ResourceType Practitioner
+
+Practitioner instances may contain private data (e.g. the name of a physician) and should be registered at an authoritative source (see [Alternative Administration Directories](#alternative-administration-directories)). This is currently out of scope.
+
+#### ResourceType OrganizationAffiliation
+
+The OrganizationAffiliation resource may be added in the future to publish relationships between organizations. ([GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))

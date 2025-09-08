@@ -27,10 +27,9 @@ InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 1 - Endpoint"
 * status = #active
-* payloadType[+].coding = nl-gf-code-system#nl-gf-care-services "Care Services Directory"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
-* connectionType.system = "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"
-* connectionType.code = #hl7-fhir-rest
+* connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 1"
 * managingOrganization.identifier.system = "http://fhir.nl/fhir/NamingSystem/kvk"
 * managingOrganization.identifier.value = "51494752" //Pharmapartners B.V.

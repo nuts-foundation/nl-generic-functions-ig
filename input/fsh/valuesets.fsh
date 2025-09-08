@@ -1,26 +1,30 @@
-ValueSet: NLGfPayloadTypes
-Id: nl-gf-payload-types
-Title: "NL GF Payload Types"
-Description: "The payload types supported by the NL Generic Functions."
+ValueSet: NlGfDataExchangeCapabilitiesVS
+Id: nl-gf-data-exchange-capabilities-vs
+Title: "NL GF Data exchange capabilities"
+Description: "The data exchange capabilities supported by the NL Generic Functions."
 * ^status = #active
 * ^experimental = true
-// * include codes from valueset http://hl7.org/fhir/ValueSet/endpoint-payload-type
-* ^copyright = "This value set includes content from SNOMED CT, which is copyright © 2002+ International Health Terminology Standards Development Organisation (IHTSDO), and distributed by agreement between IHTSDO and HL7. Implementer use of SNOMED CT is not covered by this agreement"
-* $sct#721912009  "Medication summary section"
-* $sct#371530004  "Imaging report"
-* $sct#77465005  "Patient summary document"
-* $sct#721963009  "Immunization summary document"
-* $sct#782671000000103  "Multidisciplinary care management"
-* $sct#308292007  "Transfer of care"
-* nl-gf-code-system#nl-gf-care-services "Care Services Directory"
-* nl-gf-code-system#nl-gf-dicom "DICOM Images"
+* include codes from valueset http://hl7.org/fhir/ValueSet/endpoint-payload-type
+* include codes from system http://nuts-foundation.github.io/nl-generic-functions-ig/CodeSystem/nl-gf-data-exchange-capabilities
 
-CodeSystem: NlGfCodeSystem
-Id: nl-gf-code-system
-Title: "NL GF Code System"
+// * ^copyright = "This value set includes content from SNOMED CT, which is copyright © 2002+ International Health Terminology Standards Development Organisation (IHTSDO), and distributed by agreement between IHTSDO and HL7. Implementer use of SNOMED CT is not covered by this agreement"
+// * $sct#721912009  "Medication summary section"
+// * $sct#371530004  "Imaging report"
+// * $sct#77465005  "Patient summary document"
+// * $sct#721963009  "Immunization summary document"
+// * $sct#782671000000103  "Multidisciplinary care management"
+// * $sct#308292007  "Transfer of care"
+
+
+CodeSystem: NlGfDataExchangeCapabilitiesCS
+Id: nl-gf-data-exchange-capabilities
+Title: "NL GF Data exchange capabilities"
 Description: "Local code system for NL Generic Functions."
-* #nl-gf-care-services "Care Services Directory"
-* #nl-gf-dicom "DICOM Images"
+* ^url = "http://nuts-foundation.github.io/nl-generic-functions-ig/CodeSystem/nl-gf-data-exchange-capabilities"
+* ^status = #active
+* ^experimental = true
+* #http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
+* #http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities|4.0.0 "Transfer of Care - eOverdracht Server"
 
 ValueSet: UziAgbSpecialismenVS
 Id: uzi-agb-specialismen-vs
