@@ -34,7 +34,7 @@ Each component, data model, and transaction will be discussed in more detail.
 #### Administration Client
 The Administration Client is responsible for managing the registration and maintenance of addressable entities within a healthcare organization. It should be able to create, update, and delete records for healthcare services, organizations, departments, locations, endpoints, or practitioners in the Administration Directory. Addressable entities MUST conform to the [Data models](#data-models).
 
-The Administration Client of the LRZa provides an user interface for healthcare providers to administer their Administration Directory endpoint (url).([GF-Adressering, ADR-10](https://github.com/minvws/generiekefuncties-adressering/issues/159) and [GF-Adressering, ADR#167](https://github.com/minvws/generiekefuncties-adressering/issues/167))
+The Administration Client of the LRZa provides a user interface for healthcare providers to administer their Administration Directory endpoint (url).([GF-Adressering, ADR-10](https://github.com/minvws/generiekefuncties-adressering/issues/159) and [GF-Adressering, ADR#167](https://github.com/minvws/generiekefuncties-adressering/issues/167))
 
 
 #### Administration Directory
@@ -130,7 +130,7 @@ An overview of the *most common* elements and relations between data models:
 
 
 ### Security
-The service provider of an Administration Directory may choose whether to require mTLS certificates. 'Staat der Nederlanden Root CA' should be trusted. For cross-border data exchange using mTLS, support for additional CA's is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone. ([GF-Adressering, ADR#178](https://github.com/minvws/generiekefuncties-adressering/issues/178))
+The service provider of an Administration Directory may choose whether to require mTLS certificates. 'Staat der Nederlanden Root CA' should be trusted. For cross-border data exchange using mTLS, support for additional CAs is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone. ([GF-Adressering, ADR#178](https://github.com/minvws/generiekefuncties-adressering/issues/178))
 
 ### Example use cases
 

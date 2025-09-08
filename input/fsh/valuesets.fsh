@@ -63,7 +63,7 @@ Description: "Value set for Uzi rolcodes."
 CodeSystem: UziRolcodesCS
 Id: uzi-rolcode
 Title: "RoleCodeNL - zorgverlenertype (personen)"
-Description: """Dit codesysteem is een kopie http://fhir.nl/fhir/NamingSystem/uzi-rolcode)"""
+Description: """Dit codesysteem is een kopie http://fhir.nl/fhir/NamingSystem/uzi-rolcode"""
 * ^meta.profile = "http://hl7.org/fhir/StructureDefinition/shareablecodesystem"
 * ^meta.source = "https://simplifier.net/nictiz-r4-zib2020/uzi-rolcode/$download?format=json"
 * ^language = #nl-NL
