@@ -70,7 +70,7 @@ During consolidation, multiple Administration Directories may have overlapping o
 - All HealthcareServices, Locations, PractitionerRoles and Organization-entities of a single healthcare provider MUST (indirectly) link to a top-level Organization-instance with a URA-identifier:
   - All HealthcareService, Location, PractitionerRole entities MUST be directly linked to an Organization-instance (could be 'sub-Organization' like a department).
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
-  - All Endpoint-instances MUST be linked from one of the HealthcareService or Organization-instances.
+  - All Endpoint-instances MUST be linked to from one of the HealthcareService or Organization-instances.
 
 After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the fully qualified URL of that instance at the originating Administration Directory ([GF-Adressering, ADR-6](https://github.com/minvws/generiekefuncties-adressering/issues/154)). The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
 
@@ -178,14 +178,14 @@ Currently, two types of Administration Directories are supported; LRZa as 'Root 
 
 These types of Administration Directories should be supported in the near future.
 
-#### ResourceType Practitioner
+#### Practitioner resource
 
 Practitioner instances may contain private data (e.g. the name of a physician) and should be registered at an authoritative source (see [Alternative Administration Directories](#alternative-administration-directories)). This is currently out of scope.
 
-#### ResourceType OrganizationAffiliation
+#### OrganizationAffiliation resource
 
 The OrganizationAffiliation resource may be added in the future to publish relationships between organizations. ([GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))
 
 #### Using HCIM/NL-CORE profiles and valuesets
 
-Profiles and Valuesets in this IG should re-use the Dutch nictiz.fhir.nl.r4.nl-core package, but due to a software issue, it is currently not possible. A fix is on its way.
+Profiles and Valuesets in this IG should re-use the Dutch `nictiz.fhir.nl.r4.nl-core` package, but due to a software issue, it is currently not possible. A fix is on its way.
