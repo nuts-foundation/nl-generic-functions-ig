@@ -31,6 +31,7 @@ Alias: $restful-interaction = http://hl7.org/fhir/restful-interaction
 Alias: $service-type = http://terminology.hl7.org/CodeSystem/service-type
 Alias: $endpoint-payload-type = http://terminology.hl7.org/CodeSystem/endpoint-payload-type
 Alias: $endpoint-connection-type = http://terminology.hl7.org/CodeSystem/endpoint-connection-type
+Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
 // Alias: $orpha = http://www.orpha.net
 
 

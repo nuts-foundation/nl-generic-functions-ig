@@ -23,6 +23,8 @@ The API supports the following care contexts (zorgContext), each represented by 
 - `http://snomed.info/sct|721963009` - Immunization summary document
 - `http://snomed.info/sct|782671000000103` - Multidisciplinary care management
 
+[FHIR Valueset Data localization context](./ValueSet-nl-gf-data-localization-context-vs.html)
+
 #### Supported Organization Types
 
 The API supports the following organization types (OrganisatieType):
@@ -33,6 +35,8 @@ The API supports the following organization types (OrganisatieType):
 - `2.16.840.1.113883.2.4.15.1060|L1` - Laboratorium (Laboratory)
 - `2.16.840.1.113883.2.4.15.1060|G5` - Geestelijke Gezondheidszorg (Mental Health Care)
 - `2.16.840.1.113883.5.1008|OTH` - Overige (Other)
+
+[FHIR Valueset Organization types](./ValueSet-2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000.html)
 
 #### API Operations
 
