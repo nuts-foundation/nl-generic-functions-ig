@@ -40,7 +40,7 @@ InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 3 - Endpoint FHIR R4"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR R4 Endpoint"

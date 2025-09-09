@@ -30,7 +30,7 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 1"
@@ -75,7 +75,7 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/960a4f8c-74d8-482c-97ab-e2a025869fee"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 2"
@@ -118,7 +118,7 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/553416dd-da12-40f7-a9bd-eb3e193177bd"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 3"
@@ -164,7 +164,7 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/59654248-477c-4694-b156-e0042f0765a6"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 1"
@@ -240,7 +240,7 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/430f7379-8ec2-4e55-b096-919995da61e2"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 2"
@@ -442,7 +442,7 @@ InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/8f224548-6d50-44b6-82c5-75826ee0900f"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR R4 Endpoint"

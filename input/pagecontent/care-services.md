@@ -53,19 +53,20 @@ The performance/availability requirements for an Administration Directory ([GF-A
 
 The Update Client is responsible for aggregating and synchronizing addressable entity data from multiple Administration Directories. It periodically retrieves updates, including new, modified, or deleted records, and consolidates this information into a Query Directory. 
 
-The Update Client uses a [FHIR 'history-type' transactions](http://hl7.org/fhir/R4/http.html#history) and (optionally) parameter '_since' to get updates from Administration Directories, for example:
+The Update Client uses a [FHIR 'history-type' operation](http://hl7.org/fhir/R4/http.html#history) and (optionally) parameter '_since' to get updates from Administration Directories, for example:
 
 ```
 GET https://somecareprovider.nl/fhirR4/Organization/_history?_since=2025-02-07T13:28:17.239+02:00&_format=application/fhir+json
 ```
-Besides using the 'history-type' transaction, the Update Client should be able to do query everything in the Administration Directory using a search transaction. Either for the initial load or periodically for a full reload to fix edge-case scenario's (e.g. Administration Directory backup restores). ([GF-Adressering, ADR-14](https://github.com/minvws/generiekefuncties-adressering/issues/163))
+Besides using the 'history-type' operation, the Update Client should be able to query all instances in the Administration Directory using a search operation. Either for the initial load or periodically for a full reload to fix edge-case scenario's (e.g. Administration Directory backup restores). ([GF-Adressering, ADR-14](https://github.com/minvws/generiekefuncties-adressering/issues/163))
 
 During consolidation, multiple Administration Directories may have overlapping or conflicting entities. An Update Client MUST only use data from authoritative data sources ([GF-Adressering, ADR#186](https://github.com/minvws/generiekefuncties-adressering/issues/186)) and MUST obey these guidelines:
-- The LRZa Administration Directory is authoritative for Organization instances with `identifier` of system `http://fhir.nl/fhir/NamingSystem/ura` (URA), it's `name` and `status`. When the Healthcare provider's Administration Directory also provides a `name` or `status` value (for an Organization-instance with a URA-identifier), these values should be ignored. Other elements from the Healthcare provider's Administration Directory should be added. This way, a Healthcare Provider can add an `alias` or `endpoint` using it's own Administration Directory.
+- The LRZa Administration Directory is authoritative for Organization instances with `identifier` of system `http://fhir.nl/fhir/NamingSystem/ura` (URA), it's `name` and `status`. When the Healthcare provider's Administration Directory also provides a `name` or `status` value (for an Organization-instance with a URA-identifier), these values shall be ignored. Other elements from the Healthcare provider's Administration Directory should be added. This way, a Healthcare Provider can add an `alias` or `endpoint` using it's own Administration Directory.
 - The LRZa Administration Directory contains a list of healthcare providers (identified by a URA) and the healthcare provider's Administration Directory Endpoint (url). An Administration Directory is only authoritative for the Healthcare Providers that registered this Administration Directory Endpoint (url) at the LRZa. Information from other Healthcare Providers should be disregarded.
 - All HealthcareServices, Locations, PractitionerRoles and Organization-entities of a single healthcare provider should (indirectly) link to a top-level Organization-instance with a URA-identifier:
   - All HealthcareService, Location, PractitionerRole entities MUST be directly linked to an Organization-instance (could be 'sub-Organization' like a department).
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
+  - All Endpoint-instances MUST be linked from one of the HealthcareService or Organization-instances.
 
 After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the url of that instance at the (source) Administration Directory ([GF-Adressering, ADR-6](https://github.com/minvws/generiekefuncties-adressering/issues/154)). The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
 
