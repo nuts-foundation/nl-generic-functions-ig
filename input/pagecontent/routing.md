@@ -77,9 +77,9 @@ Users (or their systems) search the directory for a suitable HealthcareService a
 
 ##### Interaction flow:
 1. Care providers publish structured addressable resources to the directory
-1. The sender searches for the appropriate service (e.g. “initial consultation” for “radiology” near “Zwolle”)
+1. The sender searches for the appropriate service (e.g. “initial consultation” for “radiology” near “Zwolle”) in a Care Service (Query) Directory ([example content of a Query Directory](./Bundle-query-directory.html))
 1. The resulting HealthcareService (indirectly) refers to Organization, Location, Endpoint, etc.
-1. This is used in the ServiceRequest and Task
+1. This is used in the ServiceRequest ([example](./ServiceRequest-53a41e63-e826-45fa-9076-9be4b18399c8.html)) and Task ([example](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.html))
 
 ##### Role of the ServiceRequest
 The ServiceRequest represents the ‘clinical intent’ or ‘clinical authorization’ for a procedure. It shall have a ServiceRequest.code (representing e.g. ‘initial consultation’ or ‘nursing handoff’). Detailed ServiceRequests may use an ActivityDefinition to define what requested for the patient in ServiceRequest.instantiatesCanonical.
@@ -129,9 +129,7 @@ This document is a co-creation of the companies listed below. The following peop
 | 1.1   | August 28th 2025   |        | The role of ActivityDefinition has been revised. Some elements are now covered by the concept of the HealthcareService.                                                             |
 {:.grid .table-hover}
 
-### Appendix: Examples
 
-TODO
 
 
 <!-- ### Summary of the notification framework in FHIR core

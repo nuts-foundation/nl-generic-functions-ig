@@ -1,0 +1,141 @@
+# 1) To use requests in this file, you need to install the REST Client extension in Visual Studio Code
+
+# 2) In the settings.json of the REST Client extension, add these environment variables like so:
+# "rest-client.environmentVariables": {
+#         "$shared": {
+#             "path-to-data": "./fsh-generated/resources/"
+#         },
+#         "poc-vws-gf": {
+#             "lrza-fhir-url": "http://localhost:8080/fhir/",
+#             "lrza-access-token": "Bearer your-token-here",
+#             "org1-fhir-url": "http://localhost:8080/fhir/",
+#             "org1-access-token": "Bearer your-token-here",
+#             "org2-fhir-url": "http://localhost:8080/fhir/",
+#             "org2-access-token": "Bearer your-token-here",
+#             "org3-fhir-url": "http://localhost:8080/fhir/",
+#             "org3-access-token": "Bearer your-token-here",
+#             "querydirectory-fhir-url": "http://localhost:8080/fhir/",
+#             "querydirectory-access-token": "Bearer your-token-here",
+
+#         }
+# }
+
+# 3) Switch between environments by clicking on the environment name in the status bar at the bottom right of the window
+
+# 4) Make sure you have a FHIR server running that allows external references. You can use the HAPI FHIR server like so:
+# sudo docker pull hapiproject/hapi:latest
+# sudo docker run -p 8080:8080 -e hapi.fhir.allow_external_references=true -e hapi.fhir.store_meta_source_information=SOURCE_URI hapiproject/hapi:latest
+# 5) to stop the server, use: sudo docker stop <container-id> (you can find the container id by using 'sudo docker ps')
+
+### POST data of services in LRZa
+
+POST {{lrza-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{lrza-access-token}}
+
+<@ {{path-to-data}}Bundle-admin-directory-lrza.json
+
+
+###
+
+POST {{lrza-fhir-url}}$reindex
+
+### POST data of services in HIS of Organization 1
+
+###
+
+
+POST {{org1-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{org1-access-token}}
+
+<@ {{path-to-data}}Bundle-admin-directory-org1.json
+
+###
+
+POST {{org1-fhir-url}}$reindex
+
+### 
+
+POST {{org1-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{org1-access-token}}
+
+<@ {{path-to-data}}Bundle-phi-org1.json
+
+### POST existing data in EHR of Organization 2
+
+POST {{org2-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{org2-access-token}}
+
+<@ {{path-to-data}}Bundle-admin-directory-org2.json
+
+###
+
+POST {{org2-fhir-url}}$reindex
+
+### 
+
+POST {{org2-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{org2-access-token}}
+
+<@ {{path-to-data}}Bundle-phi-org2.json
+
+
+### POST existing data in ECD of Organization 3
+
+
+POST {{org3-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{org3-access-token}}
+
+<@ {{path-to-data}}Bundle-admin-directory-org3.json
+
+###
+
+POST {{org3-fhir-url}}$reindex
+
+
+###
+
+POST {{org3-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{org3-access-token}}
+
+<@ {{path-to-data}}Bundle-phi-org3.json
+
+
+
+
+### The result of all the above data of the admin directories should result in the bundle of the Query Directory below.
+
+POST {{querydirectory-fhir-url}}
+Content-Type: application/fhir+json
+Authorization: {{querydirectory-access-token}}
+
+<@ {{path-to-data}}Bundle-query-directory.json
+
+
+###
+
+POST {{querydirectory-fhir-url}}$reindex
+
+
+
+
+# ###
+
+# POST {{org4-fhir-url}}/$expunge
+# Content-Type: application/fhir+json
+
+# {
+#   "resourceType": "Parameters",
+#   "parameter": [
+#     {
+#       "name": "expungeEverything",
+#       "valueBoolean": true
+#     }
+#   ]
+# }

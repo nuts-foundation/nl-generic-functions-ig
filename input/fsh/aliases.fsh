@@ -28,15 +28,26 @@ Alias: $provenance-participant-type = http://terminology.hl7.org/CodeSystem/prov
 Alias: $unitsofmeasure = http://unitsofmeasure.org
 Alias: $audit-event-type = http://terminology.hl7.org/CodeSystem/audit-event-type
 Alias: $restful-interaction = http://hl7.org/fhir/restful-interaction
+Alias: $service-type = http://terminology.hl7.org/CodeSystem/service-type
+Alias: $endpoint-payload-type = http://terminology.hl7.org/CodeSystem/endpoint-payload-type
+Alias: $endpoint-connection-type = http://terminology.hl7.org/CodeSystem/endpoint-connection-type
 // Alias: $orpha = http://www.orpha.net
-// Alias: $atc = http://www.whocc.no/atc
+
+
+Alias: $nl-core-Patient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient
+Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
+Alias: $consentscope = http://terminology.hl7.org/CodeSystem/consentscope
+Alias: $v3-ParticipationType = http://terminology.hl7.org/CodeSystem/v3-ParticipationType
+Alias: $consentaction = http://terminology.hl7.org/CodeSystem/consentaction
+Alias: $v3-Confidentiality = http://terminology.hl7.org/CodeSystem/v3-Confidentiality
+Alias: $atc = http://www.whocc.no/atc
 
 // Alias: $v3-AddressUse = http://terminology.hl7.org/CodeSystem/v3-AddressUse
 // Alias: $consentscope = http://terminology.hl7.org/CodeSystem/consentscope
 // Alias: $consentcategorycodes = http://terminology.hl7.org/CodeSystem/consentcategorycodes
 // Alias: $v3-RoleCode = http://terminology.hl7.org/CodeSystem/v3-RoleCode
-// Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-clinical
-// Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
+Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-clinical
+Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
 
 // Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
 // Alias: $allergyintolerance-verification = http://terminology.hl7.org/CodeSystem/allergyintolerance-verification

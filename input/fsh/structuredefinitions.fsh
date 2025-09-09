@@ -20,7 +20,7 @@ Description: "The technical details of an endpoint that can be used for electron
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * managingOrganization 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
-* payloadType from NLGfPayloadTypes
+* payloadType from NlGfDataExchangeCapabilitiesVS (required)
 * address obeys address-immutable
 
 
@@ -42,9 +42,9 @@ Description: "The technical details of a healthcare service that can be used in 
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
 * type 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
 * providedBy 1.. 
-* specialty from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.22--20200901000000 (required)
+* specialty from UziAgbSpecialismenVS (required)
 // * specialty from SpecialtyType
-* type from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.19--20200901000000 (required)
+* type from ProcedureType (required)
 * type.extension contains SupportedActivityDefinitions named supportedActivityDefinitions 0..*
 
 
@@ -121,7 +121,8 @@ Description: "The details of a healthcare practitioner's role within an organiza
 * practitioner 1..
 * organization 1..
 * code 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
-
+* code from UziRolcodesVS (required)
+* specialty from UziAgbSpecialismenVS (required)
 
 
 
