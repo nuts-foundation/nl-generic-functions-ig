@@ -163,6 +163,7 @@ Dr. West just created a referral (for patient Vera Brooks from use case #1). The
 Currently, two types of Administration Directories are supported; LRZa as 'Root Administration Directory' and Care Providers having their 'Administration Directory'. In the Netherlands, there are other registries that don't fit in these two types, e.g.:  
 - [Vektis-AGB](https://www.vektis.nl/agb-register/) is the authoritative source for the care provider *type*. [GF Consent](./consent.html) uses the Organization.type element, so it is important to use the authoritative source.
 - [BIG-register](https://www.bigregister.nl/) is the authoritative source for (a part of the) Physicians/Practitioners and their qualifications.
+- Medmij has a register (OCL) that lists (qualified) Endpoints for certain data exchanges. Registers like the Medmij-OCL may form the authoritative source for element Endpoint.payloadType.
 
 These types of Administration Directories should be supported in the near future.
 
@@ -173,3 +174,7 @@ Practitioner instances may contain private data (e.g. the name of a physician) a
 #### ResourceType OrganizationAffiliation
 
 The OrganizationAffiliation resource may be added in the future to publish relationships between organizations. ([GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))
+
+#### Using HCIM/NL-CORE profiles and valuesets
+
+Profiles and Valuesets in this IG should re-use the Dutch nictiz.fhir.nl.r4.nl-core package, but due to a software issue, it is currently not possible. A fix is on its way.

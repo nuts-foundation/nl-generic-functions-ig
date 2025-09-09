@@ -23,13 +23,14 @@ Title: "Organization 2 - Organization"
 * address.postalCode = "7001 BZ"
 * endpoint[+] = Reference(Endpoint/430f7379-8ec2-4e55-b096-919995da61e2)
 * endpoint[+] = Reference(Endpoint/d4c1d657-67a9-471c-9732-9c042e9a6d43)
+* endpoint[+] = Reference(Endpoint/2427ca0c-8a29-4a6a-aabd-50cf02f587a7)
 
 Instance: 430f7379-8ec2-4e55-b096-919995da61e2
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 2 - Endpoint FHIR R4"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client|0.2.0 "Care Services Directory - Administration Client"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-admin-client "Care Services Directory - Administration Client"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR Endpoint 2"
@@ -66,7 +67,7 @@ InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 2 - Endpoint FHIR STU3"
 * status = #active
-* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities|4.0.0 "Transfer of Care - eOverdracht Server"
+* payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities "Transfer of Care - eOverdracht Server"
 * payloadMimeType[+] = #application/fhir+json
 * connectionType = $endpoint-connection-type#hl7-fhir-rest
 * name = "FHIR STU3 Endpoint"
