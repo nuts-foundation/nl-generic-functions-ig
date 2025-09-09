@@ -1,8 +1,8 @@
 ### Introduction
 
-This FHIR Implementation Guide defines the specifications for Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across systems.
+This FHIR Implementation Guide specifies the Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across systems.
 
-In today’s healthcare landscape, organizations rely on both physical and digital addresses for communication and data exchange. However, access to accurate and up-to-date digital addressing information is often inconsistent or unavailable, hindering interoperability and timely access to health information. GFA addresses this challenge by providing a unified framework that ensures all current, valid addresses for data exchange are easily accessible and traceable to authoritative sources.
+In today’s healthcare landscape, organizations rely on both physical and digital addresses for communication and data exchange. However, digital addressing information is often inconsistent, out-of-date, or unavailable, hindering interoperability and timely access to health information. GFA addresses this challenge by providing a unified framework that ensures all current, valid addresses for data exchange are easily accessible and traceable to authoritative sources.
 
 This guide outlines the technical requirements and architectural principles underlying GFA, with a focus on trust, authenticity, and data integrity. Key design principles include:
 
@@ -14,19 +14,19 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 ### Solution overview
 
-GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices made for The Netherlands. Most impactful/striking choice are:
+GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices made for the Netherlands. Most impactful/striking choice are:
 - using Dutch 'nl-core' FHIR-profiles on top of IHE mCSD-profiles
 - using the Landelijke Register Zorgaanbieders (LRZa) as the source/master-list of all other sources. 
 
 Here is a brief overview of the processes that are involved: 
 1. Every care provider registers its addressable entities in an 'Administration Directory.'
-1. Every care provider registers the endpoint (url) of its 'Administration Directory' at the LRZa registry.
-1. An 'Update client' uses the LRZa and the Administration Directories to consolidate all data into a 'Query Directory.'
-1. A practitioner and/or system (EHR) can now use the Query Directory to search for a healthcare service, organization, department, location, endpoint, or practitioner.
+2. Every care provider registers the endpoint (URL) of its 'Administration Directory' at the LRZa registry (also an 'Administration Directory').
+3. An 'Update Client' uses the LRZa and the care provider Administration Directories to consolidate all data into a 'Query Directory'.
+4. A practitioner and/or system (EHR) can now use the Query Directory to search for a healthcare service, organization, department, location, endpoint, or practitioner.
 
-Each component, data model, and transaction will be discussed in more detail.
+The following chapters discuss each component, data model, and transaction in more detail.
 
-<img src="careservices-overview-transactions.png" width="100%" style="float: none"/>
+<img src="careservices-overview-transactions.png" width="100%" style="float: none" alt="Overview of transactions in the Care Services Addressing solution."/>
 
 
 ### Components (actors)
@@ -34,7 +34,7 @@ Each component, data model, and transaction will be discussed in more detail.
 #### Administration Client
 The Administration Client is responsible for managing the registration and maintenance of addressable entities within a healthcare organization. It should be able to create, update, and delete records for healthcare services, organizations, departments, locations, endpoints, or practitioners in the Administration Directory. Addressable entities MUST conform to the [Data models](#data-models).
 
-The Administration Client of the LRZa provides an user interface for healthcare providers to administer their Administration Directory endpoint (url).
+The Administration Client of the LRZa provides means for healthcare providers to administer their Administration Directory endpoint (URL).
 
 
 #### Administration Directory
@@ -44,14 +44,14 @@ The Administration Directory MUST implement [these capabilities](./CapabilitySta
 
 The performance/availability requirements for an Administration Directory:
 - **Query Response Time:** 95% of _history requests should be answered within 2000ms.
-- **Availability:** Minimum uptime of 99% between 8PM and 6AM.
+- **Availability:** Minimum uptime of 99% between 8PM and 6AM (Europe/Amsterdam timezone).
 
 
 #### Update Client
 
 The Update Client is responsible for aggregating and synchronizing addressable entity data from multiple Administration Directories. It periodically retrieves updates, including new, modified, or deleted records, and consolidates this information into a Query Directory. 
 
-The Update Client uses a [FHIR 'history-type' transactions](http://hl7.org/fhir/R4/http.html#history) and (optionally) parameter '_since' to get updates from Administration Directories, for example:
+The Update Client uses a [FHIR 'history-type' transactions](http://hl7.org/fhir/R4/http.html#history) and (optionally) parameter `_since` to get updates from Administration Directories, for example:
 
 ```
 GET https://somecareprovider.nl/fhirR4/Organization/_history?_since=2025-02-07T13:28:17.239+02:00&_format=application/fhir+json
@@ -59,13 +59,13 @@ GET https://somecareprovider.nl/fhirR4/Organization/_history?_since=2025-02-07T1
 Besides using the 'history-type' transaction, the Update Client should be able to do query everything in the Administration Directory using a search transaction. Either for the initial load or periodically for a full reload to fix edge-case scenario's (e.g. Administration Directory backup restores). 
 
 During consolidation, multiple Administration Directories may have overlapping or conflicting entities. An Update Client MUST obey these guidelines:
-- The LRZa Administration Directory is authoritative for Organization instances with `identifier` of system `http://fhir.nl/fhir/NamingSystem/ura` (URA), it's `name` and `status`. When the Healthcare provider's Administration Directory also provides a `name` or `status` value (for an Organization-instance with a URA-identifier), these values should be ignored. Other elements from the Healthcare provider's Administration Directory should be added. This way, a Healthcare Provider can add an `alias` or `endpoint` using it's own Administration Directory.
-- The LRZa Administration Directory contains a list of healthcare providers (identified by a URA) and the healthcare provider's Administration Directory Endpoint (url). An Administration Directory is only authoritative for the Healthcare Providers that registered this Administration Directory Endpoint (url) at the LRZa. Information from other Healthcare Providers should be disregarded.
-- All HealthcareServices, Locations, PractitionerRoles and Organization-entities of a single healthcare provider should (indirectly) link to a top-level Organization-instance with a URA-identifier:
+- The LRZa Administration Directory is authoritative for Organization instances with `identifier` of system `http://fhir.nl/fhir/NamingSystem/ura` (URA), its `name` and `status`. When the healthcare provider's Administration Directory also provides a `name` or `status` value (for an Organization-instance with a URA-identifier), these values should be ignored. Other elements from the healthcare provider's Administration Directory should be added. This way, a healthcare provider can add an `alias` or `endpoint` using it's own Administration Directory.
+- The LRZa Administration Directory contains a list of healthcare providers (identified by a URA) and the healthcare provider's Administration Directory endpoint (URL). An Administration Directory is only authoritative for the healthcare providers that registered this Administration Directory endpoint (URL) at the LRZa. Information about other healthcare providers MUST be disregarded.
+- All HealthcareServices, Locations, PractitionerRoles and Organization-entities of a single healthcare provider MUST (indirectly) link to a top-level Organization-instance with a URA-identifier:
   - All HealthcareService, Location, PractitionerRole entities MUST be directly linked to an Organization-instance (could be 'sub-Organization' like a department).
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
 
-After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the url of that instance at the (source) Administration Directory. The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
+After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the fully qualified URL of that instance at the originating Administration Directory. The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
 
 
 #### Query Directory
@@ -84,22 +84,22 @@ Within GF Addressing, profiles are used to validate data. They are based on both
 A brief description of the data models and their profile for this guide:
 
 #### Organization
-Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA identifier, type, and name and may have additional attributes like the Endpoints it uses. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
+Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA `identifier`, `type`, `status`, and `name`. It may have additional attributes like `endpoint`. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
 The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) contains no extra constraints on top of mCSD & nl-core profiles. 
 
 #### Endpoint
 An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. If an Organization does not have an Endpoint, it may still be reachable via an Endpoint at its parent Organization or an affiliated Organization.
-The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on .payloadType (source: [ADR-8](./care-services-adrs.html#adr-8-how-to-register-and-find-the-capabilities-of-an-endpoint)) and an additional extension 'replacedBy'. This can be used to point to a new endpoint if the old one has changed.
+The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on `.payloadType` (source: [ADR-8](./care-services-adrs.html#adr-8-how-to-register-and-find-the-capabilities-of-an-endpoint)) and an additional extension `replacedBy`. This can be used to point to a new endpoint if the old one has changed.
 
 > ##### Changing endpoints and the continued integrity of references
 > Healthcare records (e.g. conditions, observations, or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
 IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) in stead of e.g. incrementing numeric values. If the Endpoint.address (the base part of URLs) must be changed, use the `status` and `replacedBy` extension to properly redirect and fix broken links, ensuring continued integrity of references. Don't delete Endpoint-instances.
 >
->For example, care provider 'CP1' uses an EHR from software vendor 'SV1'. This vendor SV1 uses endpoint-url 'https://sv1/fhirR4' for every customer (care provider). Now if CP1 wants to switch to a new vendor, this endpoint-url may risk lots of broken references in many EHR-systems. A better option would be url 'https://sv1/**cp1**/fhirR4' where a change can be applied to all references in a system OR url 'https://cp1/fhirR4' that may prevent a change altogether (until FHIR R4 is outdated...).
+>For example, care provider 'CP1' uses an EHR from software vendor 'SV1'. This vendor SV1 uses endpoint-URL 'https://sv1/fhirR4' for every customer (care provider). Now if CP1 wants to switch to a new vendor, this endpoint-URL may risk lots of broken references in many EHR-systems. A better option would be URL 'https://sv1/**cp1**/fhirR4' where a change can be applied to all references in a system OR URL 'https://cp1/fhirR4' that may prevent a change altogether (until FHIR R4 is outdated...).
 
 #### HealthcareService
-Healthcare services are used to publish which (medical) services are provided by an (child) Organization. Examples include surgical services, antenatal care services, or primary care services. These services in `HealthcareService.type` can be extended by references to specific ActivityDefinitions and PlanDefinitions that are supported. The combination of a Healthcare Service offered at a Location may have specific attributes including contact person, hours of operation, etc.
-The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) contains a value set constraint on .type and .specialty and an extension on .type to refer to Activity/PlanDefinitions.
+Healthcare services are used to publish which (medical) services are provided by a (child) Organization. Examples include surgical services, antenatal care services, or primary care services. These services in `HealthcareService.type` can be extended by references to specific ActivityDefinitions and PlanDefinitions that are supported. The combination of a HealthcareService offered at a Location may have specific attributes including contact person, hours of operation, etc.
+The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) contains a value set constraint on `.type` and `.specialty` and an extension on `.type` to refer to Activity/PlanDefinitions.
 
 #### Location
 Locations are physical places where care can be delivered such as buildings (NL: Vestiging), wards, rooms, or vehicles. A Location may have geographic attributes (address, geocode), attributes regarding its hours of operation, etc. Each Location is related to one (child) Organization. A location may have a hierarchical relationship with other locations (e.g. building > floor > room).
@@ -112,13 +112,13 @@ The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrol
 
 
 #### Practitioner
-***This resourcetype is out-of-scope for this IG-version***
-Practitioner is a health worker such as physician, nurse, pharmacist, community health worker, district health manager, etc. Practitioners have a name and may have qualifications (like in the Dutch BIG-register).  The registration (Administration Directory) of Practitioners may be assigned to the Dutch BIG-register or similar organizations. 
+***This resource type is out-of-scope for this IG-version***
+Practitioner is a health worker such as physician, nurse, pharmacist, community health worker, district health manager, etc. Practitioners have a name and may have qualifications (like in the Dutch BIG-register).  The registry (Administration Directory) of Practitioners may be operated by the Dutch BIG-register or similar organizations. 
 The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html): no extra constraints on top of mCSD & nl-core profiles. 
 
 
 #### OrganizationAffiliation
-***This resourcetype is out-of-scope for this IG-version***
+***This resource type is out-of-scope for this IG-version***
 OrganizationAffiliation resources are used to represent relationships between organizations, such as a software vendor managing the Endpoint that is used by a care provider. It could also be used the represent multiple care providers working together under some agreement (e.g. in a region).
 The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) has no extra constraints on top of mCSD & nl-core profiles.  
 
@@ -128,7 +128,7 @@ An overview of the *most common* elements and relations between data models:
 
 
 ### Security
-The service provider of an Administration Directory may choose whether to require mTLS certificates. Certificate Authority PKI-O should be trusted. For cross-border data exchange using mTLS, support for additional CA's is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone.
+The service provider of an Administration Directory may choose whether to require mTLS certificates. Certificate Authority PKIoverheid Private Services should be trusted. For cross-border data exchange using mTLS, support for additional CA's is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone.
 
 ### Example use cases
 
