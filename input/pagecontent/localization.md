@@ -1,5 +1,16 @@
 ### Introduction
+This FHIR Implementation Guide specifies the Generic Function Data Localization (GFL), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFL aims to establish a standardized, interoperable system that makes data concerning a specific patient and context findable to data users in a way that complies with the proportionality and subsidiarity principles of the GDPR, enabling reliable and efficient exchange of health data across systems.
 
+Patient data is divided over muliple data holders. In today’s healthcare landscape organizations rely on several different types of indices to find data concerning a specific patient and context. However, none of these indices are complete and
+all of these indices have different requirements for usage, hindering interoperability and timely access to health information. GFL addresses this challenge by providing a unified framework that ensures a nation-wide index of all data holders concerning a specific patient and context is easily and securely accessible.
+
+This guide outlines the technical requirements and architectural principles underlying GFL, with a focus on trust, authenticity, and data integrity. Key design principles include:
+
+- International standards: The solution should be based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
+- Single Source of Truth: Each localization record originates from exactly one organization: the data holder itself.
+- Stakeholder Responsibility: Data holders are accountable for maintaining the accuracy of localization records in the nation-wide index.
+
+By adhering to these principles, this Implementation Guide supports consistent and secure data holder discovery, fostering improved interoperability within the healthcare ecosystem.
 
 ### Solution overview
 
