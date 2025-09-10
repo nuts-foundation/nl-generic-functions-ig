@@ -224,11 +224,19 @@ These attributes ensure proper access control and auditing while maintaining the
 - **Cost Reduction**: Reduces unnecessary healthcare costs
 - **Patient Safety**: Minimizes patient exposure to radiation from redundant scans
 
-### Future Enhancements
+### Roadmap for GF Localization
 
-Potential future enhancements to the API include:
+#### LMR/metadata
+- Specification of LMR API using FHIR specifications
+ 
+#### NVI API
+Potential future enhancements to the NVI API include:
 - Audit logging capabilities (MUST HAVE, TODO)
 - Extended metadata fields for additional context
+
+#### Pseudo-BSN-service
+- Specification of pseudo-BSN data model
+- Specification of pseudo-BSN-service API
 
 ### Appendices
 [Appendix: FHIR Resource Considerations](./localization-appendix.html) 
