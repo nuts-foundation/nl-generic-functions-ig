@@ -34,13 +34,13 @@ For more detail on the topology of GF Localization, see [GF-Lokalisatie, ADR-2](
 
 #### NVI
 
-The NVI ('nationale verwijsindex') is responsible for managing the registration, maintenance and publication of localization records. It should be able to create, update, and delete localization records. Localization records MUST conform to the [Localization Record data model](#Localization-record). NVI MUST implement the NVI API specifications.
+The NVI ('nationale verwijsindex') is responsible for managing the registration, maintenance and publication of localization records. It should be able to create, update, and delete localization records. Localization records MUST conform to the [Localization Record data model](#Localization-record). NVI MUST implement the [NVI API specifications](#NVI-API).
 
 #### LMR
-A LMR ('lokaal metadata-register') is responsible for managing the registration, maintenance and publication of the metadata of one data holder (healthcare organization). It should be able to create, update, and delete metadata. Metadata MUST conform to the internation metadata FHIR standards. LMR's MUST implement the LMR API specifications.
+A LMR ('lokaal metadata-register') is responsible for managing the registration, maintenance and publication of the metadata of one data holder (healthcare organization). It should be able to create, update, and delete metadata. Metadata MUST conform to the [Metadata data model](#Metadata). LMR's MUST implement the [LMR API specifications](#LMR-API).
 
 #### Pseudo-BSN-service
-The pseudo-bsn-service is responsible for managing the registration, maintenance and publication of bsn peudonyms. It should be able to create bsn pseudonyms. BSN pseudonyms MUST conform to the BSN-pseudonym data model. The pseudo-bsn-service MUST implement the bsn-pseudo-service API specifications.
+The pseudo-bsn-service is responsible for managing the registration, maintenance and publication of bsn peudonyms. It should be able to create bsn pseudonyms. BSN pseudonyms MUST conform to the [BSN-pseudonym data model](#Pseudo-BSN). The pseudo-bsn-service MUST implement the [bsn-pseudo-service API specifications](#pseudo-bsn-service-api).
 
 ### Data models
 
@@ -72,7 +72,8 @@ For implementing NVI, we have chosen to use a simple JSON-based REST API instead
 
 The [NVI API](./localization.openapi.json) is defined using OpenAPI 3.0.2 specification (you may render this using [swagger.editor.html](https://editor.swagger.io/)). The API provides a straightforward interface for managing the network of involved care providers using standard REST operations.
 
-##### Create Resource (POST /api)
+##### Operations
+###### Create Resource (POST /api)
 Registers a new care provider relationship in the NVI network.
 
 **Request Body:**
@@ -87,7 +88,7 @@ Registers a new care provider relationship in the NVI network.
 - All fields are required
 - Returns HTTP 201 (Created) on success
 
-##### Delete Resource (DELETE /api)
+###### Delete Resource (DELETE /api)
 Removes a care provider relationship from the NVI network.
 
 **Query Parameters:**
@@ -98,7 +99,7 @@ Removes a care provider relationship from the NVI network.
 
 Returns HTTP 204 (No Content) on successful deletion.
 
-##### Retrieve Resources (GET /api)
+###### Retrieve Resources (GET /api)
 Queries the NVI network to find which organizations have data for a patient in a specific care context.
 
 **Query Parameters:**
@@ -122,11 +123,15 @@ Queries the NVI network to find which organizations have data for a patient in a
 ```
 Returns HTTP 200 (OK) with an array of matching data locations.
 
-#### LMR
+##### Integration Considerations
+
+While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
+
+#### LMR API
 
 For implementing LMR, we have chosen to reuse the existing FHIR-API of data sources. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of metadata-based searching. In the Netherlands, both [FHIR R4](https://r4.fhir.space/http.html) and [FHIR STU3](https://www.hl7.org/fhir/STU3/http.html) are used.
 
-#### Pseudo-BSN-service
+#### Pseudo-BSN-service API
 
 This API spec will follow later.
 
@@ -150,16 +155,6 @@ Authentication and authorization follows the [GF Authorization](./authorization.
 - **Rolcode**: The professional role code of the requester
 
 These attributes ensure proper access control and auditing while maintaining the security requirements outlined in the [GF Authorization](./authorization.html) specification.
-
-### Integration Considerations
-
-While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
-
-### Future Enhancements
-
-Potential future enhancements to the API include:
-- Audit logging capabilities (MUST HAVE, TODO)
-- Extended metadata fields for additional context
 
 ---
 
@@ -229,6 +224,11 @@ Potential future enhancements to the API include:
 - **Cost Reduction**: Reduces unnecessary healthcare costs
 - **Patient Safety**: Minimizes patient exposure to radiation from redundant scans
 
+### Future Enhancements
+
+Potential future enhancements to the API include:
+- Audit logging capabilities (MUST HAVE, TODO)
+- Extended metadata fields for additional context
 
 ### Appendices
 [Appendix: FHIR Resource Considerations](./localization-appendix.html) 
