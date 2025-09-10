@@ -4,7 +4,7 @@
 ### Solution overview
 
 
-<img src="localization-overview-transactions.png" width="100%" style="float: none" alt="Overview of transactions in the Data Localization solution."/>
+<img src="localization-overview-transactions.png" width="60%" style="float: none" alt="Overview of transactions in the Data Localization solution."/>
 
 
 ### API Implementation Approach
