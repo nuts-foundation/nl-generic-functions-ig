@@ -1,3 +1,12 @@
+### Introduction
+
+
+### Solution overview
+
+
+<img src="localization-overview-transactions.png" width="100%" style="float: none" alt="Overview of transactions in the Data Localization solution."/>
+
+
 ### API Implementation Approach
 
 For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we have chosen to use a simple JSON-based REST API instead of FHIR resources. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of tracking which organizations have data about a patient in specific care contexts.
