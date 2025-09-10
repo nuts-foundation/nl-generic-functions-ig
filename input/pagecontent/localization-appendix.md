@@ -47,10 +47,12 @@ An important consideration was that the [Shared Care Planning](https://santeonnl
 
 After careful consideration of these FHIR resources, we decided that a simple JSON API better serves the NVI requirements:
 1. **Reduced Complexity**: Avoiding FHIR resource constraints and validation rules
-2. **Clear Purpose**: The API is explicitly designed for NVI without semantic ambiguity
-3. **Simpler Implementation**: Direct REST operations without FHIR overhead
-4. **Easier Integration**: Organizations can adapt the simple API to their internal systems more easily
-5. **No Semantic Conflicts**: Avoids confusion with existing FHIR-based initiatives like Shared Care Planning
+2. **Focused Functionality**: The API is purpose-built for NVI requirements without the overhead of full FHIR compliance
+3. **Clear Purpose**: The API is explicitly designed for NVI without semantic ambiguity
+4. **Simpler Implementation**: Direct REST operations without FHIR overhead
+5. **Easier Validation**: Simple JSON schema validation is sufficient, avoiding complex FHIR profile validation
+6. **Easier Integration**: Organizations can adapt the simple API to their internal systems more easily
+7. **No Semantic Conflicts**: Avoids confusion with existing FHIR-based initiatives like Shared Care Planning
 
 
 ##### Advantages of the JSON API Approach

@@ -137,17 +137,35 @@ This API spec will follow later.
 The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudoBsn to enhance patient privacy. The pseudonymization layer will ensure that patient identities are protected while still allowing organizations to use a joint index.
 
 #### Authentication and Authorization
-Authentication and authorization is described in the [GF Authorization](./authorization.html). The requirements for the NVI API are:
-* The access to the API should be restricted by mTLS and PKI Overheid certificates.
-* The authorization should be on PractitionerRole level.
-* There should be an authorization policy applicable to the relevant zorgContext, as described by the [GF Authorization](./authorization.html).
+Authentication and authorization follows the [GF Authorization](./authorization.html) specification. The required attributes for NVI API access are:
 
+**For PUT operations (registering care provider relationships):**
+- **URA**: The organization identifier of the registering organization
+- **OrganizationType**: The type of healthcare organization registering the data
+
+**For GET operations (querying the network):**
+- **URA**: The organization identifier of the requesting organization  
+- **OrganizationType**: The type of healthcare organization making the query
+- **UZI**: The unique healthcare professional identifier of the requester
+- **Rolcode**: The professional role code of the requester
+
+These attributes ensure proper access control and auditing while maintaining the security requirements outlined in the [GF Authorization](./authorization.html) specification.
+
+### Integration Considerations
+
+While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
+
+### Future Enhancements
+
+Potential future enhancements to the API include:
+- Audit logging capabilities (MUST HAVE, TODO)
+- Extended metadata fields for additional context
 
 ---
 
-### Example Use Cases
+## Example Use Cases
 
-#### Use Case: Physician Searching for Available Imaging Data
+### Use Case: Physician Searching for Available Imaging Data
 
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
@@ -155,13 +173,21 @@ Authentication and authorization is described in the [GF Authorization](./author
 
 **Process**:
 
-1. **Authentication**: Dr. Smith authenticates using DEZI, which uses an OIDC (OpenID Connect) flow that results in an id_token containing:
-   - **URA**: The organization identifier (linked to Hospital A)
-   - **OrganizationType**: The organization type (e.g. Hospital)
-   - **UZI**: Dr. Smith's unique healthcare professional identifier
-   - **Rolcode**: Her professional role code (e.g., cardiologist)
+1. **Registration of Care Provider Relationships**: Healthcare organizations register their data availability when they have imaging data for a patient. For example:
+   - A Hospital registers that it has imaging data for the patient
+   - A Laboratory registers that it also has imaging data for the same patient
+   
+   Each registration requires the following authorization attributes:
+   - **URA**: The organization identifier of the registering organization
+   - **OrganizationType**: The type of healthcare organization (e.g., `2.16.840.1.113883.2.4.15.1060|V4` for Hospital, `2.16.840.1.113883.2.4.15.1060|L1` for Laboratory)
 
-2. **Query the NVI**: The system authenticates to the NVI API using either an X509 certificate or PKI Overheid Server certificate (which resolves to an URA number), the user is authenticated with the `id_token` from the DEZI authentication. A GET is send request to find all organizations that have imaging data for this patient:
+2. **Authentication**: Dr. Smith authenticates according to the [GF Authorization](./authorization.html) specification, providing the following required attributes:
+   - **URA**: The organization identifier of the requesting organization
+   - **OrganizationType**: The organization type (e.g., `2.16.840.1.113883.2.4.15.1060|V4` for Hospital)
+   - **UZI**: Dr. Smith's unique healthcare professional identifier
+   - **Rolcode**: Her professional role code
+
+3. **Query the NVI**: With proper authentication established per the GF Authorization specification, a GET request is sent to find all organizations that have imaging data for this patient:
    ```
    GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004
    ```
@@ -170,30 +196,30 @@ Authentication and authorization is described in the [GF Authorization](./author
    - `pseudoBsn`: The patient's pseudonymized BSN
    - `zorgContext`: SNOMED code for "Imaging report" (371530004)
 
-3. **Response**: The NVI returns a list of hospitals that have imaging data for this patient:
+4. **Response**: The NVI returns a list of organizations that have imaging data for this patient:
    ```json
    {
      "datalocations": [
        {
-         "created": "2024-01-15T14:30:00Z",
+         "created": "2024-02-20T09:15:00Z",
          "pseudoBsn": "<patient-id>",
          "zorgContext": "http://snomed.info/sct|371530004",
-         "ura": "URA-HOSPITAL-B",
+         "ura": "URA-HOSPITAL",
          "organizationType": "2.16.840.1.113883.2.4.15.1060|V4"
        },
        {
-         "created": "2024-02-20T09:15:00Z",
+         "created": "2024-02-25T11:30:00Z",
          "pseudoBsn": "<patient-id>",
          "zorgContext": "http://snomed.info/sct|371530004", 
-         "ura": "URA-HOSPITAL-C",
-         "organizationType": "2.16.840.1.113883.2.4.15.1060|V4"
+         "ura": "URA-LABORATORY",
+         "organizationType": "2.16.840.1.113883.2.4.15.1060|L1"
        }
      ]
    }
    ```
 
-4. **Metadata Retrieval**: Now Dr. Smith knows that Hospital B and Hospital C have imaging data for this patient. She can then:
-   - Contact these hospitals through the appropriate channels to request the imaging data
+5. **Display Results**: Dr. Smith can now see that both a Hospital and a Laboratory have imaging data for this patient. She can then:
+   - Contact these organizations through the appropriate channels to request the imaging data
    - Use other Generic Functions (like authorization and consent) to obtain access to the actual images
    - Review the imaging history to determine if new scans are needed
 
