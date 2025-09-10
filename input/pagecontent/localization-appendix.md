@@ -51,3 +51,22 @@ After careful consideration of these FHIR resources, we decided that a simple JS
 3. **Simpler Implementation**: Direct REST operations without FHIR overhead
 4. **Easier Integration**: Organizations can adapt the simple API to their internal systems more easily
 5. **No Semantic Conflicts**: Avoids confusion with existing FHIR-based initiatives like Shared Care Planning
+
+
+##### Advantages of the JSON API Approach
+
+1. **Simplicity**: The JSON-based API is straightforward to implement and integrate, reducing the learning curve for developers
+2. **Focused Functionality**: The API is purpose-built for NVI requirements without the overhead of full FHIR compliance
+3. **Clear Semantics**: Each operation has a single, well-defined purpose without ambiguity
+4. **Efficient Operations**: Direct REST operations avoid the complexity of FHIR search parameters and resource constraints
+5. **Easier Validation**: Simple JSON schema validation is sufficient, avoiding complex FHIR profile validation
+
+##### Integration Considerations
+
+While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
+
+#### Future Enhancements
+
+Potential future enhancements to the API include:
+- Audit logging capabilities (MUST HAVE, TODO)
+- Extended metadata fields for additional context
