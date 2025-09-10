@@ -163,9 +163,9 @@ Potential future enhancements to the API include:
 
 ---
 
-## Example Use Cases
+### Example Use Cases
 
-### Use Case: Physician Searching for Available Imaging Data
+#### Use Case: Physician Searching for Available Imaging Data
 
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
