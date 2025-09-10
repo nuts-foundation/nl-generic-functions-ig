@@ -138,6 +138,57 @@ Description: "A care team for a (single)patient with multiple care providers and
 * participant.period.end 0..1
 
 
+Profile: NlGfDataLocalizationAuditEvent
+Parent: AuditEvent
+Id: nl-gf-data-localization-auditevent
+Title: "NL Generic Functions Data Localization AuditEvent Profile"
+Description: """A basic AuditEvent profile for when a RESTful Create action happens successfully, and where there is an identifiable Patient subject associated with the create of the Resource.
+This profile is based on the IHE 'Basic AuditEvent for a successful Create with known Patient subject' profile, but requires the addition of an Organization custodian agent.
+https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCreate version 1.1.3"""
+* ^status = #draft
+* type = $audit-event-type#rest
+* subtype ^slicing.discriminator.type = #value
+* subtype ^slicing.discriminator.path = "$this"
+* subtype ^slicing.rules = #open
+* subtype contains anyCreate 1..1
+* subtype[anyCreate] = $restful-interaction#create
+* action = #C
+* outcome 1..
+* outcome = #0
+* agent ^slicing.discriminator.type = #pattern
+* agent ^slicing.discriminator.path = "type"
+* agent ^slicing.rules = #open
+* agent contains
+    custodian 1..1
+* agent[custodian].type 1..
+* agent[custodian].type = $v3-ParticipationType#CST "custodian"
+* agent[custodian].role 1..
+* agent[custodian].role from OrganisatieTypeCodelijstVS (required)
+* agent[custodian].who 1..
+* agent[custodian].who.identifier 1..
+* agent[custodian].who.identifier.system 1..1
+* agent[custodian].who.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
+* agent[custodian].who.identifier.value 1..1
+* source MS
+* entity ^slicing.discriminator.type = #pattern
+* entity ^slicing.discriminator.path = "type"
+* entity ^slicing.rules = #open
+* entity contains
+    data 1..1 and
+    patient 1..1
+* entity[data].type 1..
+* entity[data].type.system = $resource-types
+* entity[patient].what 1..
+* entity[patient].what.identifier 1..
+* entity[patient].what.identifier.system 1..1
+* entity[patient].what.identifier.system = "http://fhir.nl/fhir/NamingSystem/pseudobsn"
+* entity[patient].what.identifier.value 1..1
+* entity[patient].what only Reference(Patient)
+* entity[patient].type 1..
+* entity[patient].type = $resource-types#Patient
+
+
+
 // Profile: GFDLEpisodeOfCare
 // Parent: EpisodeOfCare
 // Title: "Generic Functions, Data Localization: EpisodeOfCare Profile"

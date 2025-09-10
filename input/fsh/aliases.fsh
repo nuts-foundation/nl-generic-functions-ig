@@ -33,6 +33,8 @@ Alias: $endpoint-payload-type = http://terminology.hl7.org/CodeSystem/endpoint-p
 Alias: $endpoint-connection-type = http://terminology.hl7.org/CodeSystem/endpoint-connection-type
 Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
 // Alias: $orpha = http://www.orpha.net
+Alias: $resource-types = http://hl7.org/fhir/resource-types
+Alias: $restful-interaction = http://hl7.org/fhir/restful-interaction
 
 
 Alias: $nl-core-Patient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient

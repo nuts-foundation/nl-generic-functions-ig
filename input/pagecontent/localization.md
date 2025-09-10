@@ -34,35 +34,30 @@ For more detail on the topology of GF Localization, see [GF-Lokalisatie, ADR-2](
 
 #### NVI
 
-The NVI ('nationale verwijsindex') is responsible for managing the registration, maintenance, and publication of localization records. It should be able to create, update, and delete localization records. Localization records MUST conform to the [Localization Record data model](#Localization-record). NVI MUST implement the [NVI API specifications](#NVI-API).
+The NVI ('Nationale Verwijs Index') is responsible for managing the registration, maintenance, and publication of localization records. It should be able to create and update localization records. NVI MUST implement these FHIR [capabilities](./CapabilityStatement-nl-gf-data-localization-repository.html)
 
 #### LMR
-A LMR ('lokaal metadata-register') is responsible for managing the registration, maintenance, and publication of the metadata of one data holder (healthcare organization). It should be able to create, update, and delete metadata. Metadata MUST conform to the [Metadata data model](#Metadata). LMR's MUST implement the [LMR API specifications](#LMR-API).
+A LMR ('Lokaal Metadata Register') is responsible for managing the registration, maintenance, and publication of the metadata of one data holder (healthcare organization). To implement an LMR, existing FHIR-APIs of data sources can be used. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of metadata-based searching. [Resource Metadata](https://hl7.org/fhir/R4/resource.html#Meta) is registered in every FHIR resource type and can be found by standard [search-parameters](https://hl7.org/fhir/R4/resource.html#search). In the Netherlands, both [FHIR R4](https://hl7.org/fhir/R4/http.html) and [FHIR STU3](https://www.hl7.org/fhir/STU3/http.html) are used.
 
 #### Pseudo-BSN-service
-The pseudo-bsn-service is responsible for managing the registration, maintenance, and publication of bsn peudonyms. It should be able to create bsn pseudonyms. BSN pseudonyms MUST conform to the [BSN-pseudonym data model](#Pseudo-BSN). The pseudo-bsn-service MUST implement the [bsn-pseudo-service API specifications](#pseudo-bsn-service-api).
+***This component is out-of-scope for this IG-version***
+The pseudo-bsn-service is responsible for creating Pseudonyms of Patient identifiers (BSN). For inspiration on this topic, see the [Logius BSNk-pp service](https://www.logius.nl/onze-dienstverlening/toegang/voorzieningen/bsnk-pp).
 
 ### Data models
 
-Within GF Localization, valuesets are used to validate data. Ideally, these valuesets are merged in the nl-core-profiles in the future.
-
-A brief description of the data models and their profile for this guide:
-
 #### Localization record
 
-Localization records represent the relationship between:
-- **BSN/pseudoBsn**: The patient identifier. The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy.
-- **zorgContext (Care Context)**: The medical context or specialty, represented by SNOMED CT codes. The Localization record data model supports the care contexts (zorgContext) specified in [FHIR Valueset Data localization context](./ValueSet-nl-gf-data-localization-context-vs.html).
-- **ura**: The organization identifier representing the data holder (care provider).
-- **organizationType**: The type of healthcare organization (e.g., hospital, pharmacy, laboratory) of the data holder. The Localization record data model supports the organization types (OrganisatieType) specified in [FHIR Valueset Organization types](./ValueSet-2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000.html).
+Within GF Localization the [NL-GF-Data-Localization-Auditevent profile](./StructureDefinition-nl-gf-data-localization-auditevent.html) is used to register, search and validate localization records.
+This data model basically states ***"Care provider X has data of type Y for Patient Z"***. It contains the following elements:
+- **Organization identifier**: The care provider identifier (URA) representing the data holder/custodian.
+- **Organization type**: The type of healthcare organization (e.g., hospital, pharmacy, laboratory) of the data holder/custodian. The Localization record data model supports the organization types (OrganisatieType) specified in [FHIR Valueset Organization types](./ValueSet-2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000.html).
+- **Patient identifier** (BSN/pseudoBsn). The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy.
+- **zorgContext (Care Context)**: Represented by FHIR resource types (e.g. ImagingStudy, MedicationRequest, Condition)
 
-#### Metadata
-
-Metadata has to follow this and that fhir documentation. Bram?
 
 #### Pseudo-BSN
+***This data model is out-of-scope for this IG-version***
 
-Pseudo-BSN's follow this data model. Later!
 
 ### API specifications
 
@@ -129,7 +124,7 @@ While this API uses a simple JSON format rather than FHIR, it can still integrat
 
 #### LMR API
 
-For implementing LMR, we have chosen to reuse the existing FHIR-API of data sources. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of metadata-based searching. In the Netherlands, both [FHIR R4](https://r4.fhir.space/http.html) and [FHIR STU3](https://www.hl7.org/fhir/STU3/http.html) are used.
+
 
 #### Pseudo-BSN-service API
 
