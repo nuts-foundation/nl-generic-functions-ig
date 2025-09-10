@@ -1,5 +1,5 @@
 ### Introduction
-This FHIR Implementation Guide specifies the Generic Function Localization (GFL), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFL aims to establish a standardized, interoperable system that makes data concerning a specific patient and context findable to data users in a way that complies with the proportionality and subsidiarity principles of the GDPR, enabling reliable and efficient exchange of health data across systems.
+This FHIR Implementation Guide specifies the Generic Function Localization (GFL), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFL provides a standardized framework that enables healthcare professionals to discover which organizations hold relevant patient data within specific care contexts, ensuring GDPR compliance through proportionality and subsidiarity principles while facilitating secure and efficient health information exchange.
 
 Patient data is divided over muliple data holders. In today’s healthcare landscape organizations rely on several different types of indices to find data concerning a specific patient and context. However, none of these indices are complete and
 all of these indices have different requirements for usage, hindering interoperability and timely access to health information. GFL addresses this challenge by providing a unified framework that ensures a nation-wide index of all data holders concerning a specific patient and context is easily and securely accessible.
@@ -34,13 +34,13 @@ For more detail on the topology of GF Localization, see [GF-Lokalisatie, ADR-2](
 
 #### NVI
 
-The NVI ('nationale verwijsindex') is responsible for managing the registration, maintenance and publication of localization records. It should be able to create, update, and delete localization records. Localization records MUST conform to the [Localization Record data model](#Localization-record). NVI MUST implement the [NVI API specifications](#NVI-API).
+The NVI ('nationale verwijsindex') is responsible for managing the registration, maintenance, and publication of localization records. It should be able to create, update, and delete localization records. Localization records MUST conform to the [Localization Record data model](#Localization-record). NVI MUST implement the [NVI API specifications](#NVI-API).
 
 #### LMR
-A LMR ('lokaal metadata-register') is responsible for managing the registration, maintenance and publication of the metadata of one data holder (healthcare organization). It should be able to create, update, and delete metadata. Metadata MUST conform to the [Metadata data model](#Metadata). LMR's MUST implement the [LMR API specifications](#LMR-API).
+A LMR ('lokaal metadata-register') is responsible for managing the registration, maintenance, and publication of the metadata of one data holder (healthcare organization). It should be able to create, update, and delete metadata. Metadata MUST conform to the [Metadata data model](#Metadata). LMR's MUST implement the [LMR API specifications](#LMR-API).
 
 #### Pseudo-BSN-service
-The pseudo-bsn-service is responsible for managing the registration, maintenance and publication of bsn peudonyms. It should be able to create bsn pseudonyms. BSN pseudonyms MUST conform to the [BSN-pseudonym data model](#Pseudo-BSN). The pseudo-bsn-service MUST implement the [bsn-pseudo-service API specifications](#pseudo-bsn-service-api).
+The pseudo-bsn-service is responsible for managing the registration, maintenance, and publication of bsn peudonyms. It should be able to create bsn pseudonyms. BSN pseudonyms MUST conform to the [BSN-pseudonym data model](#Pseudo-BSN). The pseudo-bsn-service MUST implement the [bsn-pseudo-service API specifications](#pseudo-bsn-service-api).
 
 ### Data models
 
