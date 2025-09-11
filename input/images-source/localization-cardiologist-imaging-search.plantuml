@@ -1,0 +1,42 @@
+@startuml localization-cardiologist-imaging-search
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+
+!pragma teoz true
+
+actor "Dr. Smith\n(Cardiologist)" as doctor
+participant "EHR System @\n(Care Provider, URA:456)" as ehr
+participant "NVI API\n(Data Localization Service)" as nvi
+participant "PACS System @\n(Care Provider, URA:123)" as pacs
+
+doctor -> ehr: Request imaging data\n for patient (BSN:987654321)
+
+note over nvi
+  Required authorization attributes for GET:
+  - Organization Identifier (URA:456)
+  - OrganizationType: 2.16.840.1.113883.2.4.15.1060|V4 (Hospital)
+  - Practitioner Identifier: Dr. Smith's UZI/DEZI 
+  - Role code: Professional role code (e.g., cardiologist)
+
+  Use of **pseudonymized** patient identifier 
+   (pseudoBsn) is out of scope for this diagram
+end note
+
+ehr -> nvi: GET AuditEvent, where:\n Bsn=987654321\n context=ImagingStudy
+
+
+
+nvi -> nvi: Validate authorization\nand search data locations
+
+nvi -> ehr: Return response with data locations:\n[\n  {created: "2024-02-20", custodian: "URA-123", ...},\n  {...},\n  {...}\n]
+
+
+ehr -> ehr: Get DICOM-WADO URLs for\n care provider URA:123
+
+ehr -> pacs: Query DICOM images for patient (BSN:987654321)
+
+ehr -> doctor: Display available images to Dr. Smith
+
+@enduml

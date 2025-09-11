@@ -162,8 +162,6 @@ https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCrea
     custodian 1..1
 * agent[custodian].type 1..
 * agent[custodian].type = $v3-ParticipationType#CST "custodian"
-* agent[custodian].role 1..
-* agent[custodian].role from OrganisatieTypeCodelijstVS (required)
 * agent[custodian].who 1..
 * agent[custodian].who.identifier 1..
 * agent[custodian].who.identifier.system 1..1
@@ -181,7 +179,7 @@ https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCrea
 * entity[patient].what 1..
 * entity[patient].what.identifier 1..
 * entity[patient].what.identifier.system 1..1
-* entity[patient].what.identifier.system = "http://fhir.nl/fhir/NamingSystem/pseudobsn"
+* entity[patient].what.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
 * entity[patient].what.identifier.value 1..1
 * entity[patient].what only Reference(Patient)
 * entity[patient].type 1..

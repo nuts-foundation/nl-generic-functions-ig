@@ -1,0 +1,31 @@
+@startuml localization-radiologist-imaging-registration
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+
+!pragma teoz true
+
+actor "Dr. Carter\n(Radiologist)" as doctor
+participant "PACS System @\n(Care Provider, URA:123)" as pacs
+participant "Pseudonymisation\nService" as pseudonymisation
+participant "NVI API\n(Data Localization Service)" as nvi
+
+doctor -> pacs: Initiate imaging study\n for patient\n (BSN:987654321)
+pacs -> pacs: Create ImagingStudy\n or DICOM resource\n and store imaging data
+pacs -> pseudonymisation: Request pseudoBsn for patient
+return pseudonym=3f5c8b2e9a1d4
+
+note over nvi
+  Required authorization attributes for POST:
+  - Organization identifier (URA)
+
+  Use of **pseudonymized** patient identifier 
+   (pseudoBsn) is out of scope for this diagram
+end note
+
+pacs -> nvi: POST AuditEvent, containing:\n custodian: URA:123,\n patient: pseudoBSN:3f5c8b2e9a1d4,\n context: "ImagingStudy"
+
+nvi -> pacs: 201 Created
+
+@enduml
