@@ -47,7 +47,7 @@ The pseudo-bsn-service is responsible for creating Pseudonyms of Patient identif
 
 #### Localization record
 
-Within GF Localization the [NL-GF-Data-Localization-Auditevent profile](./StructureDefinition-nl-gf-data-localization-auditevent.html) is used to register, search and validate localization records.
+Within GF Localization the [NL-GF-Data-Localization-Auditevent profile](./StructureDefinition-nl-gf-data-localization-auditevent.html) is used to register, search, and validate localization records.
 This data model basically states ***"Care provider X has data of type Y for Patient Z"***. It contains the following elements:
 - **Organization identifier**: The care provider identifier (URA) representing the data holder/custodian.
 - **Organization type**: The type of healthcare organization (e.g., hospital, pharmacy, laboratory) of the data holder/custodian. The Localization record data model supports the organization types (OrganisatieType) specified in [FHIR Valueset Organization types](./ValueSet-2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000.html).
