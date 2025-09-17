@@ -8,7 +8,7 @@ hide footbox
 
 actor "Dr. Smith\n(Cardiologist)" as doctor
 participant "EHR System @\n(Care Provider, URA:456)" as ehr
-participant "NVI API\n(Data Localization Service)" as nvi
+participant "Localization Service" as nvi
 participant "PACS System @\n(Care Provider, URA:123)" as pacs
 
 doctor -> ehr: Request imaging data\n for patient (BSN:987654321)
@@ -24,7 +24,7 @@ note over nvi
    (pseudoBsn) is out of scope for this diagram
 end note
 
-ehr -> nvi: GET AuditEvent, where:\n Bsn=987654321\n context=ImagingStudy
+ehr -> nvi: GET DocumentReference, where:\n Bsn=987654321
 
 
 

@@ -138,58 +138,75 @@ Description: "A care team for a (single)patient with multiple care providers and
 * participant.period.end 0..1
 
 
-Profile: NlGfDataLocalizationAuditEvent
-Parent: AuditEvent
-Id: nl-gf-data-localization-auditevent
-Title: "NL Generic Functions Data Localization AuditEvent Profile"
-Description: """A basic AuditEvent profile for when a RESTful Create action happens successfully, and where there is an identifiable Patient subject associated with the create of the Resource.
-This profile is based on the IHE 'Basic AuditEvent for a successful Create with known Patient subject' profile, but requires the addition of an Organization custodian agent.
-https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCreate version 1.1.3"""
-* ^status = #draft
-* type = $audit-event-type#rest
-* subtype ^slicing.discriminator.type = #value
-* subtype ^slicing.discriminator.path = "$this"
-* subtype ^slicing.rules = #open
-* subtype contains anyCreate 1..1
-* subtype[anyCreate] = $restful-interaction#create
-* action = #C
-* outcome 1..
-* outcome = #0
-* agent ^slicing.discriminator.type = #pattern
-* agent ^slicing.discriminator.path = "type"
-* agent ^slicing.rules = #open
-* agent contains
-    custodian 1..1
-* agent[custodian].type 1..
-* agent[custodian].type = $v3-ParticipationType#CST "custodian"
-* agent[custodian].who 1..
-* agent[custodian].who.identifier 1..
-* agent[custodian].who.identifier.system 1..1
-* agent[custodian].who.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
-* agent[custodian].who.identifier.value 1..1
-* source MS
-* entity ^slicing.discriminator.type = #pattern
-* entity ^slicing.discriminator.path = "type"
-* entity ^slicing.rules = #open
-* entity contains
-    data 1..1 and
-    patient 1..1
-* entity[data].type 1..
-* entity[data].type.system = $resource-types
-* entity[patient].what 1..
-* entity[patient].what.identifier 1..
-* entity[patient].what.identifier.system 1..1
-* entity[patient].what.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
-* entity[patient].what.identifier.value 1..1
-* entity[patient].what only Reference(Patient)
-* entity[patient].type 1..
-* entity[patient].type = $resource-types#Patient
+Profile: NlGfLocalizationDocumentReference
+Parent: DocumentReference
+Id: nl-gf-localization-documentreference
+Title: "NL Generic Functions Localization DocumentReference Profile"
+Description: """A DocumentReference profile for data of some type/category, linked to a patient and a care provider."""
+* type 1..1
+* subject 1..1
+* subject only Reference(Patient)
+* subject.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
+* custodian 1..1
+* custodian only Reference(NlGfOrganization)
+* custodian.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
+
+
+
+
+
+// Profile: NlGfLocalizationAuditEvent
+// Parent: AuditEvent
+// Id: nl-gf-localization-auditevent
+// Title: "NL Generic Functions Localization AuditEvent Profile"
+// Description: """A basic AuditEvent profile for when a RESTful Create action happens successfully, and where there is an identifiable Patient subject associated with the create of the Resource.
+// This profile is based on the IHE 'Basic AuditEvent for a successful Create with known Patient subject' profile, but requires the addition of an Organization custodian agent.
+// https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCreate version 1.1.3"""
+// * ^status = #draft
+// * type = $audit-event-type#rest
+// * subtype ^slicing.discriminator.type = #value
+// * subtype ^slicing.discriminator.path = "$this"
+// * subtype ^slicing.rules = #open
+// * subtype contains anyCreate 1..1
+// * subtype[anyCreate] = $restful-interaction#create
+// * action = #C
+// * outcome 1..
+// * outcome = #0
+// * agent ^slicing.discriminator.type = #pattern
+// * agent ^slicing.discriminator.path = "type"
+// * agent ^slicing.rules = #open
+// * agent contains
+//     custodian 1..1
+// * agent[custodian].type 1..
+// * agent[custodian].type = $v3-ParticipationType#CST "custodian"
+// * agent[custodian].who 1..
+// * agent[custodian].who.identifier 1..
+// * agent[custodian].who.identifier.system 1..1
+// * agent[custodian].who.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
+// * agent[custodian].who.identifier.value 1..1
+// * source MS
+// * entity ^slicing.discriminator.type = #pattern
+// * entity ^slicing.discriminator.path = "type"
+// * entity ^slicing.rules = #open
+// * entity contains
+//     data 1..1 and
+//     patient 1..1
+// * entity[data].type 1..
+// * entity[data].type.system = $resource-types
+// * entity[patient].what 1..
+// * entity[patient].what.identifier 1..
+// * entity[patient].what.identifier.system 1..1
+// * entity[patient].what.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
+// * entity[patient].what.identifier.value 1..1
+// * entity[patient].what only Reference(Patient)
+// * entity[patient].type 1..
+// * entity[patient].type = $resource-types#Patient
 
 
 
 // Profile: GFDLEpisodeOfCare
 // Parent: EpisodeOfCare
-// Title: "Generic Functions, Data Localization: EpisodeOfCare Profile"
+// Title: "Generic Functions, Localization: EpisodeOfCare Profile"
 // Description: "An episode of care for tracking the involvement of healthcare organizations in patient care, categorized by medical specialty or department."
 // Id: GFDLEpisodeOfCare
 // * ^url = "https://example.org/fhir/StructureDefinition/MyEpisodeOfCare"
@@ -209,7 +226,7 @@ https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCrea
 
 // ValueSet: GFDLTaskStatus
 // Id: gfdl-episodeofcare-status
-// Title: "Generic Functions, Data Localization: EpisodeOfCare Status"
+// Title: "Generic Functions, Localization: EpisodeOfCare Status"
 // * ^compose.include.valueSet = "http://hl7.org/fhir/ValueSet/episode-of-care-status"
 // // Exclude the specific code "planned" from EpisodeOfCareStatus
 // * ^compose.exclude[+].system = "http://hl7.org/fhir/episode-of-care-status"
@@ -219,7 +236,7 @@ https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCrea
 
 // CodeSystem: GFDLMedicalSpecialtyCS
 // Id: gfdl-medical-specialty
-// Title: "Generic Functions, Data Localization: Medical Specialty CodeSystem"
+// Title: "Generic Functions, Localization: Medical Specialty CodeSystem"
 // Description: "Code system for medical specialties and departments used in NVI"
 // * ^status = #draft
 // * ^caseSensitive = true
@@ -245,7 +262,7 @@ https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PatientCrea
 
 // ValueSet: GFDLMedicalSpecialtyVS
 // Id: gfdl-medical-specialty-vs
-// Title: "Generic Functions, Data Localization: Medical Specialty ValueSet"
+// Title: "Generic Functions, Localization: Medical Specialty ValueSet"
 // Description: "Value set for medical specialties and departments used in NVI"
 // * ^status = #active
 // * include codes from system GFDLMedicalSpecialtyCS

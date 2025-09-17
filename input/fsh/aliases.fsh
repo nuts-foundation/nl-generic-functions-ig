@@ -52,7 +52,7 @@ Alias: $atc = http://www.whocc.no/atc
 Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-clinical
 Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
 
-// Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
+Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
 // Alias: $allergyintolerance-verification = http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
 // Alias: $allergyintolerance-clinical = http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
 // Alias: $observation-category = http://terminology.hl7.org/CodeSystem/observation-category

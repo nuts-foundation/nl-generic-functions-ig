@@ -66,10 +66,10 @@ pages:
     title: Routing
 
   localization.md:
-    title: Data Localization
+    title: Localization
 
   localization-appendix.md:
-    title: Data Localization - Architecture Decision Records
+    title: Localization - Architecture Decision Records
 
   consent.md:
     title: Consent
@@ -121,14 +121,14 @@ menu:
   Home: index.html
   Care Services Directory: care-services.html
   Routing: routing.html
-  Data Localization: localization.html
+  Localization: localization.html
   Consent: consent.html
   CareTeams: careteams.html
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
   Appendices:
-    Data Localization- Architecture Decision Records: localization-appendix.html
+    Localization- Architecture Decision Records: localization-appendix.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮

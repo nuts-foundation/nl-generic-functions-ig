@@ -7,8 +7,8 @@ Description: "The data exchange capabilities supported by the NL Generic Functio
 * include codes from valueset http://hl7.org/fhir/ValueSet/endpoint-payload-type
 * include codes from system http://nuts-foundation.github.io/nl-generic-functions-ig/CodeSystem/nl-gf-data-exchange-capabilities
 
-ValueSet: NlGfDataLocalizationContextVS
-Id: nl-gf-data-localization-context-vs
+ValueSet: NlGfLocalizationContextVS
+Id: nl-gf-localization-context-vs
 Title: "NL GF Data localization context"
 Description: "Data localization context supported by NL Generic Functions."
 * ^status = #active
