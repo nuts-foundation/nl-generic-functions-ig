@@ -2,7 +2,6 @@ Instance: 3f39dca9-a392-4eb3-8366-0c7ff53ab3a9
 InstanceOf: NlGfOrganization
 Usage: #example
 Title: "LRZa - Organization 1 - Organization"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
 * name = "example General Practice"
@@ -45,7 +44,6 @@ Instance: 4815bbe6-9fea-4875-a16c-a168d63054d4
 InstanceOf: NlGfOrganization
 Usage: #example
 Title: "LRZa - Organization 2 - Organization"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "22222222"
 * name = "example Hospital"
@@ -90,7 +88,6 @@ Instance: fcf55b06-f22c-4058-9051-b77368bdd26b
 InstanceOf: NlGfOrganization
 Usage: #example
 Title: "LRZa - Organization 3 - Organization"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
 * name = "example Care Institution"
