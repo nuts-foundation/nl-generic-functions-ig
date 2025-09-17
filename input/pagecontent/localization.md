@@ -55,6 +55,8 @@ This data model basically states ***"Care provider X has data of type Y for Pati
 - **Patient identifier** (BSN/pseudoBsn). The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy.
 - **Type**: Represents type of data stored at the data holder/custodian. ***No ValueSet has been decided upon yet, so in this IG-version, a fixed LOINC code '55188-7' is used: "Patient data Document"***
 
+A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f2317.html) is in the IG artifacts.
+
 
 
 <!-- ### API specifications
