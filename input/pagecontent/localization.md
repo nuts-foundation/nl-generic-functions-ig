@@ -49,86 +49,13 @@ This version of the IG will not go into the details of this Pseudonymization Ser
 
 #### Localization record
 
-Within GF-Localization the [NL-gf-localization-DocumentReference profile](./StructureDefinition-nl-gf-localization-documentreference.html) is used to register, search, and validate localization records.
+Within GF-Localization the [NL-gf-localization-DocumentReference profile](./StructureDefinition-nl-gf-localization-documentreference.html) is used to register, search, and validate localization records ([NL-GF-IG, ADR#10](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/10)).
 This data model basically states ***"Care provider X has data of type Y for Patient Z"***. It contains the following elements:
 - **Organization identifier**: The care provider identifier (URA) representing the data holder/custodian.
 - **Patient identifier** (BSN/pseudoBsn). The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy.
 - **Type**: Represents type of data stored at the data holder/custodian. ***No ValueSet has been decided upon yet, so in this IG-version, a fixed LOINC code '55188-7' is used: "Patient data Document"***
 
 A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f2317.html) is in the IG artifacts.
-
-
-
-<!-- ### API specifications
-
-#### NVI API
-
-For implementing NVI, we have chosen to use a simple JSON-based REST API instead of FHIR resources. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of tracking which organizations have data about a patient in specific care contexts.
-
-The [NVI API](./localization.openapi.json) is defined using OpenAPI 3.0.2 specification (you may render this using [swagger.editor.html](https://editor.swagger.io/)). The API provides a straightforward interface for managing the network of involved care providers using standard REST operations.
-
-##### Operations
-###### Create Resource (POST /api)
-Registers a new care provider relationship in the NVI network.
-
-**Request Body:**
-```json
-{
-  "pseudoBsn": "string",
-  "zorgContext": "SNOMED_CT_CODE",
-  "ura": "string",
-  "organizationType": "ORGANIZATION_TYPE_CODE"
-}
-```
-- All fields are required
-- Returns HTTP 201 (Created) on success
-
-###### Delete Resource (DELETE /api)
-Removes a care provider relationship from the NVI network.
-
-**Query Parameters:**
-- `pseudoBsn` (required): The pseudonymized patient identifier
-- `zorgContext` (required): The care context SNOMED CT code
-- `ura` (required): The organization identifier
-- `organizationType` (required): The organization type code
-
-Returns HTTP 204 (No Content) on successful deletion.
-
-###### Retrieve Resources (GET /api)
-Queries the NVI network to find which organizations have data for a patient in a specific care context.
-
-**Query Parameters:**
-- `pseudoBsn` (required): The pseudonymized patient identifier
-- `zorgContext` (required): The care context SNOMED CT code
-- `organizationType` (required): The organization type code
-
-**Response:**
-```json
-{
-  "datalocations": [
-    {
-      "created": "2024-01-01T10:00:00Z",
-      "pseudoBsn": "string",
-      "zorgContext": "SNOMED_CT_CODE",
-      "ura": "string",
-      "organizationType": "ORGANIZATION_TYPE_CODE"
-    }
-  ]
-}
-```
-Returns HTTP 200 (OK) with an array of matching data locations.
-
-##### Integration Considerations
-
-While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
-
-#### LMR API
-
-
-
-#### Pseudo-BSN-service API
-
-This API spec will follow later. -->
 
 
 ### Security and Privacy Considerations
