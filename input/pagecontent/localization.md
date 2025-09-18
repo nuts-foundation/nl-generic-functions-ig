@@ -89,23 +89,7 @@ These attributes ensure proper access control and auditing while maintaining the
 The following diagram illustrates the registration workflow, including interactions between the radiologist, the PACS system and the NVI. For brevity, interactions to the Pseudonymization Service are left out here.
 
 
-{% include localization-radiologist-imaging-registration.svg %}
-
-
-
-<!-- 1. **Registration of Care Provider Relationships**: Healthcare organizations register their data availability when they have imaging data for a patient. For example:
-   - A Hospital registers that it has imaging data for the patient
-   - A Laboratory registers that it also has imaging data for the same patient
-   
-   Each registration requires the following authorization attributes:
-   - **URA**: The organization identifier of the registering organization
-   - **OrganizationType**: The type of healthcare organization (e.g., `2.16.840.1.113883.2.4.15.1060|V4` for Hospital, `2.16.840.1.113883.2.4.15.1060|L1` for Laboratory)
-
-2. **Authentication**: Dr. Smith authenticates according to the [GF Authorization](./authorization.html) specification, providing the following required attributes:
-   - **URA**: The organization identifier of the requesting organization
-   - **OrganizationType**: The organization type (e.g., `2.16.840.1.113883.2.4.15.1060|V4` for Hospital)
-   - **UZI**: Dr. Smith's unique healthcare professional identifier
-   - **Rolcode**: Her professional role code -->
+{% include localization-internist-registration.svg %}
 
 
 #### Use Case: Cardiologist searching for Imaging Data
@@ -114,37 +98,12 @@ The following diagram illustrates the registration workflow, including interacti
 
 For brevity, interactions to the Pseudonymization Service are left out here.
 
-{% include localization-cardiologist-imaging-search.svg %}
+{% include localization-cardiologist-search.svg %}
 
-<!-- **Process**:
-
-3. **Query the NVI**: With proper authentication established per the GF Authorization specification, a GET request is sent to find all organizations that have imaging data for this patient:
-   ```
-   GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004
-   ```
-   
-   Where:
-   - `pseudoBsn`: The patient's pseudonymized BSN
-   - `zorgContext`: SNOMED code for "Imaging report" (371530004)
-
-4. **Response**: The NVI returns a list of organizations that have imaging data for this patient
-
-5. **Display Results**: Dr. Smith can now see that both a Hospital and a Laboratory have imaging data for this patient. She can then:
-   - Contact these organizations through the appropriate channels to request the imaging data
-   - Use other Generic Functions (like authorization and consent) to obtain access to the actual images
-   - Review the imaging history to determine if new scans are needed -->
-
-<!-- **Benefits**:
-- **Efficiency**: Avoids duplicate imaging examinations
-- **Completeness**: Ensures all relevant imaging data is considered for diagnosis
-- **Cost Reduction**: Reduces unnecessary healthcare costs
-- **Patient Safety**: Minimizes patient exposure to radiation from redundant scans -->
 
 ### Roadmap for GF Localization
 
-<!-- #### LMR/metadata
-- Specification of LMR API using FHIR specifications -->
- 
+
 #### Localization Service
 Potential future enhancements to the Localization Service include:
 - Audit logging capabilities (MUST HAVE, TODO)
@@ -153,6 +112,3 @@ Potential future enhancements to the Localization Service include:
 #### Pseudonymization Service
 - Specification of Pseudonymization Service API
 - Specification of how to include/combine Pseudonymization transactions in FHIR request/responses
-
-### Appendices
-For more information on why some design choice were made, see the ['Appendix: FHIR Resource Considerations'](./localization-appendix.html) 

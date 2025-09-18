@@ -68,9 +68,6 @@ pages:
   localization.md:
     title: Localization
 
-  localization-appendix.md:
-    title: Localization - Architecture Decision Records
-
   consent.md:
     title: Consent
 
@@ -127,8 +124,6 @@ menu:
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
-  Appendices:
-    Localization- Architecture Decision Records: localization-appendix.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮

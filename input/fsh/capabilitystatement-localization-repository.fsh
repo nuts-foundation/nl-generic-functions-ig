@@ -22,7 +22,7 @@ Usage: #definition
       * insert Expectation(SHALL)
       * code = #create
     * interaction[+]
-      * insert Expectation(SHALL)
+      * insert Expectation(MAY)
       * code = #update
     * interaction[+]
       * insert Expectation(SHALL)
@@ -34,10 +34,6 @@ Usage: #definition
       * insert Expectation(SHALL)
       * name = "_id"
       * type = #token
-    * searchParam[+]
-      * insert Expectation(SHALL)
-      * name = "_lastUpdated"
-      * type = #date
     * searchParam[+]
       * insert Expectation(MAY)
       * name = "custodian"
@@ -62,10 +58,7 @@ Usage: #definition
       * insert Expectation(SHALL)
       * name = "category"
       * type = #token
-    * searchParam[+]
-      * insert Expectation(SHALL)
-      * name = "date"
-      * type = #date
+
 
 
 
