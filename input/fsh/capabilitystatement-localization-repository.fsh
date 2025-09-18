@@ -60,6 +60,10 @@ Usage: #definition
       * type = #token
     * searchParam[+]
       * insert Expectation(SHALL)
+      * name = "category"
+      * type = #token
+    * searchParam[+]
+      * insert Expectation(SHALL)
       * name = "date"
       * type = #date
 
