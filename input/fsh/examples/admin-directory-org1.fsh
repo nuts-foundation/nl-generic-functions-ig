@@ -2,7 +2,6 @@ Instance: 4cb35b96-f021-4e15-bf71-d67a6d4bebec
 InstanceOf: NlGfOrganization
 Usage: #example
 Title: "Organization 1 - Organization"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
 * name = "example General Practice"
@@ -46,7 +45,6 @@ Instance: 5fa4c91a-a12f-48ae-a4c7-92971dc7ab53
 InstanceOf: NlGfPractitionerRole
 Usage: #example
 Title: "Organization 1 - PractitionerRole Harry Arts"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole"
 * identifier[+].system = "http://cp1.example.org/HRM/assignments"
 * identifier[=].value = "654321"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
@@ -61,7 +59,6 @@ Instance: 9a63e407-34af-4ae4-ad3c-f7107fbbc0cd
 InstanceOf: NlGfPractitioner
 Usage: #example
 Title: "Organization 1 - Practitioner Harry Arts"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner"
 * identifier[+].system = "http://cp1.example.org/HRM/employees"
 * identifier[=].value = "5678"
 * name.use = #official

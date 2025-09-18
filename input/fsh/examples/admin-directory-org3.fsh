@@ -2,7 +2,7 @@ Instance: 3e799075-63a2-4a4c-913d-a91b8198463d
 InstanceOf: NlGfOrganization
 Usage: #example
 Title: "Organization 3- Organization"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
+
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
 * name = "example Care Institution"
@@ -28,7 +28,7 @@ InstanceOf: NlGfOrganization
 Usage: #example
 Title: "Organization 3 - Organization Nursing department"
 Description: "Nursing department at Organization 3"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
+
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
 * name = "Nursing department at Organization 3"

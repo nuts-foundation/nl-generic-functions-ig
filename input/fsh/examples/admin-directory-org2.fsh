@@ -2,7 +2,6 @@ Instance: cff921f3-c1c1-4a4c-8f0f-cafd0aa25067
 InstanceOf: NlGfOrganization
 Usage: #example
 Title: "Organization 2 - Organization"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "22222222"
 * name = "example Hospital"
@@ -160,7 +159,6 @@ Instance: f051d3bd-26ff-4030-a5b6-fc4ef2be83ba
 InstanceOf: NlGfPractitionerRole
 Usage: #example
 Title: "Organization 2 - PractitionerRole Cardioloog Caroline van Dijk at Organization 2"
-* meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole"
 * identifier[+].system = "http://cp2.example.org/HRM/assignments"
 * identifier[=].value = "123456"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
