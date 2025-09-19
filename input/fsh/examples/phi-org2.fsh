@@ -155,7 +155,7 @@ Description: "Example instance of the NlGfLocalizationDocumentReference profile.
 * type = $loinc#55188-7 "Patient data Document"
 * subject.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
 * subject.identifier.value = "123456789"
-* custodian = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
+* custodian = Reference(https://cp2-test.example.org/fhirr4/Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * custodian.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
 * custodian.identifier.value = "22222222"
 * content.attachment.contentType = #text/plain
