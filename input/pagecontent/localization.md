@@ -23,8 +23,9 @@ GF-Localization follows the choices made by the MinvWS Localization working grou
 
 Here is a brief overview of the processes that are involved: 
 1. Every data holder registers the presence of data concerning a specific patient and data category at the Localization service
-2. A data user (practitioner and/or system (EHR)) can now use the Localization service to discover data holders for a specific patient and data category
-3. Both processes require the use of pseudonyms that are generated and resolved using a national Pseudonymization Service
+2. A data user (practitioner and/or system (EHR)) can now use the Localization service to discover data holders for a specific patient and data category.  
+
+Both processes require the use of pseudonyms that are generated and resolved using a national Pseudonymization Service. The Localization service-response provides a list of data holders; the endpoints of these data holders (e.g. FHIR or DICOM-urls) need to be resolved using a [Care service (Query) Directory](./care-services.html#query-directory). This process is illustrated in [this example](./care-services.html#use-case-2-endpoint-discovery). 
 
 <img src="localization-overview-transactions.png" width="60%" style="float: none" alt="Overview of transactions in the Medical Record Localization solution."/>
 
@@ -60,8 +61,12 @@ A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f
 
 ### Security and Privacy Considerations
 
+One of things you can do to mitigate privacy risks: ***Please don't put dates or references to actual documents into the localization records since it can expose the identity patient***
+
 #### Pseudonymization
 The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudo-BSNs to enhance patient privacy. The pseudonymization service will ensure that patient identities are protected while still allowing organizations to use a joint index.([GF-Lokalisatie, ADR-1](https://github.com/minvws/generiekefuncties-lokalisatie/issues/8))
+
+
 
 
 #### Authentication and Authorization

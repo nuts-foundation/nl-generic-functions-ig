@@ -35,17 +35,9 @@ Usage: #definition
       * name = "_id"
       * type = #token
     * searchParam[+]
-      * insert Expectation(MAY)
-      * name = "custodian"
-      * type = #reference
-    * searchParam[+]
       * insert Expectation(SHALL)
       * name = "custodian.identifier"
       * type = #token
-    * searchParam[+]
-      * insert Expectation(MAY)
-      * name = "patient"
-      * type = #reference
     * searchParam[+]
       * insert Expectation(SHALL)
       * name = "patient.identifier"
@@ -54,11 +46,3 @@ Usage: #definition
       * insert Expectation(SHALL)
       * name = "type"
       * type = #token
-    * searchParam[+]
-      * insert Expectation(SHALL)
-      * name = "category"
-      * type = #token
-
-
-
-
