@@ -137,15 +137,3 @@ Description: "A care team for a (single)patient with multiple care providers and
 
 
 
-Profile: NlGfLocalizationDocumentReference
-Parent: DocumentReference
-Id: nl-gf-localization-documentreference
-Title: "NL Generic Functions Localization DocumentReference Profile"
-Description: """A DocumentReference profile for registering the availability of patient data at healthcare organizations for localization services. This profile is used to indicate that certain patient data is available at a specific organization and can be accessed for localization purposes."""
-* type 1..1
-* subject 1..1
-* subject only Reference(Patient)
-* subject.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
-* custodian 1..1
-* custodian only Reference(NlGfOrganization)
-* custodian.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"

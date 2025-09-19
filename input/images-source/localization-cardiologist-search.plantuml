@@ -1,5 +1,7 @@
 @startuml localization-cardiologist-search
 
+title Localization of patient data
+
 skinparam roundcorner 20
 skinparam defaultFontName Arial 
 hide footbox
@@ -9,9 +11,13 @@ hide footbox
 actor "Dr. Smith\n(Cardiologist)" as doctor
 participant "EHR System @\n(Care Provider, URA:456)" as ehr
 participant "Localization Service" as nvi
-participant "EHR @\n(Care Provider, URA:123)" as ehr_reg
+participant "Addressing Service" as addressing
+participant "EHR @\n(Care Provider)" as ehr_reg
 
 doctor -> ehr: Request data\n for patient (BSN:987654321)
+
+== Localization ==
+
 
 note over nvi
   Required authorization attributes for GET:
@@ -23,19 +29,21 @@ note over nvi
   '  (pseudoBsn) is out of scope for this diagram
 end note
 
-ehr -> nvi: GET DocumentReference, where:\n Bsn=987654321
-
-
+ehr -> nvi: Search /DocumentReference?subject=bsn|987654321
 
 nvi -> nvi: Validate authorization\nand search data locations
 
-nvi -> ehr: Return response with data locations:\n[\n  {subject: "BSN:987654321",\n custodian: "URA-123", ...},\n  {...},\n  {...}\n]
+nvi -> ehr: Bundle with DocumentReferences \ncontaining custodian's (URA's).
 
+== Addressing and fetching data ==
 
-ehr -> ehr: Get FHIR URLs for\n care provider URA:123
+loop for each custodian
+  ehr -> addressing: Search /Organization?identifier=ura&_include=Organization:endpoint
 
-ehr -> ehr_reg: Query FHIR endpoint for patient (BSN:987654321)
+  ehr -> ehr_reg: GET /Condition?subject=bsn|987654321
+end
 
-ehr -> doctor: Display available encounters\n and conditions to Dr. Smith
+ehr -> doctor: Display consolidated list of \nconditions to Dr. Smith
 
 @enduml
+
