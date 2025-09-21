@@ -62,25 +62,20 @@ pages:
   care-services.md:
     title: Care Services Directory
 
-  care-services-appendix.md:
-    title: Care Services Directory - Architecture Decision Records
-
   routing.md:
     title: Routing
 
-  # workflow.md:
-  #   title: Workflow
-  careteams.md:
-    title: CareTeams
-
   localization.md:
-    title: Data Localization
-
-  localization-appendix.md:
-    title: Data Localization - Architecture Decision Records
+    title: Localization
 
   consent.md:
     title: Consent
+
+  careteams.md:
+    title: CareTeams
+
+  authentication.md:
+    title: Authentication
 
   authorization.md:
     title: Authorization
@@ -123,14 +118,12 @@ menu:
   Home: index.html
   Care Services Directory: care-services.html
   Routing: routing.html
-  CareTeams: careteams.html
-  Data Localization: localization.html
+  Localization: localization.html
   Consent: consent.html
+  CareTeams: careteams.html
+  Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
-  Appendices:
-    Care Services Directory - Architecture Decision Records: care-services-appendix.html
-    Data Localization- Architecture Decision Records: localization-appendix.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮

@@ -31,7 +31,10 @@ Alias: $restful-interaction = http://hl7.org/fhir/restful-interaction
 Alias: $service-type = http://terminology.hl7.org/CodeSystem/service-type
 Alias: $endpoint-payload-type = http://terminology.hl7.org/CodeSystem/endpoint-payload-type
 Alias: $endpoint-connection-type = http://terminology.hl7.org/CodeSystem/endpoint-connection-type
+Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
 // Alias: $orpha = http://www.orpha.net
+Alias: $resource-types = http://hl7.org/fhir/resource-types
+Alias: $restful-interaction = http://hl7.org/fhir/restful-interaction
 
 
 Alias: $nl-core-Patient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient
@@ -49,7 +52,7 @@ Alias: $atc = http://www.whocc.no/atc
 Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-clinical
 Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
 
-// Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
+Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
 // Alias: $allergyintolerance-verification = http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
 // Alias: $allergyintolerance-clinical = http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
 // Alias: $observation-category = http://terminology.hl7.org/CodeSystem/observation-category

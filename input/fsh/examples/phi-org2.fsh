@@ -162,3 +162,4 @@ Description: "This bundle contains all personal health information for Patient J
 // * insert BundleEntryPUT(DiagnosticReport, org2-report-orthopedic-specialty)
 // * insert BundleEntryPUT(DiagnosticReport, org2-report-internal-medicine)
 * insert BundleEntryPUT(MedicationStatement, e00a59fa-7d7e-422d-8505-ef3e645404e9)
+* insert BundleEntryPUT(NlGfLocalizationDocumentReference, 52b792ba-11ae-42f3-bcc1-231f333f2317)

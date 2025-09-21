@@ -1,180 +1,119 @@
-### API Implementation Approach
+### Introduction
+This FHIR Implementation Guide specifies the Generic Function 'Medical Record Localization' (GF Localization), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GF-Localization provides a standardized framework that enables healthcare professionals to discover which organizations hold relevant patient data of a specific type, ensuring GDPR compliance through proportionality and subsidiarity principles while facilitating secure and efficient health information exchange.
 
-For implementing NVI (Network of Involved Care Providers - see [detailed description](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15)), we have chosen to use a simple JSON-based REST API instead of FHIR resources. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of tracking which organizations have data about a patient in specific care contexts.
+Patient data is divided over multiple data holders. In today’s healthcare landscape organizations rely on several different types of indices to find data concerning a specific patient and context. However, none of these indices are complete and
+all of these indices have different requirements for usage, hindering interoperability and timely access to health information. GF-Localization addresses this challenge by providing a unified framework that ensures an index of all data holders concerning a specific patient and type is easily and securely accessible.
 
-### API Specification
+This guide outlines the technical requirements and architectural principles underlying GF-Localization, with a focus on trust, authenticity, and data integrity. Key design principles include:
 
-The [NVI API](./localization.openapi.json) is defined using OpenAPI 3.0.2 specification (you may render this using [swagger.editor.html](https://editor.swagger.io/)). The API provides a straightforward interface for managing the network of involved care providers using standard REST operations.
+- International standards: The solution should be based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
+- Single Source of Truth: Each localization record originates from exactly one organization: the data holder itself.
+- Stakeholder Responsibility: Data holders are accountable for maintaining the accuracy of localization records at the Localization service.
 
-#### Core Data Model
+By adhering to these principles, this Implementation Guide supports consistent and secure data holder discovery, fostering improved interoperability within the healthcare ecosystem.
 
-The API manages resources that represent the relationship between:
-- **BSN/pseudoBsn**: The patient identifier. The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy
-- **zorgContext (Care Context)**: The medical context or specialty, represented by SNOMED CT codes
-- **ura**: The organization identifier representing the care provider
-- **organizationType**: The type of healthcare organization (e.g., hospital, pharmacy, laboratory)
+### Solution overview
 
-#### Supported Care Contexts
+GF-Localization follows the choices made by the MinvWS Localization working group, see [GF-Lokalisatie, ADR's](https://github.com/orgs/minvws/projects/70/views/1). This guide specifies the choices made. Most impactful/striking choice are:
 
-The API supports the following care contexts (zorgContext), each represented by a SNOMED CT code:
-- `http://snomed.info/sct|721912009` - Medication summary section
-- `http://snomed.info/sct|371530004` - Imaging report
-- `http://snomed.info/sct|77465005` - Patient summary document
-- `http://snomed.info/sct|721963009` - Immunization summary document
-- `http://snomed.info/sct|782671000000103` - Multidisciplinary care management
+- using one national Medical Record Localization Service: the 'Nationale Verwijs Index' (NVI)
+- using a local metadata registry (LMR) per data holder
+- reusing the FHIR-interface of the data source to act as LMR
+- using one national service for pseudonymizing and depseudonymizing citizen service numbers (BSN's): the Pseudonymization Service
 
-#### Supported Organization Types
+Here is a brief overview of the processes that are involved: 
+1. Every data holder registers the presence of data concerning a specific patient and data category at the Localization service
+2. A data user (practitioner and/or system (EHR)) can now use the Localization service to discover data holders for a specific patient and data category.  
 
-The API supports the following organization types (OrganisatieType):
-- `2.16.840.1.113883.2.4.15.1060|H1` - Huisartsinstelling (General Practitioner)
-- `2.16.840.1.113883.2.4.15.1060|V4` - Ziekenhuis (Hospital)
-- `2.16.840.1.113883.2.4.15.1060|A1` - Apotheekinstelling (Pharmacy)
-- `2.16.840.1.113883.2.4.15.1060|X3` - Verplegings- of verzorgingsinstelling (Nursing/Care Institution)
-- `2.16.840.1.113883.2.4.15.1060|L1` - Laboratorium (Laboratory)
-- `2.16.840.1.113883.2.4.15.1060|G5` - Geestelijke Gezondheidszorg (Mental Health Care)
-- `2.16.840.1.113883.5.1008|OTH` - Overige (Other)
+Both processes require the use of pseudonyms that are generated and resolved using a national Pseudonymization Service. The Localization service-response provides a list of data holders; the endpoints of these data holders (e.g. FHIR or DICOM-urls) need to be resolved using a [Care service (Query) Directory](./care-services.html#query-directory). This process is illustrated in [this example](./care-services.html#use-case-2-endpoint-discovery). 
 
-#### API Operations
+<img src="localization-overview-transactions.png" width="60%" style="float: none" alt="Overview of transactions in the Medical Record Localization solution."/>
 
-##### Create Resource (POST /api)
-Registers a new care provider relationship in the NVI network.
+For more detail on the topology of GF-Localization, see [GF-Lokalisatie, ADR-2](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15). Each component, data model, and transaction will be discussed in more detail.
 
-**Request Body:**
-```json
-{
-  "pseudoBsn": "string",
-  "zorgContext": "SNOMED_CT_CODE",
-  "ura": "string",
-  "organizationType": "ORGANIZATION_TYPE_CODE"
-}
-```
-- All fields are required
-- Returns HTTP 201 (Created) on success
+### Components (actors)
 
-###### Delete Resource (DELETE /api)
-Removes a care provider relationship from the NVI network.
+#### Localization Service
 
-**Query Parameters:**
-- `pseudoBsn` (required): The pseudonymized patient identifier
-- `zorgContext` (required): The care context SNOMED CT code
-- `ura` (required): The organization identifier
-- `organizationType` (required): The organization type code
+A (Medical Record) Localization Service is responsible for managing the registration, maintenance, and publication of localization records. It should be able to create and update localization records. A Localization Service MUST implement these [FHIR capabilities](./CapabilityStatement-nl-gf-localization-repository.html) and basically involves creating and searching for FHIR DocumentReferences (see [](#localization-record))
 
-Returns HTTP 204 (No Content) on successful deletion.
+#### Local Metadata Register
+A Local Metadata Register (LMR) is responsible for managing the registration, maintenance, and publication of the metadata of one data holder (the custodian or the healthcare organization). To implement an LMR, existing FHIR-APIs of data sources can be used. This decision was made to simplify the implementation and reduce complexity while still meeting the core requirements of metadata-based searching. [Resource Metadata](https://hl7.org/fhir/R4/resource.html#Meta) is registered in every FHIR resource type and can be found by standard [search-parameters](https://hl7.org/fhir/R4/resource.html#search). In the Netherlands, both [FHIR R4](https://hl7.org/fhir/R4/http.html) and [FHIR STU3](https://www.hl7.org/fhir/STU3/http.html) are used.
 
-###### Retrieve Resources (GET /api)
-Queries the NVI network to find which organizations have data for a patient in a specific care context.
+#### Pseudonymization Service
+The Pseudonymization Service is responsible for creating and retrieving Polymorphic Pseudonyms of Patient identifiers. It involves multiple interactions for both a FHIR request and a FHIR response:
+- the sender (of the request or response) posts their identifier/pseudonym AND the target organization to the Pseudonymization Service, which returns an opaque value.
+- the receiver (of the request or response)  exchanges the opaque value for a pseudonym at the Pseudonymization Service. 
+This version of the IG will not go into the details of this Pseudonymization Service and the effect on FHIR transactions. For information on this topic, see the [Logius BSNk-pp service](https://www.logius.nl/onze-dienstverlening/toegang/voorzieningen/bsnk-pp).
 
-**Query Parameters:**
-- `pseudoBsn` (required): The pseudonymized patient identifier
-- `zorgContext` (required): The care context SNOMED CT code
-- `organizationType` (required): The organization type code
+### Data models
 
-**Response:**
-```json
-{
-  "datalocations": [
-    {
-      "created": "2024-01-01T10:00:00Z",
-      "pseudoBsn": "string",
-      "zorgContext": "SNOMED_CT_CODE",
-      "ura": "string",
-      "organizationType": "ORGANIZATION_TYPE_CODE"
-    }
-  ]
-}
-```
-Returns HTTP 200 (OK) with an array of matching data locations.
+#### Localization record
+
+Within GF-Localization the [NL-gf-localization-DocumentReference profile](./StructureDefinition-nl-gf-localization-documentreference.html) is used to register, search, and validate localization records ([NL-GF-IG, ADR#10](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/10)).
+This data model basically states ***"Care provider X has data of type Y for Patient Z"***. It contains the following elements:
+- **Organization identifier**: The care provider identifier (URA) representing the data holder/custodian.
+- **Patient identifier** (BSN/pseudoBsn). The initial implementation uses plain BSN (Burgerservicenummer), which will be replaced by pseudoBsn in a later stage for enhanced privacy.
+- **Type**: Represents type of data stored at the data holder/custodian. ***No ValueSet has been decided upon yet [GF-Lokalisatie, ADR#62](https://github.com/minvws/generiekefuncties-lokalisatie/issues/62), so in this IG-version, a fixed LOINC code '55188-7' is used: "Patient data Document"***
+
+A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f2317.html) is in the IG artifacts.
+
 
 ### Security and Privacy Considerations
 
+One of things you can do to mitigate privacy risks: ***Please don't put dates or references to actual documents into the localization records since it can expose the identity patient***
+
 #### Pseudonymization
-The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudoBsn to enhance patient privacy. The pseudonymization layer will ensure that patient identities are protected while still allowing organizations to coordinate care.
+The initial implementation uses plain BSN (Burgerservicenummer) for simplicity. In a later stage, this will be replaced with pseudo-BSNs to enhance patient privacy. The pseudonymization service will ensure that patient identities are protected while still allowing organizations to use a joint index.([GF-Lokalisatie, ADR-1](https://github.com/minvws/generiekefuncties-lokalisatie/issues/8))
+
+
+
 
 #### Authentication and Authorization
-Authentication and authorization is described in the [GF Authorization](./authorization.html). The requirements for the NVI API are:
-* The access to the API should be restricted by mTLS and PKI Overheid certificates.
-* The authorization should be on PractitionerRole level.
-* There should be an authorization policy applicable to the relevany zorgContext, as described by the [GF Authorization](./authorization.html).
+Authentication and authorization follows the [GF Authorization](./authorization.html) specification. The required ***authentication and authorization*** attributes for Localization Service are:
 
-### Advantages of the JSON API Approach
+**For POST operations (registering localization records):**
+- **Organization identifier** (URA): The organization identifier of the registering organization
 
-1. **Simplicity**: The JSON-based API is straightforward to implement and integrate, reducing the learning curve for developers
-2. **Focused Functionality**: The API is purpose-built for NVI requirements without the overhead of full FHIR compliance
-3. **Clear Semantics**: Each operation has a single, well-defined purpose without ambiguity
-4. **Efficient Operations**: Direct REST operations avoid the complexity of FHIR search parameters and resource constraints
-5. **Easier Validation**: Simple JSON schema validation is sufficient, avoiding complex FHIR profile validation
+**For GET operations (querying localization records):**
+- **Organization identifier** (URA): The organization identifier of the requesting organization (URA)
+- **Organization type**: The [type of healthcare organization](./ValueSet-2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000.html) making the query
+- **Practitioner identifier** (UZI/DEZI): The unique healthcare professional identifier of the requester
+- **Role code**: The [professional role code](./ValueSet-uzi-rolcode-vs.html) of the requester
+- **Patient identifier** (BSN/pseudoBSN): The Patient identifier, used to check/fetch a Consent
 
-### Integration Considerations
-
-While this API uses a simple JSON format rather than FHIR, it can still integrate with FHIR-based systems through appropriate adapters or transformation layers. Organizations using FHIR internally can map between their FHIR resources and the NVI API as needed.
-
-### Future Enhancements
-
-Potential future enhancements to the API include:
-- Audit logging capabilities (MUST HAVE, TODO)
-- Extended metadata fields for additional context
+These attributes ensure proper access control and auditing while maintaining the security requirements outlined in the [GF Authorization](./authorization.html) specification.
 
 ---
 
-## Example Use Cases
+### Example Use Cases
 
-### Use Case: Physician Searching for Available Imaging Data
+#### Use case: Radiologist registering Imaging Data
+**Scenario**: Dr. Carter, a radiologist at a care provider organization, performs an imaging study for a patient. To enable data discovery by other healthcare professionals, Dr. Carter's organization must register the existence of this imaging data in the national localization index (NVI). This process involves pseudonymizing the patient's identifier, creating a localization record, and submitting it to the NVI with the appropriate authorization attributes.
+
+The following diagram illustrates the registration workflow, including interactions between the radiologist, the PACS system and the NVI. For brevity, interactions to the Pseudonymization Service are left out here.
+
+
+{% include localization-internist-registration.svg %}
+
+
+#### Use Case: Cardiologist searching for Imaging Data
 
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
-{% include localization-physician-imaging-search.svg %}
+For brevity, interactions to the Pseudonymization Service are left out here.
 
-**Process**:
-
-1. **Authentication**: Dr. Smith authenticates using DEZI, which uses an OIDC (OpenID Connect) flow that results in an id_token containing:
-   - **URA**: The organization identifier (linked to Hospital A)
-   - **OrganizationType**: The organization type (e.g. Hospital)
-   - **UZI**: Dr. Smith's unique healthcare professional identifier
-   - **Rolcode**: Her professional role code (e.g., cardiologist)
-
-2. **Query the NVI**: The system authenticates to the NVI API using either an X509 certificate or PKI Overheid Server certificate (which resolves to an URA number), the user is authenticated with the `id_token` from the DEZI authentication. A GET is send request to find all organizations that have imaging data for this patient:
-   ```
-   GET /api?pseudoBsn=<patient-id>&zorgContext=http://snomed.info/sct|371530004
-   ```
-   
-   Where:
-   - `pseudoBsn`: The patient's pseudonymized BSN
-   - `zorgContext`: SNOMED code for "Imaging report" (371530004)
-
-3. **Response**: The NVI returns a list of hospitals that have imaging data for this patient:
-   ```json
-   {
-     "datalocations": [
-       {
-         "created": "2024-01-15T14:30:00Z",
-         "pseudoBsn": "<patient-id>",
-         "zorgContext": "http://snomed.info/sct|371530004",
-         "ura": "URA-HOSPITAL-B",
-         "organizationType": "2.16.840.1.113883.2.4.15.1060|V4"
-       },
-       {
-         "created": "2024-02-20T09:15:00Z",
-         "pseudoBsn": "<patient-id>",
-         "zorgContext": "http://snomed.info/sct|371530004", 
-         "ura": "URA-HOSPITAL-C",
-         "organizationType": "2.16.840.1.113883.2.4.15.1060|V4"
-       }
-     ]
-   }
-   ```
-
-4. **Metadata Retrieval**: Now Dr. Smith knows that Hospital B and Hospital C have imaging data for this patient. She can then:
-   - Contact these hospitals through the appropriate channels to request the imaging data
-   - Use other Generic Functions (like authorization and consent) to obtain access to the actual images
-   - Review the imaging history to determine if new scans are needed
-
-**Benefits**:
-- **Efficiency**: Avoids duplicate imaging examinations
-- **Completeness**: Ensures all relevant imaging data is considered for diagnosis
-- **Cost Reduction**: Reduces unnecessary healthcare costs
-- **Patient Safety**: Minimizes patient exposure to radiation from redundant scans
+{% include localization-cardiologist-search.svg %}
 
 
-## Appendices
-[Appendix: FHIR Resource Considerations](./localization-appendix.html) 
+### Roadmap for GF Localization
+
+
+#### Localization Service
+Potential future enhancements to the Localization Service include:
+- Audit logging capabilities (MUST HAVE, TODO)
+- ValueSet constraint on DocumentReference.type and/or DocumentReference.category
+
+#### Pseudonymization Service
+- Specification of Pseudonymization Service API
+- Specification of how to include/combine Pseudonymization transactions in FHIR request/responses
