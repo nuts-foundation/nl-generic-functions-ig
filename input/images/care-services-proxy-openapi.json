@@ -1,0 +1,322 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "NUTS Care Services Proxy Authorization API",
+    "description": "API specifications for the NUTS Care Services proxy authorization mechanisms",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "Example server"
+    }
+  ],
+  "paths": {
+    "/authorization/search-narrowing": {
+      "post": {
+        "summary": "Search Narrowing Request (1a)",
+        "description": "This endpoint is invoked before the request is executed to the internal FHIR service.\nIt takes the incoming FHIR request and returns a search-narrowed scope that includes\nauthorized FHIR query parameters.\n",
+        "operationId": "searchNarrowing",
+        "tags": [
+          "Authorization"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "query",
+                  "method",
+                  "use_case"
+                ],
+                "properties": {
+                  "use_case": {
+                    "type": "string",
+                    "description": "The use case for which the search narrowing is requested",
+                    "enum": [
+                      "mCSD",
+                      "care_services",
+                      "administration_directory"
+                    ],
+                    "example": "mCSD"
+                  },
+                  "query": {
+                    "type": "string",
+                    "description": "The FHIR query being requested (including any query parameters)",
+                    "example": "Organization?name=Example&_id=123"
+                  },
+                  "method": {
+                    "type": "string",
+                    "description": "HTTP method of the request",
+                    "enum": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "DELETE",
+                      "PATCH"
+                    ],
+                    "example": "GET"
+                  },
+                  "requester": {
+                    "type": "object",
+                    "description": "Information about the requesting party",
+                    "properties": {
+                      "organization_identifier": {
+                        "type": "string",
+                        "description": "Organization identifier of the requester",
+                        "example": "ura|24173480"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully returned search-narrowed scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "allowed",
+                    "narrowed_scope"
+                  ],
+                  "properties": {
+                    "allowed": {
+                      "type": "boolean",
+                      "description": "Whether the request is allowed",
+                      "example": true
+                    },
+                    "narrowed_scope": {
+                      "type": "string",
+                      "description": "The narrowed search scope with query parameters",
+                      "example": "Organization?identifier=ura|24173480"
+                    },
+                    "original_scope": {
+                      "type": "string",
+                      "description": "The original requested scope for reference",
+                      "example": "Organization"
+                    },
+                    "applied_filters": {
+                      "type": "array",
+                      "description": "List of filters applied to narrow the scope",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "parameter": {
+                            "type": "string",
+                            "example": "identifier"
+                          },
+                          "value": {
+                            "type": "string",
+                            "example": "ura|24173480"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authorization/scopes": {
+      "post": {
+        "summary": "Scope Request (1b Alternative)",
+        "description": "This endpoint is invoked before the request is executed to the internal FHIR service.\nIt returns FHIR scopes similar to SMART on FHIR Access Scopes, providing access scopes\nspecific to the mCSD (mobile Care Services Discovery) use case.\n",
+        "operationId": "scopeRequest",
+        "tags": [
+          "Authorization"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "use_case"
+                ],
+                "properties": {
+                  "use_case": {
+                    "type": "string",
+                    "description": "The use case for which scopes are requested",
+                    "enum": [
+                      "mCSD",
+                      "care_services",
+                      "administration_directory"
+                    ],
+                    "example": "mCSD"
+                  },
+                  "requester": {
+                    "type": "object",
+                    "description": "Information about the requesting party",
+                    "properties": {
+                      "organization_identifier": {
+                        "type": "string",
+                        "description": "Organization identifier of the requester",
+                        "example": "ura|24173480"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully returned FHIR scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "scopes"
+                  ],
+                  "properties": {
+                    "scopes": {
+                      "type": "array",
+                      "description": "Array of SMART on FHIR formatted scopes",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "system/Organization.rs?identifier=ura|24173480",
+                        "system/Location.rs?managingOrganization=Organization/24173480",
+                        "system/Practitioner.rs?_has:PractitionerRole:practitioner:organization=Organization/24173480",
+                        "system/PractitionerRole.rs?organization=Organization/24173480",
+                        "system/HealthcareService.rs?_has:Location:location:managingOrganization=Organization/24173480"
+                      ]
+                    },
+                    "scope_details": {
+                      "type": "array",
+                      "description": "Detailed information about each scope",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "scope": {
+                            "type": "string",
+                            "example": "system/Organization.rs?identifier=ura|24173480"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "Read and search access to Organization resources"
+                          },
+                          "constraints": {
+                            "type": "array",
+                            "description": "Any constraints or filters applied to this scope",
+                            "items": {
+                              "type": "string"
+                            },
+                            "example": [
+                              "identifier=ura|24173480",
+                              "type=prov"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "expiry": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "When these scopes expire",
+                      "example": "2024-12-31T23:59:59Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error code",
+            "example": "unauthorized"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "The requester is not authorized to access this resource"
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional error details",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
