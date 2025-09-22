@@ -62,6 +62,9 @@ pages:
   care-services.md:
     title: Care Services Directory
 
+  care-services-proxy.md:
+    title: Care Services Proxy
+
   routing.md:
     title: Routing
 
@@ -124,6 +127,8 @@ menu:
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
+  Technical Implementation:
+    Care Services Proxy / PDP: care-services-proxy.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
