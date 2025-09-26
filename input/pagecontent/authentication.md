@@ -1,28 +1,60 @@
 ### Introduction
 
-Why is authentication important?
+Authentication is the process of verifying the identity of an entity. In the context of healthcare, authentication is used to verify the identity of healthcare professionals and care organisations. This is important to ensure that only authorized entities can access sensitive information and resources.
+
+The verified identity is often used downstream for authorization and accounting purposes. Authorization is the process of granting access to resources based on the identity of an entity. Accounting is the process of tracking the actions of an entity.
 
 #### Requirements
 
-- Peer 2 peer authentication without the need of a central authority
-- Support of multiple identity claims from different issuers
+There exists a multitude of authentication solutions, therefore it is important to define the requirements for a authentication in the context of healthcare. The requirements are:
+
+- Work with identity claims from the authoritative sources
+- Support combinations of identity claims from different trusted issuers
 - Support for use-cases with and without a end-user (healthcare professional)
 - Support for authorizing vendors to act on behalf of an (care) organisation
+- Support for limiting the scope of an authorization of a vendor
 - Support for authorizing (care) organisations to act on behalf of a healthcare professional
 - User-friendly solution for healthcare professionals
 - Cost efficient solution for care organisations
 - Flexible solution that can be adapted to different use-cases
+- No single point of failure
 - Privacy by design
 - Securty by design
 - Support for leveraging existing identity solutions
 
 #### Terminology
 
-- Identity: A set of claims about an entity (person or organisation)
+Throughout this document the following terminology is used:
+
+- Entity: An actor in the system (person or organisation)
+- Agent: A digital representation of an entity that acts on its behalf, also often called an identity wallet
+- Vendor: A party that offers Agents to its customers (care organisations and healthcare professionals)
+- Identity: A set of claims about an entity (person or organisation) which is relevant in a specific context
+- Verifiable Identifier (VID): An identifier that can be (cryptographically) verified
 - Claim: A statement about an entity (e.g. name, role, affiliation)
+- Verifiable Claim: A claim that can be cryptographically verified
+- Issuer: An entity that issues claims about another entity
+- Authoritative source: An issuer that is trusted to issue claims about a specific entity
+- Verifier: An entity that verifies the identity of another entity based on its claims
+- Holder: An entity that holds claims about itself or is authorized to present claims about another entity
 - Authentication: The process of verifying the identity of an entity
 - Authorization: The process of granting access to resources based on the identity of an entity
 - Use-case: A specific scenario in which authentication and authorization are required
+
+#### Problem overview
+
+A tipical scenario in healthcare is that a healthcare professional needs to access a resource (e.g. patient data) which is located at a different organisation (e.g. a hospital).
+In the Netherlands, the custodian of the patient data is by law forbidden to share the data with third parties. Several exceptions to that rule exists. One responsibility of the custodian is to ensure that the requesting party is authorized to access the data. In order to do so, the custodian needs to verify the identity of the requesting party.
+
+In practice, many of these data exchanges are not done directly between the healthcare professionals, but between computers and systems. Often these systems are operated by vendors on behalf of the care organisations.
+
+On top of that, use-cases are often described and governed by a governing body. The governing body certifies healthcare organisations and vendors to operate in a specific use-case. The governing body defines the trust framework in which the use-case operates. The custodian also needs to verify that the entities operate within the trust framework of the use-case.
+
+The custodian needs to verify the identity of the requesting healthcare professional, working for an organisation which is a customer of a vendor. The custodian needs to verify the following:
+
+- The identity of the healthcare professional, identifier, role, and affiliation with the care organisation
+- The identity of the care organisation, identifier, and its relationship with the healthcare professional
+- The identity of the vendor, identifier, and its relationship with the care organisation
 
 ### Solution overview
 
