@@ -1,8 +1,6 @@
 ### Introduction
 
-This FHIR Implementation Guide specifies the Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across systems.
-
-In today’s healthcare landscape, organizations rely on both physical and digital addresses for communication and data exchange. However, digital addressing information is often inconsistent, out-of-date, or unavailable, hindering interoperability and timely access to health information. GFA addresses this challenge by providing a unified framework that ensures all current, valid addresses for data exchange are easily accessible and traceable to authoritative sources.
+This FHIR Implementation Guide specifies the technical components of the Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across healthcare systems.
 
 This guide outlines the technical requirements and architectural principles underlying GFA, with a focus on trust, authenticity, and data integrity. Key design principles include:
 
@@ -24,7 +22,7 @@ Here is a brief overview of the processes that are involved:
 1. Every care provider registers its addressable entities in an 'Administration Directory.'
 1. Every care provider registers the endpoint (URL) of its 'Administration Directory' at the LRZa registry (also an 'Administration Directory').
 1. An 'Update Client' uses the LRZa ([GF-Adressering, ADR-7](https://github.com/minvws/generiekefuncties-adressering/issues/155)) and the care provider Administration Directories to consolidate all data into a 'Query Directory.'
-1. A practitioner and/or system (EHR) can now use the Query Directory to search for a healthcare service, organization, department, location, endpoint, or practitioner.
+1. A practitioner and/or system (EHR) can now use the Query Directory to search for the resources defined within mCSD.
 
 
 <img src="careservices-overview-transactions.png" width="100%" style="float: none" alt="Overview of transactions in the Care Services Addressing solution."/>
@@ -42,13 +40,9 @@ The Administration Client of the LRZa provides a user interface for healthcare p
 
 
 #### Administration Directory
-The Administration Directory persist all addressable entities of one or more healthcare organizations. The Administration Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-admin-client.html) for an Administration Client to create, update and delete resources. If you've implemented both an Administration Client & Directory, you can also choose to use proprietary formats/APIs/transactions between these components. 
+The Administration Directory persist all addressable entities of one or more healthcare organizations. The Administration Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-admin-client.html) for an Administration Client to create, update and delete resources. 
 
 The Administration Directory MUST implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-update-client.html) to publish changes of addressable entities. These changes are consumed by an Update Client.
-
-The performance/availability requirements for an Administration Directory ([GF-Adressering, ADR#177](https://github.com/minvws/generiekefuncties-adressering/issues/177)):
-- **Query Response Time:** 95% of _history requests should be answered within 2000ms.
-- **Availability:** Minimum uptime of 99% between 8PM and 6AM (Europe/Amsterdam timezone).
 
 
 #### Update Client
@@ -66,7 +60,7 @@ Besides using the 'history-type' operation, the Update Client should be able to 
 
 During consolidation, multiple Administration Directories may have overlapping or conflicting entities. An Update Client MUST only use data from authoritative data sources ([GF-Adressering, ADR#186](https://github.com/minvws/generiekefuncties-adressering/issues/186)) and MUST obey these guidelines:
 - The LRZa Administration Directory is authoritative for Organization instances with `identifier` of system `http://fhir.nl/fhir/NamingSystem/ura` (URA), its `name` and `status`. When the healthcare provider's Administration Directory also provides a `name` or `status` value (for an Organization-instance with a URA-identifier), these values should be ignored. Other elements from the healthcare provider's Administration Directory should be added. This way, a healthcare provider can add an `alias` or `endpoint` using it's own Administration Directory.
-- The LRZa Administration Directory contains a list of healthcare providers (identified by a URA) and the healthcare provider's Administration Directory endpoint (URL). An Administration Directory is only authoritative for the healthcare providers that registered this Administration Directory endpoint (URL) at the LRZa. Information about other healthcare providers MUST be disregarded.
+- The LRZa Administration Directory contains a list of Organization resources and the Endpoint resource referencing the healthcare provider's Administration Directory endpoint (URL). An Administration Directory is only authoritative for the Organization resources that registered this Administration Directory endpoint (URL) at the LRZa. Information about other Organization resources MUST be disregarded.
 - All HealthcareServices, Locations, PractitionerRoles and Organization-entities of a single healthcare provider MUST (indirectly) link to a top-level Organization-instance with a URA-identifier:
   - All HealthcareService, Location, PractitionerRole entities MUST be directly linked to an Organization-instance (could be 'sub-Organization' like a department).
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
@@ -77,10 +71,10 @@ After consolidation, the Update Client writes the updates to a Query Directory. 
 
 
 #### Query Directory
-The Query Directory persist all addressable entities it receives from the Update Client. The Query Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-admin-client.html) for an Update Client to create, update and delete resources. If you've implemented both an Update Client & Query Directory, you can also choose to use proprietary formats/APIs/transactions between these components. 
+The Query Directory persist all addressable entities it receives from the Update Client. The Query Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-admin-client.html) for an Update Client to create, update and delete resources. 
 Due to the consolidation process of the Update Client, not all (intermediate) changes are replicated between Administration Directories and Query Directory
 
-The Query Directory serves/exposes all addressable entities to one or more Query Clients. The Query Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-query-directory-query-client.html) for a Query Client to search and read resources. If you've implemented both an Query Client & Query Directory, you can also choose to use proprietary formats/APIs/transactions between these components. 
+The Query Directory serves/exposes all addressable entities to one or more Query Clients. The Query Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-query-directory-query-client.html) for a Query Client to search and read resources. 
 
 #### Query Client
 The Query Client is used to search and retrieve information from the Query Directory, which contains consolidated data from all Administration Directories. It enables practitioners, EHR systems, and other healthcare applications to discover healthcare services, organizations, departments, locations, endpoints, or practitioners across the entire ecosystem. By querying the Query Directory, users can efficiently find up-to-date and authoritative addressable entities for care coordination, referrals, and electronic data exchange.
@@ -103,7 +97,7 @@ The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an 
 
 > ##### Changing endpoints and the continued integrity of references
 > Healthcare records (e.g. conditions, observations, or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
-IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) in stead of e.g. incrementing numeric values. If the Endpoint.address (the base part of URLs) must be changed, use the `status` and `replacedBy` extension to properly redirect and fix broken links, ensuring continued integrity of references. Don't delete Endpoint-instances.
+IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) instead of e.g. incrementing numeric values. If the Endpoint.address (the base part of URLs) must be changed, use the `status` and `replacedBy` extension to properly redirect and fix broken links, ensuring continued integrity of references. Don't delete Endpoint-instances.
 >
 >For example, care provider 'CP1' uses an EHR from software vendor 'SV1'. This vendor SV1 uses endpoint-URL 'https://sv1/fhirR4' for every customer (care provider). Now if CP1 wants to switch to a new vendor, this endpoint-URL may risk lots of broken references in many EHR-systems. A better option would be URL 'https://sv1/**cp1**/fhirR4' where a change can be applied to all references in a system OR URL 'https://cp1/fhirR4' that may prevent a change altogether (until FHIR R4 is outdated...).
 
@@ -188,4 +182,4 @@ The OrganizationAffiliation resource may be added in the future to publish relat
 
 #### Using HCIM/NL-CORE profiles and valuesets
 
-Profiles and Valuesets in this IG should re-use the Dutch `nictiz.fhir.nl.r4.nl-core` package, but due to a software issue, it is currently not possible. A fix is on its way.
+Profiles and Valuesets in this IG should re-use the Dutch `nictiz.fhir.nl.r4.nl-core` package.
