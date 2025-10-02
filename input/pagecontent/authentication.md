@@ -238,30 +238,46 @@ client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&
 client_assertion=eyJhbGciOiJSUzI1NiIsImtpZCI6IjIyIn0...
 ```
 
-##### Identity claims
+#### Identity claims
 
-The identity claims layer defines the workings of specific identity claims. Identity claims contain inforarmation about the entity such as its name, role, and affiliation. Identity claims can also be XVIDs which can not be self-certified.
+The identity claims layer defines the workings of specific identity claims.
+Identity claims contain information about the entity such as its name, role, and affiliation.
+Identity claims can also be identifiers which can not be self-certified.
 These claims are usual managed by existing governance structures such as professional branches and governmental bodies. A chamber of commerce number is an result of such a governance structure.
-This layer describes the information in the specific claim, how the claim can be acquired, presented, and verified. It also describes the assurance levels and the lifecycle of the claim, and the trust framework in which the claim can be used.
+
+The identity claims layer can be seen as the "Identification" part of the Generic Funtion "Identification & Authentication".
+
+This layer describes the information in the specific claim such as its schema. The isuer or issuers that are authorized to issue the claim and the trust framework in which the claim can be used.
+It also describes the assurance levels and the lifecycle of the claim.
 
 In order for use-case designers to choose from the available claims, a repository is needed that keeps track of the all available claims, their properties and governance bodies.
 
-##### Application layer
+This IG will not define specific claims. Eventually a national repository of available claims should be established which can be used in healthcare.
 
-The application layer defines the specific use-cases in which authentication and authorization are required. This includes the specific set of identity claims that are required to be presented, the trust framework in which the entities operate, and the protocols and mechanisms to establish a secure communication channel. It uses the lower layers of the stack to achieve this.
+One of the challenges in architecture is crossing a gap between two technologies. Many existing identity claim technologies exist and are for example based on X.509 certificates or SAML assertions. These technologies are not directly compatible with the verifiable credentials technology. In order to bridge this gap, a mapping between the existing technologies and verifiable credentials is needed.
 
-#### Choice of technologies per layer
+This layer can specify techniques to solve interoperability such as introducing custom proof types, introducing a trusted party which can map the information, or define custom verification methods. None of these solutions are ideal. Each solution has its own trade-offs. This layer can be used to specify building blocks to solve these interoperability challenges.
+
+#### Application layer
+
+The application layer defines requirements for specific use-cases in which authentication and authorization are required. This includes the specific set of identity claims that are required to be presented, the trust framework in which the entities operate, and the protocols and mechanisms to establish a secure communication channel. It uses the lower layers of the stack to achieve this.
+
+To define the required identity claims, the [Digital Credential Query Language (DCQL)](https://identity.foundation/dcql/) can be used. This standard defines a way to express the required identity claims in a machine-readable way. The DCQL query can be used as a form of digital contract by the holder to gather the required claims from its wallet (or other sources) and by the verifier to verify the presented claims.
+
+The DCQL language does not have to be implented directly by holders or verifiers, but can be used by specifications to define the required claims in a machine-readable way.
+
+#### Summary of layers, technologies and standards
 
 | Layer              | Technology / Standard                                             | Description                                                                                                                          |
 | ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Trust layer        | DID (Decentralized Identifier)                                    | DID web, a domain name based identifier that hosts the DID document conaining the public key                                         |
+| Trust layer        | DID (Decentralized Identifier)                                    | DID method did:web, a domain name based identifier that hosts the DID document conaining the public key                              |
 | Trust layer        | PKI (Public Key Infrastructure)                                   | X.509 certificates for the service providers of the digital agents                                                                   |
 | Peer-to-peer layer | OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)      | Protocol to request and issue verifiable credentials between digital agents and authoritative registries                             |
 | Peer-to-peer layer | [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523)                | JWT Profile for OAuth 2.0 Client Authentication and Authorization Grants to request Access tokens based on a Verifiable Presentation |
 | Peer-to-peer layer | DPoP (Demonstrating Proof-of-Possession at the Application Layer) | Mechanism to bind an access token to a public key to prevent token theft                                                             |
-| Peer-to-peer layer | StatusList 2021 (Revocation mechanism for VCs)                    | Standard for revoking verifiable credentials                                                                                         |
-| Identity claims    | Verifiable Credentials (VC)                                       | Standard for expressing identity claims in a cryptographically verifiable way                                                        |
-| Identity claims    | Verifiable Presentations (VP)                                     | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                        |
+| Peer-to-peer layer | StatusList2021 (Revocation mechanism for VCs)                     | Standard for revoking verifiable credentials                                                                                         |
+| Peer-to-peer layer | Verifiable Credentials (VC)                                       | Standard for expressing identity claims in a cryptographically verifiable way                                                        |
+| Peer-to-peer layer | Verifiable Presentations (VP)                                     | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                        |
 | Application layer  | Digital Credential Query Language (DCQL)                          | Standard for expressing the required identity claims in a specific use-case                                                          |
 
 #### Identity claims repository
