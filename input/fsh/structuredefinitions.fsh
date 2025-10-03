@@ -51,7 +51,7 @@ Description: "The technical details of a healthcare service that can be used in 
 
 
 Profile: NlGfLocation
-Parent: Location
+Parent: $EuLocation
 Id: nl-gf-location
 Title: "NL Generic Functions Location Profile"
 Description: "Physical location details for healthcare services, organizations, and practitioners."
@@ -69,7 +69,7 @@ Expression:  "identifier.where(system='http://fhir.nl/fhir/NamingSystem/ura').ex
 Severity:    #error
 
 Profile: NlGfOrganization
-Parent: Organization
+Parent: $EuOrganization
 Id: nl-gf-organization
 Title: "NL Generic Functions Organization Profile"
 Description: "The organizational hierarchy and details for healthcare organizations."
@@ -100,7 +100,7 @@ Description: "The details of an affiliation/relationship between two organizatio
 
 
 Profile: NlGfPractitioner
-Parent: Practitioner
+Parent: $EuPractitioner
 Id: nl-gf-practitioner
 Title: "NL Generic Functions Practitioner Profile"
 Description: "The details of a healthcare practitioner, such as a doctor or nurse, who is directly or indirectly involved in the provisioning of healthcare."
@@ -112,7 +112,7 @@ Description: "The details of a healthcare practitioner, such as a doctor or nurs
 
 
 Profile: NlGfPractitionerRole
-Parent: PractitionerRole
+Parent: $EuPractitionerRole
 Id: nl-gf-practitionerrole
 Title: "NL Generic Functions PractitionerRole Profile"
 Description: "The details of a healthcare practitioner's role within an organization."
@@ -121,8 +121,8 @@ Description: "The details of a healthcare practitioner's role within an organiza
 * practitioner 1..
 * organization 1..
 * code 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
-* code from UziRolcodesVS (required)
-* specialty from UziAgbSpecialismenVS (required)
+// * code from UziRolcodesVS (required)
+// * specialty from UziAgbSpecialismenVS (required)
 
 
 Profile: NlGfPatientCareTeam

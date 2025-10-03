@@ -1,5 +1,5 @@
 Instance: 128447d2-e153-4c93-8ac6-6c357555f3db
-InstanceOf: http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
+InstanceOf: $EuPatient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
 Usage: #inline
 Title: "Patient Jaantje Merkens"
 * meta.profile = $nl-core-Patient
