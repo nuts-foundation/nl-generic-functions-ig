@@ -63,6 +63,27 @@ The solution is based on exchanging verifiable identity claims between the invol
 The claims can be flexibily combined to form a complete identity for a specific use-case.
 The claims can be verified by the verifier without the need of a central authority, using cryptographic techniques.
 
+#### Actors and Transactions
+
+<img src="authentication-overview-transactions.png" width="100%" style="float: none" alt="Overview of transactions in the authentication function."/>
+
+**Table 7.2-1: GF Authentication - Actors and Transactions**
+
+| Actor     | Transaction                         | Initiator or Responder | Optionality | Reference                   |
+| --------- | ----------------------------------- | ---------------------- | ----------- | --------------------------- |
+| Verifier  | Request key material [GFI-001]      | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
+|           | Request Revocation status [GFI-003] | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
+|           | Request Access Token [GFI-004]      | Responder              | R           | [GFI-004]                   |
+| Holder    | Issue Claims \[GFI-002\]            | Responder              | O           | [\[GFI-002\]](GFI-002.html) |
+|           | Request Access Token [GFI-004]      | Initiator              | R           | [GFI-004]                   |
+|           | Authenticated Interaction [GFI-005] | Initiator              | R           | [GFI-005]                   |
+| Issuer    | Issue Claims [GFI-002]              | Initiator              | O           | [GFI-002]                   |
+|           | Request key material [GFI-001]      | Responder              | R           | [\[GFI-001\]](GFI-001.html) |
+|           | Request Revocation status [GFI-003] | Responder              | R           | [\[GFI-003\]](GFI-003.html) |
+| Custodian | Authenticated Interaction [GFI-005] | Responder              | R           | [GFI-005]                   |
+
+{: .grid .table-striped}
+
 #### Layered approach
 
 Because authentication is a complex topic, this IG tries to structure the solution in a layered approach. Each layer has its own responsibilities and can be implemented using different technologies. The layers are:
@@ -89,43 +110,6 @@ Once an entity has a verifiable identifier, it can use this identifier to link n
 ##### Choice of self-certifying identifier
 
 The chosen solotion for the trust layer is the [Decentralized Identifiers v1.0 standard](https://www.w3.org/TR/did-1.0/) with the [did:web method](https://w3c-ccg.github.io/did-method-web/). This method uses a domain name as the identifier. The domain name is owned by the entity and ownership can be verified by the verifier by resolving the public key hosted at the domain. This method is secured by DNSSEC and HTTPS which gearentees the domainname resolves to the correct webservice and the traffic is not altered.
-
-##### Examples
-
-Example did:web
-
-```
-did:web:example.com:user:alice
-```
-
-Which resolves to the DID document at:
-
-```
-https://example.com/user/alice/did.json
-```
-
-Which contains the following DID Document:
-
-```json
-{
-  "@context": "https://www.w3.org/ns/did/v1",
-  "id": "did:web:example.com:user:alice",
-  "verificationMethod": [
-    {
-      "id": "did:web:example.com:user:alice#key-1",
-      "type": "JsonWebKey2020",
-      "controller": "did:web:example.com:user:alice",
-      "publicKeyJwk": {
-        "kty": "EC",
-        "crv": "P-256",
-        "x": "...",
-        "y": "..."
-      }
-    }
-  ],
-  "authentication": ["did:web:example.com:user:alice#key-1"]
-}
-```
 
 #### Peer-to-peer layer
 
@@ -268,17 +252,18 @@ The DCQL language does not have to be implented directly by holders or verifiers
 
 #### Summary of layers, technologies and standards
 
-| Layer              | Technology / Standard                                             | Description                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Trust layer        | DID (Decentralized Identifier)                                    | DID method did:web, a domain name based identifier that hosts the DID document conaining the public key                              |
-| Trust layer        | PKI (Public Key Infrastructure)                                   | X.509 certificates for the service providers of the digital agents                                                                   |
-| Peer-to-peer layer | OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)      | Protocol to request and issue verifiable credentials between digital agents and authoritative registries                             |
-| Peer-to-peer layer | [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523)                | JWT Profile for OAuth 2.0 Client Authentication and Authorization Grants to request Access tokens based on a Verifiable Presentation |
-| Peer-to-peer layer | DPoP (Demonstrating Proof-of-Possession at the Application Layer) | Mechanism to bind an access token to a public key to prevent token theft                                                             |
-| Peer-to-peer layer | StatusList2021 (Revocation mechanism for VCs)                     | Standard for revoking verifiable credentials                                                                                         |
-| Peer-to-peer layer | Verifiable Credentials (VC)                                       | Standard for expressing identity claims in a cryptographically verifiable way                                                        |
-| Peer-to-peer layer | Verifiable Presentations (VP)                                     | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                        |
-| Application layer  | Digital Credential Query Language (DCQL)                          | Standard for expressing the required identity claims in a specific use-case                                                          |
+| Layer              | Transaction | Technology / Standard                                             | Description                                                                                                                          |
+| ------------------ | ----------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Trust layer        | GFI-001     | DID (Decentralized Identifier)                                    | DID method did:web, a domain name based identifier that hosts the DID document conaining the public key                              |
+| Peer-to-peer layer | GFI-001     | OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)      | Protocol to request and issue verifiable credentials between digital agents and authoritative registries                             |
+| Peer-to-peer layer | GFI-003     | [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523)                | JWT Profile for OAuth 2.0 Client Authentication and Authorization Grants to request Access tokens based on a Verifiable Presentation |
+| Peer-to-peer layer | GFI-005     | DPoP (Demonstrating Proof-of-Possession at the Application Layer) | Mechanism to bind an access token to a public key to prevent token theft                                                             |
+| Peer-to-peer layer | GFI-003     | StatusList2021 (Revocation mechanism for VCs)                     | Standard for revoking verifiable credentials                                                                                         |
+| Peer-to-peer layer | GFI-[002    | 003]                                                              | Verifiable Credentials (VC)                                                                                                          | Standard for expressing identity claims in a cryptographically verifiable way |
+| Peer-to-peer layer | GFI-003     | Verifiable Presentations (VP)                                     | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                        |
+| Application layer  | None        | Digital Credential Query Language (DCQL)                          | Standard for expressing the required identity claims in a specific use-case                                                          |
+
+{: .grid .table-striped}
 
 #### Identity claims repository
 

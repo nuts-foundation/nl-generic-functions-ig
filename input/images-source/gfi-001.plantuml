@@ -1,0 +1,16 @@
+@startuml GFI-001
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+activate issuer
+
+!pragma teoz true
+
+participant  verifier as "Verifier"
+participant  issuer as "Issuer/Holder"
+
+verifier -> issuer: Resolve DID Document Request [GFI-001]
+issuer --> verifier: DID Document Response [GFI-001]
+
+@enduml
