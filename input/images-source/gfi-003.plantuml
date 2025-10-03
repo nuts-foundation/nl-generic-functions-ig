@@ -1,0 +1,16 @@
+@startuml GFI-003
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+activate issuer
+
+!pragma teoz true
+
+participant  verifier as "Verifier"
+participant  issuer as "Issuer"
+
+verifier -> issuer: Revocation Status Information Request [GFI-003]
+issuer --> verifier: Revocation Status Information Response [GFI-003]
+
+@enduml
