@@ -73,14 +73,16 @@ The claims can be verified by the verifier without the need of a central authori
 | --------- | ----------------------------------- | ---------------------- | ----------- | --------------------------- |
 | Verifier  | Request key material [GFI-001]      | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
 |           | Request Revocation status [GFI-003] | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
-|           | Request Access Token [GFI-004]      | Responder              | R           | [GFI-004]                   |
+|           | Request Access Token [GFI-004]      | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
+|           | Introspect Access Token [GFI-006]   | Responder              | O           | [GFI-006]                   |
 | Holder    | Issue Claims \[GFI-002\]            | Responder              | O           | [\[GFI-002\]](GFI-002.html) |
-|           | Request Access Token [GFI-004]      | Initiator              | R           | [GFI-004]                   |
+|           | Request Access Token [GFI-004]      | Initiator              | R           | [\[GFI-004\]](GFI-004.html) |
 |           | Authenticated Interaction [GFI-005] | Initiator              | R           | [GFI-005]                   |
 | Issuer    | Issue Claims [GFI-002]              | Initiator              | O           | [GFI-002]                   |
 |           | Request key material [GFI-001]      | Responder              | R           | [\[GFI-001\]](GFI-001.html) |
 |           | Request Revocation status [GFI-003] | Responder              | R           | [\[GFI-003\]](GFI-003.html) |
-| Custodian | Authenticated Interaction [GFI-005] | Responder              | R           | [GFI-005]                   |
+| Custodian | Authenticated Interaction [GFI-005] | Responder              | R           | [\[GFI-005\]](GFI-005.html) |
+|           | Introspect Access Token [GFI-006]   | Initiator              | O           | [GFI-006]                   |
 
 {: .grid .table-striped}
 
@@ -138,89 +140,6 @@ The protocol to request access tokens is based on [RFC 7523](https://www.rfc-edi
 In order to prevent token theft, the access token must be bound to the client. This can be done using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop). DPoP is a mechanism to bind an access token to a private key, which is used to sign an aditional DPoP access token which is uniquely created for each request to the resource server.
 
 Verifiable credentials have a long lifetime, often several years. In order to be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the statuslist and verifies the existance of the credential in the statuslist.
-
-##### Examples
-
-Example Verifiable Credential (VC) in JWT format:
-
-```json
-{
-  "iss": "did:web:example.com:issuer",
-  "sub": "did:web:example.com:user:alice",
-  "iat": 1516239022,
-  "exp": 1672531199,
-  "jti": "http://example.edu/credentials/3732",
-  "vc": {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1",
-      "https://www.w3.org/2018/credentials/examples/v1"
-    ],
-    "type": ["VerifiableCredential", "AlumniCredential"],
-    "credentialSubject": {
-      "id": "did:web:example.com:user:alice",
-      "alumniOf": {
-        "id": "did:web:example.com:university:example",
-        "name": [
-          {
-            "value": "Example University",
-            "lang": "en"
-          },
-          {
-            "value": "Voorbeeld Universiteit",
-            "lang": "nl"
-          }
-        ]
-      }
-    },
-    "credentialStatus": {
-      "id": "https://example.com/status/24#94567",
-      "type": "StatusList2021Entry",
-      "statusPurpose": "revocation",
-      "statusListIndex": "94567",
-      "statusListCredential": "https://example.com/status/24"
-    }
-  }
-}
-```
-
-Example of a Verifiable Presentation (VP) in JWT format:
-
-```json
-{
-  "iss": "did:web:example.com:user:alice",
-  "aud": "https://verifier.example.com",
-  "iat": 1516239022,
-  "exp": 1516239322,
-  "jti": "http://example.edu/presentations/3732",
-  "vp": {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1",
-      "https://www.w3.org/2018/credentials/examples/v1"
-    ],
-    "type": ["VerifiablePresentation"],
-    "verifiableCredential": [
-      {
-        // verifiable credential 1
-      },
-      {
-        // verifiable credential 2
-      }
-    ]
-  }
-}
-```
-
-Example of an tokenn request using RFC 7523 with a VP in the JWT Authorization Grant:
-
-```
-POST /token HTTP/1.1
-Host: oauth.example.com
-Content-Type: application/x-www-form-urlencoded
-grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&
-assertion=eyJhbGciOiJSUzI1NiIsImtpZCI6IjIyIn0...&
-client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&
-client_assertion=eyJhbGciOiJSUzI1NiIsImtpZCI6IjIyIn0...
-```
 
 #### Identity claims
 
