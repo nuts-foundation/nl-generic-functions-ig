@@ -89,7 +89,7 @@ Title: "Organization 2 - HealthcareService Cardiology"
 * active = true
 * name = "Polikliniek 't Vaatje"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0303 "Chirurgie (Heelkunde)"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0303 "Chirurgie (Heelkunde)"
 * specialty[+].coding = UziRolcodesCS#01.014 "Chirurg"
 
 Instance: c79125e5-739f-4238-959c-cd5872518c1f
@@ -101,7 +101,7 @@ Title: "Organization 2 - HealthcareService Neurochirurgie"
 * active = true
 * name = "Neurochirurgie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0308 "Medisch specialisten, neurochirurgie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0308 "Medisch specialisten, neurochirurgie"
 * specialty[+].coding = UziRolcodesCS#01.025 "Neurochirurg"
 
 Instance: 9d47ca45-4166-4531-a23d-ef5fa613ece4
@@ -113,7 +113,7 @@ Title: "Organization 2 - HealthcareService Orthopedie"
 * active = true
 * name = "Orthopedie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0305 "Medisch specialisten, orthopedie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0305 "Medisch specialisten, orthopedie"
 * specialty[+].coding = UziRolcodesCS#01.032 "Orthopedisch chirurg"
 
 Instance: f6a508bd-9455-4afa-aad0-baec0833602d
@@ -125,7 +125,7 @@ Title: "Organization 2 - HealthcareService Interne Geneeskunde"
 * active = true
 * name = "Interne Geneeskunde"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0313 "Interne geneeskunde"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0313 "Interne geneeskunde"
 * specialty[+].coding = UziRolcodesCS#01.016 "Internist"
 
 
@@ -138,7 +138,7 @@ Title: "Organization 2 - HealthcareService Geriatrie"
 * active = true
 * name = "Geriatrie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
 * specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
 
 Instance: 08013141-16b2-42a0-8c9a-af57cee5511b
@@ -150,7 +150,7 @@ Title: "Organization 2 - HealthcareService Urologie"
 * active = true
 * name = "Urologie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0306 "Medisch specialisten, urologie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0306 "Medisch specialisten, urologie"
 * specialty[+].coding = UziRolcodesCS#01.045 "Uroloog"
 
 

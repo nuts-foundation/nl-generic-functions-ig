@@ -3,6 +3,14 @@ Alias: $NlCoreLocation = http://nictiz.nl/fhir/StructureDefinition/nl-core-Healt
 Alias: $NlCorePractitioner = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner
 Alias: $NlCorePractitionerRole = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole
 Alias: $NlCoreCareTeam = http://nictiz.nl/fhir/StructureDefinition/nl-core-CareTeam
+Alias: $NlCorePatient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient
+
+
+Alias: $EuOrganization = http://hl7.eu/fhir/base/StructureDefinition/organization-eu-core
+Alias: $EuLocation = http://hl7.eu/fhir/base/StructureDefinition/location-eu
+Alias: $EuPractitioner = http://hl7.eu/fhir/base/StructureDefinition/practitioner-eu-core
+Alias: $EuPractitionerRole = http://hl7.eu/fhir/base/StructureDefinition/practitionerRole-eu-core
+Alias: $EuPatient = http://hl7.eu/fhir/base/StructureDefinition/patient-eu-core
 Alias: $sct = http://snomed.info/sct
 Alias: $loinc = http://loinc.org
 Alias: $task-status = http://hl7.org/fhir/task-status
