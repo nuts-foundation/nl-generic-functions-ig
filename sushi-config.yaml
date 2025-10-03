@@ -26,7 +26,7 @@ publisher:
 # package id and the value is the version (or dev/current). For advanced
 # use cases, the value can be an object with keys for id, uri, and version.
 dependencies:
-  # nictiz.fhir.nl.r4.nl-core: 0.12.0-beta.1
+  nictiz.fhir.nl.r4.nl-core: 0.12.0-beta.1
   hl7.fhir.eu.base: 0.1.0-ballot
 # dependencies:
 #   hl7.fhir.us.core: 3.1.0

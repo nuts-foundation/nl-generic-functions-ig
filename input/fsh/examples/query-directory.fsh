@@ -294,7 +294,7 @@ Usage: #inline
 * active = true
 * name = "Polikliniek 't Vaatje"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0303 "Chirurgie (Heelkunde)"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0303 "Chirurgie (Heelkunde)"
 * specialty[+].coding = UziRolcodesCS#01.014 "Chirurg"
 
 Instance: ad2-hs2
@@ -306,7 +306,7 @@ Usage: #inline
 * active = true
 * name = "Neurochirurgie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0308 "Medisch specialisten, neurochirurgie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0308 "Medisch specialisten, neurochirurgie"
 * specialty[+].coding = UziRolcodesCS#01.025 "Neurochirurg"
 
 Instance: ad2-hs3
@@ -318,7 +318,7 @@ Usage: #inline
 * active = true
 * name = "Orthopedie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0305 "Medisch specialisten, orthopedie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0305 "Medisch specialisten, orthopedie"
 * specialty[+].coding = UziRolcodesCS#01.032 "Orthopedisch chirurg"
 
 Instance: ad2-hs4
@@ -330,7 +330,7 @@ Usage: #inline
 * active = true
 * name = "Interne Geneeskunde"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0313 "Interne geneeskunde"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0313 "Interne geneeskunde"
 * specialty[+].coding = UziRolcodesCS#01.016 "Internist"
 
 
@@ -343,7 +343,7 @@ Usage: #inline
 * active = true
 * name = "Geriatrie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
 * specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
 
 Instance: ad2-hs6
@@ -355,7 +355,7 @@ Usage: #inline
 * active = true
 * name = "Urologie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0306 "Medisch specialisten, urologie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0306 "Medisch specialisten, urologie"
 * specialty[+].coding = UziRolcodesCS#01.045 "Uroloog"
 
 
@@ -476,7 +476,7 @@ Usage: #inline
 * type[+] = $sct#146521000146103 "Brief comprehensive geriatric assessment"
 * type[+] = $sct#107101000146106 "comprehensive geriatric assessment"
 * type[+] = $sct#86944008 "Visual field study"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
 
 
 Instance: ad3-hs2
@@ -489,7 +489,7 @@ Usage: #inline
 * type[+] = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
 * type[+] = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
 * type[+] = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
-* specialty[+].coding = AgbSpecialismenCS#0100 "Verpleegkundige"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0100 "Verpleegkundige"
 
 
 Instance: ad3-p1
@@ -515,7 +515,7 @@ Usage: #inline
 * organization = Reference(Organization/ad3-o1)
 * active = true
 * code.coding = UziRolcodesCS#01.022 "Klinisch geriater"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
 * specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
 * telecom[0].system = #phone
 * telecom[=].value = "+31301234568"
