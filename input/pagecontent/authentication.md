@@ -69,20 +69,20 @@ The claims can be verified by the verifier without the need of a central authori
 
 **Table 7.2-1: GF Authentication - Actors and Transactions**
 
-| Actor     | Transaction                         | Initiator or Responder | Optionality | Reference                   |
-| --------- | ----------------------------------- | ---------------------- | ----------- | --------------------------- |
-| Verifier  | Request key material [GFI-001]      | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
-|           | Request Revocation status [GFI-003] | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
-|           | Request Access Token [GFI-004]      | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
-|           | Introspect Access Token [GFI-006]   | Responder              | O           | [GFI-006]                   |
-| Holder    | Issue Claims \[GFI-002\]            | Responder              | O           | [\[GFI-002\]](GFI-002.html) |
-|           | Request Access Token [GFI-004]      | Initiator              | R           | [\[GFI-004\]](GFI-004.html) |
-|           | Authenticated Interaction [GFI-005] | Initiator              | R           | [GFI-005]                   |
-| Issuer    | Issue Claims [GFI-002]              | Initiator              | O           | [GFI-002]                   |
-|           | Request key material [GFI-001]      | Responder              | R           | [\[GFI-001\]](GFI-001.html) |
-|           | Request Revocation status [GFI-003] | Responder              | R           | [\[GFI-003\]](GFI-003.html) |
-| Custodian | Authenticated Interaction [GFI-005] | Responder              | R           | [\[GFI-005\]](GFI-005.html) |
-|           | Introspect Access Token [GFI-006]   | Initiator              | O           | [GFI-006]                   |
+| Actor     | Transaction                                           | Initiator or Responder | Optionality | Reference                   |
+| --------- | ----------------------------------------------------- | ---------------------- | ----------- | --------------------------- |
+| Verifier  | Request key material [GFI-001]                        | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
+|           | Request Revocation status [GFI-003]                   | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
+|           | Request Access Token [GFI-004]                        | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
+|           | Introspect Access Token [GFI-006]                     | Responder              | O           | [GFI-006]                   |
+| Holder    | Issue Claims \[GFI-002\]                              | Responder              | O           | [\[GFI-002\]](GFI-002.html) |
+|           | Request Access Token [GFI-004]                        | Initiator              | R           | [\[GFI-004\]](GFI-004.html) |
+|           | Authenticated Interaction [\[GFI-005\]](GFI-005.html) | Initiator              | R           | [GFI-005]                   |
+| Issuer    | Issue Claims [GFI-002]                                | Initiator              | O           | [GFI-002]                   |
+|           | Request key material [GFI-001]                        | Responder              | R           | [\[GFI-001\]](GFI-001.html) |
+|           | Request Revocation status [GFI-003]                   | Responder              | R           | [\[GFI-003\]](GFI-003.html) |
+| Custodian | Authenticated Interaction [GFI-005]                   | Responder              | R           | [\[GFI-005\]](GFI-005.html) |
+|           | Introspect Access Token [GFI-006]                     | Initiator              | O           | [GFI-006]                   |
 
 {: .grid .table-striped}
 
