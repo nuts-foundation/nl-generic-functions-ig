@@ -58,24 +58,6 @@ publisher:
 pages:
   index.md:
     title: Home
-  GFI-001.md:
-    title: Request key material [GFI-001]
-    generation: markdown
-  GFI-002.md:
-    title: Issue Claims [GFI-002]
-    generation: markdown
-  GFI-003.md:
-    title: Request Revocation status [GFI-003]
-    generation: markdown
-  GFI-004.md:
-    title: Request Access Token [GFI-004]
-    generation: markdown
-  GFI-005.md:
-    title: Authenticated Interaction [GFI-005]
-    generation: markdown
-  GFI-006.md:
-    title: Token introspection [GFI-006]
-    generation: markdown
 
   care-services.md:
     title: Care Services Directory
@@ -94,6 +76,24 @@ pages:
 
   authentication.md:
     title: Authentication
+    GFI-001.md:
+      title: Request key material [GFI-001]
+      generation: markdown
+    GFI-002.md:
+      title: Issue Claims [GFI-002]
+      generation: markdown
+    GFI-003.md:
+      title: Request Revocation status [GFI-003]
+      generation: markdown
+    GFI-004.md:
+      title: Request Access Token [GFI-004]
+      generation: markdown
+    GFI-005.md:
+      title: Authenticated Interaction [GFI-005]
+      generation: markdown
+    GFI-006.md:
+      title: Token introspection [GFI-006]
+      generation: markdown
 
   authorization.md:
     title: Authorization
