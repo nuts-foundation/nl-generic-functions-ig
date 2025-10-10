@@ -140,7 +140,7 @@ An overview of the *most common* elements and relations between data models:
 
 ### Security
 
-The service provider of an Administration Directory may choose whether to require mTLS certificates. Certificate Authority PKIoverheid Private Services should be trusted. For cross-border data exchange using mTLS, support for additional CA's is required. If mTLS is not used, Administration Directory endpoints must be unconditionally available to everyone. ([GF-Adressering, ADR#178](https://github.com/minvws/generiekefuncties-adressering/issues/178))
+The service provider of an Administration Directory must require mTLS. Qualified certificates from Qualified Trusted Service Providers (like PKIoverheid) should be trusted. The service may also have a certificate policy that allows for other types of certificates (e.g. self-signed certificates) provided that -through policy- a sufficient level of trust in these certificates can be established. ([GF-Adressering, ADR#178](https://github.com/minvws/generiekefuncties-adressering/issues/178))
 
 
 ### Example use cases
