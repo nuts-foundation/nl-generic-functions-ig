@@ -20,7 +20,7 @@ There exists a multitude of authentication solutions, therefore it is important 
 - Peer-2-peer trust which allows direct interactions between the involved parties without involvement of a third party
 - No single point of failure
 - Privacy by design
-- Securty by design
+- Security by design
 - Support for leveraging existing identity solutions
 
 #### Terminology
@@ -44,7 +44,7 @@ Throughout this document the following terminology is used:
 
 #### Problem overview
 
-A tipical scenario in healthcare is that a healthcare professional needs to access a resource (e.g. patient data) which is located at a different organisation (e.g. a hospital).
+A typical scenario in healthcare is that a healthcare professional needs to access a resource (e.g. patient data) which is located at a different organisation (e.g. a hospital).
 In the Netherlands, the custodian of the patient data is by law forbidden to share the data with third parties. Several exceptions to that rule exists. One responsibility of the custodian is to ensure that the requesting party is authorized to access the data. In order to do so, the custodian needs to verify the identity of the requesting party.
 
 In practice, many of these data exchanges are not done directly between the healthcare professionals, but between computers and systems. Often these systems are operated by vendors on behalf of the care organisations.
@@ -60,7 +60,7 @@ The custodian needs to verify the identity of the requesting healthcare professi
 ### Solution overview
 
 The solution is based on exchanging verifiable identity claims between the involved parties.
-The claims can be flexibily combined to form a complete identity for a specific use-case.
+The claims can be flexibly combined to form a complete identity for a specific use-case.
 The claims can be verified by the verifier without the need of a central authority, using cryptographic techniques.
 
 #### Actors and Transactions
@@ -111,7 +111,7 @@ Once an entity has a verifiable identifier, it can use this identifier to link n
 
 ##### Choice of self-certifying identifier
 
-The chosen solotion for the trust layer is the [Decentralized Identifiers v1.0 standard](https://www.w3.org/TR/did-1.0/) with the [did:web method](https://w3c-ccg.github.io/did-method-web/). This method uses a domain name as the identifier. The domain name is owned by the entity and ownership can be verified by the verifier by resolving the public key hosted at the domain. This method is secured by DNSSEC and HTTPS which gearentees the domainname resolves to the correct webservice and the traffic is not altered.
+The chosen solution for the trust layer is the [Decentralized Identifiers v1.0 standard](https://www.w3.org/TR/did-1.0/) with the [did:web method](https://w3c-ccg.github.io/did-method-web/). This method uses a domain name as the identifier. The domain name is owned by the entity and ownership can be verified by the verifier by resolving the public key hosted at the domain. This method is secured by DNSSEC and HTTPS which guarantees the domainname resolves to the correct webservice and the traffic is not altered.
 
 #### Peer-to-peer layer
 
@@ -121,7 +121,7 @@ The peer-to-peer layer defines the protocols and mechanisms to establish a secur
 
 Each entity needs a digital agent to act on its behalf. The digital agent is responsible for managing the SCID, establishing secure communication channels with other parties, receiving and presenting identity claims.
 
-This layer describes the protocols and data standards which can be used between the digital agents of the involved parties to aqcuire, present, and verify identity claims.
+This layer describes the protocols and data standards which can be used between the digital agents of the involved parties to acquire, present, and verify identity claims.
 
 The identifier of the underlaying trust layer is not that useful by itself. But when it is combined with identity claims it becomes useful. Identity claims are statements about an entity that can be used to verify its identity in a specific context. By combining the SCID with identity claims, an entity can prove the ownership of the claims.
 
@@ -129,17 +129,17 @@ The identifier of the underlaying trust layer is not that useful by itself. But 
 
 The dataformat to express identity claims is the [Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/). This standard defines how to express claims in a cryptographically verifiable way. The claims can be issued by an issuer and presented by a holder to a verifier.
 
-To prove the ownership of a set of claims, the holder can create a [Verifiable Presentation](https://www.w3.org/TR/vc-data-model/#presentations-0) which contains one or more verifiable credentials. The verifiable presentation is signed by the holder key (which can be resolved using the method defined by the trusr layer) and can be verified by the verifier.
+To prove the ownership of a set of claims, the holder can create a [Verifiable Presentation](https://www.w3.org/TR/vc-data-model/#presentations-0) which contains one or more verifiable credentials. The verifiable presentation is signed by the holder key (which can be resolved using the method defined by the trust layer) and can be verified by the verifier.
 
-Verifiable credentials and presentations can be expressed in different formats. We here choose to use the JWT format, because it is widely used and supported by many libraries and tools and is comparetible with existing OAuth 2.0 and OpenID Connect implementations.
+Verifiable credentials and presentations can be expressed in different formats. We here choose to use the JWT format, because it is widely used and supported by many libraries and tools and is compatible with existing OAuth 2.0 and OpenID Connect implementations.
 
 The protocol to request and issue verifiable credentials is [OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html). This protocol is based on OpenID Connect and OAuth 2.0 and defines how to request and issue verifiable credentials between a digital agent and an authoritative registry.
 
 The protocol to request access tokens is based on [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523), an extension to the OAuth 2.x standard, which defines how to request access tokens using a JWT Authorization Grant combined with a Client Authentication assertion. The JWT Authorization Grant contains a Verifiable Presentation with the required identity claims. The Client Authentication assertion contains the identity of the client according, issued by an authoritative registry.
 
-In order to prevent token theft, the access token must be bound to the client. This can be done using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop). DPoP is a mechanism to bind an access token to a private key, which is used to sign an aditional DPoP access token which is uniquely created for each request to the resource server.
+In order to prevent token theft, the access token must be bound to the client. This can be done using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop). DPoP is a mechanism to bind an access token to a private key, which is used to sign an additional DPoP access token which is uniquely created for each request to the resource server.
 
-Verifiable credentials have a long lifetime, often several years. In order to be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the statuslist and verifies the existance of the credential in the statuslist.
+Verifiable credentials have a long lifetime, often several years. In order to be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the statuslist and verifies the existence of the credential in the statuslist.
 
 #### Identity claims
 
@@ -150,7 +150,7 @@ These claims are usual managed by existing governance structures such as profess
 
 The identity claims layer can be seen as the "Identification" part of the Generic Funtion "Identification & Authentication".
 
-This layer describes the information in the specific claim such as its schema. The isuer or issuers that are authorized to issue the claim and the trust framework in which the claim can be used.
+This layer describes the information in the specific claim such as its schema. The issuer or issuers that are authorized to issue the claim and the trust framework in which the claim can be used.
 It also describes the assurance levels and the lifecycle of the claim.
 
 In order for use-case designers to choose from the available claims, a repository is needed that keeps track of the all available claims, their properties and governance bodies.
@@ -222,7 +222,7 @@ The following steps are required to establish the identity of a healthcare organ
 ##### Setup for organisations
 
 - Choose a identity wallet provider
-- Acuire identity claims
+- Acquire identity claims
 - Choose a vendor and authorize it to act on your behalf for a specific use-case
 - Issue relationship credentials to each healthcare professional
 
@@ -264,7 +264,7 @@ In the context of a use-case, several identity claims are required to be present
 - The resource server verifies the token status
 - The resource server verifies the identity claims and the relationships
 
-### Sercurity considerations
+### Security considerations
 
 #### Token binding
 
