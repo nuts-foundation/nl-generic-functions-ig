@@ -1,8 +1,8 @@
 ### Introduction
 
-Authentication is the process of verifying the identity of an entity. In the context of healthcare, authentication is used to verify the identity of healthcare professionals and care organisations. This is important to ensure that only authorized entities can access sensitive information and resources.
+Authentication is the process of verifying the identity of an entity. In the context of healthcare, authentication is used to verify the identity of healthcare professionals and care organizations. This is important to ensure that only authorized entities can access sensitive information and resources.
 
-The verified identity is often used downstream for authorization and accounting purposes. Authorization is the process of granting access to resources based on the identity of an entity. Accounting is the process of tracking the actions of an entity.
+The verified identity is often used downstream for authorization and accounting. Authorization is the process of granting access to resources based on the identity of an entity. Accounting is the process of tracking the actions of an entity.
 
 #### Requirements
 
@@ -10,12 +10,12 @@ There exists a multitude of authentication solutions, therefore it is important 
 
 - Work with identity claims from the authoritative sources
 - Support combinations of identity claims from different trusted issuers
-- Support for use-cases with and without a end-user (healthcare professional)
-- Support for authorizing vendors to act on behalf of an (care) organisation
-- Support for limiting the scope of an authorization of a vendor
-- Support for authorizing (care) organisations to act on behalf of a healthcare professional
+- Support for use-cases with and without an end-user (healthcare professional)
+- Support for authorizing vendors to act on behalf of a (care) organization
+- Support for limiting the scope of a vendor's authorization
+- Support for authorizing (care) organizations to act on behalf of a healthcare professional
 - User-friendly solution for healthcare professionals
-- Cost efficient solution for care organisations
+- Cost-efficient solution for care organizations
 - Flexible solution that can be adapted to different use-cases
 - Peer-2-peer trust which allows direct interactions between the involved parties without involvement of a third party
 - No single point of failure
@@ -27,10 +27,10 @@ There exists a multitude of authentication solutions, therefore it is important 
 
 Throughout this document the following terminology is used:
 
-- Entity: An actor in the system (person or organisation)
+- Entity: An actor in the system (person or organization)
 - Agent: A digital representation of an entity that acts on its behalf, also often called an identity wallet
-- Vendor: A party that offers Agents to its customers (care organisations and healthcare professionals)
-- Identity: A set of claims about an entity (person or organisation) which is relevant in a specific context
+- Vendor: A party that offers Agents to its customers (care organizations and healthcare professionals)
+- Identity: A set of claims about an entity (person or organization) which is relevant in a specific context
 - Verifiable Identifier (VID): An identifier that can be (cryptographically) verified
 - Claim: A statement about an entity (e.g. name, role, affiliation)
 - Verifiable Claim: A claim that can be cryptographically verified
@@ -44,23 +44,23 @@ Throughout this document the following terminology is used:
 
 #### Problem overview
 
-A typical scenario in healthcare is that a healthcare professional needs to access a resource (e.g. patient data) which is located at a different organisation (e.g. a hospital).
+A typical scenario in healthcare is that a healthcare professional needs to access a resource (e.g. patient data) which is located at a different organization (e.g. a hospital).
 In the Netherlands, the custodian of the patient data is by law forbidden to share the data with third parties. Several exceptions to that rule exists. One responsibility of the custodian is to ensure that the requesting party is authorized to access the data. In order to do so, the custodian needs to verify the identity of the requesting party.
 
-In practice, many of these data exchanges are not done directly between the healthcare professionals, but between computers and systems. Often these systems are operated by vendors on behalf of the care organisations.
+In practice, many of these data exchanges are not done directly between the healthcare professionals, but between computers and systems. Often vendors operate these systems on behalf of the care organizations.
 
-On top of that, use-cases are often described and governed by a governing body. The governing body certifies healthcare organisations and vendors to operate in a specific use-case. The governing body defines the trust framework in which the use-case operates. The custodian also needs to verify that the entities operate within the trust framework of the use-case.
+On top of that, use-cases are often described and governed by a governing body. The governing body certifies healthcare organizations and vendors to operate in a specific use-case. The governing body defines the trust framework in which the use-case operates. The custodian also needs to verify that the entities operate within the trust framework of the use-case.
 
-The custodian needs to verify the identity of the requesting healthcare professional, working for an organisation which is a customer of a vendor. The custodian needs to verify the following:
+The custodian needs to verify the identity of the requesting healthcare professional, working for an organization which is a customer of a vendor. The custodian needs to verify the following:
 
-- The identity of the healthcare professional, identifier, role, and affiliation with the care organisation
-- The identity of the care organisation, identifier, and its relationship with the healthcare professional
-- The identity of the vendor, identifier, and its relationship with the care organisation
+- The identity of the healthcare professional: identifier, role, and affiliation with the care organization
+- The identity of the care organization: identifier and its relationship with the healthcare professional
+- The identity of the vendor: identifier and its relationship with the care organization
 
 ### Solution overview
 
 The solution is based on exchanging verifiable identity claims between the involved parties.
-The claims can be flexibly combined to form a complete identity for a specific use-case.
+The claims can be flexible combined to form a complete identity for a specific use-case.
 The claims can be verified by the verifier without the need of a central authority, using cryptographic techniques.
 
 #### Actors and Transactions
@@ -70,7 +70,7 @@ The claims can be verified by the verifier without the need of a central authori
 **Table 7.2-1: GF Authentication - Actors and Transactions**
 
 | Actor     | Transaction                             | Initiator or Responder | Optionality | Reference                   |
-| --------- | --------------------------------------- | ---------------------- | ----------- | --------------------------- |
+|-----------|-----------------------------------------|------------------------|-------------|-----------------------------|
 | Verifier  | Request key material [GFI-001]          | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
 |           | Request Revocation status [GFI-003]     | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
 |           | Request Access Token [GFI-004]          | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
@@ -100,12 +100,12 @@ Because authentication is a complex topic, this IG tries to structure the soluti
 ##### Overview
 
 The trust layer defines techniques and governance to establish trust between entities. Each entity needs to be referenced by an identifier.
-In order to establish trust into an entity, a verifier must be able to verify the ownership of the identifier by the entity. Some identifiers are easier to verify than other. Identifiers that can be verified are called verifiable identifiers (VIDs).
+To establish trust into an entity, a verifier must be able to verify the ownership of the identifier by the entity. Some identifiers are easier to verify than others. Identifiers that can be verified are called verifiable identifiers (VIDs).
 How a verifier can verify a VID depends on the type of identifier.
 Identifiers can either be externally verified by an authority (XVIDs), or self-certifying (SCIDs). Many identifiers we know are externally verified, such as your phone number or bank account.
-Self-certifying identifiers can be verified by a verifier without the need of a third party. An example category of a self-certifying identifiers are DIDs (Decentralized Identifiers).
+Self-certifying identifiers can be verified by a verifier without the need of a third party. An example category of a self-certifying identifier is DIDs (Decentralized Identifiers).
 
-Self-certifying identifiers are very useful in peer-to-peer scenarios, because they do not require a central authority to verify the identifier. This makes them suitable for use-cases where entities need to interact with each other without the need of a central authority.
+Self-certifying identifiers are instrumental in peer-to-peer scenarios because they do not require a central authority to verify the identifier. This makes them suitable for use-cases where entities need to interact with each other without the need of a central authority.
 
 Once an entity has a verifiable identifier, it can use this identifier to link non-verifiable identifiers to its identity. This will be explained in the identity claims layer.
 
@@ -123,7 +123,7 @@ Each entity needs a digital agent to act on its behalf. The digital agent is res
 
 This layer describes the protocols and data standards which can be used between the digital agents of the involved parties to acquire, present, and verify identity claims.
 
-The identifier of the underlaying trust layer is not that useful by itself. But when it is combined with identity claims it becomes useful. Identity claims are statements about an entity that can be used to verify its identity in a specific context. By combining the SCID with identity claims, an entity can prove the ownership of the claims.
+The identifier of the underlying trust layer is not that useful by itself. But when it is combined with identity claims, it becomes useful. Identity claims are statements about an entity that can be used to verify its identity in a specific context. By combining the SCID with identity claims, an entity can prove the ownership of the claims.
 
 ##### Choice of protocols and standards
 
@@ -139,37 +139,37 @@ The protocol to request access tokens is based on [RFC 7523](https://www.rfc-edi
 
 In order to prevent token theft, the access token must be bound to the client. This can be done using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop). DPoP is a mechanism to bind an access token to a private key, which is used to sign an additional DPoP access token which is uniquely created for each request to the resource server.
 
-Verifiable credentials have a long lifetime, often several years. In order to be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the statuslist and verifies the existence of the credential in the statuslist.
+Verifiable credentials have a long lifetime, often several years. To be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the status list and verifies the existence of the credential in the status list.
 
 #### Identity claims
 
 The identity claims layer defines the workings of specific identity claims.
 Identity claims contain information about the entity such as its name, role, and affiliation.
-Identity claims can also be identifiers which can not be self-certified.
-These claims are usual managed by existing governance structures such as professional branches and governmental bodies. A chamber of commerce number is an result of such a governance structure.
+Identity claims can also be identifiers that cannot be self-certified.
+These claims are usually managed by existing governance structures such as professional branches and governmental bodies. A chamber of commerce number is a result of such a governance structure.
 
-The identity claims layer can be seen as the "Identification" part of the Generic Function "Identification & Authentication".
+The identity claims layer can be seen as the "Identification" part of the Generic Function "Identification & Authentication."
 
 This layer describes the information in the specific claim such as its schema. The issuer or issuers that are authorized to issue the claim and the trust framework in which the claim can be used.
 It also describes the assurance levels and the lifecycle of the claim.
 
-In order for use-case designers to choose from the available claims, a repository is needed that keeps track of the all available claims, their properties and governance bodies.
+In order for use-case designers to choose from the available claims, a repository is needed that keeps track of all available claims, their properties, and governance bodies.
 
 This IG will not define specific claims. Eventually a national repository of available claims should be established which can be used in healthcare.
 
-One of the challenges in architecture is crossing a gap between two technologies. Many existing identity claim technologies exist and are for example based on X.509 certificates or SAML assertions. These technologies are not directly compatible with the verifiable credentials technology. In order to bridge this gap, a mapping between the existing technologies and verifiable credentials is needed.
+One of the challenges in architecture is crossing a gap between two technologies. Many existing identity claim technologies exist and are, for example, based on X.509 certificates or SAML assertions. These technologies are not directly compatible with the verifiable credentials technology. To bridge this gap, a mapping between the existing technologies and verifiable credentials is needed.
 
-This layer can specify techniques to solve interoperability such as introducing custom proof types, introducing a trusted party which can map the information, or define custom verification methods. None of these solutions are ideal. Each solution has its own trade-offs. This layer can be used to specify building blocks to solve these interoperability challenges.
+This layer can specify techniques to solve interoperability, such as introducing custom proof types, introducing a trusted party which can map the information, or define custom verification methods. None of these solutions are ideal. Each solution has its own trade-offs. This layer can be used to specify building blocks to solve these interoperability challenges.
 
 #### Application layer
 
 The application layer defines requirements for specific use-cases in which authentication and authorization are required. This includes the specific set of identity claims that are required to be presented, the trust framework in which the entities operate, and the protocols and mechanisms to establish a secure communication channel. It uses the lower layers of the stack to achieve this.
 
-To define the required identity claims, the [Digital Credential Query Language (DCQL)](https://identity.foundation/dcql/) can be used. This standard defines a way to express the required identity claims in a machine-readable way. The DCQL query can be used as a form of digital contract by the holder to gather the required claims from its wallet (or other sources) and by the verifier to verify the presented claims.
+To define the required identity claims, the [Digital Credential Query Language (DCQL)](https://identity.foundation/dcql/) can be used. This standard defines a way to express the required identity claims in a machine-readable way. The holder can use the DCQL query as a form of digital contract to gather the required claims from its wallet (or other sources) and by the verifier to verify the presented claims.
 
 The DCQL language does not have to be implemented directly by holders or verifiers, but can be used by specifications to define the required claims in a machine-readable way.
 
-#### Summary of layers, technologies and standards
+#### Summary of layers, technologies, and standards
 
 | Layer              | Transaction | Technology / Standard                                             | Description                                                                                                                          |
 | ------------------ | ----------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
@@ -188,19 +188,19 @@ The DCQL language does not have to be implemented directly by holders or verifie
 
 Several identity claims are required to be presented. Which claims are required depends on the use-case. Each of the claims have different properties such as:
 
-- Who can issue the claim
-- How can the claim be verified
-- What is the level of assurance of the claim
-- Under which conditions can the claim be used
+- Who can issue the claim?
+- How can the claim be verified?
+- What is the level of assurance of the claim?
+- Under which conditions can the claim be used?
 - Lifecycle of the claim (expiration, revocation, renewal)
 
-In order for use-case writers to define which claims are required, a repository is needed that keeps track of the claims and its properties.
+In order for use-case writers to define which claims are required, a repository is needed that keeps track of the claims and their properties.
 
 #### Mechanics
 
 ### The actors
 
-- Care organisation
+- Care organization
 - Healthcare professional
 - Vendor
 - Verifier
@@ -208,20 +208,20 @@ In order for use-case writers to define which claims are required, a repository 
 
 #### Relations between the actors
 
-Vendors get authorized by care organisations to act on their behalf.
-The care organisation's identity can be represented by one of the trusted Vendors.
+Vendors get authorized by care organizations to act on their behalf.
+The care organization's identity can be represented by one of the trusted Vendors.
 
 ### Use-cases
 
 Different use-cases have different requirements for identity claims.
 
-Each use-case requires its own governance in which it defines the needed identity claims and the trust framework in which the actors operate.
+Each use-case requires its own governance in which it defines the necessary identity claims and the trust framework in which the actors operate.
 
-The following steps are required to establish the identity of a healthcare organisation and professional in a specific use-case.
+The following steps are required to establish the identity of a healthcare organization and professional in a specific use-case.
 
-##### Setup for organisations
+##### Setup for organizations
 
-- Choose a identity wallet provider
+- Choose an identity wallet provider
 - Acquire identity claims
 - Choose a vendor and authorize it to act on your behalf for a specific use-case
 - Issue relationship credentials to each healthcare professional
@@ -230,8 +230,8 @@ The following steps are required to establish the identity of a healthcare organ
 
 - Choose a wallet
 - Acquire identity claims from DEZI and your branch organization
-- Acquire relationship credentials from your care organisation
-- authorize the organisation to act on your behalf for a limited amount of time (e.g. 1 day)
+- Acquire relationship credentials from your care organization
+- Authorize the organization to act on your behalf for a limited amount of time (e.g. 1 day)
 
 ##### Asserting identity
 
@@ -246,21 +246,21 @@ In the context of a use-case, several identity claims are required to be present
 
 - Verify the verifiable presentation
   - Verify the nonce
-  - verify the signature
-  - verify the expiration date
-- verify the claims
+  - Verify the signature
+  - Verify the expiration date
+- Verify the claims
   - Verify the signatures
   - Verify the revocation status
-  - verify the issuer
-  - verify the expiration date
+  - Verify the issuer
+  - Verify the expiration date
 - Respond with a bearer token
 
 ##### Interacting with the resource server
 
-- Present the bearer token to the resource server along side the request
-- Check the DPoP proof (or other token binding mechanism)
+- Present the bearer token to the resource server alongside the request
+- Check the DPoP proof (or other token-binding mechanism)
 - The resource server verifies the bearer token by introspecting it at the oauth-authorization server
-- The oauth-authorization server replies with the token status and the the provided identity claims
+- The oauth-authorization server replies with the token status and the provided identity claims
 - The resource server verifies the token status
 - The resource server verifies the identity claims and the relationships
 
@@ -268,12 +268,12 @@ In the context of a use-case, several identity claims are required to be present
 
 #### Token binding
 
-#### No sharing of Private Keys of certificates
+#### No sharing of private keys or certificates
 
-#### use of TLS
+#### Use of TLS
 
 Use of TLS for the vendor
 
-#### replay attacks
+#### Replay attacks
 
 nonce and timestamps
