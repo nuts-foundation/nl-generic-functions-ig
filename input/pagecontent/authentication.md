@@ -6,7 +6,7 @@ The verified identity is often used downstream for authorization and accounting 
 
 #### Requirements
 
-There exists a multitude of authentication solutions, therefore it is important to define the requirements for a authentication in the context of healthcare. The requirements are:
+There exists a multitude of authentication solutions, therefore it is important to define the requirements for authentication in the context of healthcare. The requirements are:
 
 - Work with identity claims from the authoritative sources
 - Support combinations of identity claims from different trusted issuers
@@ -99,7 +99,7 @@ Because authentication is a complex topic, this IG tries to structure the soluti
 
 ##### Overview
 
-The trust layer defines techniques and governance to establish trust between entities. Each entity needs an to be referenced by an identifier.
+The trust layer defines techniques and governance to establish trust between entities. Each entity needs to be referenced by an identifier.
 In order to establish trust into an entity, a verifier must be able to verify the ownership of the identifier by the entity. Some identifiers are easier to verify than other. Identifiers that can be verified are called verifiable identifiers (VIDs).
 How a verifier can verify a VID depends on the type of identifier.
 Identifiers can either be externally verified by an authority (XVIDs), or self-certifying (SCIDs). Many identifiers we know are externally verified, such as your phone number or bank account.
@@ -148,7 +148,7 @@ Identity claims contain information about the entity such as its name, role, and
 Identity claims can also be identifiers which can not be self-certified.
 These claims are usual managed by existing governance structures such as professional branches and governmental bodies. A chamber of commerce number is an result of such a governance structure.
 
-The identity claims layer can be seen as the "Identification" part of the Generic Funtion "Identification & Authentication".
+The identity claims layer can be seen as the "Identification" part of the Generic Function "Identification & Authentication".
 
 This layer describes the information in the specific claim such as its schema. The issuer or issuers that are authorized to issue the claim and the trust framework in which the claim can be used.
 It also describes the assurance levels and the lifecycle of the claim.
@@ -167,7 +167,7 @@ The application layer defines requirements for specific use-cases in which authe
 
 To define the required identity claims, the [Digital Credential Query Language (DCQL)](https://identity.foundation/dcql/) can be used. This standard defines a way to express the required identity claims in a machine-readable way. The DCQL query can be used as a form of digital contract by the holder to gather the required claims from its wallet (or other sources) and by the verifier to verify the presented claims.
 
-The DCQL language does not have to be implented directly by holders or verifiers, but can be used by specifications to define the required claims in a machine-readable way.
+The DCQL language does not have to be implemented directly by holders or verifiers, but can be used by specifications to define the required claims in a machine-readable way.
 
 #### Summary of layers, technologies and standards
 
