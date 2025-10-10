@@ -42,10 +42,10 @@ Description: "The technical details of a healthcare service that can be used in 
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
 * type 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
 * providedBy 1.. 
-* specialty from UziAgbSpecialismenVS (required)
-//* specialty from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.22--20200901000000 (required)
-* type from ProcedureType (required)
-//* type form http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.19--20200901000000 (required)
+//* specialty from UziAgbSpecialismenVS (required)
+* specialty from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.22--20200901000000 (required)
+//* type from ProcedureType (required)
+* type from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.19--20200901000000 (required)
 * type.extension contains SupportedActivityDefinitions named supportedActivityDefinitions 0..*
 
 
@@ -79,20 +79,20 @@ Description: "The organizational hierarchy and details for healthcare organizati
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Organization
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Organization
 * type 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Organization
-// * type ^slicing.discriminator.type = #value
-// * type ^slicing.discriminator.path = "$this"
-// * type ^slicing.rules = #open
-// * type contains
-//     departmentSpecialty 0..1 and
-//     organizationType 0..1
-// * type[departmentSpecialty] from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.17.2.4--20200901000000 (required)
-// * type[departmentSpecialty] ^short = "DepartmentSpecialty"
-// * type[departmentSpecialty] ^definition = "The specialty of the healthcare provider’s department. The departmental specialty can be filled in if further indication of the healthcare provider is needed. This refers to the recognized medical specialties as stated in the BIG Act."
-// * type[departmentSpecialty] ^alias = "AfdelingSpecialisme"
-// * type[organizationType] from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000 (required)
-// * type[organizationType] ^short = "OrganizationType"
-// * type[organizationType] ^definition = "The type of healthcare provider, such as general hospital, or nursing home. If this field is filled in and an AGB code is used for the HealthcareProviderIdentificationNumber, the type must match the type implicitly contained in the AGB code."
-// * type[organizationType] ^alias = "OrganisatieType"
+* type ^slicing.discriminator.type = #value
+* type ^slicing.discriminator.path = "$this"
+* type ^slicing.rules = #open
+* type contains
+    departmentSpecialty 0..1 and
+    organizationType 0..1
+* type[departmentSpecialty] from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.17.2.4--20200901000000 (required)
+* type[departmentSpecialty] ^short = "DepartmentSpecialty"
+* type[departmentSpecialty] ^definition = "The specialty of the healthcare provider’s department. The departmental specialty can be filled in if further indication of the healthcare provider is needed. This refers to the recognized medical specialties as stated in the BIG Act."
+* type[departmentSpecialty] ^alias = "AfdelingSpecialisme"
+* type[organizationType] from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000 (required)
+* type[organizationType] ^short = "OrganizationType"
+* type[organizationType] ^definition = "The type of healthcare provider, such as general hospital, or nursing home. If this field is filled in and an AGB code is used for the HealthcareProviderIdentificationNumber, the type must match the type implicitly contained in the AGB code."
+* type[organizationType] ^alias = "OrganisatieType"
 * partOf only Reference(NlGfOrganization)
 
 
@@ -124,8 +124,6 @@ Description: "The details of a healthcare practitioner, such as a doctor or nurs
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Practitioner
 
 
-
-
 Profile: NlGfPractitionerRole
 Parent: $EuPractitionerRole
 Id: nl-gf-practitionerrole
@@ -136,21 +134,21 @@ Description: "The details of a healthcare practitioner's role within an organiza
 * practitioner 1..
 * organization 1..
 * code 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
-* code from UziRolcodesVS (required)
-// * code from http://hl7.org/fhir/ValueSet/practitioner-role (required)
-* specialty from UziAgbSpecialismenVS (required)
-//* specialty from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.22--20200901000000 (required)
+//* code from UziRolcodesVS (required)
+* code from http://hl7.org/fhir/ValueSet/practitioner-role (required)
+//* specialty from UziAgbSpecialismenVS (required)
+* specialty from http://decor.nictiz.nl/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.121.11.22--20200901000000 (required)
 
 
-Profile: NlGfPatientCareTeam
-Parent: CareTeam
-Id: nl-gf-patient-careteam
-Title: "NL Generic Functions CareTeam Profile for Patient Care Team"
-Description: "A care team for a (single)patient with multiple care providers and/or care givers."
-* subject only Reference(Patient)
-* subject 1..1
-* participant.period.start 1..1
-* participant.period.end 0..1
+// Profile: NlGfPatientCareTeam
+// Parent: CareTeam
+// Id: nl-gf-patient-careteam
+// Title: "NL Generic Functions CareTeam Profile for Patient Care Team"
+// Description: "A care team for a (single)patient with multiple care providers and/or care givers."
+// * subject only Reference(Patient)
+// * subject 1..1
+// * participant.period.start 1..1
+// * participant.period.end 0..1
 
 
 

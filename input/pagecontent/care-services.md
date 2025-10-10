@@ -17,7 +17,7 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 GFA follows the IHE [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) ([GF-Adressering, ADR-0](https://github.com/minvws/generiekefuncties-adressering/issues/166)). The [mCSD profile](https://profiles.ihe.net/ITI/mCSD/index.html) provides multiple options for deployment. This guide specifies the choices made for The Netherlands. Most impactful/striking choice are:
 
-- using Dutch 'nl-core' FHIR-profiles on top of IHE mCSD-profiles
+- using a combination of 'EU-base', 'NL-core' and 'IHE mCSD' for the FHIR-profiles in this IG. (Both EU-base and NL-core packages are in draft status)
 - using the Landelijke Register Zorgaanbieders (LRZa) as the source/master-list of all other sources. 
 
 Here is a brief overview of the processes that are involved: 
@@ -87,13 +87,13 @@ The Query Client is used to search and retrieve information from the Query Direc
 
 
 ### Data models
-Within GF Addressing, profiles are used to validate data. They are based on both mCSD-profiles and nl-core-profiles (TODO: use Nictiz nl-core package as soon as dependency-bug is fixed)([GF-Adressering, ADR#188](https://github.com/minvws/generiekefuncties-adressering/issues/188)). Ideally, these profiles are merged in the nl-core-profiles in the future. 
+Within GF Addressing, profiles are used to validate data. They are based on both mCSD-profiles, EU-profiles and NL-profiles ([GF-Adressering, ADR#188](https://github.com/minvws/generiekefuncties-adressering/issues/188)). Ideally, these profiles are merged in the EU- or NL-profiles in the future. 
 
 A brief description of the data models and their profile for this guide:
 
 #### Organization
 Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA `identifier`, `type`, `status`, and `name`. It may have additional attributes like `endpoint`. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
-The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) contains no extra constraints on top of mCSD & nl-core profiles. 
+The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) contains no extra constraints on top of mCSD, EU & NL profiles. 
 
 #### Endpoint
 An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. If an Organization does not have an Endpoint, it may still be reachable via an Endpoint at its parent Organization or an affiliated Organization.
@@ -113,25 +113,25 @@ The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareserv
 
 #### Location
 Locations are physical places where care can be delivered such as buildings (NL: Vestiging), wards, rooms, or vehicles. A Location may have geographic attributes (address, geocode), attributes regarding its hours of operation, etc. Each Location is related to one (child) Organization. A location may have a hierarchical relationship with other locations (e.g. building > floor > room).
-The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) has no extra constraints on top of mCSD & nl-core profiles. 
+The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) has no extra constraints on top of mCSD, EU & NL profiles. 
 
 
 #### PractitionerRole
 PractitionerRole resources are used to define the specific roles, specialties, and responsibilities that a Practitioner holds within an Organization. PractitionerRole enables precise modeling of relationships between practitioners and organizations, supporting scenarios like assigning practitioners to departments, specifying their roles (e.g., surgeon, nurse), and linking them to particular healthcare services or locations. A PractitionerRole may have contact details for phone, mail, or direct messaging. The information in a PractitionerRole-instance is equivalent to the info on a Dutch 'UZI-pas'.
-The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html): no extra constraints on top of mCSD & nl-core profiles. 
+The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html): no extra constraints on top of mCSD, EU & NL profiles. 
 
 
 #### Practitioner
 ***This resource type is out-of-scope for this IG-version***
 Practitioner is a health worker such as physician, nurse, pharmacist, community health worker, district health manager, etc. Practitioners have a name and may have qualifications (like in the Dutch BIG-register).  The registry (Administration Directory) of Practitioners may be operated by the Dutch BIG-register or similar organizations. 
-The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html): no extra constraints on top of mCSD & nl-core profiles. 
+The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html): no extra constraints on top of mCSD, EU & NL profiles. 
 
 
 #### OrganizationAffiliation
 ***This resource type is out-of-scope for this IG-version (waiting for [GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))***
 
 OrganizationAffiliation resources are used to represent relationships between organizations, such as a software vendor managing the Endpoint that is used by a care provider. It could also be used the represent multiple care providers working together under some agreement (e.g. in a region).
-The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) has no extra constraints on top of mCSD & nl-core profiles.  
+The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) has no extra constraints on top of mCSD, EU & NL profiles.  
 
 An overview of the *most common* elements and relations between data models:
 
@@ -185,7 +185,3 @@ Practitioner instances may contain private data (e.g. the name of a physician) a
 #### OrganizationAffiliation resource
 
 The OrganizationAffiliation resource may be added in the future to publish relationships between organizations. ([GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))
-
-#### Using HCIM/NL-CORE profiles and valuesets
-
-Profiles and Valuesets in this IG should re-use the Dutch `nictiz.fhir.nl.r4.nl-core` package, but due to a software issue, it is currently not possible. A fix is on its way.
