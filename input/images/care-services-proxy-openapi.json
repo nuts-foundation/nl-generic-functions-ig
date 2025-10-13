@@ -2,255 +2,41 @@
   "openapi": "3.0.3",
   "info": {
     "title": "NUTS Care Services Proxy Authorization API",
-    "description": "API specifications for the NUTS Care Services proxy authorization mechanisms",
-    "version": "1.0.0"
+    "description": "API specification for the NUTS Care Services proxy FHIR query rewriting with search narrowing based on authorization policies.\n\nThis API is part of a two-phase authorization approach:\n1. **Phase 1 - Token Introspection:** Use the NUTS `/internal/auth/v2/accesstoken/introspect_extended` endpoint to obtain Verifiable Presentations. See the NUTS API specification: https://nuts-node.readthedocs.io/en/v1/_static/auth/v2.yaml\n2. **Phase 2 - Search Narrowing:** Use the `/authorization/search-narrowing` endpoint (defined in this spec) to rewrite FHIR queries based on authorization policies\n\nThe introspection result from Phase 1 is passed to the search-narrowing endpoint in Phase 2.",
+    "version": "2.0.0"
   },
   "servers": [
     {
-      "url": "https://api.example.com/v1",
-      "description": "Example server"
+      "url": "https://nuts.example.com",
+      "description": "NUTS node server"
     }
   ],
   "paths": {
     "/authorization/search-narrowing": {
       "post": {
-        "summary": "Search Narrowing Request (1a)",
-        "description": "This endpoint is invoked before the request is executed to the internal FHIR service.\nIt takes the incoming FHIR request and returns a search-narrowed scope that includes\nauthorized FHIR query parameters.\n",
+        "summary": "FHIR Query Rewriting with Search Narrowing (Phase 2)",
+        "description": "This endpoint is invoked after token introspection to obtain a rewritten FHIR query\nthat applies search-narrowing based on authorization policies.\n\nThe proxy provides:\n- The introspection result from Phase 1\n- The HTTP request details (method, path, query parameters, headers)\n- Client certificate properties (if applicable for mTLS)\n\nThe Policy Decision Point (PDP) returns:\n- A rewritten FHIR query with search-narrowing parameters\n- Authorization decision (allow/deny)\n- Applied filters for auditability\n",
         "operationId": "searchNarrowing",
         "tags": [
-          "Authorization"
+          "Phase 2 - Authorization"
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "query",
-                  "method",
-                  "use_case"
-                ],
-                "properties": {
-                  "use_case": {
-                    "type": "string",
-                    "description": "The use case for which the search narrowing is requested",
-                    "enum": [
-                      "mCSD",
-                      "care_services",
-                      "administration_directory"
-                    ],
-                    "example": "mCSD"
-                  },
-                  "query": {
-                    "type": "string",
-                    "description": "The FHIR query being requested (including any query parameters)",
-                    "example": "Organization?name=Example&_id=123"
-                  },
-                  "method": {
-                    "type": "string",
-                    "description": "HTTP method of the request",
-                    "enum": [
-                      "GET",
-                      "POST",
-                      "PUT",
-                      "DELETE",
-                      "PATCH"
-                    ],
-                    "example": "GET"
-                  },
-                  "requester": {
-                    "type": "object",
-                    "description": "Information about the requesting party",
-                    "properties": {
-                      "organization_identifier": {
-                        "type": "string",
-                        "description": "Organization identifier of the requester",
-                        "example": "ura|24173480"
-                      }
-                    }
-                  }
-                }
+                "$ref": "#/components/schemas/SearchNarrowingRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Successfully returned search-narrowed scope",
+            "description": "Successfully returned rewritten query",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "allowed",
-                    "narrowed_scope"
-                  ],
-                  "properties": {
-                    "allowed": {
-                      "type": "boolean",
-                      "description": "Whether the request is allowed",
-                      "example": true
-                    },
-                    "narrowed_scope": {
-                      "type": "string",
-                      "description": "The narrowed search scope with query parameters",
-                      "example": "Organization?identifier=ura|24173480"
-                    },
-                    "original_scope": {
-                      "type": "string",
-                      "description": "The original requested scope for reference",
-                      "example": "Organization"
-                    },
-                    "applied_filters": {
-                      "type": "array",
-                      "description": "List of filters applied to narrow the scope",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "parameter": {
-                            "type": "string",
-                            "example": "identifier"
-                          },
-                          "value": {
-                            "type": "string",
-                            "example": "ura|24173480"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/authorization/scopes": {
-      "post": {
-        "summary": "Scope Request (1b Alternative)",
-        "description": "This endpoint is invoked before the request is executed to the internal FHIR service.\nIt returns FHIR scopes similar to SMART on FHIR Access Scopes, providing access scopes\nspecific to the mCSD (mobile Care Services Discovery) use case.\n",
-        "operationId": "scopeRequest",
-        "tags": [
-          "Authorization"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "use_case"
-                ],
-                "properties": {
-                  "use_case": {
-                    "type": "string",
-                    "description": "The use case for which scopes are requested",
-                    "enum": [
-                      "mCSD",
-                      "care_services",
-                      "administration_directory"
-                    ],
-                    "example": "mCSD"
-                  },
-                  "requester": {
-                    "type": "object",
-                    "description": "Information about the requesting party",
-                    "properties": {
-                      "organization_identifier": {
-                        "type": "string",
-                        "description": "Organization identifier of the requester",
-                        "example": "ura|24173480"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully returned FHIR scopes",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "scopes"
-                  ],
-                  "properties": {
-                    "scopes": {
-                      "type": "array",
-                      "description": "Array of SMART on FHIR formatted scopes",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "system/Organization.rs?identifier=ura|24173480",
-                        "system/Location.rs?managingOrganization=Organization/24173480",
-                        "system/Practitioner.rs?_has:PractitionerRole:practitioner:organization=Organization/24173480",
-                        "system/PractitionerRole.rs?organization=Organization/24173480",
-                        "system/HealthcareService.rs?_has:Location:location:managingOrganization=Organization/24173480"
-                      ]
-                    },
-                    "scope_details": {
-                      "type": "array",
-                      "description": "Detailed information about each scope",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "scope": {
-                            "type": "string",
-                            "example": "system/Organization.rs?identifier=ura|24173480"
-                          },
-                          "description": {
-                            "type": "string",
-                            "example": "Read and search access to Organization resources"
-                          },
-                          "constraints": {
-                            "type": "array",
-                            "description": "Any constraints or filters applied to this scope",
-                            "items": {
-                              "type": "string"
-                            },
-                            "example": [
-                              "identifier=ura|24173480",
-                              "type=prov"
-                            ]
-                          }
-                        }
-                      }
-                    },
-                    "expiry": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "When these scopes expire",
-                      "example": "2024-12-31T23:59:59Z"
-                    }
-                  }
+                  "$ref": "#/components/schemas/SearchNarrowingResponse"
                 }
               }
             }
@@ -281,6 +67,301 @@
   },
   "components": {
     "schemas": {
+      "SearchNarrowingRequest": {
+        "type": "object",
+        "required": [
+          "introspection_result",
+          "http_request"
+        ],
+        "properties": {
+          "introspection_result": {
+            "type": "object",
+            "description": "The token introspection result from the NUTS `/internal/auth/v2/accesstoken/introspect_extended` endpoint. See the NUTS API specification for the complete schema: https://nuts-node.readthedocs.io/en/v1/_static/auth/v2.yaml\n\nThis object contains standard OAuth 2.0 introspection fields (RFC 7662) plus:\n- `vps`: Array of Verifiable Presentations with Verifiable Credentials\n- `presentation_definitions`: Presentation Definitions that were requested\n- `presentation_submissions`: Presentation Submissions showing how VPs fulfill definitions\n\nAdditional properties are extracted from the Verifiable Credentials (e.g., user_type, user_id, organization_identifier, name).",
+            "additionalProperties": true,
+            "example": {
+              "active": true,
+              "iss": "https://example.com/oauth2/authorizer",
+              "client_id": "https://requester.example.com",
+              "exp": 1735689599,
+              "iat": 1735603199,
+              "scope": "patient/*.read",
+              "vps": [
+                {
+                  "type": ["VerifiablePresentation"],
+                  "verifiableCredential": [
+                    {
+                      "type": ["VerifiableCredential", "DeziLoginCredential"],
+                      "credentialSubject": {
+                        "type": "Practitioner",
+                        "identifier": "urn:oid:2.16.528.1.1007.3.1:123456789"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "http_request": {
+            "type": "object",
+            "required": [
+              "method",
+              "path"
+            ],
+            "properties": {
+              "method": {
+                "type": "string",
+                "description": "HTTP method",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE",
+                  "PATCH"
+                ],
+                "example": "GET"
+              },
+              "path": {
+                "type": "string",
+                "description": "Request path (without query parameters)",
+                "example": "/Patient"
+              },
+              "query_params": {
+                "type": "object",
+                "description": "Query parameters as key-value pairs",
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "name": "Smith",
+                  "_count": "10"
+                }
+              },
+              "headers": {
+                "type": "object",
+                "description": "Relevant HTTP headers",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "example": {
+                  "Content-Type": "application/fhir+json",
+                  "Accept": "application/fhir+json"
+                }
+              }
+            }
+          },
+          "client_certificate": {
+            "type": "object",
+            "description": "Properties extracted from client certificate (if mTLS is used)",
+            "properties": {
+              "subject_dn": {
+                "type": "string",
+                "description": "Subject Distinguished Name",
+                "example": "CN=Organization Name,O=Organization,C=NL"
+              },
+              "issuer_dn": {
+                "type": "string",
+                "description": "Issuer Distinguished Name",
+                "example": "CN=PKIoverheid,O=Staat der Nederlanden,C=NL"
+              },
+              "serial_number": {
+                "type": "string",
+                "description": "Certificate serial number",
+                "example": "123456789"
+              },
+              "not_before": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Certificate validity start date"
+              },
+              "not_after": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Certificate validity end date"
+              },
+              "san": {
+                "type": "array",
+                "description": "Subject Alternative Names",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "urn:oid:2.16.840.1.113883.2.4.6.1:12345678"
+                ]
+              }
+            }
+          },
+          "use_case": {
+            "type": "string",
+            "description": "The use case context for authorization",
+            "enum": [
+              "mCSD",
+              "patient_access",
+              "care_services",
+              "administration_directory"
+            ],
+            "example": "patient_access"
+          }
+        }
+      },
+      "SearchNarrowingResponse": {
+        "type": "object",
+        "required": [
+          "allowed"
+        ],
+        "properties": {
+          "allowed": {
+            "type": "boolean",
+            "description": "Whether the request is allowed",
+            "example": true
+          },
+          "rewritten_query": {
+            "type": "string",
+            "description": "The complete rewritten query path with search-narrowing parameters. Use business-appropriate search parameters such as type, identifier, status, or custom SearchParameters on extensions (e.g., mcsd-profile=admin).",
+            "example": "/Patient?_has:CareTeam:patient:participant:Practitioner.identifier=urn:oid:2.16.528.1.1007.3.1:123456789"
+          },
+          "original_query": {
+            "type": "string",
+            "description": "The original requested query for reference",
+            "example": "/Patient"
+          },
+          "applied_filters": {
+            "type": "array",
+            "description": "List of filters applied to narrow the scope",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parameter": {
+                  "type": "string",
+                  "description": "FHIR search parameter name",
+                  "example": "_has:CareTeam:patient:participant:Practitioner.identifier"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Parameter value",
+                  "example": "urn:oid:2.16.528.1.1007.3.1:123456789"
+                },
+                "reason": {
+                  "type": "string",
+                  "description": "Explanation for why this filter was applied",
+                  "example": "Practitioner can only access patients where they are a CareTeam participant"
+                }
+              }
+            }
+          },
+          "allowed_operations": {
+            "type": "array",
+            "description": "List of HTTP methods allowed for this resource",
+            "items": {
+              "type": "string",
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
+              ]
+            },
+            "example": [
+              "GET",
+              "POST"
+            ]
+          },
+          "resource_constraints": {
+            "type": "object",
+            "description": "Additional constraints on the resource access",
+            "properties": {
+              "required_extensions": {
+                "type": "array",
+                "description": "Extensions that must be present on resources. Use custom SearchParameters to make extensions searchable.",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "http://nuts.nl/fhir/StructureDefinition/mcsd-profile"
+                ]
+              },
+              "required_codes": {
+                "type": "object",
+                "description": "Required code values for specific fields",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "type": ["prov"],
+                  "active": ["true"],
+                  "mcsd-profile": ["admin"]
+                }
+              },
+              "search_parameters": {
+                "type": "array",
+                "description": "Custom SearchParameters required for filtering (e.g., for extension-based searches)",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "mcsd-profile"
+                    },
+                    "url": {
+                      "type": "string",
+                      "example": "http://nuts.nl/fhir/SearchParameter/Organization-mcsd-profile"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Searches on the mcsd-profile extension"
+                    }
+                  }
+                }
+              },
+              "denied_elements": {
+                "type": "array",
+                "description": "FHIR elements that should be filtered out",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "Patient.identifier"
+                ]
+              }
+            }
+          },
+          "audit_info": {
+            "type": "object",
+            "description": "Information for audit logging",
+            "properties": {
+              "policy_decision_id": {
+                "type": "string",
+                "description": "Unique identifier for this authorization decision",
+                "example": "pdp-12345-67890"
+              },
+              "applied_policies": {
+                "type": "array",
+                "description": "List of policy rules that were evaluated",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "related-person-patient-access-v1",
+                  "search-narrowing-related-person-v1"
+                ]
+              }
+            }
+          }
+        }
+      },
       "Error": {
         "type": "object",
         "required": [
@@ -310,7 +391,8 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "JWT"
+        "bearerFormat": "JWT",
+        "description": "OAuth 2.0 Bearer token for client authentication"
       }
     }
   },
