@@ -47,8 +47,6 @@ Usage: #example
 Title: "Organization 1 - PractitionerRole Harry Arts"
 * identifier[+].system = "http://cp1.example.org/HRM/assignments"
 * identifier[=].value = "654321"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
-* identifier[=].value = "UZI-2"
 * practitioner = Reference(Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd)
 * organization = Reference(Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec)
 * code.coding = UziRolcodesCS#01.015 "Huisarts"
@@ -61,6 +59,8 @@ Usage: #example
 Title: "Organization 1 - Practitioner Harry Arts"
 * identifier[+].system = "http://cp1.example.org/HRM/employees"
 * identifier[=].value = "5678"
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
+* identifier[=].value = "UZI-2"
 * name.use = #official
 * name.text = "Hary Arts"
 * name.family = "Arts"

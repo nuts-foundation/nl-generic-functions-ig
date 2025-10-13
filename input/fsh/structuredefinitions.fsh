@@ -1,14 +1,14 @@
-Extension: ReplacedByEndpoint
-Id:        replaced-by-endpoint
-Title:    "Replaced By Endpoint"
-Description: "Points to a new (updated) Endpoint. This can be used if this endpoint.address is (partially) replaced by a new one"
-Context: Endpoint
-* value[x] only Reference(Endpoint)
+// Extension: ReplacedByEndpoint
+// Id:        replaced-by-endpoint
+// Title:    "Replaced By Endpoint"
+// Description: "Points to a new (updated) Endpoint. This can be used if this endpoint.address is (partially) replaced by a new one"
+// Context: Endpoint
+// * value[x] only Reference(Endpoint)
 
-Invariant:   address-immutable
-Description: "This address field must not be updated after creation of the Endpoint instance"
-// Expression:  "address = %previous.address"
-Severity:    #error
+// Invariant:   address-immutable
+// Description: "This address field must not be updated after creation of the Endpoint instance"
+// // Expression:  "address = %previous.address"
+// Severity:    #error
 
 Profile: NlGfEndpoint
 Parent: Endpoint
@@ -16,12 +16,12 @@ Id: nl-gf-endpoint
 Title: "NL Generic Functions Endpoint Profile"
 Description: "The technical details of an endpoint that can be used for electronic services, such as for web services providing access to FHIR resources."
 * ^experimental = true
-* extension contains ReplacedByEndpoint named replacedBy 0..*
+// * extension contains ReplacedByEndpoint named replacedBy 0..*
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * managingOrganization 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * payloadType from NlGfDataExchangeCapabilitiesVS (required)
-* address obeys address-immutable
+// * address obeys address-immutable
 
 
 

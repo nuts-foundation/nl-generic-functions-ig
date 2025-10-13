@@ -106,6 +106,8 @@ InstanceOf: NlGfPractitioner
 Usage: #example
 Title: "Organization 3 - Practitioner John Doe"
 * active = true
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
+* identifier[=].value = "UZI-3"
 * name.family = "Doe"
 * name.given = "John"
 * telecom[0].system = #phone

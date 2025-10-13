@@ -161,8 +161,6 @@ Usage: #example
 Title: "Organization 2 - PractitionerRole Cardioloog Caroline van Dijk at Organization 2"
 * identifier[+].system = "http://cp2.example.org/HRM/assignments"
 * identifier[=].value = "123456"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
-* identifier[=].value = "UZI-1"
 * practitioner = Reference(Practitioner/040b160a-6072-4244-adc0-2b786c4ef052)
 * organization = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * code.coding = UziRolcodesCS#01.010 "Cardioloog"
@@ -178,6 +176,8 @@ Title: "Organization 2 - Practitioner Cardioloog Caroline van Dijk"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner"
 * identifier[+].system = "http://cp2.example.org/HRM/employees"
 * identifier[=].value = "1234"
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
+* identifier[=].value = "UZI-1"
 * name.use = #official
 * name.text = "Caroline van Dijk"
 * name.family = "van Dijk"
