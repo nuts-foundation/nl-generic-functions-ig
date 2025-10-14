@@ -1,5 +1,5 @@
 Instance: 128447d2-e153-4c93-8ac6-6c357555f3db
-InstanceOf: $EuPatient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
+InstanceOf: $NlPatient
 Usage: #inline
 Title: "Patient Jaantje Merkens"
 * meta.profile = $nl-core-Patient
@@ -19,7 +19,7 @@ Title: "Patient Jaantje Merkens"
 * address.line = "Kerkstraat 18"
 * address.postalCode = "7071 WZ"
 * address.city = "Ulft"
-//* managingOrganization = Reference(Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec) "Organization 1"
+* managingOrganization = Reference(Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec) "Organization 1"
 
 Instance: 8cdd8f8d-f75b-4285-851e-ff302dad46fb
 InstanceOf: Condition

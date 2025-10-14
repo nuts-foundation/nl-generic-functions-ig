@@ -123,9 +123,9 @@ Title: "Organization 3 - PractitionerRole Klinisch Geriater John Doe"
 * practitioner = Reference(Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9)
 * organization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
-* code.coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* code.coding = $uzi-rolcode#01.022 "Klinisch geriater"
 * specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* specialty[+].coding = $uzi-rolcode#01.022 "Klinisch geriater"
 * telecom[0].system = #phone
 * telecom[=].value = "+31301234568"
 * telecom[=].use = #work
