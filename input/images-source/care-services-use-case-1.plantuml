@@ -18,10 +18,12 @@ Doctor -> Doctor: diagnosis = torn ACL
 activate EHR
 Doctor -> EHR: use EHR's custom query tool \nsearch for orthopedic services, \nwithin 30km of Vera's home
 activate CSD
-EHR-> CSD: Find Matching Care Services request
-CSD -> EHR: Find Matching Care Services response\ncontaining HealthcareServices list
+EHR-> CSD: Find Matching Care Services request\n GET [base]/HealthcareService?\ntype=consultation\n&specialty=orthopedics
+CSD -> EHR: response
+EHR-> CSD: Get (parent) Organizations and Locations for HealthcareServices\n GET /Organization/[id], GET /Location/[id], etc
+CSD -> EHR: response
+EHR -> EHR: Filter results on distance to Vera's home
 deactivate CSD
-EHR -> EHR: Resolve References
 EHR -> Doctor : Review results\nwith office address, hours of operation
 Doctor -> Patient: Review and discuss options
 deactivate Patient
