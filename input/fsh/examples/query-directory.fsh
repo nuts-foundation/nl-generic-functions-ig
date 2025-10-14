@@ -420,8 +420,6 @@ Instance: ad3-o2
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Organization/631cf10e-42d6-4165-9907-11e2333d4a85"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "33333333"
 * name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/ad3-o1)

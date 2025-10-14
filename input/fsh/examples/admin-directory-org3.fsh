@@ -29,8 +29,6 @@ Usage: #example
 Title: "Organization 3 - Organization Nursing department"
 Description: "Nursing department at Organization 3"
 
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "33333333"
 * name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
