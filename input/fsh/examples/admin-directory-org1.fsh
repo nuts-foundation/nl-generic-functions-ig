@@ -51,7 +51,7 @@ Title: "Organization 1 - PractitionerRole Harry Arts"
 * identifier[=].value = "UZI-2"
 * practitioner = Reference(Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd)
 * organization = Reference(Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec)
-* code.coding = UziRolcodesCS#01.015 "Huisarts"
+* code.coding = $uzi-rolcode#01.015 "Huisarts"
 * telecom[+].system = #email
 * telecom[=].value = "h.arts@cp1.example.org"
 

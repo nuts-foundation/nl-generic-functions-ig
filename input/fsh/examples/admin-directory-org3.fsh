@@ -29,8 +29,6 @@ Usage: #example
 Title: "Organization 3 - Organization Nursing department"
 Description: "Nursing department at Organization 3"
 
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "33333333"
 * name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
@@ -85,7 +83,7 @@ Title: "Organization 3 - HealthcareService Geriatrie"
 * type[+] = $sct#146521000146103 "Brief comprehensive geriatric assessment"
 * type[+] = $sct#107101000146106 "comprehensive geriatric assessment"
 * type[+] = $sct#86944008 "Visual field study"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
 
 
 Instance: b48826dc-2d58-479a-bfd3-80b7a9d69757
@@ -98,7 +96,7 @@ Title: "Organization 3 - HealthcareService Verpleging"
 * type[+] = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
 * type[+] = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
 * type[+] = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
-* specialty[+].coding = AgbSpecialismenCS#0100 "Verpleegkundige"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0100 "Verpleegkundige"
 
 
 Instance: 08630c28-5e2a-4b0c-b8ce-f08f533246b9
@@ -123,9 +121,9 @@ Title: "Organization 3 - PractitionerRole Klinisch Geriater John Doe"
 * practitioner = Reference(Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9)
 * organization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
-* code.coding = UziRolcodesCS#01.022 "Klinisch geriater"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* code.coding = $uzi-rolcode#01.022 "Klinisch geriater"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = $uzi-rolcode#01.022 "Klinisch geriater"
 * telecom[0].system = #phone
 * telecom[=].value = "+31301234568"
 * telecom[=].use = #work

@@ -185,7 +185,7 @@ Usage: #inline
 * identifier[=].value = "UZI-2"
 * practitioner = Reference(Practitioner/ad1-p1)
 * organization = Reference(Organization/ad1-o1)
-* code.coding = UziRolcodesCS#01.015 "Huisarts"
+* code.coding = $uzi-rolcode#01.015 "Huisarts"
 * telecom[+].system = #email
 * telecom[=].value = "h.arts@cp1.example.org"
 
@@ -294,8 +294,8 @@ Usage: #inline
 * active = true
 * name = "Polikliniek 't Vaatje"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0303 "Chirurgie (Heelkunde)"
-* specialty[+].coding = UziRolcodesCS#01.014 "Chirurg"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0303 "Chirurgie (Heelkunde)"
+* specialty[+].coding = $uzi-rolcode#01.014 "Chirurg"
 
 Instance: ad2-hs2
 InstanceOf: NlGfHealthcareService
@@ -306,8 +306,8 @@ Usage: #inline
 * active = true
 * name = "Neurochirurgie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0308 "Medisch specialisten, neurochirurgie"
-* specialty[+].coding = UziRolcodesCS#01.025 "Neurochirurg"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0308 "Medisch specialisten, neurochirurgie"
+* specialty[+].coding = $uzi-rolcode#01.025 "Neurochirurg"
 
 Instance: ad2-hs3
 InstanceOf: NlGfHealthcareService
@@ -318,8 +318,8 @@ Usage: #inline
 * active = true
 * name = "Orthopedie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0305 "Medisch specialisten, orthopedie"
-* specialty[+].coding = UziRolcodesCS#01.032 "Orthopedisch chirurg"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0305 "Medisch specialisten, orthopedie"
+* specialty[+].coding = $uzi-rolcode#01.032 "Orthopedisch chirurg"
 
 Instance: ad2-hs4
 InstanceOf: NlGfHealthcareService
@@ -330,8 +330,8 @@ Usage: #inline
 * active = true
 * name = "Interne Geneeskunde"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0313 "Interne geneeskunde"
-* specialty[+].coding = UziRolcodesCS#01.016 "Internist"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0313 "Interne geneeskunde"
+* specialty[+].coding = $uzi-rolcode#01.016 "Internist"
 
 
 Instance: ad2-hs5
@@ -343,8 +343,8 @@ Usage: #inline
 * active = true
 * name = "Geriatrie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = $uzi-rolcode#01.022 "Klinisch geriater"
 
 Instance: ad2-hs6
 InstanceOf: NlGfHealthcareService
@@ -355,8 +355,8 @@ Usage: #inline
 * active = true
 * name = "Urologie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0306 "Medisch specialisten, urologie"
-* specialty[+].coding = UziRolcodesCS#01.045 "Uroloog"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0306 "Medisch specialisten, urologie"
+* specialty[+].coding = $uzi-rolcode#01.045 "Uroloog"
 
 
 
@@ -370,8 +370,8 @@ Usage: #inline
 * identifier[=].value = "UZI-1"
 * practitioner = Reference(Practitioner/ad2-p1)
 * organization = Reference(Organization/ad2-o1)
-* code.coding = UziRolcodesCS#01.010 "Cardioloog"
-* specialty.coding = UziRolcodesCS#01.010 "Cardioloog"
+* code.coding = $uzi-rolcode#01.010 "Cardioloog"
+* specialty.coding = $uzi-rolcode#01.010 "Cardioloog"
 * telecom[+].system = #email
 * telecom[=].value = "c.vandijk@cp2.example.org"
 
@@ -420,8 +420,6 @@ Instance: ad3-o2
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Organization/631cf10e-42d6-4165-9907-11e2333d4a85"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "33333333"
 * name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/ad3-o1)
@@ -476,7 +474,7 @@ Usage: #inline
 * type[+] = $sct#146521000146103 "Brief comprehensive geriatric assessment"
 * type[+] = $sct#107101000146106 "comprehensive geriatric assessment"
 * type[+] = $sct#86944008 "Visual field study"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
 
 
 Instance: ad3-hs2
@@ -489,7 +487,7 @@ Usage: #inline
 * type[+] = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
 * type[+] = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
 * type[+] = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
-* specialty[+].coding = AgbSpecialismenCS#0100 "Verpleegkundige"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0100 "Verpleegkundige"
 
 
 Instance: ad3-p1
@@ -514,9 +512,9 @@ Usage: #inline
 * practitioner = Reference(Practitioner/ad3-p1)
 * organization = Reference(Organization/ad3-o1)
 * active = true
-* code.coding = UziRolcodesCS#01.022 "Klinisch geriater"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* code.coding = $uzi-rolcode#01.022 "Klinisch geriater"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = $uzi-rolcode#01.022 "Klinisch geriater"
 * telecom[0].system = #phone
 * telecom[=].value = "+31301234568"
 * telecom[=].use = #work
