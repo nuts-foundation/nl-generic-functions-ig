@@ -70,59 +70,6 @@ Title: "MedicationStatement Cisplatine"
 * dosage[0].doseAndRate[0].doseQuantity.value = 250
 * dosage[0].doseAndRate[0].doseQuantity.unit = "mg"
 
-// Instance: org2-report-vascular-medicine
-// InstanceOf: DiagnosticReport
-// Usage: #inline
-// * status = #final
-// * basedOn = Reference(https://fhir-org1.test.dataverloskunde.nl/fhir/ServiceRequest/org1-vascular-medicine)
-// * code = $sct#371530004 " klinisch consultverslag"
-// * code.text = "Negative result, no abnormalities detected"
-// * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
-// * effectiveDateTime = "2025-02-19T10:00:00Z"
-// * issued = "2025-02-19T10:05:00Z"
-// * conclusionCode.coding = $sct#281900007 "No abnormality detected"
-// * conclusion = "No significant findings. The test is negative."
-
-// Instance: org2-report-neurology
-// InstanceOf: DiagnosticReport
-// Usage: #inline
-// * status = #final
-// * basedOn = Reference(https://fhir-org1.test.dataverloskunde.nl/fhir/ServiceRequest/org1-neurology)
-// * code = $sct#10241000146105 "verslag van neurologische beoordeling"
-// * code.text = "Negative result, no abnormalities detected"
-// * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
-// * effectiveDateTime = "2025-02-19T10:00:00Z"
-// * issued = "2025-02-19T10:05:00Z"
-// * conclusionCode.coding = $sct#281900007 "No abnormality detected"
-// * conclusion = "No significant findings. The test is negative."
-
-
-// Instance: org2-report-orthopedic-specialty
-// InstanceOf: DiagnosticReport
-// Usage: #inline
-// * status = #final
-// * basedOn = Reference(https://fhir-org1.test.dataverloskunde.nl/fhir/ServiceRequest/org1-orthopedic-specialty)
-// * code = $sct#10301000146102 "hematologieverslag"
-// * code.text = "Negative result, no abnormalities detected"
-// * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
-// * effectiveDateTime = "2025-02-19T10:00:00Z"
-// * issued = "2025-02-19T10:05:00Z"
-// * conclusionCode.coding = $sct#281900007 "No abnormality detected"
-// * conclusion = "No significant findings. The test is negative."
-
-// Instance: org2-report-internal-medicine
-// InstanceOf: DiagnosticReport
-// Usage: #inline
-// * status = #final
-// * basedOn = Reference(https://fhir-org1.test.dataverloskunde.nl/fhir/ServiceRequest/org1-internal-medicine)
-// * code = $sct#10301000146102 "hematologieverslag"
-// * code.text = "Negative result, no abnormalities detected"
-// * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
-// * effectiveDateTime = "2025-02-19T10:00:00Z"
-// * issued = "2025-02-19T10:05:00Z"
-// * conclusionCode.coding = $sct#281900007 "No abnormality detected"
-// * conclusion = "No significant findings. The test is negative."
-
 
 //4jr geleden: Vermindering energie en krachtsverlies in benen
 Instance: 5a7f34e7-9b7b-4e5c-ba7c-890edbc4d757
@@ -157,9 +104,5 @@ Description: "This bundle contains all personal health information for Patient J
 * insert BundleEntryPUT(Condition, 5a7f34e7-9b7b-4e5c-ba7c-890edbc4d757)
 * insert BundleEntryPUT(Procedure, 6bc0f95c-f281-475e-a279-4ed6beb59024)
 * insert BundleEntryPUT(MedicationRequest, 8c2d4009-4322-4d4a-8e29-3e70cd67d286)
-// * insert BundleEntryPUT(DiagnosticReport, org2-report-vascular-medicine)
-// * insert BundleEntryPUT(DiagnosticReport, org2-report-neurology)
-// * insert BundleEntryPUT(DiagnosticReport, org2-report-orthopedic-specialty)
-// * insert BundleEntryPUT(DiagnosticReport, org2-report-internal-medicine)
 * insert BundleEntryPUT(MedicationStatement, e00a59fa-7d7e-422d-8505-ef3e645404e9)
 * insert BundleEntryPUT(NlGfLocalizationDocumentReference, 52b792ba-11ae-42f3-bcc1-231f333f2317)

@@ -136,11 +136,6 @@ Title: "CareTeam of Patient Jaantje Merkens"
 * participant[=].member.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
 * participant[=].member.identifier.value = "22222222"
 
-// * participant[+].period.start = "2024-08-27"
-// * participant[=].member = Reference(https://fhir-org3.test.dataverloskunde.nl/fhir/Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
-// * participant[=].member.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
-// * participant[=].member.identifier.value = "33333333"
-
 
 
 Instance: phi-org1

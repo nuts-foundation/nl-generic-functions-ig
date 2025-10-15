@@ -181,8 +181,6 @@ Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/PractitionerRole/5fa4c91a-a12f-48ae-a4c7-92971dc7ab53"
 * identifier[+].system = "http://cp1.example.org/HRM/assignments"
 * identifier[=].value = "654321"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
-* identifier[=].value = "UZI-2"
 * practitioner = Reference(Practitioner/ad1-p1)
 * organization = Reference(Organization/ad1-o1)
 * code.coding = $uzi-rolcode#01.015 "Huisarts"
@@ -195,6 +193,8 @@ Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd"
 * identifier[+].system = "http://cp1.example.org/HRM/employees"
 * identifier[=].value = "5678"
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
+* identifier[=].value = "UZI-2"
 * name.use = #official
 * name.text = "Hary Arts"
 * name.family = "Arts"
@@ -366,8 +366,6 @@ Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba"
 * identifier[+].system = "http://cp2.example.org/HRM/assignments"
 * identifier[=].value = "123456"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
-* identifier[=].value = "UZI-1"
 * practitioner = Reference(Practitioner/ad2-p1)
 * organization = Reference(Organization/ad2-o1)
 * code.coding = $uzi-rolcode#01.010 "Cardioloog"
@@ -382,6 +380,8 @@ Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/Practitioner/040b160a-6072-4244-adc0-2b786c4ef052"
 * identifier[+].system = "http://cp2.example.org/HRM/employees"
 * identifier[=].value = "1234"
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
+* identifier[=].value = "UZI-1"
 * name.use = #official
 * name.text = "Caroline van Dijk"
 * name.family = "van Dijk"
@@ -495,6 +495,8 @@ InstanceOf: NlGfPractitioner
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9"
 * active = true
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
+* identifier[=].value = "UZI-3"
 * name.family = "Doe"
 * name.given = "John"
 * telecom[0].system = #phone
