@@ -77,7 +77,7 @@ Authentication and authorization follows the [GF Authorization](./authorization.
 
 **For GET operations (querying localization records):**
 - **Organization identifier** (URA): The organization identifier of the requesting organization (URA)
-- **Organization type**: The [type of healthcare organization](./ValueSet-2.16.840.1.113883.2.4.3.11.60.40.2.17.2.3--20200901000000.html) making the query
+- **Organization type**: The type of healthcare organization making the query
 - **Practitioner identifier** (UZI/DEZI): The unique healthcare professional identifier of the requester
 - **Role code**: The [professional role code](./ValueSet-uzi-rolcode-vs.html) of the requester
 - **Patient identifier** (BSN/pseudoBSN): The Patient identifier, used to check/fetch a Consent

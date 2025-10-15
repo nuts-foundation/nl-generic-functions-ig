@@ -1,8 +1,9 @@
-Alias: $NlCoreOrganization = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization
-Alias: $NlCoreLocation = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider
-Alias: $NlCorePractitioner = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner
-Alias: $NlCorePractitionerRole = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole
-Alias: $NlCoreCareTeam = http://nictiz.nl/fhir/StructureDefinition/nl-core-CareTeam
+Alias: $NlOrganization = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization
+Alias: $NlLocation = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider
+Alias: $NlPractitioner = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-Practitioner
+Alias: $NlPractitionerRole = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole
+Alias: $NlCareTeam = http://nictiz.nl/fhir/StructureDefinition/nl-core-CareTeam
+Alias: $NlPatient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient
 Alias: $sct = http://snomed.info/sct
 Alias: $loinc = http://loinc.org
 Alias: $task-status = http://hl7.org/fhir/task-status
@@ -12,6 +13,7 @@ Alias: $task-input-type = http://terminology.hl7.org/CodeSystem/task-input-type
 Alias: $bsn = http://fhir.nl/fhir/NamingSystem/bsn
 Alias: $ura = http://fhir.nl/fhir/NamingSystem/ura
 Alias: $uzi = http://fhir.nl/fhir/NamingSystem/uzi
+Alias: $uzi-rolcode = http://fhir.nl/fhir/NamingSystem/uzi-rolcode
 Alias: $yesnodontknow = http://hl7.org/fhir/ValueSet/yesnodontknow
 Alias: $condition-code = http://hl7.org/fhir/ValueSet/condition-code
 Alias: $usage-context-type = http://terminology.hl7.org/CodeSystem/usage-context-type
@@ -32,11 +34,8 @@ Alias: $service-type = http://terminology.hl7.org/CodeSystem/service-type
 Alias: $endpoint-payload-type = http://terminology.hl7.org/CodeSystem/endpoint-payload-type
 Alias: $endpoint-connection-type = http://terminology.hl7.org/CodeSystem/endpoint-connection-type
 Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
-// Alias: $orpha = http://www.orpha.net
 Alias: $resource-types = http://hl7.org/fhir/resource-types
 Alias: $restful-interaction = http://hl7.org/fhir/restful-interaction
-
-
 Alias: $nl-core-Patient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient
 Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
 Alias: $consentscope = http://terminology.hl7.org/CodeSystem/consentscope
@@ -44,29 +43,6 @@ Alias: $v3-ParticipationType = http://terminology.hl7.org/CodeSystem/v3-Particip
 Alias: $consentaction = http://terminology.hl7.org/CodeSystem/consentaction
 Alias: $v3-Confidentiality = http://terminology.hl7.org/CodeSystem/v3-Confidentiality
 Alias: $atc = http://www.whocc.no/atc
-
-// Alias: $v3-AddressUse = http://terminology.hl7.org/CodeSystem/v3-AddressUse
-// Alias: $consentscope = http://terminology.hl7.org/CodeSystem/consentscope
-// Alias: $consentcategorycodes = http://terminology.hl7.org/CodeSystem/consentcategorycodes
-// Alias: $v3-RoleCode = http://terminology.hl7.org/CodeSystem/v3-RoleCode
 Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-clinical
 Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
-
 Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
-// Alias: $allergyintolerance-verification = http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
-// Alias: $allergyintolerance-clinical = http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
-// Alias: $observation-category = http://terminology.hl7.org/CodeSystem/observation-category
-// Alias: $organization-type = http://nictiz.nl/fhir/NamingSystem/organization-type
-// Alias: $icpc-1-nl = http://hl7.org/fhir/sid/icpc-1-nl
-// Alias: $uzi-rolcode = http://fhir.nl/fhir/NamingSystem/uzi-rolcode
-// Alias: $v3-ObservationInterpretation = http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation
-// Alias: $icd-10-nl = http://hl7.org/fhir/sid/icd-10-nl
-// Alias: $v3-AdministrativeGender = http://terminology.hl7.org/CodeSystem/v3-AdministrativeGender
-// Alias: $v3-MaritalStatus = http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-// Alias: $v3-LanguageAbilityProficiency = http://terminology.hl7.org/CodeSystem/v3-LanguageAbilityProficiency
-// Alias: $v3-LanguageAbilityMode = http://terminology.hl7.org/CodeSystem/v3-LanguageAbilityMode
-// Alias: $coverage-selfpay = http://terminology.hl7.org/CodeSystem/coverage-selfpay
-
-// Alias: $v2-0443 = http://terminology.hl7.org/CodeSystem/v2-0443
-// Alias: $immunization-recommendation-status = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status
-// 

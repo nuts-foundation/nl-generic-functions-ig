@@ -89,8 +89,8 @@ Title: "Organization 2 - HealthcareService Cardiology"
 * active = true
 * name = "Polikliniek 't Vaatje"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0303 "Chirurgie (Heelkunde)"
-* specialty[+].coding = UziRolcodesCS#01.014 "Chirurg"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0303 "Chirurgie (Heelkunde)"
+* specialty[+].coding = $uzi-rolcode#01.014 "Chirurg"
 
 Instance: c79125e5-739f-4238-959c-cd5872518c1f
 InstanceOf: NlGfHealthcareService
@@ -101,8 +101,8 @@ Title: "Organization 2 - HealthcareService Neurochirurgie"
 * active = true
 * name = "Neurochirurgie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0308 "Medisch specialisten, neurochirurgie"
-* specialty[+].coding = UziRolcodesCS#01.025 "Neurochirurg"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0308 "Medisch specialisten, neurochirurgie"
+* specialty[+].coding = $uzi-rolcode#01.025 "Neurochirurg"
 
 Instance: 9d47ca45-4166-4531-a23d-ef5fa613ece4
 InstanceOf: NlGfHealthcareService
@@ -113,8 +113,8 @@ Title: "Organization 2 - HealthcareService Orthopedie"
 * active = true
 * name = "Orthopedie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0305 "Medisch specialisten, orthopedie"
-* specialty[+].coding = UziRolcodesCS#01.032 "Orthopedisch chirurg"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0305 "Medisch specialisten, orthopedie"
+* specialty[+].coding = $uzi-rolcode#01.032 "Orthopedisch chirurg"
 
 Instance: f6a508bd-9455-4afa-aad0-baec0833602d
 InstanceOf: NlGfHealthcareService
@@ -125,8 +125,8 @@ Title: "Organization 2 - HealthcareService Interne Geneeskunde"
 * active = true
 * name = "Interne Geneeskunde"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0313 "Interne geneeskunde"
-* specialty[+].coding = UziRolcodesCS#01.016 "Internist"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0313 "Interne geneeskunde"
+* specialty[+].coding = $uzi-rolcode#01.016 "Internist"
 
 
 Instance: 120325af-083c-40ee-b16e-01230fe65655
@@ -138,8 +138,8 @@ Title: "Organization 2 - HealthcareService Geriatrie"
 * active = true
 * name = "Geriatrie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0335 "Medisch specialisten, geriatrie"
-* specialty[+].coding = UziRolcodesCS#01.022 "Klinisch geriater"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0335 "Medisch specialisten, geriatrie"
+* specialty[+].coding = $uzi-rolcode#01.022 "Klinisch geriater"
 
 Instance: 08013141-16b2-42a0-8c9a-af57cee5511b
 InstanceOf: NlGfHealthcareService
@@ -150,8 +150,8 @@ Title: "Organization 2 - HealthcareService Urologie"
 * active = true
 * name = "Urologie"
 * type = $sct#11429006 "Consultation"
-* specialty[+].coding = AgbSpecialismenCS#0306 "Medisch specialisten, urologie"
-* specialty[+].coding = UziRolcodesCS#01.045 "Uroloog"
+* specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0306 "Medisch specialisten, urologie"
+* specialty[+].coding = $uzi-rolcode#01.045 "Uroloog"
 
 
 
@@ -163,8 +163,8 @@ Title: "Organization 2 - PractitionerRole Cardioloog Caroline van Dijk at Organi
 * identifier[=].value = "123456"
 * practitioner = Reference(Practitioner/040b160a-6072-4244-adc0-2b786c4ef052)
 * organization = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
-* code.coding = UziRolcodesCS#01.010 "Cardioloog"
-* specialty.coding = UziRolcodesCS#01.010 "Cardioloog"
+* code.coding = $uzi-rolcode#01.010 "Cardioloog"
+* specialty.coding = $uzi-rolcode#01.010 "Cardioloog"
 * telecom[+].system = #email
 * telecom[=].value = "c.vandijk@cp2.example.org"
 

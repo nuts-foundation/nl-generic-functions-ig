@@ -1,5 +1,5 @@
 Instance: 128447d2-e153-4c93-8ac6-6c357555f3db
-InstanceOf: Patient //TODO: dependency on $nl-core-Patient if dependency-bug-nictiz is fixed
+InstanceOf: $NlPatient
 Usage: #inline
 Title: "Patient Jaantje Merkens"
 * meta.profile = $nl-core-Patient
