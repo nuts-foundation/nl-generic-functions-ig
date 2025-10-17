@@ -103,13 +103,6 @@ An Organization may be reachable for electronic data exchange through electronic
 
 The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on `.payloadType` ([GF-Adressering, ADR-8](https://github.com/minvws/generiekefuncties-adressering/issues/156)).
 
-
-> ##### Changing endpoints and the continued integrity of references
-> Healthcare records (e.g. conditions, observations, or procedures) will contain links (references) to addressable entities. Some entities may be referenced by an *identifier* (e.g. a URA or DEZI-number), but most references will use either a local *ID* (e.g. Patient/880e50a3) or URL (https://somecareprovider.nl/fhirR4/Patient/880e50a3). The (local) IDs and (remote) URLs are definitive and widely supported in the FHIR ecosystem. Identifiers may be harder to resolve, may expose sensitive data (like a Citizen number; Dutch BSN) and can be ambiguous (multiple instances carrying the same identifier).
-IDs and URLs are easy in use and (should be) resolvable, but they may break over time which leads to broken references and unresolvable medical records. Try to use endpoints that can remain stable for long periods (5-10 years) and use universally unique IDs (UUIDs) instead of e.g. incrementing numeric values. 
->
->For example, care provider 'CP1' uses an EHR from software vendor 'SV1'. This vendor SV1 uses endpoint-URL 'https://sv1/fhirR4' for every customer (care provider). Now if CP1 wants to switch to a new vendor, this endpoint-URL may risk lots of broken references in many EHR-systems. A better option would be URL 'https://sv1/**cp1**/fhirR4' where a change can be applied to all references in a system OR URL 'https://cp1/fhirR4' that may prevent a change altogether (until FHIR R4 is outdated...).
-
 #### HealthcareService
 Healthcare services are used to publish which (medical) services are provided by a (child) Organization. Examples include surgical services, antenatal care services, or primary care services. These services in `HealthcareService.type` can be extended by references to specific ActivityDefinitions and PlanDefinitions that are supported. The combination of a HealthcareService offered at a Location may have specific attributes including contact person, hours of operation, etc.
 The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) contains a value set constraint on `.type` and `.specialty` and an extension on `.type` to refer to Activity/PlanDefinitions.
