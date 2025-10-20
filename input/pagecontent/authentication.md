@@ -1,27 +1,24 @@
 ### Introduction
 
-Authentication is the process of verifying the identity of an entity. In the context of healthcare, authentication is used to verify the identity of healthcare professionals and care organizations. This is important to ensure that only authorized entities can access sensitive information and resources.
-
-The verified identity is often used downstream for authorization and accounting. Authorization is the process of granting access to resources based on the identity of an entity. Accounting is the process of tracking the actions of an entity.
+Authentication verifies the identity of entities — such as healthcare professionals and organizations — within healthcare systems.
+Verified identities support down stream processes such as secure authorization (access control) and accounting (audit logging).
 
 #### Requirements
 
-There exists a multitude of authentication solutions, therefore it is important to define the requirements for authentication in the context of healthcare. The requirements are:
+The authentication solution must:
 
-- Work with identity claims from the authoritative sources
-- Support combinations of identity claims from different trusted issuers
-- Support for use-cases with and without an end-user (healthcare professional)
-- Support for authorizing vendors to act on behalf of a (care) organization
-- Support for limiting the scope of a vendor's authorization
-- Support for authorizing (care) organizations to act on behalf of a healthcare professional
-- User-friendly solution for healthcare professionals
-- Cost-efficient solution for care organizations
-- Flexible solution that can be adapted to different use-cases
-- Peer-2-peer trust which allows direct interactions between the involved parties without involvement of a third party
-- No single point of failure
-- Privacy by design
-- Security by design
-- Support for leveraging existing identity solutions
+- Support identity claims issued by authoritative sources.
+- Support presenting a combination of claims from multiple trusted issuers.
+- Support use cases with and without direct end-user involvement.
+- Enable vendors to act on behalf of care organizations, with scope-limited authorization.
+- Allow care organizations to act on behalf of healthcare professionals, with time-limited authorization.
+- Be user-friendly for healthcare professionals.
+- Be cost-effective for care organizations.
+- Be flexible and adaptable to various healthcare use cases.
+- Support peer-to-peer trust, enabling direct interactions without involvement of third parties.
+- Avoid single points of failure.
+- Adhere to privacy-by-design and security-by-design principles.
+- Leverage existing identity solutions where possible.
 
 #### Terminology
 
@@ -44,24 +41,17 @@ Throughout this document the following terminology is used:
 
 #### Problem overview
 
-A typical scenario in healthcare is that a healthcare professional needs to access a resource (e.g. patient data) which is located at a different organization (e.g. a hospital).
-In the Netherlands, the custodian of the patient data is by law forbidden to share the data with third parties. Several exceptions to that rule exists. One responsibility of the custodian is to ensure that the requesting party is authorized to access the data. In order to do so, the custodian needs to verify the identity of the requesting party.
+Healthcare professionals often require access to patient data managed by other organizations (e.g., hospitals). Legal and regulatory frameworks restrict data sharing, requiring strong verification of:
 
-In practice, many of these data exchanges are not done directly between the healthcare professionals, but between computers and systems. Often vendors operate these systems on behalf of the care organizations.
-
-On top of that, use-cases are often described and governed by a governing body. The governing body certifies healthcare organizations and vendors to operate in a specific use-case. The governing body defines the trust framework in which the use-case operates. The custodian also needs to verify that the entities operate within the trust framework of the use-case.
-
-The custodian needs to verify the identity of the requesting healthcare professional, working for an organization which is a customer of a vendor. The custodian needs to verify the following:
-
-- The identity of the healthcare professional: identifier, role, and affiliation with the care organization
-- The identity of the care organization: identifier and its relationship with the healthcare professional
-- The identity of the vendor: identifier and its relationship with the care organization
+- The professional’s identity, role, and organizational affiliation.
+- The care organization’s identity.
+- The vendor’s identity, if involved.
 
 ### Solution overview
 
-The solution is based on exchanging verifiable identity claims between the involved parties.
-The claims can be flexible combined to form a complete identity for a specific use-case.
-The claims can be verified by the verifier without the need of a central authority, using cryptographic techniques.
+This guide proposes requesting Access Tokens using an extension to the OAuth 2.0 standard, specifically [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523).
+This extension allows the use of a JWT Authorization Grant combined with a Client Authentication assertion to request Access Tokens.
+The JWT Authorization Grant contains a Verifiable Presentation with the required identity claims. The Client Authentication assertion contains the identity of the client according to an authoritative registry.
 
 #### Actors and Transactions
 
@@ -70,7 +60,7 @@ The claims can be verified by the verifier without the need of a central authori
 **Table 7.2-1: GF Authentication - Actors and Transactions**
 
 | Actor     | Transaction                             | Initiator or Responder | Optionality | Reference                   |
-|-----------|-----------------------------------------|------------------------|-------------|-----------------------------|
+| --------- | --------------------------------------- | ---------------------- | ----------- | --------------------------- |
 | Verifier  | Request key material [GFI-001]          | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
 |           | Request Revocation status [GFI-003]     | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
 |           | Request Access Token [GFI-004]          | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
