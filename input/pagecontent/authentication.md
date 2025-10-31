@@ -1,7 +1,7 @@
 ### Introduction
 
 Authentication verifies the identity of entities, such as healthcare professionals and organizations, within healthcare systems.
-Verified identities support down stream processes such as secure authorization (access control) and accounting (audit logging).
+Verified identities support downstream processes such as secure authorization (access control) and accounting (audit logging).
 
 ### Problem overview
 
@@ -19,7 +19,7 @@ Also, traditional authentication topologies relying on a central trusted authori
 #### Requirements
 
 This IG is focused on establishing a robust authentication mechanism that scales in a national healthcare context. This national context requires a solution that is scalable, cost-effective, and user-friendly for healthcare professionals.
-Also, it must support various (not yet know) use-cases, including those without direct end-user involvement (e.g., automated systems).
+Also, it must support various (not yet known) use-cases, including those without direct end-user involvement (e.g., automated systems).
 To create a robust and safe solution in a hostile global internet, the topology must avoid a single point of failure and support peer-to-peer trust, enabling direct interactions between entities without relying on the availability of third parties.
 
 To summarize, the authentication solution must:
@@ -61,7 +61,7 @@ This guide defines an authentication solution based on the _OAuth 2.0_ standard.
 
 In this approach, authentication of the participating entities is performed using a [JWT Authorization Grant](https://www.rfc-editor.org/rfc/rfc7523#section-2.1), while the client itself is authenticated through a [Client Authentication Assertion](https://www.rfc-editor.org/rfc/rfc7523#section-2.2).
 
-The _Authorization Grand_ carries verifiable identity claims for the involved parties (e.g., a healthcare provider and care giver), and the _Client Authentication Assertion_ conveys the client’s own identity.
+The _Authorization Grant_ carries verifiable identity claims for the involved parties (e.g., a healthcare provider and care giver), and the _Client Authentication Assertion_ conveys the client’s own identity.
 
 Identity claims are long-lived and issued in advance by multiple authoritative sources (such as registries responsible for maintaining identity information). These claims are represented in a cryptographically verifiable format compliant with the [Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/2022/REC-vc-data-model-20220303/).
 
@@ -144,7 +144,7 @@ Verifiable credentials have a long lifetime, often several years. To be able to 
 
 | Transaction   | Technology / Standard                                                      | Description                                                                                                                                                                                     |
 | ------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GFI-001       | DID (Decentralized Identifier)                                             | DID method did:web, a domain name based identifier that hosts the DID document conaining the public key                                                                                         |
+| GFI-001       | DID (Decentralized Identifier)                                             | DID method did:web, a domain name based identifier that hosts the DID document containing the public key                                                                                        |
 | GFI-002       | OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)               | Protocol to request and issue verifiable credentials between digital agents and authoritative registries                                                                                        |
 | GFI-00\[2,4\] | Verifiable Credentials (VC)                                                | Standard for expressing identity claims in a cryptographically verifiable way                                                                                                                   |
 | GFI-00\[2,4\] | Verifiable Presentations (VP)                                              | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                                                                                   |
@@ -166,4 +166,4 @@ Verifiable credentials have a long lifetime, often several years. To be able to 
 
 TODO: Expand this section with more details and examples.
 
-Don't let users authenticate for each access token. Let users authenticate once a day (or what is acceptable for a specifi scenario) and then use this information together with organization identity to request access tokens. This is also the reason we use a back-channel OAuth 2.0 flow, so the user does not have to interact with the authorization server for each access token request.
+Don't let users authenticate for each access token. Let users authenticate once a day (or what is acceptable for a specific scenario) and then use this information together with organization identity to request access tokens. This is also the reason we use a back-channel OAuth 2.0 flow, so the user does not have to interact with the authorization server for each access token request.
