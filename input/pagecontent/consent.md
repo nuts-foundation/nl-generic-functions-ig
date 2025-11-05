@@ -29,7 +29,12 @@ Here is a brief overview of the GF Consent processes concerning the use of conse
 3. Receiving notification about consent choice: Subscribers (see process 1) receive a notification when consent choice changes occur in the Mitz consent catalogue. See the chapters called 'Toestemmingsnotificatie' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
 
 #### Explicit consents stored locally
-GF Consent recognizes the possibility of using explicit consents stored decentrally, e.g. in an EHR or other system managed by the data holder organization. The GF Consent does not define agreements and specifications for the implementation of locally stored explicit consents. It is up to the data holder organizations and/or its data processors to make choices about this.
+GF Consent recognizes the possibility of using explicit consents stored decentrally, e.g. in an EHR or other system managed by the data holder organization (also know as DHTV, Dossierhouderstoestemmingsvoorziening). The GF Consent does not define agreements and specifications for the implementation of locally stored explicit consents. It is up to the data holder organizations and/or its data processors to make choices about this.
+To do:
+Also locally, standardized interface for creating, reading and updating consents are necessary.
+Because 
+- PHR, client portals and other patient or professional aplications need to be able to creating, read and update consents.
+- Consistency/ uniformity of meaning is needed between catalog-consents and local-consents to be able to correctly process combinations of catalog-consents and local-consents.
 
 #### Implicit consents
 GF Consent recognizes the possibility of using implict consents as a legal basis for the processing of medical data. In the Netherlands, implict consent is defined as a consent that can be implied/ assumed. For example, in the case of a referral or handoff sent with the patient's knowledge to a specific healthcare provider (see chapter 'Veronderstelde Toestemming' in NEN 7517 for more details). GF Consent does not define agreements and specifications for the implementation of implicit consents. It is up to the data holder organizations and/or its data processors to make choices about this.
@@ -41,3 +46,4 @@ In real life, one data request can be linked to multiple explicit consents, stor
 - Consents concerning an individual data user organizations are more specific than consents concerning a category of data user organizations
 - Consents concerning a specific context are more specific than consents that do not concern a specific context
 - Consents concerning specific resources are more specific than consents that do not concern specific resources
+- Objections supersede consents
