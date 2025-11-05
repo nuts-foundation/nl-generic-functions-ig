@@ -15,26 +15,26 @@ By adhering to these principles, this Implementation Guide supports consistent a
 ### Solution overview
 
 GF Consent defines the use of 3 different types of consents:
-a. explicit consents stored in a national catalogue of patient consents
-b. explicit consents stored locally
-c. implicit consents
+- explicit consents stored in a national catalogue of patient consents
+- explicit consents stored locally
+- implicit consents
 
-#### a. explicit consents stored in a national catalogue of patient consents
+#### Explicit consents stored in a national catalogue of patient consents
 
 GF Consent follows the agreements and specifications in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11) for the use of consents stored in a national catalogue of patient consents.
 
 Here is a brief overview of the GF Consent processes concerning the use of consents registered in Mitz consent catalogue:
-1. Subscribing to consent choices changes: A data holder organization can choose to subscribe to consent choices changes of a specific patient. See the chapters called 'Toestemmingsabonnement' in  "Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"(https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
-2. Mitz closed authorization question: A data holder organization can send a request to Mitz to check whether a consent is registered in the Mitz consent catalogue that applies to the URA and/or an Organization Type of the data holder organization and the Organization Type of the data user organization. See the chapters called 'Gesloten Autorisatievraag' in  "Implementatiehandleiding_OpenGesloten"(https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
-3. Receiving notification about consent choice: Subscribers (see process 1) receive a notification when consent choice changes occur in the Mitz consent catalogue. See the chapters called 'Toestemmingsnotificatie' in "Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"(https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
+1. Subscribing to consent choices changes: A data holder organization can choose to subscribe to consent choices changes of a specific patient. See the chapters called 'Toestemmingsabonnement' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
+2. Mitz closed authorization question: A data holder organization can send a request to Mitz to check whether a consent is registered in the Mitz consent catalogue that applies to the URA and/or an Organization Type of the data holder organization and the Organization Type of the data user organization. See the chapters called 'Gesloten Autorisatievraag' in ["Implementatiehandleiding_OpenGesloten"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
+3. Receiving notification about consent choice: Subscribers (see process 1) receive a notification when consent choice changes occur in the Mitz consent catalogue. See the chapters called 'Toestemmingsnotificatie' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
 
-#### b. explicit consents stored locally
+#### Explicit consents stored locally
 GF Consent recognizes the possibility of using explicit consents stored decentrally, e.g. in an EHR or other system managed by the data holder organization. The GF Consent does not define agreements and specifications for the implementation of locally stored explicit consents. It is up to the data holder organizations and/or its data processors to make choices about this.
 
-#### c. implicit consents
+#### Implicit consents
 GF Consent recognizes the possibility of using implict consents as a legal basis for the processing of medical data. In the Netherlands, implict consent is defined as a consent that can be implied/ assumed. For example, in the case of a referral or handoff sent with the patient's knowledge to a specific healthcare provider (see chapter 'Veronderstelde Toestemming' in NEN 7517 for more details). GF Consent does not define agreements and specifications for the implementation of implicit consents. It is up to the data holder organizations and/or its data processors to make choices about this.
 
-### Prioritizing different consents
+### Processing multiple consents
 In real life, one data request can be linked to multiple explicit consents, stored either in a national catalogue of patient consents or locally. When multiple consents apply to one data request, conflicts can arise. The GF Consent specifies the following about processing multiple consents that apply to the same data request:
 - More specific consents supersede less specific consents
 - Consents concerning an individual data holder organizations are more specific than consents concerning a category of data holder organizations
