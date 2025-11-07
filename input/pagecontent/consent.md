@@ -2,7 +2,7 @@
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Consent, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Consent aims to establish a standardized, interoperable system for using patient consent as a legal basis for processing medical data, enabling reliable and efficient exchange of health data across healthcare systems and organizations.
 
-This guide outlines the technical requirements and architectural principles underlying the GF Consent, with a focus on x, y and z. Key design principles include:
+This guide outlines the technical requirements and architectural principles underlying the GF Consent. Key design principles include:
 
 - The Mitz agreements and specifications are leading for the use of a national catalogue of patient consents.
 - International standards: The solution should be based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
@@ -36,18 +36,18 @@ GF Consent recognizes the possibility of using explicit consents stored decentra
 
 #### Implicit consents
 
-GF Consent recognizes the possibility of using implict consents as a legal basis for the processing of medical data. In the Netherlands, implict consent is defined as a consent that can be implied/ assumed. For example, in the case of a referral or handoff sent with the patient's knowledge to a specific healthcare provider (see chapter 'Veronderstelde Toestemming' in NEN 7517 for more details). GF Consent does not define agreements and specifications for the implementation of implicit consents. It is up to the data holder organizations and/or its data processors to make choices about this.
+GF Consent recognizes the possibility of using implict consents as a legal basis for the processing of medical data. In the Netherlands, implict consent is defined as a consent that can be implied/ assumed. For example, in the case of a referral or handoff sent with the patient's knowledge to a specific healthcare provider (see chapter 'Veronderstelde Toestemming' in NEN 7517 for more details). Consent-records are an important input for GF Authorization and need to be explicit in order to evaluate the consents of a patient. Making implicit consent explicit (and storing/updating these consents) is a responsibility of the care provider. 
 
 ### Processing multiple consents
 
 In real life, one data request can be linked to multiple explicit consents, stored either in a national catalogue of patient consents or locally. When multiple consents apply to one data request, conflicts can arise. The GF Consent specifies the following about processing multiple consents that apply to the same data request:
-- More specific consents supersede less specific consents
-- Consents concerning an individual data holder organizations are more specific than consents concerning a category of data holder organizations
-- Consents concerning an individual data user organizations are more specific than consents concerning a category of data user organizations
-- Consents concerning a specific context are more specific than consents that do not concern a specific context
-- Consents concerning specific resources are more specific than consents that do not concern specific resources
-- Objections are seen as negative consents
-- In case of an objection and a consent with equal specificness: Objections supersede consents
+1. More specific consents supersede less specific consents
+1. Consents concerning an individual data holder organizations are more specific than consents concerning a category of data holder organizations
+1. Consents concerning an individual data user organizations are more specific than consents concerning a category of data user organizations
+1. Consents concerning a specific context are more specific than consents that do not concern a specific context
+1. Consents concerning specific resources are more specific than consents that do not concern specific resources
+1. Objections are seen as negative consents
+1. In case of an objection and a consent with equal specificness: Objections supersede consents
 
 
 ### Components (actors)
