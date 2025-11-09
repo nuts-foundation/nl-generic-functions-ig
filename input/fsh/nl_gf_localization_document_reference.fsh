@@ -10,3 +10,5 @@ Description: """A DocumentReference profile for registering the availability of 
 * custodian 1..1
 * custodian.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
 * custodian.reference 0..0
+* content.attachment.url 1..1
+* content.attachment.contentType 1..1
