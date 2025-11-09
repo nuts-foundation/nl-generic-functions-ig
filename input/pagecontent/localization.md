@@ -54,7 +54,7 @@ This version of the IG will not go into the details of this Pseudonymization Ser
 Within GF-Localization the [NL-gf-localization-DocumentReference profile](./StructureDefinition-nl-gf-localization-documentreference.html) is used to register, search, and validate localization records ([NL-GF-IG, ADR#10](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/10)).
 This data model basically states ***"Care provider X has data of type Y for Patient Z"***. It contains the following elements:
 - **Organization identifier**: The care provider identifier (URA) representing the data holder/custodian.
-- **Patient identifier**: The pseudomized BSN to identify the patient.
+- **Patient identifier**: The pseudonymized BSN to identify the patient.
 - **Type**: Represents type of data stored at the data holder/custodian. ***No ValueSet has been decided upon yet [GF-Lokalisatie, ADR#62](https://github.com/minvws/generiekefuncties-lokalisatie/issues/62), so in this IG-version, a fixed LOINC code '55188-7' is used: "Patient data Document"***
 - **Url**: A link/url to a document (e.g. FHIR resource) that represents the data type of this localization record. This url used by the Localization service to check authorization (consent) at the data holder for the data user/requester.
 
@@ -66,7 +66,7 @@ A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f
 One of things you can do to mitigate privacy risks: ***Please don't put dates or other privacy-sensitive data into the localization records since it can expose the identity patient***
 
 #### Pseudonymization
-Patient identifier BSN (BurgerServiceNummer) is pseudomized to enhance patient privacy. The pseudonymization service will ensure that patient identities are protected while still allowing organizations to use a joint index.([GF-Lokalisatie, ADR-1](https://github.com/minvws/generiekefuncties-lokalisatie/issues/8))
+Patient identifier BSN (BurgerServiceNummer) is pseudonymized to enhance patient privacy. The pseudonymization service will ensure that patient identities are protected while still allowing organizations to use a joint index.([GF-Lokalisatie, ADR-1](https://github.com/minvws/generiekefuncties-lokalisatie/issues/8))
 
 
 
