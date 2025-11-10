@@ -46,4 +46,3 @@ Alias: $atc = http://www.whocc.no/atc
 Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-clinical
 Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
 Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
-// Alias: $observation-status = http://hl7.org/fhir/observation-status
