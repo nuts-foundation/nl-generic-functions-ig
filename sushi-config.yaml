@@ -66,8 +66,8 @@ pages:
   consent.md:
     title: Consent
 
-  careteams.md:
-    title: CareTeams
+  identification.md:
+    title: Identification
 
   authentication.md:
     title: Authentication
@@ -115,7 +115,7 @@ menu:
   Routing: routing.html
   Localization: localization.html
   Consent: consent.html
-  CareTeams: careteams.html
+  Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
