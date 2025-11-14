@@ -4,7 +4,6 @@ Usage: #example
 Title: "Organization 2 - Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "22222222"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067"
 * name = "example Hospital"
 * type[+] = $organization-type#V4 "Ziekenhuis"
 * type[+] = $sct#22232009 "Hospital"
@@ -29,7 +28,6 @@ Instance: 430f7379-8ec2-4e55-b096-919995da61e2
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 2 - Endpoint FHIR R4"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/430f7379-8ec2-4e55-b096-919995da61e2"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -49,7 +47,6 @@ Instance: d4c1d657-67a9-471c-9732-9c042e9a6d43
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 2 - Endpoint DICOM-WADO-RS"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/d4c1d657-67a9-471c-9732-9c042e9a6d43"
 * status = #active
 * payloadType[+].coding = $endpoint-payload-type#any "Any"
 * connectionType = $endpoint-connection-type#dicom-wado-rs
@@ -68,7 +65,6 @@ Instance: 2427ca0c-8a29-4a6a-aabd-50cf02f587a7
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 2 - Endpoint FHIR STU3"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/2427ca0c-8a29-4a6a-aabd-50cf02f587a7"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities "Transfer of Care - eOverdracht Server"
 * payloadMimeType[+] = #application/fhir+json
@@ -88,7 +84,6 @@ Instance: 5cb05355-474b-4d30-8b0e-a9ca574b8274
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 2 - HealthcareService Cardiology"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/5cb05355-474b-4d30-8b0e-a9ca574b8274"
 * active = true
 * providedBy = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * active = true
@@ -101,7 +96,6 @@ Instance: c79125e5-739f-4238-959c-cd5872518c1f
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 2 - HealthcareService Neurochirurgie"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/c79125e5-739f-4238-959c-cd5872518c1f"
 * active = true
 * providedBy = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * active = true
@@ -114,7 +108,6 @@ Instance: 9d47ca45-4166-4531-a23d-ef5fa613ece4
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 2 - HealthcareService Orthopedie"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/9d47ca45-4166-4531-a23d-ef5fa613ece4"
 * active = true
 * providedBy = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * active = true
@@ -127,7 +120,6 @@ Instance: f6a508bd-9455-4afa-aad0-baec0833602d
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 2 - HealthcareService Interne Geneeskunde"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/f6a508bd-9455-4afa-aad0-baec0833602d"
 * active = true
 * providedBy = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * active = true
@@ -141,7 +133,6 @@ Instance: 120325af-083c-40ee-b16e-01230fe65655
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 2 - HealthcareService Geriatrie"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/120325af-083c-40ee-b16e-01230fe65655"
 * active = true
 * providedBy = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * active = true
@@ -154,7 +145,6 @@ Instance: 08013141-16b2-42a0-8c9a-af57cee5511b
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 2 - HealthcareService Urologie"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/08013141-16b2-42a0-8c9a-af57cee5511b"
 * active = true
 * providedBy = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * active = true
@@ -171,7 +161,6 @@ Usage: #example
 Title: "Organization 2 - PractitionerRole Cardioloog Caroline van Dijk at Organization 2"
 * identifier[+].system = "http://cp2.example.org/HRM/assignments"
 * identifier[=].value = "123456"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba"
 * practitioner = Reference(Practitioner/040b160a-6072-4244-adc0-2b786c4ef052)
 * organization = Reference(Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067)
 * code.coding = $uzi-rolcode#01.010 "Cardioloog"
@@ -189,7 +178,6 @@ Title: "Organization 2 - Practitioner Cardioloog Caroline van Dijk"
 * identifier[=].value = "1234"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
 * identifier[=].value = "UZI-1"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Practitioner/040b160a-6072-4244-adc0-2b786c4ef052"
 * name.use = #official
 * name.text = "Caroline van Dijk"
 * name.family = "van Dijk"

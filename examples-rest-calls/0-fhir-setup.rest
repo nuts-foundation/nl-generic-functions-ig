@@ -27,15 +27,6 @@
 # sudo docker run -p 8080:8080 -e hapi.fhir.allow_external_references=true -e hapi.fhir.store_meta_source_information=SOURCE_URI hapiproject/hapi:latest
 # 5) to stop the server, use: sudo docker stop <container-id> (you can find the container id by using 'sudo docker ps')
 
-###
-
-GET https://hapi.fhir.org/baseR4/Patient/46961052/
-
-###
-
-HEAD https://hapi.fhir.org/baseR4/Patient/46961052/
-
-
 ### POST data of services in LRZa
 
 POST {{lrza-fhir-url}}
@@ -64,7 +55,7 @@ Authorization: {{org1-access-token}}
 
 POST {{org1-fhir-url}}$reindex
 
-### 
+###
 
 POST {{org1-fhir-url}}
 Content-Type: application/fhir+json
@@ -84,7 +75,7 @@ Authorization: {{org2-access-token}}
 
 POST {{org2-fhir-url}}$reindex
 
-### 
+###
 
 POST {{org2-fhir-url}}
 Content-Type: application/fhir+json

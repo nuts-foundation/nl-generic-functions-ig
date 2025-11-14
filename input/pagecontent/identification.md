@@ -13,14 +13,6 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 The GF Identification follows the national FHIR-profiels for patient, healthcare provider and health professional. For the identification of non-care-provider organizations the GF Identification uses the Chamber of Commerce. For data-object identification a globally resolvable URL is used.
 
-### Data-object Identification
-
-Data objects (e.g. a FHIR resource) are frequently copied, federated, or accessed via intermediary platforms. This complicates tracking of provenance, authenticity, and the long‑term ability to locate the original source. To avoid uncontrolled dispersion of data, data redundancy (multiple version-of-the-truth) and to ensure compliance with legally required retention periods, each data object SHALL be assigned a globally resolvable URL that serves as the identifier of the original object. 
-
-The custodian of the data object is responsible for maintaining the long‑term resolvability of that URL (for example, by operating a stable domain name and configuring redirects or forwards to the current service endpoint).
-
-This identifier is specified in [NamingSystem "FHIR resource URL"](./NamingSystem-fhir-resource-url.html) and applied in the profiles specified in this IG (e.g. [NL-GF-Organization](./StructureDefinition-nl-gf-organization.html) or [NL-GF-HealthCareService](./StructureDefinition-nl-gf-healthcareservice.html)) and example FHIR-resources (e.g. [Organization](./Organization-631cf10e-42d6-4165-9907-11e2333d4a85.json.html) (department), [Condition](./Condition-5a7f34e7-9b7b-4e5c-ba7c-890edbc4d757.json.html) and [Task](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.json.html) that references the example Organization/department). For discussion and other solutions that were considered, see [GF-Identification, ADR#33](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/33).
-
 ### Patient Identification
 
 Patients are identified by BSN as specified in the [nl-core-Patient profile](http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient). The authentic source for this identifier is Basisregistratie Personen (BRP) that is administered by Rijksdienst voor Identiteitsgegevens (RvIG). The pseudonymization service may be used to transform the BSN to/from a pseudonymized BSN (or from one pseudonymized BSN to another pseudonymized BSN). See namingsystem ['http://fhir.nl/fhir/NamingSystem/pseudo-bsn'](./NamingSystem-pseudo-bsn.html) for the specification of this identifier. 

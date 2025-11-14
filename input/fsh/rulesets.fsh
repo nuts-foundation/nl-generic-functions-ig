@@ -48,10 +48,6 @@ RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
 * entry[=].request.method = {method}
 * entry[=].request.url = "{url}"
 
-RuleSet: RefIdentifierFHIRUrl (resource-element, url, display)
-* {resource-element}.identifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* {resource-element}.identifier.value = {url}
-* {resource-element}.display = {display}
 
 RuleSet: RefIdentifier (resource-element, resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)
 * {resource-element} = Reference({{{source}-fhir-url}}{resource-type}/{{{resource-type}{instance-number}}})
