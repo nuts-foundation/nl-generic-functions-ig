@@ -55,7 +55,7 @@ Authorization: {{org1-access-token}}
 
 POST {{org1-fhir-url}}$reindex
 
-###
+### 
 
 POST {{org1-fhir-url}}
 Content-Type: application/fhir+json
@@ -75,7 +75,7 @@ Authorization: {{org2-access-token}}
 
 POST {{org2-fhir-url}}$reindex
 
-###
+### 
 
 POST {{org2-fhir-url}}
 Content-Type: application/fhir+json

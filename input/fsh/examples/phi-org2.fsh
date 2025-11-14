@@ -30,7 +30,7 @@ Title: "Condition Aortadissectie"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Problem"
 * onsetDateTime = "2017-09-03T12:00:00Z"
 * code = $sct#308546005 "Dissection of aorta"
-* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
+* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
 
 
 //Start antihypertensiva bij cardioloog
@@ -42,7 +42,7 @@ Title: "MedicationRequest Cisplatine"
 * status = #active
 * intent = #order
 * medicationCodeableConcept = $atc#L01BC05 "gemcitabine"
-* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
+* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
 * authoredOn = "2017-09-03"
 * requester = Reference(PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba) // Organization 2
 * dosageInstruction[0].text = "Take one tablet by mouth twice daily"
@@ -79,7 +79,7 @@ Title: "Condition hypercalciëmie"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Problem"
 * onsetDateTime = "2021-09-03T12:00:00Z"
 * code = $sct#66931009 "Hypercalcemia"
-* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
+* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
 
 Instance: 6bc0f95c-f281-475e-a279-4ed6beb59024
 InstanceOf: Procedure
@@ -88,7 +88,7 @@ Title: "Procedure Thyroidectomy"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure"
 * status = #completed
 * code = $sct#13619001 "Thyroidectomy"
-* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
+* subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
 * performedDateTime = "2022-05-15T08:00:00Z"
 * performer[0].actor = Reference(PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba)
 * reasonReference = Reference(Condition/5a7f34e7-9b7b-4e5c-ba7c-890edbc4d757)
