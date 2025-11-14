@@ -5,6 +5,8 @@ Title: "Organisation 2 - ServiceRequest Nursing"
 Description: "Request from Organization 2 for nursing care"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure-request"
 * meta.versionId = "1"
+* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
+* identifier[=].value = "https://cp2-test.example.org/fhirr4/ServiceRequest/53a41e63-e826-45fa-9076-9be4b18399c8"
 * status = #active
 * intent = #order
 * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) "Patient Jaantje Merkens"

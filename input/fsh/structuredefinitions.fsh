@@ -4,6 +4,12 @@ Id: nl-gf-endpoint
 Title: "NL Generic Functions Endpoint Profile"
 Description: "The technical details of an endpoint that can be used for electronic services, such as for web services providing access to FHIR resources."
 * ^experimental = true
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
 * managingOrganization 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Endpoint
@@ -23,6 +29,12 @@ Parent: HealthcareService
 Id: nl-gf-healthcareservice
 Title: "NL Generic Functions HealthcareService Profile"
 Description: "The technical details of a healthcare service that can be used in referrals, requests and orders"
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.HealthcareService
@@ -38,6 +50,12 @@ Parent: $NlLocation
 Id: nl-gf-location
 Title: "NL Generic Functions Location Profile"
 Description: "Physical location details for healthcare services, organizations, and practitioners."
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Location
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Location
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Location
@@ -57,6 +75,12 @@ Id: nl-gf-organization
 Title: "NL Generic Functions Organization Profile"
 Description: "The organizational hierarchy and details for healthcare organizations."
 * obeys ura-identifier-or-partof
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Organization
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Organization
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Organization
@@ -70,6 +94,12 @@ Parent: OrganizationAffiliation
 Id: nl-gf-organizationaffiliation
 Title: "NL Generic Functions OrganizationAffiliation Profile"
 Description: "The details of an affiliation/relationship between two organizations, such as a healthcare provider and a software vendor."
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.OrganizationAffiliation
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.OrganizationAffiliation
 * active 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.OrganizationAffiliation
@@ -86,6 +116,12 @@ Parent: $NlPractitioner
 Id: nl-gf-practitioner
 Title: "NL Generic Functions Practitioner Profile"
 Description: "The details of a healthcare practitioner, such as a doctor or nurse, who is directly or indirectly involved in the provisioning of healthcare."
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Practitioner
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Practitioner
 * name 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.Practitioner
@@ -96,6 +132,12 @@ Parent: $NlPractitionerRole
 Id: nl-gf-practitionerrole
 Title: "NL Generic Functions PractitionerRole Profile"
 Description: "The details of a healthcare practitioner's role within an organization."
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    fhirUrl 1..1
+* identifier[fhirUrl] ^patternIdentifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
 * implicitRules ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
 * modifierExtension ..0 //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
 * practitioner 1..
