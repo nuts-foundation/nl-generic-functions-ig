@@ -99,6 +99,9 @@ pages:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
 
+  history.md:
+    title: History
+
   # usecase-enrollment.md:
   #   title: Use cases - Enroll patient in home monitoring
   # usecase-view-all-data.md:
@@ -143,6 +146,7 @@ menu:
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
+  # History: history.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
