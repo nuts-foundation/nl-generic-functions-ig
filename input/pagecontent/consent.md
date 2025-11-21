@@ -7,7 +7,7 @@ This guide outlines the technical requirements and architectural principles unde
 - The Mitz agreements and specifications are leading for the use of a national catalogue of patient consents.
 - International standards: The solution should be based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
 - Explicit and implicit consent: The GF Consent specifies the use of both explicit and implicit consent.
-- Specific and categorical consent: The GF Consent specificies the use of consents concerning individual data holder organizations and/or data user organizations and consents concerning categories of data holder organizations and/or data user organizations, where categories are based on Organization Type.
+- Specific and categorical consent: The GF Consent specifies the use of consents concerning individual data holder organizations and/or data user organizations and consents concerning categories of data holder organizations and/or data user organizations, where categories are based on Organization Type.
 - Stakeholder Responsibility: Healthcare providers are accountable for maintaining the accuracy of consent records.
 
 By adhering to these principles, this Implementation Guide supports consistent and secure use of consent information, fostering improved interoperability within the healthcare ecosystem.
@@ -21,22 +21,24 @@ GF Consent defines the use of 3 different types of consents:
 
 #### OTV: Explicit consents stored in a national catalogue of patient consents
 
-GF Consent follows the agreements and specifications in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11) for the use of consents stored in a national catalogue of patient consents, commonly referred to as an OTV ("Online toestemmingsvoorziening").
+For explicit consents stored in a national catalogue of patient consents, this specification uses/follows the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11), commonly referred to as the OTV ("Online ToestemmingsVoorziening").
+The consents stored in Mitz can't be queried directly, but Mitz can process input (data requester of organization type X, patient Y and data holder of organization type Z) and return a policy decision (allow/deny) based on the consent stored in Mitz. See the chapters called 'Gesloten Autorisatievraag' in ["Implementatiehandleiding_OpenGesloten"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten) for more information.
 
-Here is a brief overview of the GF Consent processes concerning the use of consents registered in Mitz consent catalogue:
-1. Subscribing to consent choices changes: A data holder organization can choose to subscribe to consent choices changes of a specific patient. See the chapters called 'Toestemmingsabonnement' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
-2. Mitz closed authorization question: A data holder organization can send a request to Mitz to check whether a consent is registered in the Mitz consent catalogue that applies to the URA and/or an Organization Type of the data holder organization and the Organization Type of the data user organization. See the chapters called 'Gesloten Autorisatievraag' in ["Implementatiehandleiding_OpenGesloten"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
-3. Receiving notification about consent choice: Subscribers (see process 1) receive a notification when consent choice changes occur in the Mitz consent catalogue. See the chapters called 'Toestemmingsnotificatie' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
 
 #### DHTV: Explicit consents stored locally
 
-GF Consent recognizes the possibility of using explicit consents stored decentrally, e.g. in an EHR or other system managed by the data holder organization (commonly referred to as a DHTV, dossierhouderstoestemmingsvoorziening). The GF Consent does not define agreements and specifications for the internal functionality of a DHTV. The GF Consent does define agreements and specifications to standardize the data models and interfaces for creating, reading and updating consents on the DHTV. The rationale for this is twofold:
--  Standardization enables personal health records, client portals and other patient and/or professional facing applications to create, read and update consents in DHTV's.
-- Standardization ensures consistency of meaning (syntactical and semantic interoperability?) between consents of various sources (OTV and/or one or more DHTV's). This consistency of meaning is necessary to correctly process combinations of consents of various sources.
+GF Consent recognizes the possibility of using explicit consents stored decentrally, e.g. in an EHR or other system managed by the data holder organization (commonly referred to as a DHTV, dossierhouderstoestemmingsvoorziening). The GF Consent does not define agreements and specifications for the internal processing and storage of a DHTV. GF Consent does define agreements and specifications to standardize the data models and interfaces for creating, reading and updating consents on the DHTV, because:
+- Standardization enables personal health records, client portals and other patient and/or professional facing applications to create, read and update consents in DHTV's.
+- Standardization ensures consistency of meaning (syntactical and semantic interoperability?) between consents of various sources (OTV and/or one or more DHTV's). This consistency of meaning is necessary to correctly process combinations of consents of various sources in an authorization/data access policy.
+
+##### DHTV keeping copies of OTV consents
+In order to reduce operational dependencies on a central, national catalogue, the DHTV shall have the option to publish/subscribe to changes in the consent at the OTV. These can be used by the data holder organization (DHTV) to store and use theses consents locally:
+1. Subscribing to consent choices changes: A data holder organization can choose to subscribe to consent choices changes of a specific patient. See the chapters called 'Toestemmingsabonnement' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
+1. Receiving notification about consent choice: Subscribers (see process 1) receive a notification when consent choice changes occur in the Mitz consent catalogue. See the chapters called 'Toestemmingsnotificatie' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
 
 #### Implicit consents
 
-GF Consent recognizes the possibility of using implict consents as a legal basis for the processing of medical data. In the Netherlands, implict consent is defined as a consent that can be implied/ assumed. For example, in the case of a referral or handoff sent with the patient's knowledge to a specific healthcare provider (see chapter 'Veronderstelde Toestemming' in NEN 7517 for more details). Consent-records are an important input for GF Authorization and need to be explicit in order to evaluate the consents of a patient. Making implicit consent explicit (and storing/updating these consents) is a responsibility of the care provider. 
+GF Consent recognizes the possibility of using implict consents as a legal basis for the processing of medical data. In the Netherlands, implicit consent is defined as a consent that can be implied/ assumed. For example, in the case of a referral or handoff sent with the patient's knowledge to a specific healthcare provider (see chapter 'Veronderstelde Toestemming' in NEN 7517 for more details). Consent-records are an important input for GF Authorization and need to be explicit in order to evaluate the consents of a patient. Making implicit consent explicit (and storing/updating these consents) is a responsibility of the care provider. 
 
 ### Processing multiple consents
 
@@ -52,52 +54,32 @@ In real life, one data request can be linked to multiple explicit consents, stor
 
 ### Components (actors)
 
-#### OTV
+#### Consent recorder
+This specification reuses the definition of the [IHE PCF Consent Recorder](https://profiles.ihe.net/ITI/PCF/volume-1.html#153111-consent-recorder). 
 
-See the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11).
+#### Consent registry: OTV
+This specification reuses the definition of MITZ Consent Registry as described in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11). OTV/MITZ as Consent Registry actor only defines interfaces for subscription and notification of consent changes. See ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten). 
 
-#### DHTV
+#### Consent registry: DHTV
+This specification reuses the definition of the [IHE PCF Consent Registry](https://profiles.ihe.net/ITI/PCF/CapabilityStatement-IHE.PCF.consentRegistry.html). A DHTV could implement the [IHE PCF Consent Registry capabilitystatement](https://profiles.ihe.net/ITI/PCF/CapabilityStatement-IHE.PCF.consentRegistry.html) as [GF Authorization](./authorization.html) uses consents in access/authorization policies.
 
-Reuse the following actors defined in IHE-PCF:
-- Consent Recorder: some text. See [IHE PCF Consent Recorder](https://build.fhir.org/ig/IHE/ITI.PCF/branches/master/volume-1.html#153111-consent-recorder).
-- Consent Registry: This is the DHTV itself. See [IHE PCF Consent Registry](https://build.fhir.org/ig/IHE/ITI.PCF/branches/master/volume-1.html#153112-consent-registry).
-- Consent Authorization Server: The PDP. See [IHE PCF Consent Authorization Server](https://build.fhir.org/ig/IHE/ITI.PCF/branches/master/volume-1.html#153113-consent-authorization-server).
+#### Consent Authorization Server: OTV
+This specification reuses the definition of the MITZ Authorization Server as described in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11). OTV/MITZ as Consent Authorization Server actor only defines interfaces for the authroization or policy decision also known as ["gesloten vraag"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten). 
+
+
+#### Consent Authorization Server/Enforcement Point: DHTV 
+The (enforcement of) authorization or access are part of [GF Authorization](./authorization.html) and not further specified here.
+
+
 
 ### Data models
 
-GF Consent ensures (semantic?) interoperability between OTV and DHTV by combining the reuse of Mitz-specifications for OTV and the reuse of data models defined in [IHE-PCF](https://build.fhir.org/ig/IHE/ITI.PCF/branches/master/index.html).
+GF Consent reuses 2 datamodels to hold consents the OTV/MITZ FHIR Consent profile and IHE PCF FHIR Consent profile.
 
-#### OTV
+#### FHIR Consent: OTV
 
-GF Consent complies to the data model specifications in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11).
+If MITZ/OTV Consents are stored and used locally (at the authorization server or policy decision point of the data holder), the data model SHALL comply to the specification in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11).
 
-#### DHTV
+#### FHIR Consent: DHTV
 
-GF Consent complies to the [IHE PCF Explicit Intermediate Consent](https://build.fhir.org/ig/IHE/ITI.PCF/branches/master/StructureDefinition-IHE.PCF.consentIntermediate.html) Resource Profile that is specified in IHE-PCF.
-
-#### Mapping OTV-DHTV Consent
-
-!!Please insert a table here that maps the Mitz Consent data model to the IHE PCF Explicit Intermediate Consent!!
-
-### Security
-
-#### OTV
-
-GF Consent complies to the security specfications in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11).
-
-#### DHTV
-
-Security requirements for interacting with the standardized CRU-interface of DHTV:
-
-Network-later-encryption:
-- Use TLS with PKIo
-
-Authentication: 
-- client authentication of DHTV-consumer vendor using mTLS with PKIo
-- The DHTV-consumer must act on behalf of either a data holder organization OR a patient  
-- Authenticating data holder organization, see IG Authentication
-- Authenticating patient see IG Authentication/DigID?
-
-Logic:
-- If DHTV-consumer acts on behalf of a patient, it can only CRU Consents with Consent.patient == that patient
-- If DHTV-consumer acts on behalf of a data holder organization, it can only CRU Consents with Consent.organization == that data holder organization
+GF Consent reuses the [IHE PCF Explicit Intermediate Consent](https://profiles.ihe.net/ITI/PCF/StructureDefinition-IHE.PCF.consentIntermediate.html) profile.
