@@ -88,5 +88,5 @@ This guide is based on the [HL7 FHIR R4](https://hl7.org/fhir/R4/index.html) spe
 You can also download:
 
 * [this entire guide](full-ig.zip),
-* the definition resources in [json](definitions.json.zip) or [xml](definitions.xml.zip) format
+* the definition resources in [json](definitions.json.zip) or [xml](definitions.xml.zip) format,
 * the example resources in [json](examples.json.zip) or [xml](examples.xml.zip) format.

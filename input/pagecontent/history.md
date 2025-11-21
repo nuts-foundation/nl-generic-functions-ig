@@ -1,6 +1,6 @@
 <div markdown="1" class="w-100 bg-info">
 
-> [Open issues and Architectural Decision Records (ADRs) can be found in the Github repository](https://github.com/nuts-foundation/nl-generic-functions-ig/issues)
+> [Open issues and Architectural Decision Records (ADRs) can be found in the GitHub repository](https://github.com/nuts-foundation/nl-generic-functions-ig/issues)
 
 </div>
 
