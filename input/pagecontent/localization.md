@@ -41,6 +41,7 @@ A (Medical Record) Localization Service is responsible for managing the registra
 #### Local Metadata Register
 A Local Metadata Register (LMR) is responsible for managing the registration, maintenance, and publication of the metadata of one data holder (the custodian or the healthcare organization). To implement an LMR, existing FHIR-APIs of data sources can be used. Minimum requirements for a LMR are specified in this [FHIR capabilitystatement](./CapabilityStatement-nl-gf-localization-repository-lmr.html). HTTP-method HEAD SHALL be supported to allow the [Localization service](#localization-service) to check the access (consent) to the localization-record for the data user at the data holder.
 
+
 #### Pseudonymization Service
 The Pseudonymization Service is responsible for creating and retrieving Polymorphic Pseudonyms of Patient identifiers. It involves multiple interactions for both a FHIR request and a FHIR response:
 - the sender (of the request or response) posts their identifier/pseudonym AND the target organization to the Pseudonymization Service, which returns an opaque value.
@@ -86,6 +87,10 @@ Authentication and authorization follows the [GF Authorization](./authorization.
 
 **For HEAD operations (checking access for data requester at data holder by localization service):**
 - **Url**: Url in the localization record (DocumentReference). Based on the HTTP-status in the response, the relationship between data holder and patient may be exposed to the data requester.
+
+<div markdown="1" class="w-100 bg-danger">
+> The 'HEAD operation and use of existing (FHIR) APIs' is evaluated in the Proof of concept phase. Other solutions are discussed on [this page](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/42)
+</div>
 
 These attributes ensure proper access control and auditing while maintaining the security requirements outlined in the [GF Authorization](./authorization.html) specification.
 
