@@ -1,4 +1,33 @@
-### Authorization specifications
+### Introduction
+
+### Solution overview
+
+
+Input --> PDP --> Output
+
+
+
+Key principles:
+- The scope of GF Authorization only specifies the input-variables, output-variables of the authorization decision. ***How to obtain and verify the inputs, is out-of-scope***; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials.
+- Authorization policies are expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing. The Rego-policy inputs and outputs are inspired by API specified in the [OpenID AuthZen specification](https://openid.net/specs/authorization-api-1_0.html)
+- Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy. 
+
+
+### Components (actors)
+
+Reuse actor specification in [XACML](https://www.oasis-open.org/committees/xacml/repository/cs-xacml-specification-1.1.pdf)
+
+### Data models
+
+Reuse API specification in [OpenID AuthZen specification](https://openid.net/specs/authorization-api-1_0.html)
+
+### Security and privacy considerations
+
+### Example use cases
+
+
+
+### Roadmap
 
 <!-- The Shared Care Planning (SCP) authorization model is based on the authority of the Care Plan Service (CPS). This service maintains the Care Plan and is responsible for all the due diligence that is required to build up the required trust for all Care Plan Contributors (CPC) in the network.
 
