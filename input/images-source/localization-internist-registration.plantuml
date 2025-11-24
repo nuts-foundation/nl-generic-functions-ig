@@ -23,7 +23,7 @@ note over nvi
   '  (pseudoBsn) is out of scope for this diagram
 end note
 
-ehr -> nvi: POST DocumentReference, containing:\n custodian: URA:123,\n patient: BSN:987654321"
+ehr -> nvi: POST DocumentReference, containing:\n custodian: URA:123,\n patient: BSN:987654321,\n url: https://careprovider123.org/fhir/Patient/345fa-9076-9be4b"
 
 nvi -> ehr: 201 Created
 
