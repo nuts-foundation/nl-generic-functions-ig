@@ -146,7 +146,7 @@ menu:
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
-  # History: history.html
+  History: history.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
