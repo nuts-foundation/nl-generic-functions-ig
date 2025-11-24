@@ -1,4 +1,4 @@
-FROM openjdk:24-jdk-bookworm
+FROM eclipse-temurin:21-jdk-jammy
 LABEL maintainer="roland@headease.nl"
 
 # Install native compilation dependencies.
