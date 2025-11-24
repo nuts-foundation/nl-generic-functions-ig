@@ -23,11 +23,29 @@ Reuse API specification in [OpenID AuthZen specification](https://openid.net/spe
 
 ### Security and privacy considerations
 
+??
+
 ### Example use cases
 
+#### Lokalization-service authorization
 
+example inputs
+
+include Rego-policy
+
+show/explain output
+
+#### EPS request authorization
+
+example inputs
+
+include Rego-policy
+
+show/explain output
 
 ### Roadmap
+
+??
 
 <!-- The Shared Care Planning (SCP) authorization model is based on the authority of the Care Plan Service (CPS). This service maintains the Care Plan and is responsible for all the due diligence that is required to build up the required trust for all Care Plan Contributors (CPC) in the network.
 
