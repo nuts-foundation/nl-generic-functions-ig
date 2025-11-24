@@ -74,19 +74,19 @@ The [FHIR Workflow Mangement Communication patterns](https://hl7.org/fhir/R4/wor
 ### Conformance Expectations
 
 NL Generic Functions IG uses the normative words: Shall, Should, and May according to standards conventions. 
-NL Generic Functions IG uses the HL7 FHIR standaard, version R4
-
-> [!NOTE]
-> It is recommended that readers have a foundational understanding of FHIR R4 to fully grasp the content presented in this document. 
 
 
+### Dependencies
 
-<!-- add other conventions -->
+This guide is based on the [HL7 FHIR R4](https://hl7.org/fhir/R4/index.html) specification.  In addition, this guide also relies on a number of parent implementation guides:
+
+ {% include dependency-table-short.xhtml %}
+
 
 ### Download 
 
 You can also download:
 
 * [this entire guide](full-ig.zip),
-* the definition resources in [json](definitions.json.zip), [xml](definitions.xml.zip), [ttl](definitions.ttl.zip), or [csv](csvs.zip) format, or
-* the example resources in [json](examples.json.zip), [xml](examples.xml.zip) or [ttl](examples.ttl.zip) format.
+* the definition resources in [json](definitions.json.zip) or [xml](definitions.xml.zip) format,
+* the example resources in [json](examples.json.zip) or [xml](examples.xml.zip) format.

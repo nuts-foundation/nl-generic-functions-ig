@@ -11,16 +11,17 @@ title: Netherlands - Generic Functions for data exchange Implementation Guide
 language: en-US
 # description: Example Implementation Guide for getting started with SUSHI
 status: draft # draft | active | retired | unknown
-version: 0.2.0
+version: 0.3.0
 fhirVersion: 4.0.1 # https://www.hl7.org/fhir/valueset-FHIR-version.html
 copyrightYear: 2025+
 releaseLabel: ci-build # ci-build | draft | qa-preview | ballot | trial-use | release | update | normative+trial-use
-license: GPL-3.0-or-later # https://www.hl7.org/fhir/valueset-spdx-license.html
+license: EUPL-1.2 # https://www.hl7.org/fhir/valueset-spdx-license.html
 jurisdiction: urn:iso:std:iso:3166#NL "Netherlands" # https://www.hl7.org/fhir/valueset-jurisdiction.html
 publisher:
   name: Stichting Nuts
   url: https://www.nuts.nl
   # email: test@example.org
+
 
 # The dependencies property corresponds to IG.dependsOn. The key is the
 # package id and the value is the version (or dev/current). For advanced
@@ -56,24 +57,50 @@ pages:
 
   care-services.md:
     title: Care Services Directory
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: trial-use
+
 
   routing.md:
     title: Routing
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
 
   localization.md:
     title: Localization
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   consent.md:
     title: Consent
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   identification.md:
     title: Identification
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   authentication.md:
     title: Authentication
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   authorization.md:
     title: Authorization
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
+  history.md:
+    title: History
 
   # usecase-enrollment.md:
   #   title: Use cases - Enroll patient in home monitoring
@@ -97,8 +124,8 @@ pages:
 # For parameters defined by the FHIR Tools IG see:
 # http://build.fhir.org/ig/FHIR/fhir-tools-ig/branches/master/CodeSystem-ig-parameters.html
 #
-# parameters:
-#   excludettl: true
+parameters:
+  excludettl: true
 #   validation: [allow-any-extensions, no-broken-links]
 #
 # ╭────────────────────────────────────────────menu.xml────────────────────────────────────────────╮
@@ -119,6 +146,7 @@ menu:
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
+  History: history.html
 
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
