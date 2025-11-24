@@ -3,7 +3,7 @@
 ### Solution overview
 
 
-Input --> PDP --> Output
+Input --> policy evaluation --> Output
 
 
 
@@ -46,6 +46,25 @@ show/explain output
 ### Roadmap
 
 ??
+<!-- 
+comments meeting 24-nov 14:00:
+
+Aandachtspunten
+- Scope/capabilitystatement input
+- Policy maker must use REGO
+- how does TANP fit in?
+- geen architectuurkeuzes voorschrijven: b.v. term PDP niet noemen
+
+Houd rekening met verschillende lezers:
+- policy makers
+- PEP -implementers
+- vendors (die integratiewerk moeten verrichten om extra inputs op te halen en te verifieren)
+
+- beschrijf: waar verwachten we welke input?
+Welke inputs zijn er mogelijk?
+Waar kan je die inputs in de request verwachten? -->
+
+
 
 <!-- The Shared Care Planning (SCP) authorization model is based on the authority of the Care Plan Service (CPS). This service maintains the Care Plan and is responsible for all the due diligence that is required to build up the required trust for all Care Plan Contributors (CPC) in the network.
 
