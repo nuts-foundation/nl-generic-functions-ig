@@ -58,13 +58,13 @@ In real life, one data request can be linked to multiple explicit consents, stor
 This specification reuses the definition of the [IHE PCF Consent Recorder](https://profiles.ihe.net/ITI/PCF/volume-1.html#153111-consent-recorder). 
 
 #### Consent registry: OTV
-This specification reuses the definition of MITZ Consent Registry as described in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11). OTV/MITZ as Consent Registry actor only defines interfaces for subscription and notification of consent changes. See ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten). 
+This specification reuses the definition of Mitz Consent Registry as described in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11). OTV/Mitz as Consent Registry actor only defines interfaces for subscription and notification of consent changes. See ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten). 
 
 #### Consent registry: DHTV
 This specification reuses the definition of the [IHE PCF Consent Registry](https://profiles.ihe.net/ITI/PCF/CapabilityStatement-IHE.PCF.consentRegistry.html). A DHTV could implement the [IHE PCF Consent Registry capabilitystatement](https://profiles.ihe.net/ITI/PCF/CapabilityStatement-IHE.PCF.consentRegistry.html) as [GF Authorization](./authorization.html) uses consents in access/authorization policies.
 
 #### Consent Authorization Server: OTV
-This specification reuses the definition of the MITZ Authorization Server as described in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11). OTV/MITZ as Consent Authorization Server actor only defines interfaces for the authroization or policy decision also known as ["gesloten vraag"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten). 
+This specification reuses the definition of the Mitz Authorization Server as described in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11). OTV/Mitz as Consent Authorization Server actor only defines interfaces for the authroization or policy decision also known as ["gesloten vraag"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten). 
 
 
 #### Consent Authorization Server/Enforcement Point: DHTV 
@@ -74,16 +74,16 @@ The (enforcement of) authorization or access are part of [GF Authorization](./au
 
 ### Data models
 
-GF Consent reuses 2 datamodels to hold consents the OTV/MITZ FHIR Consent profile and IHE PCF FHIR Consent profile.
+GF Consent reuses 2 datamodels to hold consents the OTV/Mitz FHIR Consent profile and IHE PCF FHIR Consent profile.
 
 #### FHIR Consent: OTV
 
-If MITZ/OTV Consents are stored and used locally (at the authorization server or policy decision point of the data holder), the data model SHALL comply to the specification in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11).
+If Mitz/OTV Consents are stored and used locally (at the authorization server or policy decision point of the data holder), the data model SHALL comply to the specification in the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11).
 
 #### FHIR Consent: DHTV
 
 GF Consent reuses the [IHE PCF Explicit Intermediate Consent](https://profiles.ihe.net/ITI/PCF/StructureDefinition-IHE.PCF.consentIntermediate.html) profile.
 
 <div markdown="1" class="w-100 bg-danger">
-> The IHE PCF Consent profile is evaluated in the Proof of concept phase, but it does not align with the profile in MITZ. Further analysis and (implementer) feedback is needed.
+> The IHE PCF Consent profile is evaluated in the Proof of concept phase, but it does not align with the profile in Mitz. Further analysis and (implementer) feedback is needed. This analysis/decision is discussed [here](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/47)
 </div>
