@@ -22,7 +22,7 @@ GF Consent defines the use of 3 different types of consents:
 #### OTV: Explicit consents stored in a national catalogue of patient consents
 
 For explicit consents stored in a national catalogue of patient consent preferences, this specification uses/follows the [Mitz afsprakenstelsel](https://vzvz.atlassian.net/wiki/spaces/MA11), commonly referred to as the OTV ("Online ToestemmingsVoorziening").
-The consents stored in Mitz can't be queried directly, but Mitz can process input (data user of organization type X, patient Y and data holder of organization type Z) and return a policy decision (allow/deny) based on the consent preferences stored in Mitz. See the chapters called 'Gesloten Autorisatievraag' in ["Implementatiehandleiding_OpenGesloten"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten) for more information.
+The consents stored in Mitz can't be queried directly, but Mitz can process input (data user organization of type X, patient Y and data holder organization of type Z) and return a policy decision (allow/deny) based on the consent preferences stored in Mitz. See the chapters called 'Gesloten Autorisatievraag' in ["Implementatiehandleiding_OpenGesloten"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten) for more information.
 
 
 #### DHTV: Explicit consents stored locally
