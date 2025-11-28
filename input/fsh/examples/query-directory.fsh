@@ -5,6 +5,7 @@ Instance: lrza-o1
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/Organization/3f39dca9-a392-4eb3-8366-0c7ff53ab3a9"
+* identifier[fhirUrl].value = "https://www.cibg.nl/lrza/fhirr4/Organization/3f39dca9-a392-4eb3-8366-0c7ff53ab3a9"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
 * name = "example General Practice"
@@ -28,6 +29,7 @@ Instance: lrza-e1
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/Endpoint/ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4"
+* identifier[fhirUrl].value = "https://www.cibg.nl/lrza/fhirr4/Endpoint/ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -47,6 +49,7 @@ Instance: lrza-o2
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/Organization/4815bbe6-9fea-4875-a16c-a168d63054d4"
+* identifier[fhirUrl].value = "https://www.cibg.nl/lrza/fhirr4/Organization/4815bbe6-9fea-4875-a16c-a168d63054d4"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "22222222"
 * name = "example Hospital"
@@ -72,6 +75,7 @@ Instance: lrza-e2
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/Endpoint/960a4f8c-74d8-482c-97ab-e2a025869fee"
+* identifier[fhirUrl].value = "https://www.cibg.nl/lrza/fhirr4/Endpoint/960a4f8c-74d8-482c-97ab-e2a025869fee"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -91,6 +95,7 @@ Instance: lrza-o3
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/Organization/fcf55b06-f22c-4058-9051-b77368bdd26b"
+* identifier[fhirUrl].value = "https://www.cibg.nl/lrza/fhirr4/Organization/fcf55b06-f22c-4058-9051-b77368bdd26b"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
 * name = "example Care Institution"
@@ -114,6 +119,7 @@ Instance: lrza-e3
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://www.cibg.nl/lrza/fhirr4/Endpoint/553416dd-da12-40f7-a9bd-eb3e193177bd"
+* identifier[fhirUrl].value = "https://www.cibg.nl/lrza/fhirr4/Endpoint/553416dd-da12-40f7-a9bd-eb3e193177bd"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -136,6 +142,7 @@ Instance: ad1-o1
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec"
+* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
 * name = "example General Practice"
@@ -159,6 +166,7 @@ Instance: ad1-e1
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/Endpoint/59654248-477c-4694-b156-e0042f0765a6"
+* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Endpoint/59654248-477c-4694-b156-e0042f0765a6"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -179,6 +187,7 @@ Instance: ad1-pr1
 InstanceOf: NlGfPractitionerRole
 Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/PractitionerRole/5fa4c91a-a12f-48ae-a4c7-92971dc7ab53"
+* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/PractitionerRole/5fa4c91a-a12f-48ae-a4c7-92971dc7ab53"
 * identifier[+].system = "http://cp1.example.org/HRM/assignments"
 * identifier[=].value = "654321"
 * practitioner = Reference(Practitioner/ad1-p1)
@@ -191,6 +200,7 @@ Instance: ad1-p1
 InstanceOf: NlGfPractitioner
 Usage: #inline
 * meta.source = "https://cp1-test.example.org/fhirr4/Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd"
+* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd"
 * identifier[+].system = "http://cp1.example.org/HRM/employees"
 * identifier[=].value = "5678"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
@@ -207,6 +217,7 @@ Instance: ad2-o1
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Organization/cff921f3-c1c1-4a4c-8f0f-cafd0aa25067"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "22222222"
 * name = "example Hospital"
@@ -232,6 +243,7 @@ Instance: ad2-e1
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/Endpoint/430f7379-8ec2-4e55-b096-919995da61e2"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/430f7379-8ec2-4e55-b096-919995da61e2"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -251,6 +263,7 @@ Instance: ad2-e2
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/Endpoint/d4c1d657-67a9-471c-9732-9c042e9a6d43"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/d4c1d657-67a9-471c-9732-9c042e9a6d43"
 * status = #active
 * payloadType[+].coding = $endpoint-payload-type#any "Any"
 * connectionType = $endpoint-connection-type#dicom-wado-rs
@@ -269,6 +282,7 @@ Instance: ad2-e3
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/Endpoint/2427ca0c-8a29-4a6a-aabd-50cf02f587a7"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/2427ca0c-8a29-4a6a-aabd-50cf02f587a7"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities "Transfer of Care - eOverdracht Server"
 * payloadMimeType[+] = #application/fhir+json
@@ -289,6 +303,7 @@ Instance: ad2-hs1
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/HealthcareService/5cb05355-474b-4d30-8b0e-a9ca574b8274"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/5cb05355-474b-4d30-8b0e-a9ca574b8274"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
 * active = true
@@ -301,6 +316,7 @@ Instance: ad2-hs2
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/HealthcareService/c79125e5-739f-4238-959c-cd5872518c1f"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/c79125e5-739f-4238-959c-cd5872518c1f"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
 * active = true
@@ -313,6 +329,7 @@ Instance: ad2-hs3
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/HealthcareService/9d47ca45-4166-4531-a23d-ef5fa613ece4"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/9d47ca45-4166-4531-a23d-ef5fa613ece4"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
 * active = true
@@ -325,6 +342,7 @@ Instance: ad2-hs4
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/HealthcareService/f6a508bd-9455-4afa-aad0-baec0833602d"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/f6a508bd-9455-4afa-aad0-baec0833602d"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
 * active = true
@@ -338,6 +356,7 @@ Instance: ad2-hs5
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/HealthcareService/120325af-083c-40ee-b16e-01230fe65655"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/120325af-083c-40ee-b16e-01230fe65655"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
 * active = true
@@ -350,6 +369,7 @@ Instance: ad2-hs6
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/HealthcareService/08013141-16b2-42a0-8c9a-af57cee5511b"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/HealthcareService/08013141-16b2-42a0-8c9a-af57cee5511b"
 * active = true
 * providedBy = Reference(Organization/ad2-o1)
 * active = true
@@ -364,6 +384,7 @@ Instance: ad2-pr1
 InstanceOf: NlGfPractitionerRole
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba"
 * identifier[+].system = "http://cp2.example.org/HRM/assignments"
 * identifier[=].value = "123456"
 * practitioner = Reference(Practitioner/ad2-p1)
@@ -378,6 +399,7 @@ Instance: ad2-p1
 InstanceOf: NlGfPractitioner
 Usage: #inline
 * meta.source = "https://cp2-test.example.org/fhirr4/Practitioner/040b160a-6072-4244-adc0-2b786c4ef052"
+* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Practitioner/040b160a-6072-4244-adc0-2b786c4ef052"
 * identifier[+].system = "http://cp2.example.org/HRM/employees"
 * identifier[=].value = "1234"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
@@ -397,6 +419,7 @@ Instance: ad3-o1
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Organization/3e799075-63a2-4a4c-913d-a91b8198463d"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Organization/3e799075-63a2-4a4c-913d-a91b8198463d"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
 * name = "example Care Institution"
@@ -420,6 +443,7 @@ Instance: ad3-o2
 InstanceOf: NlGfOrganization
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Organization/631cf10e-42d6-4165-9907-11e2333d4a85"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Organization/631cf10e-42d6-4165-9907-11e2333d4a85"
 * name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/ad3-o1)
@@ -428,6 +452,7 @@ Instance: ad3-e1
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Endpoint/8f224548-6d50-44b6-82c5-75826ee0900f"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Endpoint/8f224548-6d50-44b6-82c5-75826ee0900f"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -447,6 +472,7 @@ Instance: ad3-e2
 InstanceOf: NlGfEndpoint
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Endpoint/72a349cc-7336-4a91-873d-fc9349769e1a"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Endpoint/72a349cc-7336-4a91-873d-fc9349769e1a"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities "Transfer of Care - eOverdracht Server"
 * payloadMimeType[+] = #application/fhir+json
@@ -467,6 +493,7 @@ Instance: ad3-hs1
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/HealthcareService/4fcf98c7-b198-4d61-8b3e-5ea39e33c405"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/HealthcareService/4fcf98c7-b198-4d61-8b3e-5ea39e33c405"
 * active = true
 * providedBy = Reference(Organization/ad3-o1)
 * active = true
@@ -481,6 +508,7 @@ Instance: ad3-hs2
 InstanceOf: NlGfHealthcareService
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/HealthcareService/b48826dc-2d58-479a-bfd3-80b7a9d69757"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/HealthcareService/b48826dc-2d58-479a-bfd3-80b7a9d69757"
 * active = true
 * providedBy = Reference(Organization/ad3-o2)
 * name = "Verpleging"
@@ -494,6 +522,7 @@ Instance: ad3-p1
 InstanceOf: NlGfPractitioner
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9"
 * active = true
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
 * identifier[=].value = "UZI-3"
@@ -511,6 +540,7 @@ Instance: ad3-pr1
 InstanceOf: NlGfPractitionerRole
 Usage: #inline
 * meta.source = "https://cp3-test.example.org/fhirr4/PractitionerRole/d60525bd-5caf-4437-8f4b-4156300a27de"
+* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/PractitionerRole/d60525bd-5caf-4437-8f4b-4156300a27de"
 * practitioner = Reference(Practitioner/ad3-p1)
 * organization = Reference(Organization/ad3-o1)
 * active = true
