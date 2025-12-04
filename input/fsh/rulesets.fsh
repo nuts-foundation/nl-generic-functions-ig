@@ -48,9 +48,21 @@ RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
 * entry[=].request.method = {method}
 * entry[=].request.url = "{url}"
 
-RuleSet: RefIdentifierFHIRUrl (resource-element, url, display)
-* {resource-element}.identifier.system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* {resource-element}.identifier.value = {url}
+
+
+RuleSet: AuthorAssignedIdentifier (system, value, assigner-system, assigner-value)
+* identifier[+].system = {system}
+* identifier[=].value = {value}
+* identifier[=].assigner.identifier.system = {assigner-system}
+* identifier[=].assigner.identifier.value = {assigner-value}
+* identifier[=].assigner.identifier.type = $provenance-participant-type#author
+
+RuleSet: RefAuthorAssignedIdentifier (resource-element, system, value, assigner-system, assigner-value, display)
+* {resource-element}.identifier.system = {system}
+* {resource-element}.identifier.value = {value}
+* {resource-element}.identifier.assigner.identifier.system = {assigner-system}
+* {resource-element}.identifier.assigner.identifier.value = {assigner-value}
+* {resource-element}.identifier.assigner.identifier.type = $provenance-participant-type#author
 * {resource-element}.display = {display}
 
 RuleSet: RefIdentifier (resource-element, resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)

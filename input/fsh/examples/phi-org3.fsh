@@ -7,8 +7,7 @@ Title: "Patient Jaantje Merkens"
 * identifier[=].value = "126"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/bsn"
 * identifier[=].value = "111222333"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp3-test.example.org/fhirr4/Patient/96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/Patient","96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * name
   * given[0] = "Jaantje"
   * family = "Merkens"
@@ -27,8 +26,7 @@ Instance: 8732d369-7759-447b-af01-f3e0c601b452
 InstanceOf: MedicationStatement
 Usage: #inline
 Title: "MedicationStatement for Apremilast"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp3-test.example.org/fhirr4/MedicationStatement/8732d369-7759-447b-af01-f3e0c601b452"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/MedicationStatement","8732d369-7759-447b-af01-f3e0c601b452","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * status = #active
 * medicationCodeableConcept = $atc#L04AA32 "apremilast"
 * subject = Reference(Patient/96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d)
@@ -47,8 +45,7 @@ Instance: bd8f360a-7bf2-4b65-9202-f3c092525492
 InstanceOf: CareTeam
 Usage: #inline
 Title: "CareTeam of Patient Jaantje Merkens"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp3-test.example.org/fhirr4/CareTeam/bd8f360a-7bf2-4b65-9202-f3c092525492"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/CareTeam","bd8f360a-7bf2-4b65-9202-f3c092525492","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * participant[+].period.start = "2024-08-27"
 * participant[=].member = Reference(Patient/96e7aa36-6d66-4a9e-bf6b-245d97d8ec1d)
 * participant[+].period.start = "2024-08-27"

@@ -4,7 +4,7 @@ Usage: #example
 Title: "Organization 1 - Organization"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "11111111"
-* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec"
+* insert AuthorAssignedIdentifier("https://cp1-test.example.org/departments","4cb35b96-f021-4e15-bf71-d67a6d4bebec","http://fhir.nl/fhir/NamingSystem/ura", "11111111")
 * name = "example General Practice"
 * type[+] = $organization-type#Z3 "Huisartspraktijk (zelfstandig of groepspraktijk)"
 * telecom[0].system = #phone
@@ -26,7 +26,7 @@ Instance: 59654248-477c-4694-b156-e0042f0765a6
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 1 - Endpoint"
-* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Endpoint/59654248-477c-4694-b156-e0042f0765a6"
+* insert AuthorAssignedIdentifier("https://cp1-test.example.org/api","59654248-477c-4694-b156-e0042f0765a6","http://fhir.nl/fhir/NamingSystem/ura", "11111111")
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -47,9 +47,7 @@ Instance: 5fa4c91a-a12f-48ae-a4c7-92971dc7ab53
 InstanceOf: NlGfPractitionerRole
 Usage: #example
 Title: "Organization 1 - PractitionerRole Harry Arts"
-* identifier[+].system = "http://cp1.example.org/HRM/assignments"
-* identifier[=].value = "654321"
-* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/PractitionerRole/5fa4c91a-a12f-48ae-a4c7-92971dc7ab53"
+* insert AuthorAssignedIdentifier("https://cp1-test.example.org/employees","5fa4c91a-a12f-48ae-a4c7-92971dc7ab53","http://fhir.nl/fhir/NamingSystem/ura", "11111111")
 * practitioner = Reference(Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd)
 * organization = Reference(Organization/4cb35b96-f021-4e15-bf71-d67a6d4bebec)
 * code.coding = $uzi-rolcode#01.015 "Huisarts"
@@ -60,11 +58,9 @@ Instance: 9a63e407-34af-4ae4-ad3c-f7107fbbc0cd
 InstanceOf: NlGfPractitioner
 Usage: #example
 Title: "Organization 1 - Practitioner Harry Arts"
-* identifier[+].system = "http://cp1.example.org/HRM/employees"
-* identifier[=].value = "5678"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
 * identifier[=].value = "UZI-2"
-* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Practitioner/9a63e407-34af-4ae4-ad3c-f7107fbbc0cd"
+* insert AuthorAssignedIdentifier("https://cp1-test.example.org/employees","5678","http://fhir.nl/fhir/NamingSystem/ura", "11111111")
 * name.use = #official
 * name.text = "Hary Arts"
 * name.family = "Arts"

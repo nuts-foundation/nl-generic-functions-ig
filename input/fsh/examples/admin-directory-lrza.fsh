@@ -1,10 +1,8 @@
 Instance: 3f39dca9-a392-4eb3-8366-0c7ff53ab3a9
-InstanceOf: NlGfOrganization
+InstanceOf: NlGfOrganizationLRZA
 Usage: #example
 Title: "LRZa - Organization 1 - Organization"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "11111111"
-* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Organization/3f39dca9-a392-4eb3-8366-0c7ff53ab3a9"
+* insert AuthorAssignedIdentifier("http://fhir.nl/fhir/NamingSystem/ura","11111111","http://fhir.nl/fhir/NamingSystem/kvk", "50000535")
 * name = "example General Practice"
 * type[+] = $organization-type#Z3 "Huisartspraktijk (zelfstandig of groepspraktijk)"
 * telecom[0].system = #phone
@@ -26,7 +24,6 @@ Instance: ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "LRZa - Organization 1 - Endpoint"
-* identifier[fhirUrl].value = "https://cp1-test.example.org/fhirr4/Endpoint/ffa3e969-3dfd-45d3-9d2c-f4e3795e1bf4"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -43,12 +40,10 @@ Title: "LRZa - Organization 1 - Endpoint"
 * address = "https://cp1-test.example.org/fhirr4"
 
 Instance: 4815bbe6-9fea-4875-a16c-a168d63054d4
-InstanceOf: NlGfOrganization
+InstanceOf: NlGfOrganizationLRZA
 Usage: #example
 Title: "LRZa - Organization 2 - Organization"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "22222222"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Organization/4815bbe6-9fea-4875-a16c-a168d63054d4"
+* insert AuthorAssignedIdentifier("http://fhir.nl/fhir/NamingSystem/ura", "22222222", "http://fhir.nl/fhir/NamingSystem/kvk", "50000535")
 * name = "example Hospital"
 * type[+] = $organization-type#V4 "Ziekenhuis"
 * type[+] = $sct#22232009 "Hospital"
@@ -72,7 +67,6 @@ Instance: 960a4f8c-74d8-482c-97ab-e2a025869fee
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "LRZa - Organization 2 - Endpoint"
-* identifier[fhirUrl].value = "https://cp2-test.example.org/fhirr4/Endpoint/960a4f8c-74d8-482c-97ab-e2a025869fee"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -89,12 +83,10 @@ Title: "LRZa - Organization 2 - Endpoint"
 * address = "https://cp2-test.example.org/fhirr4"
 
 Instance: fcf55b06-f22c-4058-9051-b77368bdd26b
-InstanceOf: NlGfOrganization
+InstanceOf: NlGfOrganizationLRZA
 Usage: #example
 Title: "LRZa - Organization 3 - Organization"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "33333333"
-* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Organization/fcf55b06-f22c-4058-9051-b77368bdd26b"
+* insert AuthorAssignedIdentifier("http://fhir.nl/fhir/NamingSystem/ura", "33333333", "http://fhir.nl/fhir/NamingSystem/kvk", "50000535")
 * name = "example Care Institution"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * telecom[0].system = #phone
@@ -116,7 +108,6 @@ Instance: 553416dd-da12-40f7-a9bd-eb3e193177bd
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "LRZa - Organization 3 - Endpoint"
-* identifier[fhirUrl].value = "https://cp3-test.example.org/fhirr4/Endpoint/553416dd-da12-40f7-a9bd-eb3e193177bd"
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json

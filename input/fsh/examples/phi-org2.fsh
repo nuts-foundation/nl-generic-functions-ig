@@ -4,8 +4,7 @@ Usage: #example
 Title: "Patient Jaantje Merkens"
 Description: "Patient Jaantje Merkens in EHR of Organization 2"
 * meta.profile = $nl-core-Patient
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp2-test.example.org/fhirr4/Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d"
+* insert AuthorAssignedIdentifier("https://cp2-test.example.org/Patient","27e58ece-409e-44f9-8cc1-b33495a0ef9d","http://fhir.nl/fhir/NamingSystem/ura", "22222222")
 * identifier[0].system = "http://organization2.example.org/EHR/patients"
 * identifier[=].value = "vdfesz"
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/bsn"
@@ -30,8 +29,7 @@ InstanceOf: Condition
 Usage: #inline
 Title: "Condition Aortadissectie"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Problem"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp2-test.example.org/fhirr4/Condition/8f26c2c2-9a7b-4a2f-84ac-264f1177964c"
+* insert AuthorAssignedIdentifier("https://cp2-test.example.org/Condition","8f26c2c2-9a7b-4a2f-84ac-264f1177964c","http://fhir.nl/fhir/NamingSystem/ura", "22222222")
 * onsetDateTime = "2017-09-03T12:00:00Z"
 * code = $sct#308546005 "Dissection of aorta"
 * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
@@ -43,8 +41,7 @@ InstanceOf: MedicationRequest
 Usage: #inline
 Title: "MedicationRequest Cisplatine"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-MedicationRequest"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp2-test.example.org/fhirr4/MedicationRequest/8c2d4009-4322-4d4a-8e29-3e70cd67d286"
+* insert AuthorAssignedIdentifier("https://cp2-test.example.org/MedicationRequest","8c2d4009-4322-4d4a-8e29-3e70cd67d286","http://fhir.nl/fhir/NamingSystem/ura", "22222222")
 * status = #active
 * intent = #order
 * medicationCodeableConcept = $atc#L01BC05 "gemcitabine"
@@ -63,8 +60,7 @@ InstanceOf: MedicationStatement
 Usage: #inline
 Title: "MedicationStatement Cisplatine"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-MedicationStatement"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp2-test.example.org/fhirr4/MedicationStatement/e00a59fa-7d7e-422d-8505-ef3e645404e9"
+* insert AuthorAssignedIdentifier("https://cp2-test.example.org/MedicationStatement","e00a59fa-7d7e-422d-8505-ef3e645404e9","http://fhir.nl/fhir/NamingSystem/ura", "22222222")
 * status = #active
 * medicationCodeableConcept = $atc#L01BC05 "gemcitabine"
 * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
@@ -85,8 +81,7 @@ InstanceOf: Condition
 Usage: #example
 Title: "Condition hypercalciëmie"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Problem"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp2-test.example.org/fhirr4/Condition/5a7f34e7-9b7b-4e5c-ba7c-890edbc4d757"
+* insert AuthorAssignedIdentifier("https://cp2-test.example.org/Condition","5a7f34e7-9b7b-4e5c-ba7c-890edbc4d757","http://fhir.nl/fhir/NamingSystem/ura", "22222222")
 * onsetDateTime = "2021-09-03T12:00:00Z"
 * code = $sct#66931009 "Hypercalcemia"
 * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
@@ -96,8 +91,7 @@ InstanceOf: Procedure
 Usage: #inline
 Title: "Procedure Thyroidectomy"
 * meta.profile = "http://nictiz.nl/fhir/StructureDefinition/nl-core-Procedure"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/url/fhir"
-* identifier[=].value = "https://cp2-test.example.org/fhirr4/Procedure/6bc0f95c-f281-475e-a279-4ed6beb59024"
+* insert AuthorAssignedIdentifier("https://cp2-test.example.org/Procedure","6bc0f95c-f281-475e-a279-4ed6beb59024","http://fhir.nl/fhir/NamingSystem/ura", "22222222")
 * status = #completed
 * code = $sct#13619001 "Thyroidectomy"
 * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) 
