@@ -5,6 +5,7 @@ Title: "Organization 3- Organization"
 
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
 * identifier[=].value = "33333333"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/departments","3e799075-63a2-4a4c-913d-a91b8198463d","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * name = "example Care Institution"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * telecom[0].system = #phone
@@ -28,7 +29,7 @@ InstanceOf: NlGfOrganization
 Usage: #example
 Title: "Organization 3 - Organization Nursing department"
 Description: "Nursing department at Organization 3"
-
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/departments","631cf10e-42d6-4165-9907-11e2333d4a85","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * name = "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
@@ -37,6 +38,7 @@ Instance: 8f224548-6d50-44b6-82c5-75826ee0900f
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 3 - Endpoint FHIR R4"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/api","8f224548-6d50-44b6-82c5-75826ee0900f","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
 * payloadMimeType[+] = #application/fhir+json
@@ -56,6 +58,7 @@ Instance: 72a349cc-7336-4a91-873d-fc9349769e1a
 InstanceOf: NlGfEndpoint
 Usage: #example
 Title: "Organization 3 - Endpoint FHIR STU3"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/api","72a349cc-7336-4a91-873d-fc9349769e1a","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * status = #active
 * payloadType[+].coding = nl-gf-data-exchange-capabilities#http://nictiz.nl/fhir/CapabilityStatement/eOverdracht-servercapabilities "Transfer of Care - eOverdracht Server"
 * payloadMimeType[+] = #application/fhir+json
@@ -76,6 +79,7 @@ Instance: 4fcf98c7-b198-4d61-8b3e-5ea39e33c405
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 3 - HealthcareService Geriatrie"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/services","4fcf98c7-b198-4d61-8b3e-5ea39e33c405","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * active = true
 * providedBy = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true
@@ -90,6 +94,7 @@ Instance: b48826dc-2d58-479a-bfd3-80b7a9d69757
 InstanceOf: NlGfHealthcareService
 Usage: #example
 Title: "Organization 3 - HealthcareService Verpleging"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/services","b48826dc-2d58-479a-bfd3-80b7a9d69757","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * active = true
 * providedBy = Reference(Organization/631cf10e-42d6-4165-9907-11e2333d4a85)
 * name = "Verpleging"
@@ -103,6 +108,7 @@ Instance: 08630c28-5e2a-4b0c-b8ce-f08f533246b9
 InstanceOf: NlGfPractitioner
 Usage: #example
 Title: "Organization 3 - Practitioner John Doe"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/physicians","08630c28-5e2a-4b0c-b8ce-f08f533246b9","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * active = true
 * identifier[+].system = "http://fhir.nl/fhir/NamingSystem/uzi"
 * identifier[=].value = "UZI-3"
@@ -120,6 +126,7 @@ Instance: d60525bd-5caf-4437-8f4b-4156300a27de
 InstanceOf: NlGfPractitionerRole
 Usage: #example
 Title: "Organization 3 - PractitionerRole Klinisch Geriater John Doe"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/employees","d60525bd-5caf-4437-8f4b-4156300a27de","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
 * practitioner = Reference(Practitioner/08630c28-5e2a-4b0c-b8ce-f08f533246b9)
 * organization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 * active = true

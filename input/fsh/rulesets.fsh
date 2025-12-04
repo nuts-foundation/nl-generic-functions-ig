@@ -49,6 +49,22 @@ RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
 * entry[=].request.url = "{url}"
 
 
+
+RuleSet: AuthorAssignedIdentifier (system, value, assigner-system, assigner-value)
+* identifier[+].system = {system}
+* identifier[=].value = {value}
+* identifier[=].assigner.identifier.system = {assigner-system}
+* identifier[=].assigner.identifier.value = {assigner-value}
+* identifier[=].assigner.identifier.type = $provenance-participant-type#author
+
+RuleSet: RefAuthorAssignedIdentifier (resource-element, system, value, assigner-system, assigner-value, display)
+* {resource-element}.identifier.system = {system}
+* {resource-element}.identifier.value = {value}
+* {resource-element}.identifier.assigner.identifier.system = {assigner-system}
+* {resource-element}.identifier.assigner.identifier.value = {assigner-value}
+* {resource-element}.identifier.assigner.identifier.type = $provenance-participant-type#author
+* {resource-element}.display = {display}
+
 RuleSet: RefIdentifier (resource-element, resource-type, instance-number, identifier-system, identifier-value, assigner-system, assigner-value, source)
 * {resource-element} = Reference({{{source}-fhir-url}}{resource-type}/{{{resource-type}{instance-number}}})
 * {resource-element}.type = "{resource-type}"
