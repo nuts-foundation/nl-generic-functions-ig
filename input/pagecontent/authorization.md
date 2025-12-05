@@ -9,7 +9,7 @@ This guide outlines the data requirements and principles underlying the GF Autho
 - Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
-
+<!--  pfor policy makers -->
 
 ### Solution overview
 
@@ -73,7 +73,7 @@ Healthcare Information standards define which operations a data user or data hol
 
 #### Autorization policy makers
 Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
-
+<!-- publishing policies, policies should be merged without negotiation... -->
 
 #### Requesting party (Data user)
 Creates a request, adds necessary attributes/claims about itself and sends it to the responding party 
