@@ -19,17 +19,25 @@ Just below this top level abstraction, there's a lot more to discuss:
 
 <img src="authorization-overview-transactions.png" width="100%" style="float: none" alt="Overview of authorization process"/>
 
-1. Authorization policy makers create policies based on input data (data models) specified in Healthcare Information models and standards
+1. Authorization policy makers create authorization policies based on attributes specified in Healthcare Information models and standards. These attributes can be certain identifiers (BSN, URA, etc.), entity characteristics (organization type, practitioner role), permission records (qualifications, consent) and/or specified operations or capability statements for requesting and responding party
+2. Requesting and responding parties need to acquire attributes (data) from authoritative data sources. When to get this data is not specified here. A (PKIoverheid) certificate from a Trust Service Provider may be fetched one a year, a CiBG-DeZI-token may be fetched when a practitioner starts his/her shift and a VZVZ Mitz patient consent may be fetched, by the responding party, just after receiving a data request.
+3. The requesting party can now create a request and send it to the responding party along with 'claims'; statement on the e.g. identity or characteristics of the requesting party. The responding party may add additional claims or attributes, for example, a local patient consent and/or the VZVZ Mitz consent preference.
+4. The request and all claims/attributes are input for the authorization policy. The input is evaluated against the policy. The outcome is a decisions if the request is allowed or denied.  
 
 
 #### Scope
-GF Authorization only specifies the input-variables, policy evaluation, output-variables of the authorization decision. ***How to obtain and verify the inputs, is out-of-scope***; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials.
+GF Authorization only specifies the input-variables, policy evaluation and output-variables of the authorization decision. ***How to obtain and verify the inputs, is out-of-scope***; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials. Execution of the request and architectural design (e.g. Policy Enforcement Point or AAA-proxies) are also out of scope. 
 
 
 ### Components (actors)
 
-Reuse actor specification in [XACML](https://www.oasis-open.org/committees/xacml/repository/cs-xacml-specification-1.1.pdf)
+This IG distinguishes 4 categories of actors:
+1. Authoritative data sources
+1. Autorization policy makers
+1. Requesting party (Data user)
+1. Responding party (Data holder)
 
+The role of these actors can be explained in [XACML](https://www.oasis-open.org/committees/xacml/repository/cs-xacml-specification-1.1.pdf) terms. We'll not go into this here, but XACML-roles are added in the [solution overview](#solution-overview) figure.
 
 
 #### Authoritative data sources
@@ -64,29 +72,77 @@ PKIoverheid certificates. Used to identify the organization operating the client
 Healthcare Information standards define which operations a data user or data holder should use/support. These standards also define HealthCare Information Models (HCIM's) and therefore which data labels, codes or categories can be used in policies. 
 
 #### Autorization policy makers
-- input:
 Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
 
 
-#### Data user
+#### Requesting party (Data user)
+Creates a request, adds necessary attributes/claims about itself and sends it to the responding party 
 
-
-#### Data holder
-- May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism)
+#### Responding party (Data holder)
+Acquires attributes/claims about requesting party and e.g. the patient consent. Evaluates the request.
+May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism)
 Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy. 
 
 
 ### Data models
-GF Authorization uses the information model specification of [OpenID AuthZen](https://openid.net/specs/authorization-api-1_0.html). The information model for requests and responses include the following entities: Subject, Action, Resource, Context, and Decision. These are all defined below.
+GF Authorization uses the information model specification of [OpenID AuthZen](https://openid.net/specs/authorization-api-1_0.html). The information model for requests and responses include the following entities: Subject, Action, Resource, Context, and Decision. The use of this information model is illustrated by an example of a data user searching for active MedicationRequests for a patient.
+
+```
+{
+  "subject": {
+    "type": "organization",
+    "id": "URA|123"
+    "properties": {
+      "client_id": "cee473c4-d9be-487b-b719-f552189d5891"
+      "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"]
+      "subject_id": "DEZI|002"
+      "subject_organization_id": "URA|123"
+      "subject_organization": "Harry Helpt"
+      "subject_role": "uzirole|01.015 (huisarts)"
+    }
+  },
+  "resource": {
+    "type": "MedicationRequest",
+    "properties": {
+      "status": "active"
+      "patient": "90546b0d-e323-47f3-909b-fb9504859f7b"
+    }
+  },
+  "action": {
+    "name": "search",
+    "properties": {
+      "method": "GET"
+    }
+  },
+  "context": {
+    "OTV-consent-decision": false
+    "consents": [{"resourceType": "Consent", "id"...etc}]
+    "time": "2025-10-26T01:22-07:00"
+    "purpose_of_use": "treatment"
+  }
+}
+```
+#### Subject
+This is the principle requesting the data (type, id and properties). Attributes may come from Identity Providers (CiBG DeZI) and or (client-)certificates
+
+#### Resource
+This is the requested data (type, id and properties). Attributes are typically from the request-url and request-parameters
+
+#### Action
+The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
+
+#### Context
+Other input for the policy evaluation is added to the context. For example the patient consents, OTV (Mitz) decision-outcome and the purpose-of-use (e.g. 'treatment', 'emergency' or 'research')
+
 
 
 ### Security and privacy considerations
+--TODO
 
-??
 
 ### Example use cases
-
-#### Lokalization-service authorization
+--TODO
+<!-- #### Lokalization-service authorization
 
 example inputs
 
@@ -100,11 +156,11 @@ example inputs
 
 include Rego-policy
 
-show/explain output
+show/explain output -->
 
 ### Roadmap
+--TODO
 
-??
 <!-- 
 comments meeting 24-nov 14:00:
 
@@ -123,37 +179,6 @@ Houd rekening met verschillende lezers:
 Welke inputs zijn er mogelijk?
 Waar kan je die inputs in de request verwachten? -->
 
-
-{
-  "subject": {
-    "type": "organization",
-    "id": "URA|123"
-    "properties": {
-      "subject_id": "DEZI|002"
-      "subject_organization_id": "URA|123"
-      "subject_organization": "Harry Helpt"
-      "subject_role": "uzirole|01.015 (huisarts)"
-      "purpose_of_use": "treatment"
-    }
-  },
-  "resource": {
-    "type": "MedicationRequest",
-    "properties": {
-      "status": "active"
-    }
-  },
-  "action": {
-    "name": "search",
-    "properties": {
-      "method": "GET"
-    }
-  },
-  "context": {
-    "consent-decision": false
-    "consents": [{"resourceType": "Consent", "id"...etc}]
-    "time": "2025-10-26T01:22-07:00"
-  }
-}
 
 
 
