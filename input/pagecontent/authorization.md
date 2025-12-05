@@ -1,25 +1,84 @@
 ### Introduction
 
+This FHIR Implementation Guide specifies the technical components of the Generic Function Authorization, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Authorization aims to establish a standardized, interoperable system for authorizing access to data and services of healthcare organizations, enabling reliable and efficient exchange of health data across healthcare systems and organizations.
+
+This guide outlines the data requirements and principles underlying the GF Authorization. Key design principles include:
+
+- International standards: The solution should be based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
+- Policy Based Access Control (PBAC) is used to control access to data. PBAC can be used for Role-Based, Attribute-Based and more complex business logic to determine access control. This enables patient-level, operation-level and/or resource-level permissions for various healthcare processes or secondary (e.g. research) use-cases.
+- Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
+
+By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
+
+
 ### Solution overview
 
+On a high level, a data access/operation authorization starts with a request from the requesting party, for example: a practitioner requesting data. This request, along with information of the requesting party and e.g. patient consent records form the *input data* for the process. This input is *evaluated by a policy* by a responding party; this could be a data holder. The outcome is a *decision* (allow or deny). Basically: Input --> policy evaluation --> Output
 
-Input --> policy evaluation --> Output
+Just below this top level abstraction, there's a lot more to discuss:
+
+<img src="authorization-overview-transactions.png" width="100%" style="float: none" alt="Overview of authorization process"/>
+
+1. Authorization policy makers create policies based on input data (data models) specified in Healthcare Information models and standards
 
 
-
-Key principles:
-- The scope of GF Authorization only specifies the input-variables, output-variables of the authorization decision. ***How to obtain and verify the inputs, is out-of-scope***; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials.
-- Authorization policies are expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing. The Rego-policy inputs and outputs are inspired by API specified in the [OpenID AuthZen specification](https://openid.net/specs/authorization-api-1_0.html)
-- Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy. 
+#### Scope
+GF Authorization only specifies the input-variables, policy evaluation, output-variables of the authorization decision. ***How to obtain and verify the inputs, is out-of-scope***; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials.
 
 
 ### Components (actors)
 
 Reuse actor specification in [XACML](https://www.oasis-open.org/committees/xacml/repository/cs-xacml-specification-1.1.pdf)
 
-### Data models
 
-Reuse API specification in [OpenID AuthZen specification](https://openid.net/specs/authorization-api-1_0.html)
+
+#### Authoritative data sources
+
+**Trust Service Provider Certificates**: 
+PKIoverheid certificates. Used to identify the organization operating the client or server of data user or data holder. 
+
+**CiBG-DeZI**: 
+- Used to identify the practitioner and care provider
+- Role of the Practitioner. Uses (indirectly) the BIG-register as data source
+
+**CiBG-LRZa**:
+- Registry of care providers and their care service directory endpoint-urls
+
+**Care service directories**:
+- Can data holder handle my request? 
+- Endpoint-url of data holder
+
+**SBV-Z**:
+- Used to check the identity (BSN) of the patient
+
+**Vektis Organization type**:
+- Vektis is the source of the care provider type. A care provider can be one or more types. For example: a pharmacy, hospital, general practitioner, care at home, etc.
+
+**VZVZ Mitz**:
+- Patient Consent preference registry
+
+**NictiZ Qualifications**:
+- Is data user (care provider and software) qualified for the request? This source claims the data user to be abled to use some CapabilityStatements from NictiZ Healthcare Information standards. The request should be in scope of the CapabilityStatements.
+
+**NictiZ Healthcare Information standards**:
+Healthcare Information standards define which operations a data user or data holder should use/support. These standards also define HealthCare Information Models (HCIM's) and therefore which data labels, codes or categories can be used in policies. 
+
+#### Autorization policy makers
+- input:
+Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
+
+
+#### Data user
+
+
+#### Data holder
+- May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism)
+Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy. 
+
+
+### Data models
+GF Authorization uses the information model specification of [OpenID AuthZen](https://openid.net/specs/authorization-api-1_0.html). The information model for requests and responses include the following entities: Subject, Action, Resource, Context, and Decision. These are all defined below.
+
 
 ### Security and privacy considerations
 
@@ -50,7 +109,7 @@ show/explain output
 comments meeting 24-nov 14:00:
 
 Aandachtspunten
-- Scope/capabilitystatement input
+
 - Policy maker must use REGO
 - how does TANP fit in?
 - geen architectuurkeuzes voorschrijven: b.v. term PDP niet noemen
@@ -63,6 +122,38 @@ Houd rekening met verschillende lezers:
 - beschrijf: waar verwachten we welke input?
 Welke inputs zijn er mogelijk?
 Waar kan je die inputs in de request verwachten? -->
+
+
+{
+  "subject": {
+    "type": "organization",
+    "id": "URA|123"
+    "properties": {
+      "subject_id": "DEZI|002"
+      "subject_organization_id": "URA|123"
+      "subject_organization": "Harry Helpt"
+      "subject_role": "uzirole|01.015 (huisarts)"
+      "purpose_of_use": "treatment"
+    }
+  },
+  "resource": {
+    "type": "MedicationRequest",
+    "properties": {
+      "status": "active"
+    }
+  },
+  "action": {
+    "name": "search",
+    "properties": {
+      "method": "GET"
+    }
+  },
+  "context": {
+    "consent-decision": false
+    "consents": [{"resourceType": "Consent", "id"...etc}]
+    "time": "2025-10-26T01:22-07:00"
+  }
+}
 
 
 
