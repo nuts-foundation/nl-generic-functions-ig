@@ -10,9 +10,6 @@ autoactivate on
 participant  holder as "Holder"
 participant  verifier as "Verifier"
 
-holder -> verifier: Nonce Request
-verifier --> holder: Nonce Response
-
 holder -> verifier: Access Token Request
 verifier --> holder: Access Token Response
 
