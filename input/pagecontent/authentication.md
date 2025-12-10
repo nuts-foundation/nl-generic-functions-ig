@@ -40,20 +40,22 @@ To summarize, the authentication solution must:
 
 Throughout this document the following terminology is used:
 
-- Entity: An actor in the system (person or organization)
-- Agent: A digital representation of an entity that acts on its behalf, also often called an identity wallet
-- Vendor: A party that offers Agents to its customers (care organizations and healthcare professionals)
-- Identity: A set of claims about an entity (person or organization) which is relevant in a specific context
-- Claim: A statement about an entity (e.g. name, role, affiliation)
-- Verifiable Claim: A claim that can be cryptographically verified
-- Client: An entity that requests access to a resource on behalf of another entity
-- Issuer: An entity that issues claims about another entity
-- Authoritative source: An organization that is usually the authentic source of a claim and trusted to issue claims about a specific entity
-- Verifier: An entity that verifies the identity of another entity based on its claims
-- Holder: An entity that holds claims about itself or is authorized to present claims about another entity
-- Authentication: The process of verifying the identity of an entity
-- Authorization: The process of granting access to resources based on the identity of an entity
-- Use-case: A specified cross organization data exchange in which authentication and authorization requirements are defined
+- Entity: Anything that can be referenced in statements as an abstract or concrete noun. Entities include but are not limited to people, organizations, physical things. Any entity might perform roles in the ecosystem.
+- Subject: A thing about which claims are made.
+- Agent: Software that representation a subject, either by user interaction or predefined rules.
+- Vendor: A party that offers software and/or services to its customers (e.g. healthcare organizations and healthcare professionals).
+- Identity: A set of claims about a subject (e.g. person or organization) which is relevant in a specific context.
+- Claim: A statement about a property of an entity (e.g. identifier, name, role, affiliation).
+- Credential: A set of one or more claims made by the same entity.
+- Verifiable Credential: A credential that can be cryptographically verified.
+- Client: An agent that requests access to a resource on behalf of another entity.
+- Issuer: A role an entity can perform by asserting claims about one or more subjects, creating a verifiable credential from these claims, and transmitting the verifiable credential to a holder.
+- Authoritative source: An entity that is the authentic source of a claim
+- Verifier: A role an entity performs by receiving one or more verifiable credentials, optionally inside a verifiable presentation for processing. Other specifications might refer to this concept as a relying party.
+- Holder: A role an entity might perform by possessing one or more verifiable credentials and generating verifiable presentations from them. A holder is often, but not always, a subject of the verifiable credentials they are holding.
+- Authentication: The process of verifying the identity of an entity.
+- Authorization: The process of granting access (to resources or operations) based on the identity of an entity.
+- Use-case: A specified cross organization data exchange in which authentication and authorization requirements are defined.
 
 ### Proposed Authentication Approach
 
