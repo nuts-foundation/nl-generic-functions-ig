@@ -5,14 +5,15 @@ Verified identities support downstream processes such as secure authorization (a
 
 ### Problem overview
 
-Healthcare professionals often require access to patient data managed by other organizations (e.g. hospitals). Legal and regulatory frameworks restrict data sharing, requiring strong verification of:
+When healthcare professionals work together across organizational boundaries, they need access to patient health data and related logisitical resources.
+Legal and regulatory frameworks restrict data sharing between organizations and requiring strong verification of:
 
 - The professional’s identity, role, and organizational affiliation.
 - The care organization’s identity.
 - The IT service provider’s identity, if involved.
 
-In small systems, these verifications can be managed through direct agreements and trusting relationships between entities (e.g., hospitals trusting each others staff and HR systems).
-However, in national-scale healthcare systems with many organizations and professionals, direct agreements become impractical.
+In small eco-systems, these verifications can be managed through direct agreements and trusting relationships between entities (e.g., hospitals trusting each others staff and HR systems).
+However, in national-scale healthcare eco-systems with many organizations and professionals, direct agreements become impractical.
 
 Also, traditional authentication topologies relying on a central trusted authority introduce single points of failure and may not scale well. Downtime of such a central authority can disrupt access for all dependent entities. Also, often these schemes have a use-case tailored design, providing a limited set of identity claims, making them inflexible for future use-cases. Adding new identity claims require these central authorities to expand their systems and governance, which is often a slow process.
 
@@ -27,8 +28,8 @@ To summarize, the authentication solution must:
 - Support portable identity claims issued by authoritative sources.
 - Support presenting a combination of claims from different authoritative sources in a single transaction.
 - Support use cases with and without direct end-user involvement.
-- Enable service providers to act on behalf of care organizations, with scope-limited authorization.
-- Allow care organizations to act on behalf of healthcare professionals, with time-limited authorization.
+- Enable service providers to act on behalf of care organizations, for authorized operations.
+- Allow care organizations to act on behalf of healthcare professionals, for a limited time.
 - Be user-friendly for healthcare professionals.
 - Be flexible and adaptable to various healthcare use cases.
 - Avoid single points of failure.
@@ -43,7 +44,7 @@ Throughout this document the following terminology is used:
 - Entity: Anything that can be referenced in statements as an abstract or concrete noun. Entities include but are not limited to people, organizations, physical things. Any entity might perform roles in the ecosystem.
 - Subject: A thing about which claims are made.
 - Agent: Software that representation a subject, either by user interaction or predefined rules.
-- Vendor: A party that offers software and/or services to its customers (e.g. healthcare organizations and healthcare professionals).
+- Service Provider: A party that offers software and/or services to its customers (e.g. healthcare organizations and healthcare professionals).
 - Identity: A set of claims about a subject (e.g. person or organization) which is relevant in a specific context.
 - Claim: A statement about a property of an entity (e.g. identifier, name, role, affiliation).
 - Credential: A set of one or more claims made by the same entity.
@@ -81,7 +82,7 @@ The dotted lines represent the trust relations: Access tokens are trusted by the
 
 | Actor     | Transaction                             | Initiator or Responder | Optionality | Reference                   |
 | --------- | --------------------------------------- | ---------------------- | ----------- | --------------------------- |
-| Verifier  | Request key material [GFI-001]          | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
+| Verifier  | Resolve key material [GFI-001]          | Initiator              | R           | [\[GFI-001\]](GFI-001.html) |
 |           | Request Revocation status [GFI-003]     | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
 |           | Request Access Token [GFI-004]          | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
 |           | Introspect Access Token [GFI-006]       | Responder              | O           | [\[GFI-006\]](GFI-006.html) |
@@ -111,9 +112,9 @@ In this scheme, the trust stems from cryptographic proofs rather than institutio
 
 The DID:web method offers a pragmatic bridge between traditional and decentralized systems and are published under a domain name controlled by the organization e.g., `did:web:example.com`. This leverages the existing DNS and HTTPS infrastructure to provide authenticity and discovery, ensuring that organizations can adopt decentralized identifiers without being part of a trust network such as a blockchain.
 
-#### Verifiable Identity Claims
+#### Verifiable Credentials
 
-Building upon DIDs, the W3C Verifiable Credentials (VC) standard defines a model for encoding, signing, and verifying claims about an entity. Conceptually, VCs are similar to SAML assertions or X.509 attribute certificates: an issuer makes claims (e.g., “Alice is a certified healthcare practitioner”) about a subject, and these claims are cryptographically signed so that verifiers can validate their authenticity and integrity. However, unlike SAML assertions that depend on live trust relationships and real-time exchanges, VCs are designed to be storable/portable: they can be presented by the holder at any time, to any verifier, without requiring the issuer to be online. This enables more flexible, privacy-preserving interactions.
+The W3C Verifiable Credentials (VC) standard defines a model for encoding, signing, and verifying claims about an entity. Conceptually, VCs are similar to SAML assertions or X.509 attribute certificates: an issuer makes claims (e.g., “Alice is a certified healthcare practitioner”) about a subject, and these claims are cryptographically signed so that verifiers can validate their authenticity and integrity. However, unlike SAML assertions that depend on live trust relationships and real-time exchanges, VCs are designed to be storable/portable: they can be presented by the holder at any time, to any verifier, without requiring the issuer to be online. This enables more flexible, privacy-preserving interactions.
 
 Ownership of a Verifiable Credential is established through the holder’s control of the private key associated with the DID referenced in the credential’s `credentialSubject.id`. When a holder presents a credential, they prove possession of this private key by producing a cryptographic proof, for example, by signing a challenge provided by the verifier. The verifier can then use the public key found in the holder’s DID Document (resolved via HTTPS, in the case of `DID:web`) to confirm that the proof is valid and indeed signed by the holder. This demonstrates that the holder controls the identifier linked to the credential.
 
@@ -139,21 +140,21 @@ The protocol to request and issue verifiable credentials is [OpenID Connect for 
 
 The protocol to request access tokens is based on [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523), an extension to the OAuth 2.x standard, which defines how to request access tokens using a JWT Authorization Grant combined with a Client Authentication assertion. The JWT Authorization Grant contains a Verifiable Presentation with the required identity claims. The Client Authentication assertion contains the identity of the client according, issued by an authoritative registry.
 
-To prevent token theft, access tokens should be bound to the client by using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop). DPoP is a mechanism to bind an access token to a private key, which is used to sign an additional DPoP access token which is uniquely created for each request to the resource server.
+To prevent token theft, access tokens should be bound to the client by using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://www.rfc-editor.org/rfc/rfc9449). DPoP is a mechanism to bind an access token to a private key, which is used to sign an additional DPoP access token which is uniquely created for each request to the resource server.
 
-Verifiable credentials have a long lifetime, often several years. To be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the status list and verifies the existence of the credential in the status list.
+Verifiable credentials have a long lifetime, up to several years. To be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the status list and verifies the existence of the credential in the status list.
 
 #### Summary technologies, and standards per transaction
 
-| Transaction   | Technology / Standard                                                      | Description                                                                                                                                                                                     |
-| ------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GFI-001       | DID (Decentralized Identifier)                                             | DID method did:web, a domain name based identifier that hosts the DID document containing the public key                                                                                        |
-| GFI-002       | OpenID Connect for Verifiable Credential Issuance (OIDC4VCI)               | Protocol to request and issue verifiable credentials between digital agents and authoritative registries                                                                                        |
-| GFI-00\[2,4\] | Verifiable Credentials (VC)                                                | Standard for expressing identity claims in a cryptographically verifiable way                                                                                                                   |
-| GFI-00\[2,4\] | Verifiable Presentations (VP)                                              | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                                                                                   |
-| GFI-003       | StatusList2021 (Revocation mechanism for VCs)                              | Standard for revoking verifiable credentials                                                                                                                                                    |
-| GFI-004       | OAuth 2.0 with JWT Authorization Grant and Client Authentication Assertion | [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523) Protocol to request access tokens using a JWT Authorization Grant containing a Verifiable Presentation and a Client Authentication Assertion |
-| GFI-005       | DPoP (Demonstrating Proof-of-Possession at the Application Layer)          | Mechanism to bind an access token to a public key to prevent token theft                                                                                                                        |
+| Transaction   | Technology / Standard                                                                                                                           | Description                                                                                                                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GFI-001       | [DID (Decentralized Identifier) 1.0](https://www.w3.org/TR/did-1.0/)                                                                            | DID method did:web, a domain name based identifier that hosts the DID document containing the public key                                                                                        |
+| GFI-002       | [OpenID Connect for Verifiable Credential Issuance 1.0 (OpenID4VCI)](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) | Protocol to request and issue verifiable credentials between digital agents and authoritative registries                                                                                        |
+| GFI-00\[2,4\] | [Verifiable Credentials (VC) 1.1](https://www.w3.org/TR/2022/REC-vc-data-model-20220303/)                                                       | Standard for expressing identity claims in a cryptographically verifiable way                                                                                                                   |
+| GFI-00\[2,4\] | [Verifiable Presentations (VP) 1.1](https://www.w3.org/TR/2022/REC-vc-data-model-20220303/#presentations-0)                                     | Standard for presenting a set of verifiable credentials in a cryptographically verifiable way                                                                                                   |
+| GFI-003       | [Bitstring Status List 1.0](https://www.w3.org/TR/vc-bitstring-status-list/) (Revocation mechanism for VCs)                                     | Standard for revoking verifiable credentials                                                                                                                                                    |
+| GFI-004       | OAuth 2.0 with JWT Authorization Grant and Client Authentication Assertion                                                                      | [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523) Protocol to request access tokens using a JWT Authorization Grant containing a Verifiable Presentation and a Client Authentication Assertion |
+| GFI-005       | [RFC 9449 (DPoP)](https://datatracker.ietf.org/doc/html/rfc9449) (Demonstrating Proof-of-Possession at the Application Layer)                   | Mechanism to bind an access token to a public key to prevent token theft                                                                                                                        |
 
 {: .grid .table-striped}
 
