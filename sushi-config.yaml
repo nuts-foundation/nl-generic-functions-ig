@@ -11,29 +11,25 @@ title: Netherlands - Generic Functions for data exchange Implementation Guide
 language: en-US
 # description: Example Implementation Guide for getting started with SUSHI
 status: draft # draft | active | retired | unknown
-version: 0.2.0
+version: 0.3.0
 fhirVersion: 4.0.1 # https://www.hl7.org/fhir/valueset-FHIR-version.html
 copyrightYear: 2025+
 releaseLabel: ci-build # ci-build | draft | qa-preview | ballot | trial-use | release | update | normative+trial-use
-license: GPL-3.0-or-later # https://www.hl7.org/fhir/valueset-spdx-license.html
+license: EUPL-1.2 # https://www.hl7.org/fhir/valueset-spdx-license.html
 jurisdiction: urn:iso:std:iso:3166#NL "Netherlands" # https://www.hl7.org/fhir/valueset-jurisdiction.html
 publisher:
   name: Stichting Nuts
   url: https://www.nuts.nl
   # email: test@example.org
 
+
 # The dependencies property corresponds to IG.dependsOn. The key is the
 # package id and the value is the version (or dev/current). For advanced
 # use cases, the value can be an object with keys for id, uri, and version.
-# dependencies:
-#   nictiz.fhir.nl.r4.nl-core: 0.12.0-beta.1
-
-# dependencies:
-#   hl7.fhir.us.core: 3.1.0
-#   hl7.fhir.us.mcode:
-#     id: mcode
-#     uri: http://hl7.org/fhir/us/mcode/ImplementationGuide/hl7.fhir.us.mcode
-#     version: 1.0.0
+dependencies:
+  nictiz.fhir.nl.r4.nl-core: 0.12.0-beta.4
+  nictiz.fhir.nl.r4.zib2020: 0.12.0-beta.4
+  # hl7.fhir.eu.base: 0.1.0-ballot # Depending on discussion with Nictiz if we want to base our profiles on this or not
 #
 #
 # The pages property corresponds to IG.definition.page. SUSHI can
@@ -61,21 +57,41 @@ pages:
 
   care-services.md:
     title: Care Services Directory
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: trial-use
+
 
   routing.md:
     title: Routing
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
 
   localization.md:
     title: Localization
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   consent.md:
     title: Consent
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
-  careteams.md:
-    title: CareTeams
+  identification.md:
+    title: Identification
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   authentication.md:
     title: Authentication
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
     GFI-001.md:
       title: Request key material [GFI-001]
       generation: markdown
@@ -97,6 +113,12 @@ pages:
 
   authorization.md:
     title: Authorization
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
+  history.md:
+    title: History
 
   # usecase-enrollment.md:
   #   title: Use cases - Enroll patient in home monitoring
@@ -120,8 +142,8 @@ pages:
 # For parameters defined by the FHIR Tools IG see:
 # http://build.fhir.org/ig/FHIR/fhir-tools-ig/branches/master/CodeSystem-ig-parameters.html
 #
-# parameters:
-#   excludettl: true
+parameters:
+  excludettl: true
 #   validation: [allow-any-extensions, no-broken-links]
 #
 # ╭────────────────────────────────────────────menu.xml────────────────────────────────────────────╮
@@ -138,10 +160,11 @@ menu:
   Routing: routing.html
   Localization: localization.html
   Consent: consent.html
-  CareTeams: careteams.html
+  Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
   Artifacts: artifacts.html
+  History: history.html
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
 # │  Uncomment the properties below to configure additional properties on the ImplementationGuide  │

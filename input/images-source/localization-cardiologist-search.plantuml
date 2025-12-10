@@ -31,9 +31,13 @@ end note
 
 ehr -> nvi: Search /DocumentReference?subject=bsn|987654321
 
-nvi -> nvi: Validate authorization\nand search data locations
+loop for each DocumentReference found,\n using DocumentReference.content.attachment.url
+  nvi -> ehr_reg: HEAD https://careprovider123.org/fhir/Patient/345fa-9076-9be4b\n (checking access for Cardiologist Smith at Care provider 456)
+  
+  return: return HTTP-status
+end
 
-nvi -> ehr: Bundle with DocumentReferences \ncontaining custodian's (URA's).
+nvi -> ehr: Bundle with DocumentReferences \ncontaining custodian's (URA's)\n that returned HTTP-status 200 OK.
 
 == Addressing and fetching data ==
 

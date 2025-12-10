@@ -1,9 +1,8 @@
 Instance: 3f39dca9-a392-4eb3-8366-0c7ff53ab3a9
-InstanceOf: NlGfOrganization
+InstanceOf: NlGfOrganizationLRZA
 Usage: #example
 Title: "LRZa - Organization 1 - Organization"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "11111111"
+* insert AuthorAssignedIdentifier("http://fhir.nl/fhir/NamingSystem/ura","11111111","http://fhir.nl/fhir/NamingSystem/kvk", "50000535")
 * name = "example General Practice"
 * type[+] = $organization-type#Z3 "Huisartspraktijk (zelfstandig of groepspraktijk)"
 * telecom[0].system = #phone
@@ -41,11 +40,10 @@ Title: "LRZa - Organization 1 - Endpoint"
 * address = "https://cp1-test.example.org/fhirr4"
 
 Instance: 4815bbe6-9fea-4875-a16c-a168d63054d4
-InstanceOf: NlGfOrganization
+InstanceOf: NlGfOrganizationLRZA
 Usage: #example
 Title: "LRZa - Organization 2 - Organization"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "22222222"
+* insert AuthorAssignedIdentifier("http://fhir.nl/fhir/NamingSystem/ura", "22222222", "http://fhir.nl/fhir/NamingSystem/kvk", "50000535")
 * name = "example Hospital"
 * type[+] = $organization-type#V4 "Ziekenhuis"
 * type[+] = $sct#22232009 "Hospital"
@@ -85,11 +83,10 @@ Title: "LRZa - Organization 2 - Endpoint"
 * address = "https://cp2-test.example.org/fhirr4"
 
 Instance: fcf55b06-f22c-4058-9051-b77368bdd26b
-InstanceOf: NlGfOrganization
+InstanceOf: NlGfOrganizationLRZA
 Usage: #example
 Title: "LRZa - Organization 3 - Organization"
-* identifier[+].system = "http://fhir.nl/fhir/NamingSystem/ura"
-* identifier[=].value = "33333333"
+* insert AuthorAssignedIdentifier("http://fhir.nl/fhir/NamingSystem/ura", "33333333", "http://fhir.nl/fhir/NamingSystem/kvk", "50000535")
 * name = "example Care Institution"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * telecom[0].system = #phone
