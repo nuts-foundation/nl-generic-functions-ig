@@ -10,7 +10,7 @@ activate issuer
 participant  verifier as "Verifier"
 participant  issuer as "Issuer/Holder"
 
-verifier -> issuer: Resolve DID Document Request [GFI-001]
-issuer --> verifier: DID Document Response [GFI-001]
+verifier -> issuer: DID Resolution Request [GFI-001]
+issuer --> verifier: DID Resolution Response [GFI-001]
 
 @enduml
