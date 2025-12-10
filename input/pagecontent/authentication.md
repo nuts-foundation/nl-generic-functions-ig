@@ -12,10 +12,10 @@ Legal and regulatory frameworks restrict data sharing between organizations and 
 - The care organization’s identity.
 - The IT service provider’s identity, if involved.
 
-In small eco-systems, these verifications can be managed through direct agreements and trusting relationships between entities (e.g., hospitals trusting each others staff and HR systems).
+In small eco-systems, these verifications can be managed through direct agreements and trusting relationships between entities (e.g., hospitals trusting each other's staff and HR systems).
 However, in national-scale healthcare eco-systems with many organizations and professionals, direct agreements become impractical.
 
-Also, traditional authentication topologies relying on a central trusted authority introduce single points of failure and may not scale well. Downtime of such a central authority can disrupt access for all dependent entities. Also, often these schemes have a use-case tailored design, providing a limited set of identity claims, making them inflexible for future use-cases. Adding new identity claims require these central authorities to expand their systems and governance, which is often a slow process.
+Also, traditional authentication topologies relying on a central trusted authority introduce single points of failure and may not scale well. Downtime of such a central authority can disrupt access for all dependent entities. Also, these schemes often have a use-case tailored design, providing a limited set of identity claims, making them inflexible for future use-cases. Adding new identity claims require these central authorities to expand their systems and governance, which is often a slow process.
 
 #### Requirements
 
@@ -86,7 +86,8 @@ The dotted lines represent the trust relations: Access tokens are trusted by the
 |           | Request Revocation status [GFI-003]     | Initiator              | R           | [\[GFI-003\]](GFI-003.html) |
 |           | Request Access Token [GFI-004]          | Responder              | R           | [\[GFI-004\]](GFI-004.html) |
 |           | Introspect Access Token [GFI-006]       | Responder              | O           | [\[GFI-006\]](GFI-006.html) |
-| Holder    | Issue Claims \[GFI-002\]                | Responder              | O           | [\[GFI-002\]](GFI-002.html) |
+| Holder    | Request key material [GFI-001]          | Responder              | R           | [\[GFI-001\]](GFI-001.html) |
+|           | Issue Claims \[GFI-002\]                | Responder              | O           | [\[GFI-002\]](GFI-002.html) |
 |           | Request Access Token [GFI-004]          | Initiator              | R           | [\[GFI-004\]](GFI-004.html) |
 |           | Authenticated Interaction [\[GFI-005\]] | Initiator              | R           | [\[GFI-005\]](GFI-005.html) |
 | Issuer    | Issue Claims [GFI-002]                  | Initiator              | O           | [\[GFI-002\]](GFI-002.html) |
@@ -110,13 +111,13 @@ However, they become difficult to extend across these managed boundaries or into
 Decentralized Identifiers (DIDs) address this limitation by replacing the notion of a centrally issued identifier with a self-controlled, globally resolvable identifier. A DID is an URI that uniquely represents an entity (a person, organization, or device) and resolves to a DID Document, a small piece of JSON-based metadata containing the entity’s public keys, service endpoints, and related cryptographic material. This document enables other parties to verify signatures or encrypt data for the DID subject without relying on a central registry or certificate authority.
 In this scheme, the trust stems from cryptographic proofs rather than institutional intermediaries.
 
-The DID:web method offers a pragmatic bridge between traditional and decentralized systems and are published under a domain name controlled by the organization e.g., `did:web:example.com`. This leverages the existing DNS and HTTPS infrastructure to provide authenticity and discovery, ensuring that organizations can adopt decentralized identifiers without being part of a trust network such as a blockchain.
+The did:web method offers a pragmatic bridge between traditional and decentralized systems and are published under a domain name controlled by the organization e.g., `did:web:example.com`. This leverages the existing DNS and HTTPS infrastructure to provide authenticity and discovery, ensuring that organizations can adopt decentralized identifiers without being part of a trust network such as a blockchain.
 
 #### Verifiable Credentials
 
 The W3C Verifiable Credentials (VC) standard defines a model for encoding, signing, and verifying claims about an entity. Conceptually, VCs are similar to SAML assertions or X.509 attribute certificates: an issuer makes claims (e.g., “Alice is a certified healthcare practitioner”) about a subject, and these claims are cryptographically signed so that verifiers can validate their authenticity and integrity. However, unlike SAML assertions that depend on live trust relationships and real-time exchanges, VCs are designed to be storable/portable: they can be presented by the holder at any time, to any verifier, without requiring the issuer to be online. This enables more flexible, privacy-preserving interactions.
 
-Ownership of a Verifiable Credential is established through the holder’s control of the private key associated with the DID referenced in the credential’s `credentialSubject.id`. When a holder presents a credential, they prove possession of this private key by producing a cryptographic proof, for example, by signing a challenge provided by the verifier. The verifier can then use the public key found in the holder’s DID Document (resolved via HTTPS, in the case of `DID:web`) to confirm that the proof is valid and indeed signed by the holder. This demonstrates that the holder controls the identifier linked to the credential.
+Ownership of a Verifiable Credential is established through the holder’s control of the private key associated with the DID referenced in the credential’s `credentialSubject.id`. When a holder presents a credential, they prove possession of this private key by producing a cryptographic proof, for example, by signing a challenge provided by the verifier. The verifier can then use the public key found in the holder’s DID Document (resolved via HTTPS, in the case of `did:web`) to confirm that the proof is valid and indeed signed by the holder. This demonstrates that the holder controls the identifier linked to the credential.
 
 In combination, DIDs and Verifiable Credentials enable a trust model that is decentralized yet verifiable. Authoritative registries continue to act as issuers of claims, much like certificate authorities or identity providers today, but the system no longer depends on a single central operator. This enables the combination of multiple claims to be provided to the verifier in a single transaction. The separation of claim issuer and verifier creates interoperability across administrative domains, e.g., the same healthcare organization identity can be used in different use-cases or even outside the healthcare domain.
 
