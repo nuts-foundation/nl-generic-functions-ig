@@ -57,15 +57,16 @@ Throughout this document the following terminology is used:
 - Authorization: The process of granting access (to resources or operations) based on the identity of an entity.
 - Use-case: A specified cross organization data exchange in which authentication and authorization requirements are defined.
 
-### Proposed Authentication Approach
+### Solution Overview
 
-This guide defines an authentication solution based on the _OAuth 2.0_ standard. It enables clients to obtain _Access Tokens_ using the extension defined in [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523).
+This guide defines the GF Authentication which is based on the _OAuth 2.0_ standard. It enables clients to obtain _Access Tokens_ using the extension defined in [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523).
 
-In this approach, authentication of the participating entities is performed using a [JWT Authorization Grant](https://www.rfc-editor.org/rfc/rfc7523#section-2.1), while the client itself is authenticated through a [Client Authentication Assertion](https://www.rfc-editor.org/rfc/rfc7523#section-2.2).
+The involved entities in the transaction are authenticated with a [JWT Authorization Grant](https://www.rfc-editor.org/rfc/rfc7523#section-2.1).
+The client itself is authenticated through a [Client Authentication Assertion](https://www.rfc-editor.org/rfc/rfc7523#section-2.2).
 
-The _Authorization Grant_ carries verifiable identity claims for the involved parties (e.g., a healthcare provider and care giver), and the _Client Authentication Assertion_ conveys the client’s own identity.
+The _Authorization Grant_ carries verifiable identity claims for the involved parties (e.g., a healthcare provider and healthcare professional), and the _Client Authentication Assertion_ conveys the client’s own identity.
 
-Identity claims are long-lived and issued in advance by multiple authoritative sources (such as registries responsible for maintaining identity information). These claims are represented in a cryptographically verifiable format compliant with the [Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/2022/REC-vc-data-model-20220303/).
+Identity claims could be long-lived and are issued in advance by their authoritative sources (such as registries responsible for maintaining identity information). These claims are represented in a cryptographically verifiable format compliant with the [Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/2022/REC-vc-data-model-20220303/).
 
 Each use case may define its own required set of claims and the corresponding trust framework governing how entities interact. _Authorization Services_ can validate the presented claims without contacting the authoritative sources at the time of authentication.
 
