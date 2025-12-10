@@ -5,6 +5,7 @@ template
 output
 fsh-generated
 input-cache
+build-cache
 
 # Windows generated files #
 ###########################
