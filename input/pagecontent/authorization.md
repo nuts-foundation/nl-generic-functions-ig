@@ -73,7 +73,7 @@ Healthcare Information standards define which operations a data user or data hol
 
 #### Autorization policy makers
 Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
-<!-- publishing policies, policies should be merged without negotiation... -->
+<!-- publishing policies, policies should be merged without negotiation... Legislation is always input-->
 
 #### Requesting party (Data user)
 Creates a request, adds necessary attributes/claims about itself and sends it to the responding party 
