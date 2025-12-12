@@ -72,7 +72,7 @@ During consolidation, multiple Administration Directories may have overlapping o
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
   - All Endpoint-instances MUST be linked to from one of the HealthcareService or Organization-instances.
 
-After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the fully qualified URL of that instance at the originating Administration Directory ([GF-Adressering, ADR-6](https://github.com/minvws/generiekefuncties-adressering/issues/154)). The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
+After consolidation, the Update Client writes the updates to a Query Directory. The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
 
 
 
@@ -96,7 +96,7 @@ A brief description of the data models and their profile for this guide:
 
 #### Organization
 Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA `identifier`, `type`, `status`, and `name`. It may have additional attributes like `endpoint`. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
-The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) contains no extra constraints on top of mCSD & NL profiles. 
+The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) is based on the NL-Core-Healthcare-Provider-Organization profile, adds constraints from the mCSD-Organization profile and requires an author-assigned identifier. 
 
 #### Endpoint
 An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. If an Organization does not have an Endpoint, it may still be reachable via an Endpoint at its parent Organization.
@@ -109,25 +109,25 @@ The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareserv
 
 #### Location
 Locations are physical places where care can be delivered such as buildings (NL: Vestiging), wards, rooms, or vehicles. A Location may have geographic attributes (address, geocode), attributes regarding its hours of operation, etc. Each Location is related to one (child) Organization. A location may have a hierarchical relationship with other locations (e.g. building > floor > room).
-The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) has no extra constraints on top of mCSD & NL profiles. 
+The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) is based on the NL-Core-Healthcare-Provider profile, adds constraints from the mCSD-Location profile and requires an author-assigned identifier
 
 
 #### PractitionerRole
 PractitionerRole resources are used to define the specific roles, specialties, and responsibilities that a Practitioner holds within an Organization. PractitionerRole enables precise modeling of relationships between practitioners and organizations, supporting scenarios like assigning practitioners to departments, specifying their roles (e.g., surgeon, nurse), and linking them to particular healthcare services or locations. A PractitionerRole may have contact details for phone, mail, or direct messaging.
-The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html): no extra constraints on top of mCSD & nl-core profiles. 
+The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html) is based on the NL-Core-HealthProfessional-PractitionerRole profile, adds constraints from the mCSD-PractitionerRole profile and requires an author-assigned identifier
 
 
 #### Practitioner
 ***This resource type is out-of-scope for this IG-version***
 Practitioner is a health worker such as physician, nurse, pharmacist, community health worker, district health manager, etc. Practitioners have a name and may have qualifications (like in the Dutch BIG-register).  The registry (Administration Directory) of Practitioners may be operated by the Dutch BIG-register or similar organizations. 
-The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html): no extra constraints on top of mCSD & NL profiles. 
+The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html)is based on the NL-Core-HealthProfessional-Practitioner profile, adds constraints from the mCSD-Practitioner profile and requires an author-assigned identifier
 
 
 #### OrganizationAffiliation
 ***This resource type is out-of-scope for this IG-version (waiting for [GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))***
 
 OrganizationAffiliation resources are used to represent relationships between organizations, such as a software vendor managing the Endpoint that is used by a care provider. It could also be used the represent multiple care providers working together under some agreement (e.g. in a region).
-The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) has no extra constraints on top of mCSD & NL profiles.  
+The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) is based on the NL-Core-Healthcare-Provider profile, adds constraints from the mCSD-Location profile and requires an author-assigned identifier
 
 
 
