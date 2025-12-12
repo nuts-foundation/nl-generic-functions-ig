@@ -152,10 +152,7 @@ The patient, Vera Brooks, consults with her physician who recommends surgery. Th
 
 #### Use Case #2: Endpoint Discovery
 Dr. West just created a referral (for patient Vera Brooks from use case #1). The EHR has to notify Hospital East and the Orthopedic department of this referral. This may include some recurring requests:
-- The EHR looks up the HealthcareService instance of the Orthopedic department at the Query Directory, fetches the related endpoints and checks if these support a 'Transfer of care' payload. If none found:
-    - The EHR looks up the associated Organization of the HealthcareService at the Query Directory, fetches related endpoints, and checks if these support a 'Transfer of care' payload. If none found:
-        - The EHR looks up the associated/parent Organization of the Organization at the Query Directory, fetches related endpoints, and checks if these support a 'Transfer of care' payload. If none found: repeat last step.
-- As soon as an endpoint is found, the EHR sends the notification and referral-workflow continues.
+- The EHR looks up the HealthcareService instance of the Orthopedic department at the Query Directory, fetches the related endpoints and checks if these support a 'Transfer of care' payload. The EHR sends the notification and referral-workflow continues.
 
 <div>
 {% include care-services-use-case-2.svg %}
