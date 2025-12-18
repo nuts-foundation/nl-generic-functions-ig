@@ -111,7 +111,7 @@ However, they become difficult to extend across these managed boundaries or into
 Decentralized Identifiers (DIDs) address this limitation by replacing the notion of a centrally issued identifier with a self-controlled, globally resolvable identifier. A DID is an URI that uniquely represents an entity (a person, organization, or device) and resolves to a DID Document, a small piece of JSON-based metadata containing the entity’s public keys, service endpoints, and related cryptographic material. This document enables other parties to verify signatures or encrypt data for the DID subject without relying on a central registry or certificate authority.
 In this scheme, the trust stems from cryptographic proofs rather than institutional intermediaries.
 
-The did:web method offers a pragmatic bridge between traditional and decentralized systems and are published under a domain name controlled by the organization e.g., `did:web:example.com`. This leverages the existing DNS and HTTPS infrastructure to provide authenticity and discovery, ensuring that organizations can adopt decentralized identifiers without being part of a trust network such as a blockchain.
+The `did:web` method offers a pragmatic bridge between traditional and decentralized systems and are published under a domain name controlled by the organization e.g., `did:web:example.com`. This leverages the existing DNS and HTTPS infrastructure to provide authenticity and discovery, ensuring that organizations can adopt decentralized identifiers without being part of a trust network such as a blockchain.
 
 #### Verifiable Credentials
 
@@ -143,7 +143,7 @@ The protocol to request access tokens is based on [RFC 7523](https://www.rfc-edi
 
 To prevent token theft, access tokens should be bound to the client by using [DPoP (Demonstrating Proof-of-Possession at the Application Layer)](https://www.rfc-editor.org/rfc/rfc9449). DPoP is a mechanism to bind an access token to a private key, which is used to sign an additional DPoP access token which is uniquely created for each request to the resource server.
 
-Verifiable credentials have a long lifetime, up to several years. To be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [StatusList 2021](https://w3c-ccg.github.io/vc-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the status list and verifies the existence of the credential in the status list.
+Verifiable credentials have a long lifetime, up to several years. To be able to revoke a verifiable credential, a revocation mechanism is needed. The chosen revocation mechanism is [Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/), which defines a standard for revoking verifiable credentials using a bitstring. The verifier periodically retrieves (and caches) the status list and verifies the existence of the credential in the status list.
 
 #### Summary technologies, and standards per transaction
 
@@ -163,7 +163,7 @@ Verifiable credentials have a long lifetime, up to several years. To be able to 
 
 #### Use Case 1: Healthcare Professional Accessing Patient Data
 
-#### Use Case 2: Care Organization notifying another Care Organization about a available resource
+#### Use Case 2: Care Organization notifying another Care Organization
 
 #### Use Case 3: Care Organization authenticating to a Generic Function
 
