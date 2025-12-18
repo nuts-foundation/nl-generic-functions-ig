@@ -1,0 +1,16 @@
+@startuml GFI-006
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+autoactivate on
+
+!pragma teoz true
+
+participant RS as "Resource Server"
+participant AS as "Verifier"
+
+RS -> AS: Introspect Access Token Request
+AS --> RS: Introspect Access Token Response
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml GFI-004
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+autoactivate on
+
+!pragma teoz true
+
+participant  holder as "Holder"
+participant  verifier as "Verifier"
+
+holder -> verifier: Access Token Request
+verifier --> holder: Access Token Response
+
+@enduml
