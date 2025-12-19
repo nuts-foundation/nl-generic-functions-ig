@@ -13,7 +13,7 @@ Usage: #definition
 * format[+] = #application/fhir+json
 * rest
   * mode = #server
-  * documentation = "Dutch profile of the IHE ITI mCSD ITI-91 endpoint"
+  * documentation = "Dutch profile of the IHE ITI mCSD ITI-91 endpoint. Note that this CapabilityStatement includes the search-interaction without any specific search-parameter (the `_since` is added to allow for history-type interactions). This search interaction can be used to retrieve the latest state of all resources of a specific type."
   * resource[+]
     * insert Expectation(MAY)
     * type = #Organization

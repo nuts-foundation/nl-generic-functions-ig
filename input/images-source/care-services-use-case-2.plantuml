@@ -20,15 +20,14 @@ end
 activate CSD
 EHR -> CSD: Find HealthcareService of Orthopedic department\n including Endpoints\n GET /HealthcareService/[id], GET /Endpoint/[id]
 EHR -> EHR: Check Endpoints for 'Transfer of care' support
-EHR -> CSD: If no endpoint found: find Organization of HealthcareService\n including Endpoint\n GET /Organization/[id]?_include=Organization:endpoint
-EHR -> EHR: Check Endpoints for 'Transfer of care' support
-loop If no endpoint found and\nOrganization is part of parent Organization
-    EHR -> CSD: Find parent Organization of Organization\n including Endpoints\n GET /Organization/[id]?_include=Organization:endpoint
-    EHR -> EHR: Check Endpoints for 'Transfer of care' support
-end
 deactivate CSD
-EHR -> EHR2: Post **notification** to Endpoint\nof Hospital East with referral ID
+EHR -> Doctor: If no endpoint found: Use other means to send referral
 
 deactivate Doctor
+activate EHR2
+EHR -> EHR2: Post **notification** to Endpoint\nof Hospital East with referral ID
+
+
 deactivate EHR
+deactivate EHR2
 @enduml
