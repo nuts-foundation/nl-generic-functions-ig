@@ -10,4 +10,4 @@ Description: "Request from Organization 2 for nursing care"
 * intent = #order
 * subject = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d) "Patient Jaantje Merkens"
 * requester = Reference(PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba) "Caroline van Dijk at Organization 2"
-* code = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
+* code = NlGfWlzZorgprofielenCS#6VV "VV Beschermd wonen met intensieve verzorging en verpleging"

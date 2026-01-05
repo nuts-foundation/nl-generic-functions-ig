@@ -213,3 +213,16 @@ Description: "The details of a healthcare practitioner's role within an organiza
 * practitioner 1..
 * organization 1..
 * code 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
+
+
+Extension: TaskSTU3Location
+Id:        task-stu3-location
+Title:    "Location for Task in STU3"
+Description: "The location where the task is performed."
+* value[x] only Reference(NlGfLocation)
+
+Extension: TaskSTU3HealthcareService
+Id:        task-stu3-healthcareservice
+Title:    "HealthcareService for Task in STU3"
+Description: "The healthcare service where the task is performed."
+* value[x] only Reference(NlGfHealthcareService)

@@ -1,8 +1,20 @@
 <Task xmlns="http://hl7.org/fhir">
-    <id value="eOverdracht-Task-eov-test-${CD6}-1-1b" />
+    <id value="eOverdracht-Task-eov-test-1-1b" />
     <meta>
         <profile value="http://nictiz.nl/fhir/StructureDefinition/eOverdracht-Task" />
     </meta>
+    <extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-healthcareservice">
+        <valueReference>
+            <reference value="HealthcareService/b48826dc-2d58-479a-bfd3-80b7a9d69757" />
+            <display value="Organization 3 - HealthcareService Verpleging"/>
+        </valueReference>
+    </extension>
+    <extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-location">
+        <valueReference>
+            <reference value="Location/9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b" />
+            <display value="Organization 3 - Location Nursing Department"/>
+        </valueReference>
+    </extension>
     <status value="requested" />
     <intent value="order" />
     <code>

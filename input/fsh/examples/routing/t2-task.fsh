@@ -7,7 +7,8 @@ Description: "Task created by Organization 2 to fulfill the ServiceRequest for n
 * status = #requested
 * intent = #order
 * code = $task-code#fulfill
-* basedOn = Reference(ServiceRequest/53a41e63-e826-45fa-9076-9be4b18399c8) "ServiceRequest Nursing"
+* focus = Reference(ServiceRequest/53a41e63-e826-45fa-9076-9be4b18399c8) "ServiceRequest Nursing"
 * for = Reference(Patient/27e58ece-409e-44f9-8cc1-b33495a0ef9d)
 * requester = Reference(PractitionerRole/f051d3bd-26ff-4030-a5b6-fc4ef2be83ba) "Caroline van Dijk at Organization 2"
-* insert RefAuthorAssignedIdentifier(owner, "https://cp3-test.example.org/departments","631cf10e-42d6-4165-9907-11e2333d4a85", "http://fhir.nl/fhir/NamingSystem/ura", "33333333", "Nursing department at Organization 3")
+* owner = Reference(HealthcareService/b48826dc-2d58-479a-bfd3-80b7a9d69757) "Organization 3 - HealthcareService Verpleging"
+* location = Reference(Location/9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b) "Organization 3 - Location Nursing Department"

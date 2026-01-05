@@ -34,6 +34,34 @@ Description: "Nursing department at Organization 3"
 * type[+] = $organization-type#X3 "Verplegings- of verzorgingsinstelling"
 * partOf = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
 
+Instance: 7c5e3d2a-1f9e-4b8c-9d6a-8e2f5c3b1a4d
+InstanceOf: NlGfLocation
+Usage: #example
+Title: "Organization 3 - Location Main Building"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/locations","7c5e3d2a-1f9e-4b8c-9d6a-8e2f5c3b1a4d","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
+* status = #active
+* name = "Main Building"
+* type = $v3-RoleCode#SNF "Skilled nursing facility"
+* managingOrganization = Reference(Organization/3e799075-63a2-4a4c-913d-a91b8198463d)
+* address.line = "Smidsstraat 10"
+* address.city = "Zelhem"
+* address.postalCode = "7021 AC"
+* address.country = "NL"
+
+Instance: 9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b
+InstanceOf: NlGfLocation
+Usage: #example
+Title: "Organization 3 - Location Nursing Department"
+* insert AuthorAssignedIdentifier("https://cp3-test.example.org/locations","9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b","http://fhir.nl/fhir/NamingSystem/ura", "33333333")
+* status = #active
+* name = "Verpleeghuis Weltevree"
+* type = $v3-RoleCode#SNF "Skilled nursing facility"
+* managingOrganization = Reference(Organization/631cf10e-42d6-4165-9907-11e2333d4a85)
+* address.city = "Doetinchem"
+* address.country = "NL"
+
+
+
 Instance: 8f224548-6d50-44b6-82c5-75826ee0900f
 InstanceOf: NlGfEndpoint
 Usage: #example
@@ -98,9 +126,12 @@ Title: "Organization 3 - HealthcareService Verpleging"
 * active = true
 * providedBy = Reference(Organization/631cf10e-42d6-4165-9907-11e2333d4a85)
 * name = "Verpleging"
-* type[+] = $sct#23044009 "Patient transfer to skilled nursing facility for level 1 care"
-* type[+] = $sct#58413007 "Patient transfer to skilled nursing facility for level 2 care"
-* type[+] = $sct#43495009 "Patient transfer to skilled nursing facility for level 3 care"
+* location[+] = Reference(Location/9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b)
+* location[+] = Reference(Location/7c5e3d2a-1f9e-4b8c-9d6a-8e2f5c3b1a4d)
+* type[+] = NlGfWlzZorgprofielenCS#5VV "VV Beschermd wonen met intensieve dementiezorg"
+* type[+] = NlGfWlzZorgprofielenCS#6VV "VV Beschermd wonen met intensieve verzorging en verpleging"
+* type[+] = NlGfWlzZorgprofielenCS#7VV "VV Beschermd wonen met zeer intensieve zorg, vanwege specifieke aandoeningen, met de nadruk op begeleiding"
+* type[+] = NlGfWlzZorgprofielenCS#8VV "VV Beschermd wonen met zeer intensieve zorg, vanwege specifieke aandoeningen, met de nadruk op verzorging/verpleging"
 * specialty[+].coding = urn:oid:2.16.840.1.113883.2.4.6.7#0100 "Verpleegkundige"
 
 

@@ -70,22 +70,15 @@ The following principles are followed in this TA:
 This chapter describes all relevant interactions on data level. 
 
 #### mCSD-Based Directory Lookup
-Routing is based on the IHE mCSD model, in which each care provider publishes Organization, Location, HealthcareService, and Endpoint resources in a mCSD Directory.  
+Routing is based on the IHE mCSD model, in which each care provider publishes Organization, Location, HealthcareService, and Endpoint resources in a mCSD Directory.  In this mCSD Directory, a sender can search for the appropriate service (e.g. “initial consultation” for “radiology” near “Zwolle”). See this [example content of a Query Directory](./Bundle-query-directory.html).
 
-Users (or their systems) search the directory for a suitable HealthcareService and construct a FHIR ServiceRequest (R4) or ReferralRequest (STU3) and Task. 
+Users (or their systems) first determine ***what*** they'd want to order or refer to patient for. The HealthcareService.type in the mCSD Directory contains a catalog of orderable items or service types. These can be represented as a (simple) code or as a activitydefinition/plandefinition. When a selection has been made, the request resource is created (using either a simple `.code` or `.instantiatesCanonical` in the case of an activitydefinition/plandefinition). See [example](./ServiceRequest-53a41e63-e826-45fa-9076-9be4b18399c8.html) Servicerequest. 
 
-<div>
-{% include workflow-base-f.svg %}
-</div>
+The FHIR Task is used to determine ***who*** and ***where*** to request should be delivered. The location is specified in `Task.location` and healthcareservice should be linked in `Task.owner` like in this [example](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.html).
 
-##### Interaction flow:
-1. Care providers publish structured addressable resources to the directory
-1. The sender searches for the appropriate service (e.g. “initial consultation” for “radiology” near “Zwolle”) in a Care Service (Query) Directory ([example content of a Query Directory](./Bundle-query-directory.html))
-1. The resulting HealthcareService (indirectly) refers to Organization, Location, Endpoint, etc.
-1. This is used in the ServiceRequest ([example](./ServiceRequest-53a41e63-e826-45fa-9076-9be4b18399c8.html)) and Task ([example](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.html))
 
 ##### Role of the ServiceRequest
-The ServiceRequest represents the ‘clinical intent’ or ‘clinical authorization’ for a procedure. It shall have a ServiceRequest.code (representing e.g. ‘initial consultation’ or ‘nursing handoff’). 
+The ServiceRequest represents the ‘clinical intent’ or ‘clinical authorization’ for a procedure. It shall have a ServiceRequest.code (representing e.g. ‘initial consultation’ or ‘nursing handoff’) and may be instantiated by an ActivityDefinition or PlanDefinition
 
 ##### Role of the ActivityDefinition
 Using ActivityDefinitions directories can define more precisely how a service needs to be requested or distinguish between different activities that can be provided by a single service. Using PlanDefinitions (consisting of multiple ActivityDefinitions) allows for defining more complex workflows. 
@@ -93,12 +86,10 @@ Using ActivityDefinitions directories can define more precisely how a service ne
 When the service directory defines an ActivityDefinition for the requested service, the server may decline a ServiceRequest for that service that does not refer to that ActivityDefinition in ServiceRequest.instantiatesCanonical or does not adhere to the requirements specified in that definition. 
 
 ##### Role of the Task
-The Task is used for state management and administrative routing (I.e ‘who’ and ‘where’ should do the referred ServiceRequest). The Task.code is used to define what the Task.owner is expected to do with the referred ServiceRequest, e.g. ‘fulfill’, ‘change’ or ‘approve’.   
+The Task is used coordination, i.e. state management and administrative routing (I.e ‘who’ and ‘where’ should do the referred ServiceRequest). The Task.code is used to define what the Task.owner is expected to do with the referred ServiceRequest, e.g. ‘fulfill’, ‘change’ or ‘approve’. Task.owner should refer to the HealthcareService responsible for carrying out the Request
 
 ##### Role of the HealthcareService
-The HealthcareService is used to publish supported activities (using codeable concepts in element.type and optionally references to ActivityDefinitions and PlanDefinitions in element.type.extension:supportedActivityDefinitions). These items are primarily used in the Request. 
-
-The HealthcareService also points to the (sub-)organization that provides the HealthcareService. This organization should be used as Task.owner.  
+The HealthcareService is used to publish supported activities (using codeable concepts in element `.type` and optionally references to ActivityDefinitions and PlanDefinitions in element `.type.extension:supportedActivityDefinitions` ). These items are primarily used in the Request. 
 
 The HealthcareService.location may point to (multiple) physical locations where the service can be performed. If the HealthcareService does not specify a location, the location can be inherited from the organization (or, recursively, parent organizations) that provides the service. 
 
@@ -111,6 +102,29 @@ The [HealthcareService-profile](https://build.fhir.org/ig/nuts-foundation/nl-gen
 - requirement for .providedBy 
 - valueset binding of .type 
 - extension:supportedActivityDefinitions 
+
+
+#### Support for FHIR STU3-eOverdracht
+
+To support the current eOverdracht specification, (a FHIR STU3 Implementation Guide), 2 extension are added to the eOverdracht Task  (see this [example](input/images-source/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) ):
+- .location: Reference to the location
+- .healthcareservice: Reference to the healthcareservice
+
+```
+<extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-healthcareservice">
+    <valueReference>
+        <reference value="HealthcareService/b48826dc-2d58-479a-bfd3-80b7a9d69757" />
+        <display value="Organization 3 - HealthcareService Verpleging"/>
+    </valueReference>
+</extension>
+<extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-location">
+    <valueReference>
+        <reference value="Location/9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b" />
+        <display value="Organization 3 - Location Nursing Department"/>
+    </valueReference>
+</extension>
+```
+In FHIR R4, the elements for location and healthcareservice are natively supported. Using these extensions, no breaking changes are introduced.
 
 
 ### Document management
@@ -138,3 +152,8 @@ This document is a co-creation of the companies listed below. The following peop
 | 1.0.1 | December 19th 2024 |        | An example of eOverdracht has been added. Example of BgZ has been supplemented for missing parts. An attribute in table 2.3 (assessment) has been removed because it added nothing. |
 | 1.1   | August 28th 2025   |        | The role of ActivityDefinition has been revised. Some elements are now covered by the concept of the HealthcareService.                                                             |
 {:.grid .table-hover}
+
+
+### Appendix: Examples
+
+TODO: https://github.com/Nictiz/Nictiz-testscripts/blob/main/src/eOverdracht-4-0/Test/_reference/resources/resources-specific/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml
