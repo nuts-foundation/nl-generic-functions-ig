@@ -45,7 +45,7 @@ This TA assumes use of FHIR R4 resources and is compatible with IHE mCSD directo
 ##### Principles
 The following principles are followed in this TA: 
 - Use international standards where applicable  
-- Align with FHIR Workflow, Implementation guide Clinical Order Workflow and IHE mCSD 
+- Align with FHIR Workflow, Implementation guide [Clinical Order Workflow](https://build.fhir.org/ig/HL7/fhir-cow-ig/) and [IHE mCSD](https://profiles.ihe.net/ITI/mCSD/) 
 - Minimize custom extensions or non-standard patterns  
 - Ensure design longevity (3-5 years applicability)
 
@@ -72,7 +72,7 @@ This chapter describes all relevant interactions on data level.
 #### mCSD-Based Directory Lookup
 Routing is based on the IHE mCSD model, in which each care provider publishes Organization, Location, HealthcareService, and Endpoint resources in a mCSD Directory.  In this mCSD Directory, a sender can search for the appropriate service (e.g. “initial consultation” for “radiology” near “Zwolle”). See this [example content of a Query Directory](./Bundle-query-directory.html).
 
-Users (or their systems) first determine ***what*** they'd want to order or refer to patient for. The HealthcareService.type in the mCSD Directory contains a catalog of orderable items or service types. These can be represented as a (simple) code or as a activitydefinition/plandefinition. When a selection has been made, the request resource is created (using either a simple `.code` or `.instantiatesCanonical` in the case of an activitydefinition/plandefinition). See [example](./ServiceRequest-53a41e63-e826-45fa-9076-9be4b18399c8.html) Servicerequest. 
+Users (or their systems) first determine ***what*** they'd want to order or refer to patient for. The HealthcareService.type in the mCSD Directory contains one or more orderable items or service types. These can be represented as a (simple) code or as a ActivityDefinition/PlanDefinition. When a selection has been made, the request resource is created (using either a simple `.code` or `.instantiatesCanonical` in the case of an ActivityDefinition/PlanDefinition). See [example](./ServiceRequest-53a41e63-e826-45fa-9076-9be4b18399c8.html) Servicerequest. 
 
 The FHIR Task is used to determine ***who*** and ***where*** to request should be delivered. The location is specified in `Task.location` and healthcareservice should be linked in `Task.owner` like in this [example](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.html).
 
@@ -104,11 +104,11 @@ The [HealthcareService-profile](https://build.fhir.org/ig/nuts-foundation/nl-gen
 - extension:supportedActivityDefinitions 
 
 
-#### Support for FHIR STU3-eOverdracht
+#### Support for FHIR STU3 Task
 
-To support the current eOverdracht specification, (a FHIR STU3 Implementation Guide), 2 extension are added to the eOverdracht Task  (see this [example](input/images-source/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) ):
-- .location: Reference to the location
-- .healthcareservice: Reference to the healthcareservice
+To support the current [eOverdracht specification](https://informatiestandaarden.nictiz.nl/wiki/vpk:V4.0_FHIR_eOverdracht), (a FHIR STU3 Implementation Guide), 2 extension are added to the eOverdracht Task  (see this [example](./eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) (original [example](https://github.com/Nictiz/Nictiz-testscripts/blob/main/src/eOverdracht-4-0/Test/_reference/resources/resources-specific/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) from NictiZ test-resources)):
+- .location: Reference to the Location
+- .healthcareservice: Reference to the HealthcareService
 
 ```
 <extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-healthcareservice">
@@ -124,7 +124,7 @@ To support the current eOverdracht specification, (a FHIR STU3 Implementation Gu
     </valueReference>
 </extension>
 ```
-In FHIR R4, the elements for location and healthcareservice are natively supported. Using these extensions, no breaking changes are introduced.
+In FHIR R4, the reference to Location and HealthcareService (part of `.owner`) are natively supported. Using these extensions, no breaking changes are introduced.
 
 
 ### Document management
@@ -156,4 +156,6 @@ This document is a co-creation of the companies listed below. The following peop
 
 ### Appendix: Examples
 
-TODO: https://github.com/Nictiz/Nictiz-testscripts/blob/main/src/eOverdracht-4-0/Test/_reference/resources/resources-specific/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml
+TA Routing specifies the ***what***, ***who*** and ***where*** of Requests and (coordination) Tasks. These can be applied in workflows like [eOverdracht](https://informatiestandaarden.nictiz.nl/wiki/vpk:V4.0_FHIR_eOverdracht) or the workflows defined in the [Clinical Order Workflow IG](https://build.fhir.org/ig/HL7/fhir-cow-ig/) (COW). 
+
+In the COW-example [Simple Lab Order Flow](https://build.fhir.org/ig/HL7/fhir-cow-ig/en/ex1-simple-lab-order-flow.html), the mCSD Directory represents the 'Order Catalog' mentioned. For routing, a care provider should publish the glucose test (LOINC 2345-7) in a HealthcareService.type element (possibly along with a more fine-grained ActivityDefinition). Using the code or ActivityDefinition, a ServiceRequest can be initiated. The HealthcareService (and a HealthcareService.location) are referred in `Task.owner` and `Task.location` respectively. 
