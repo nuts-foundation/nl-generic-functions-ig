@@ -4,6 +4,7 @@ Alias: $NlPractitioner = http://nictiz.nl/fhir/StructureDefinition/nl-core-Healt
 Alias: $NlPractitionerRole = http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthProfessional-PractitionerRole
 Alias: $NlCareTeam = http://nictiz.nl/fhir/StructureDefinition/nl-core-CareTeam
 Alias: $NlPatient = http://nictiz.nl/fhir/StructureDefinition/nl-core-Patient
+Alias: $NlEpisodeOfCare = http://nictiz.nl/fhir/StructureDefinition/nl-core-EpisodeOfCare
 Alias: $sct = http://snomed.info/sct
 Alias: $loinc = http://loinc.org
 Alias: $task-status = http://hl7.org/fhir/task-status

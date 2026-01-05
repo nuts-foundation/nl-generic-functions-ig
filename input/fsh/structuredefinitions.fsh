@@ -213,3 +213,25 @@ Description: "The details of a healthcare practitioner's role within an organiza
 * practitioner 1..
 * organization 1..
 * code 1.. //compliance to https://profiles.ihe.net/ITI/mCSD/StructureDefinition/IHE.mCSD.PractitionerRole
+
+
+Profile: NlGfEpisodeOfCare
+Parent: $NlEpisodeOfCare
+Id: nl-gf-episodeofcare
+Title: "NL Generic Functions EpisodeOfCare Profile"
+Description: "An association between a patient and an organization / healthcare provider during which time encounters may occur."
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "$this"
+* identifier ^slicing.rules = #open
+* identifier contains
+    AssignedId 1..1
+* identifier[AssignedId].system 1..1
+* identifier[AssignedId].value 1..1
+* identifier[AssignedId].assigner 1..1
+* identifier[AssignedId].assigner.identifier 1..1
+* identifier[AssignedId].assigner.identifier.system = "http://fhir.nl/fhir/NamingSystem/ura"
+* identifier[AssignedId].assigner.identifier.value 1..1
+* identifier[AssignedId].assigner.identifier.type 1..1
+* identifier[AssignedId].assigner.identifier.type.coding 1..1
+* identifier[AssignedId].assigner.identifier.type.coding.system = $provenance-participant-type
+* identifier[AssignedId].assigner.identifier.type.coding.code = #author
