@@ -106,7 +106,7 @@ The [HealthcareService-profile](https://build.fhir.org/ig/nuts-foundation/nl-gen
 
 #### Support for FHIR STU3 Task
 
-To support the current [eOverdracht specification](https://informatiestandaarden.nictiz.nl/wiki/vpk:V4.0_FHIR_eOverdracht), (a FHIR STU3 Implementation Guide), 2 extension are added to the eOverdracht Task  (see this [example](./eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) (original [example](https://github.com/Nictiz/Nictiz-testscripts/blob/main/src/eOverdracht-4-0/Test/_reference/resources/resources-specific/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) from NictiZ test-resources)):
+To support the current [eOverdracht specification](https://informatiestandaarden.nictiz.nl/wiki/vpk:V4.0_FHIR_eOverdracht), (a FHIR STU3 Implementation Guide), 2 extension are added to the eOverdracht Task profile  (see the new [profile](./eOverdracht-Task-STU3-profile.json), this [example](./eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) (original [example](https://github.com/Nictiz/Nictiz-testscripts/blob/main/src/eOverdracht-4-0/Test/_reference/resources/resources-specific/eOverdracht-Task-eov-test-1_1b-REQUESTED.xml) from NictiZ test-resources)):
 - .location: Reference to the Location
 - .healthcareservice: Reference to the HealthcareService
 
