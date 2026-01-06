@@ -2,7 +2,7 @@
 This FHIR Implementation Guide specifies the Generic Function 'Medical Record Localization' (GF Localization), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GF-Localization provides a standardized framework that enables healthcare professionals to discover which organizations hold relevant patient data of a specific type, ensuring GDPR compliance through proportionality and subsidiarity principles while facilitating secure and efficient health information exchange.
 
 Patient data is divided over multiple data holders. In today’s healthcare landscape organizations rely on several different types of indices to find data concerning a specific patient and context. However, none of these indices are complete and
-all of these indices have different requirements for usage, hindering interoperability and timely access to health information. GF-Localization addresses this challenge by providing a unified framework that ensures an index of all data holders concerning a specific patient and type is easily and securely accessible.
+all of these indices have different requirements for usage, hindering interoperability and timely access to health information. GF-Localization addresses this challenge by providing a unified framework that ensures an index of all data holders concerning a specific patient and type that is easily and securely accessible.
 
 This guide outlines the technical requirements and architectural principles underlying GF-Localization, with a focus on trust, authenticity, and data integrity. Key design principles include:
 
@@ -14,7 +14,7 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 ### Solution overview
 
-GF-Localization follows the choices made by the MinvWS Localization working group, see [GF-Lokalisatie, ADR's](https://github.com/orgs/minvws/projects/70/views/1). This guide specifies the choices made. Most impactful/striking choice are:
+GF-Localization follows the choices made by the MinVWS Localization working group, see [GF-Lokalisatie, ADR's](https://github.com/orgs/minvws/projects/70/views/1). This guide specifies the choices made. Most impactful/striking choice are:
 
 - using one national Medical Record Localization Service: the 'Nationale Verwijs Index' (NVI)
 - using a local metadata registry (LMR) per data holder
