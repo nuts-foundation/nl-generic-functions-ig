@@ -47,7 +47,7 @@ In order to get the `[patient-id]`, the [$match operation](https://hl7.org/fhir/
 When a patient moves to a different General Practitioner, an extra step is needed by the new GP:
 - the new GP has to register the EpisodeOfCare at the old GP-localization-service (like any other care provider)
 - *the new GP copies all EpisodeOfCare-records from the old GP-localization-service*
-- the old GP ends the active EpisodeOfCare-record using `.period.end` and `.status = finished` (like any other care provider)
+- the old GP ends the active EpisodeOfCare-record using `.status = finished` (like any other care provider)
 These steps ensure that every care provider is pointed to the active GP-localization-service and is updated on any new GP relationship.  
 
 
@@ -59,8 +59,10 @@ Within GF-Localization the [NL-gf-EpisodeOfCare profile](./StructureDefinition-n
 This profile is based on the [NL-Core-EpisodeOfCare](https://simplifier.net/nictiz-r4-zib2020/nlcoreepisodeofcare) profile and adds/requires an author-assigned identifier.
 The content of the EpisodeOfCare resource can be used to determine if a care provider (data holder) has relevant data for the data user.
 
-NB: The `EpisodeOfCare.team` element may be used to point to a CareTeam of care providers (from different organizations) collaborating for a specific patient in related episodes (thereby creating groups of related episodes).
-
+The EpisodeOfCare is used here primarily for Localization, but it may also be used other purposes:
+- The `EpisodeOfCare.team` element may be used to point to a CareTeam of care providers (from different organizations) collaborating for a specific patient in related episodes (thereby creating groups of related episodes).
+- Check the current, active relationship with a General Practitioner and other care providers
+- A consistent overview of care episodes for a specific patient
 
 
 ### Security and Privacy Considerations
