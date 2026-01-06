@@ -31,7 +31,7 @@ ehr -> nvi: GET patient-id using $match operation\n with patient.identifier BSN:
 
 ehr -> nvi: GET EpisodeOfCare(s) for patient
 
-ehr -> ehr: Check if GP relationship is active\n (if not, select active GP from\n EpisodeOfCares and repeat steps 2-4)
+ehr -> ehr: Check if GP relationship is active\n (if not, select active GP from\n EpisodeOfCares, update GP in\n EHR and repeat steps 2-4)
 
 == Addressing and fetching data ==
 

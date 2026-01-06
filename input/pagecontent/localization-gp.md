@@ -38,7 +38,7 @@ A (Medical Record) Localization Service is responsible for managing the registra
 The [TA Notified Pull](https://www.twiin.nl/tanp) is used for create/update transactions, so the Localization Service shall expose an endpoint capable of receiving Twiin-TA-notification payloads. The Localization Service is expected to handle the notification (i.e. get the EpisodeOfCare, rewriting remote/local references and create/update the local repository).
 
 #### Localization Client
-Localization Client shall register/push each (update of a) localization record using the Notified Pull specification to the GP (i.e. send a notification of a new/updated EpisodeOfCare resource to the GP). 
+Localization Clients shall register/push each localization (episode of care) record to the GP-localization-service. Each update in a care episode is also pushed to the GP-localization-service (for example, when a care episode is finished). For the registration of new/updated EpisodeOfCare-records, the TA Notified Pull specification is used (i.e. send a notification of a new/updated EpisodeOfCare resource to the GP). 
 
 A Localization Client can search for other care episodes at the GP-localization-service using a regular `GET [GP-localization-service base url]/EpisodeOfCare?patient=[patient-id]`. Each episode of care points to a care provider (data holder) that may have data relevant for the Localization Client.
 In order to get the `[patient-id]`, the [$match operation](https://hl7.org/fhir/R4/patient-operation-match.html) shall be used.
