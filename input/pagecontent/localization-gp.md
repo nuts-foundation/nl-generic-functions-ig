@@ -20,14 +20,14 @@ GF-Localization follows the choices made by the MinvWS Localization working grou
 - if the GP is unknown and cannot be established during patient-registration (e.g. patient is unconscious in an emergency situation), a GP-citizen-index can be used to lookup the patient. (***out-of-scope for this version***)
 
 Here is a brief overview of the processes that are involved: 
-1. Every data holder registers references of patient care episodes with the GP-localization-service (when patient consents)
+1. Every data holder registers care episodes at the GP-localization-service (when patient consents)
 1. A data user (practitioner and/or system (EHR)) can now use the GP-localization-service to discover data holders and episodes of care for a specific patient.
 
 The Localization service-response provides a list of data holders; the endpoints of these data holders (e.g. FHIR or DICOM-urls) need to be resolved using a [Care service (Query) Directory](./care-services.html#query-directory). 
 
 <img src="localization-gp-overview-transactions.png" width="60%" style="float: none" alt="Overview of transactions in the Medical Record Localization solution."/>
 
-For more detail on the topology of GF-Localization, see [GF-Lokalisatie, ADR-2](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15). In this Localization-solution, the decentralized topology was chose in stead of a centralized setup
+For more detail on the topology of GF-Localization, see [GF-Lokalisatie, ADR-2](https://github.com/minvws/generiekefuncties-lokalisatie/issues/15). In this Localization-solution, the decentralized topology was chosen in stead of a centralized setup
 Each component, data model, and transaction will be discussed in more detail.
 
 ### Components (actors)
@@ -60,9 +60,9 @@ This profile is based on the [NL-Core-EpisodeOfCare](https://simplifier.net/nict
 The content of the EpisodeOfCare resource can be used to determine if a care provider (data holder) has relevant data for the data user.
 
 The EpisodeOfCare is used here primarily for Localization, but it may also be used other purposes:
-- The `EpisodeOfCare.team` element may be used to point to a CareTeam of care providers (from different organizations) collaborating for a specific patient in related episodes (thereby creating groups of related episodes).
-- Check the current, active relationship with a General Practitioner and other care providers
 - A consistent overview of care episodes for a specific patient
+- Check the current, active relationship with a General Practitioner and other care providers
+- The `EpisodeOfCare.team` element may be used to point to a CareTeam of care providers (from different organizations) collaborating for a specific patient in related episodes (thereby creating groups of related episodes).
 
 
 ### Security and Privacy Considerations
@@ -74,11 +74,10 @@ Data registration and retrieval shall follow regular security and privacy consid
 ### Example Use Cases
 
 #### Use case: Radiologist registering Imaging Data
-**Scenario**: Dr. Carter, a radiologist at a care provider organization, performs an imaging study for a patient. This imaging study is related to a EpisodeOfCare that is created at the start of the imaging study. To enable data discovery by other healthcare professionals, Dr. Carter's organization registers this EpisodeOfCare at the GP-Localization-service. 
+**Scenario**: Dr. Carter, a radiologist at a care provider organization, performs an imaging study for a patient. This imaging study is related to an EpisodeOfCare that is created at the start of the imaging study. To enable data discovery by other healthcare professionals, Dr. Carter's organization registers this EpisodeOfCare at the GP-Localization-service. 
 
 
-TODO (create EpisodeOfCare, a GP is known, search EpisodesOfCare at GP-localization-service, check if GP relationship is active, TANP (push) EpisodesOfCare to GP-localization-service)
-<!-- {% include localization-internist-registration.svg %} -->
+{% include localization-gp-internist-registration.svg %}
 
 
 #### Use Case: Cardiologist searching for Imaging Data
@@ -86,8 +85,7 @@ TODO (create EpisodeOfCare, a GP is known, search EpisodesOfCare at GP-localizat
 **Scenario**: Dr. Smith, a cardiologist at Hospital A, is treating a patient who was recently referred from another hospital. She needs to know what imaging data (X-rays, CT scans, MRIs) might be available from other healthcare providers to avoid unnecessary duplicate examinations and to get a complete picture of the patient's medical history.
 
 
-TODO (a GP is known, search EpisodesOfCare at GP-localization-service, check if GP relationship is active, lookup endpoints of relevant care provider, search for data at relevant care providers)
-<!-- {% include localization-cardiologist-search.svg %} -->
+{% include localization-gp-cardiologist-search.svg %}
 
 
 ### Roadmap for GF Localization

@@ -1,0 +1,47 @@
+@startuml localization-gp-cardiologist-search
+
+title Localization of patient data
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+
+!pragma teoz true
+
+actor "Dr. Smith\n(Cardiologist)" as doctor
+participant "EHR System @\n(Care Provider, URA:456)" as ehr
+participant "GP Localization Service" as nvi
+participant "Addressing Service" as addressing
+participant "EHR @\n(Care Provider)" as ehr_reg
+
+
+
+autonumber
+note right of doctor
+  General Practitioner was noted during patient registration
+end note
+
+doctor -> ehr: Request ImagingStudies\n for patient (BSN:987654321)
+
+== Localization ==
+
+ehr -> addressing: get Endpoints for General Practitioner\n (GP-Localization-Service)
+
+ehr -> nvi: GET patient-id using $match operation\n with patient.identifier BSN:987654321
+
+ehr -> nvi: GET EpisodeOfCare(s) for patient
+
+ehr -> ehr: Check if GP relationship is active\n (if not, select active GP from\n EpisodeOfCares and repeat steps 2-4)
+
+== Addressing and fetching data ==
+
+loop for each custodian
+  ehr -> addressing: get Endpoints for Care Provider (custodian)
+
+  ehr -> ehr_reg: Get relevant ImagingStudies for patient
+end
+
+ehr -> doctor: Display consolidated list \nof ImagingStudies to Dr. Smith
+
+@enduml
+
