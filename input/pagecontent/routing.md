@@ -86,7 +86,7 @@ Using ActivityDefinitions directories can define more precisely how a service ne
 When the service directory defines an ActivityDefinition for the requested service, the server may decline a ServiceRequest for that service that does not refer to that ActivityDefinition in `ServiceRequest.instantiatesCanonical` or does not adhere to the requirements specified in that definition. 
 
 ##### Role of the Task
-The Task is used coordination, i.e. state management and administrative routing (I.e ‘who’ and ‘where’ should do the referred ServiceRequest). The Task.code is used to define what the Task.owner is expected to do with the referred ServiceRequest, e.g. ‘fulfill’, ‘change’ or ‘approve’. Task.owner should refer to the HealthcareService responsible for carrying out the Request
+The Task is used for coordination, i.e. state management and administrative routing (i.e ‘who’ and ‘where’ should do the referred ServiceRequest). The `Task.code` is used to define what the `Task.owner` is expected to do with the referred ServiceRequest, e.g. ‘fulfill’, ‘change’ or ‘approve’. `Task.owner` should refer to the HealthcareService responsible for carrying out the Request
 
 ##### Role of the HealthcareService
 The HealthcareService is used to publish supported activities (using codeable concepts in element `.type` and optionally references to ActivityDefinitions and PlanDefinitions in element `.type.extension:supportedActivityDefinitions` ). These items are primarily used in the Request. 
