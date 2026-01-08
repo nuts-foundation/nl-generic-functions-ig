@@ -1,0 +1,64 @@
+<Task xmlns="http://hl7.org/fhir">
+    <id value="eOverdracht-Task-eov-test-1-1b" />
+    <meta>
+        <profile value="https://nuts-foundation.github.io/nl-generic-functions-ig/eOverdracht-Task-STU3-profile.json" />
+    </meta>
+    <extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-healthcareservice">
+        <valueReference>
+            <reference value="HealthcareService/b48826dc-2d58-479a-bfd3-80b7a9d69757" />
+            <display value="Organization 3 - HealthcareService Verpleging"/>
+        </valueReference>
+    </extension>
+    <extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-location">
+        <valueReference>
+            <reference value="Location/9a2b8f1c-4e7d-42a1-b3c9-2d5e8f7a6c1b" />
+            <display value="Organization 3 - Location Nursing Department"/>
+        </valueReference>
+    </extension>
+    <status value="requested" />
+    <intent value="order" />
+    <code>
+        <coding>
+            <system value="http://snomed.info/sct" />
+            <code value="308292007" />
+            <display value="Overdracht van zorg" />
+        </coding>
+    </code>
+    <for>
+        <reference value="Patient/nl-core-patient-eov-test-1-1b-01" />
+        <display value="Erik XXX_Altenborg" />
+    </for>
+    <requester>
+        <agent>
+            <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
+                <valueReference>
+                    <reference value="PractitionerRole/nl-core-practitionerrole-eov-test-1-1b-01" />
+                    <display value="Verpleegkundigen, niet nader gespecificeerd" />
+                </valueReference>
+            </extension>
+            <reference value="Practitioner/nl-core-practitioner-eov-test-1-1b-01" />
+            <display value="C.M. Bruinsma" />
+        </agent>
+        <onBehalfOf>
+            <reference value="Organization/nl-core-organization-eov-test-1-1b-01" />
+            <display value="AB-zkh Noord" />
+        </onBehalfOf>
+    </requester>
+    <owner>
+        <reference value="Organization/nl-core-organization-eov-test-1-1b-02" />
+        <display value="Thuiszorg Org Noord" />
+    </owner>
+    <input>
+        <type>
+            <coding>
+                <system value="http://snomed.info/sct" />
+                <code value="721915006" />
+                <display value="Admission request document" />
+            </coding>
+        </type>
+        <valueReference>
+            <reference value="Composition/eOverdracht-AdvanceNotice-eov-test-1-1b-01" />
+            <display value="Aanmeldbericht Erik XXX_Altenborg" />
+        </valueReference>
+    </input>
+</Task>
