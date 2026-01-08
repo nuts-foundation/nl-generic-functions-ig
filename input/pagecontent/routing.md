@@ -74,7 +74,7 @@ Routing is based on the IHE mCSD model, in which each care provider publishes Or
 
 Users (or their systems) first determine ***what*** they'd want to order for or refer the patient to. The `HealthcareService.type` in the mCSD Directory contains one or more orderable items or service types. These can be represented as a (simple) code or as an ActivityDefinition/PlanDefinition. When a selection has been made, the request resource is created (using either a simple `.code` or `.instantiatesCanonical` in the case of an ActivityDefinition/PlanDefinition). See [example](./ServiceRequest-53a41e63-e826-45fa-9076-9be4b18399c8.html) Servicerequest. 
 
-The FHIR Task is used to determine ***who*** and ***where*** to request should be delivered. The location is specified in `Task.location` and healthcareservice should be linked in `Task.owner` like in this [example](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.html).
+The FHIR Task is used to determine to ***who*** and ***where*** the request should be delivered. The location is specified in `Task.location` and the healthcare service should be linked in `Task.owner` like in this [example](./Task-a0fc5221-bcd9-46f1-922f-c2913dae5d63.html).
 
 
 ##### Role of the ServiceRequest
