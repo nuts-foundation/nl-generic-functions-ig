@@ -91,7 +91,7 @@ The Task is used for coordination, i.e. state management and administrative rout
 ##### Role of the HealthcareService
 The HealthcareService is used to publish supported activities (using codeable concepts in element `.type` and optionally references to ActivityDefinitions and PlanDefinitions in element `.type.extension:supportedActivityDefinitions` ). These items are primarily used in the Request. 
 
-The HealthcareService.location may point to (multiple) physical locations where the service can be performed. If the HealthcareService does not specify a location, the location can be inherited from the organization (or, recursively, parent organizations) that provides the service. 
+The `HealthcareService.location` may point to (multiple) physical locations where the service can be performed. If the HealthcareService does not specify a location, the location can be inherited from the organization (or, recursively, parent organizations) that provides the service. 
 
 Either the `HealthcareService.endpoint` or `ActivityDefinition.endpoint` must contain a suitable Endpoint resource (e.g. an Endpoint that is capable of receiving FHIR notifications like TA-NP specifies). If both an ActivityDefinition and a HealthcareService define an endpoint, the one defined on the ActivityDefinition must be used. 
 
