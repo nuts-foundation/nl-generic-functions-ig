@@ -143,7 +143,7 @@ This document is a co-creation of the companies listed below. The following peop
 | Nexus      | Marcel Engels                       | marcel.engels@nexus-nederland.nl |
 | Nictiz     | Pieter Edelman                      |                                  |
 | Twiin      | Marc Sandberg, Robin van Everdingen |                                  |
-| VZVZ      | Ron van Holland                     |                                  |
+| VZVZ       | Ron van Holland                     |                                  |
 | ZorgDomein | Stephan Opdenberg, Ruben Pape       |                                  |
 | Nuts       | Bram Wesselo                        |                                  |
 {:.grid .table-hover}
