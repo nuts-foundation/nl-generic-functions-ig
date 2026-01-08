@@ -25,10 +25,10 @@ The mechanism defined in this document is intended to provide a single and simpl
 
 ##### Scope
 This TA applies to scenarios where information exchange involves:  
-- Publishing (sub-)organizations, practitioners and locations as routing labels in an mCSD Directory 
-- Selecting a (sub-)organization, and practitioner or location from a structured directory using activity-types/definitions in healthcare services 
-- Creating (clinical) requests and (logistic) tasks for the (sub-)organization, and practitioner or location 
-- Sending notifications to the corresponding endpoint of the (sub-)organization, and practitioner or location 
+- Publishing healthcare services, (sub-)organizations, practitioners and locations as routing labels in an mCSD Directory 
+- Selecting a (sub-)organization, practitioner or location from a structured directory using activity-types/definitions in healthcare services 
+- Creating (clinical) requests and (logistic) tasks for the healthcare service, (sub-)organization, practitioner or location 
+- Sending notifications to the corresponding endpoint of the healthcare service, (sub-)organization, practitioner or location 
 
 All information exchanges described in this TA are based on FHIR standards and profiles, ensuring semantic and technical interoperability between participating systems. 
 
@@ -81,7 +81,7 @@ The FHIR Task is used to determine to ***who*** and ***where*** the request shou
 The ServiceRequest represents the ‘clinical intent’ or ‘clinical authorization’ for a procedure. It shall have a `ServiceRequest.code` (representing e.g. ‘initial consultation’ or ‘nursing handoff’) and may be instantiated by an ActivityDefinition or PlanDefinition
 
 ##### Role of the ActivityDefinition
-Using ActivityDefinitions directories can define more precisely how a service needs to be requested or distinguish between different activities that can be provided by a single service. Using PlanDefinitions (consisting of multiple ActivityDefinitions) allows for defining more complex workflows. 
+Using ActivityDefinitions in directories can define more precisely how a service needs to be requested or distinguish between different activities that can be provided by a single service. Using PlanDefinitions (consisting of multiple ActivityDefinitions) allows for defining more complex workflows. 
 
 When the service directory defines an ActivityDefinition for the requested service, the server may decline a ServiceRequest for that service that does not refer to that ActivityDefinition in `ServiceRequest.instantiatesCanonical` or does not adhere to the requirements specified in that definition. 
 
@@ -110,7 +110,7 @@ To support the current [eOverdracht specification](https://informatiestandaarden
 - .location: Reference to the Location
 - .healthcareservice: Reference to the HealthcareService
 
-These reference SHOULD also include an Author-assigned-identifier (required in the profiles for [NL-GF-Location](./StructureDefinition-nl-gf-location.html) and [NL-GF-HealthcareService](./StructureDefinition-nl-gf-healthcareservice.html)). *Without* such an identifier, the eOverdracht-sender *SHALL* make the resources available to eOverdracht-receiver (support read-operations for Location and HealthcareService, using [this](./CapabilityStatement-nl-gf-query-directory-query-client-reads.html) capabilitystatement)
+These references SHOULD also include an Author-assigned-identifier (required in the profiles for [NL-GF-Location](./StructureDefinition-nl-gf-location.html) and [NL-GF-HealthcareService](./StructureDefinition-nl-gf-healthcareservice.html)). *Without* such an identifier, the eOverdracht-sender *SHALL* make the resources available to eOverdracht-receiver (support read-operations for Location and HealthcareService, using [this](./CapabilityStatement-nl-gf-query-directory-query-client-reads.html) capabilitystatement)
 
 
 ```
