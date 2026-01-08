@@ -143,7 +143,7 @@ This document is a co-creation of the companies listed below. The following peop
 | Nexus      | Marcel Engels                       | marcel.engels@nexus-nederland.nl |
 | Nictiz     | Pieter Edelman                      |                                  |
 | Twiin      | Marc Sandberg, Robin van Everdingen |                                  |
-| VZVZ1      | Ron van Holland                     |                                  |
+| VZVZ       | Ron van Holland                     |                                  |
 | ZorgDomein | Stephan Opdenberg, Ruben Pape       |                                  |
 | Nuts       | Bram Wesselo                        |                                  |
 {:.grid .table-hover}
@@ -154,6 +154,7 @@ This document is a co-creation of the companies listed below. The following peop
 |-------|--------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1.0.1 | December 19th 2024 |        | An example of eOverdracht has been added. Example of BgZ has been supplemented for missing parts. An attribute in table 2.3 (assessment) has been removed because it added nothing. |
 | 1.1   | August 28th 2025   |        | The role of ActivityDefinition has been revised. Some elements are now covered by the concept of the HealthcareService.                                                             |
+| 1.3   | January 8th 2026   |        | Consultation feedback resolved.                                                             |
 {:.grid .table-hover}
 
 
