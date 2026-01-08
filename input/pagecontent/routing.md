@@ -78,7 +78,7 @@ The FHIR Task is used to determine to ***who*** and ***where*** the request shou
 
 
 ##### Role of the ServiceRequest
-The ServiceRequest represents the ‘clinical intent’ or ‘clinical authorization’ for a procedure. It shall have a ServiceRequest.code (representing e.g. ‘initial consultation’ or ‘nursing handoff’) and may be instantiated by an ActivityDefinition or PlanDefinition
+The ServiceRequest represents the ‘clinical intent’ or ‘clinical authorization’ for a procedure. It shall have a `ServiceRequest.code` (representing e.g. ‘initial consultation’ or ‘nursing handoff’) and may be instantiated by an ActivityDefinition or PlanDefinition
 
 ##### Role of the ActivityDefinition
 Using ActivityDefinitions directories can define more precisely how a service needs to be requested or distinguish between different activities that can be provided by a single service. Using PlanDefinitions (consisting of multiple ActivityDefinitions) allows for defining more complex workflows. 
