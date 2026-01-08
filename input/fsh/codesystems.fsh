@@ -6,6 +6,8 @@ Description: "Local code system for NL Generic Functions."
 * ^status = #active
 * ^experimental = true
 * #http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-admin-directory-update-client "Care Services Directory for Update Client"
+* #http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-query-directory-query-client "Care Services Directory for Query Client"
+* #http://nuts-foundation.github.io/nl-generic-functions-ig/CapabilityStatement/nl-gf-query-directory-query-client-reads "Care Services Directory for Query Client for only Read operations"
 * #eOverdracht-notification "Transfer of Care - eOverdracht Notification"
 * #Twiin-TA-notification "Twiin - TA Notification"
 * #Nuts-OAuth "Nuts OAuth endpoint"

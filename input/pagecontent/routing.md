@@ -110,6 +110,9 @@ To support the current [eOverdracht specification](https://informatiestandaarden
 - .location: Reference to the Location
 - .healthcareservice: Reference to the HealthcareService
 
+These reference SHOULD also include an Author-assigned-identifier (required in the profiles for [NL-GF-Location](./StructureDefinition-nl-gf-location.html) and [NL-GF-HealthcareService](./StructureDefinition-nl-gf-healthcareservice.html)). *Without* such an identifier, the eOverdracht-sender *SHALL* make the resources available to eOverdracht-receiver (support read-operations for Location and HealthcareService, using [this](./CapabilityStatement-nl-gf-query-directory-query-client-reads.html) capabilitystatement)
+
+
 ```
 <extension url="http://nuts-foundation.github.io/nl-generic-functions-ig/StructureDefinition/task-stu3-healthcareservice">
     <valueReference>
