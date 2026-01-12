@@ -2,7 +2,7 @@
 
 User authentication establishes the identity of an end-user (typically a healthcare professional) in cross-organizational data exchanges. While the [Authentication](authentication.html) section describes how organizations and service providers authenticate using Verifiable Credentials, this section extends that model to include authenticated end-users.
 
-The result of user authentication is a **User Consent Credential** - a short-lived Verifiable Credential issued by a trusted Identity Provider (IDP) that attests to a user's consent for their organization to act on their behalf. This credential can be included in the Verifiable Presentation sent to an Authorization Server as part of the [Request Access Token \[GFI-004\]](GFI-004.html) transaction.
+The result of user authentication is a **User Consent Credential** - a short-lived Verifiable Credential issued by a trusted Identity Provider (IDP) that attests that an authenticated user has authorized their organization to act on their behalf. This credential can be included in the Verifiable Presentation sent to an Authorization Server as part of the [Request Access Token \[GFI-004\]](GFI-004.html) transaction.
 
 ### Problem Overview
 
@@ -36,173 +36,100 @@ The user authentication solution must:
 In addition to the terminology defined in [Authentication](authentication.html), this section uses:
 
 - **User**: An end-user, typically a healthcare professional, who initiates data access requests.
-- **Identity Provider (IDP)**: A trusted party that authenticates users and issues User Consent Credentials. The IDP acts as an Issuer in the VC model.
-- **User Consent Credential**: A short-lived Verifiable Credential representing a user's consent for their organization to act on their behalf.
+- **Identity Provider (IDP)**: A trusted party that authenticates users and attests to their consent.
 - **Authentication Session**: A time-limited session between the user and the IDP, established through user authentication.
 - **Relying Party (RP)**: The client application (e.g., EHR system) that relies on the IDP to authenticate users.
 
-### Credential Semantics
+### Solution Overview
 
-This section explains the semantic model of the User Consent Credential and how it differs from a simple identity assertion.
+#### Consent Model
 
-#### What does the credential represent?
+When a user at Organization A accesses resources at Organization B, the fundamental question is: "Is Organization A authorized to act on behalf of this user?"
 
-The User Consent Credential represents a **delegation of authority**: the user (Alice) authorizes their organization (Organization A) to act on their behalf when accessing external resources.
+The solution models this as a **delegation of authority**:
 
-**Statement**: "Alice (authenticated by this IDP) consents to Organization A acting on her behalf"
+**Statement**: "User Alice consents to Organization A acting on her behalf"
+
+```
+┌───────────┐                      ┌────────────────┐
+│   Alice   │ ── delegates to ──▶  │ Organization A │
+│  (User)   │                      │  (Employer)    │
+└───────────┘                      └────────────────┘
+      │                                    │
+      │ authenticates at                   │ presents delegation to
+      ▼                                    ▼
+┌───────────┐                      ┌────────────────┐
+│    IDP    │                      │ Organization B │
+│           │                      │   (Verifier)   │
+└───────────┘                      └────────────────┘
+```
+
+The IDP acts as a trusted third party that:
+
+1. Authenticates the user (proves who they are)
+2. Captures the user's consent (proves they agreed to delegate)
+3. Attests to both facts for the verifier
 
 This is fundamentally different from:
-- A pure identity credential ("This is Alice") - which would have the user as subject
-- An employment credential ("Alice works for Org A") - which would be issued by the organization
 
-#### Credential Structure
-
-```
-Issuer:  IDP (trusted third party that authenticated the user)
-Subject: Organization A (the entity receiving the delegation)
-Holder:  Organization A (presents the credential)
-Claims:  User identity, consent timestamp
-```
-
-The **subject is the organization**, not the user, because:
-1. The credential answers: "Is Organization A authorized to act on behalf of a user?"
-2. Organization A is the holder presenting the credential
-3. The verifier is checking Organization A's authorization to act
+- A pure identity assertion ("This is Alice") - which only proves identity, not delegation
+- An employment claim ("Alice works for Org A") - which would be issued by the organization, not the user
 
 #### Consent Scope
 
-The User Consent Credential represents **broad consent** - the user trusts their employer to act appropriately on their behalf. This aligns with the employment relationship where:
+The consent represents **broad delegation** - the user trusts their employer to act appropriately on their behalf. This aligns with the employment relationship:
+
 - The user works for the organization
 - The organization is accountable for appropriate use
-- Audit trails track which credentials were used
+- Audit trails track actions taken on behalf of users
 
-This is distinct from **specific consent** where each recipient would need to be named in the credential. Specific consent per verifier would require:
-- A new credential for each external party
-- More user interactions
-- Custom claims outside the VC Data Model
+This is distinct from **specific consent** where each recipient (verifier) would need to be explicitly named. Specific consent would require more user interactions but provides stronger guarantees about where the user's identity is shared.
 
 #### Audience Binding
 
-The [Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model/) does not include an `aud` (audience) property in the credential itself. Audience binding is a property of the **Verifiable Presentation**, not the credential.
+Audience binding (restricting who can use the attestation) happens at **presentation time**, not at consent time:
 
-This means:
-- The User Consent Credential has **no audience restriction** in the VC itself
-- When presenting to a specific verifier, the **VP includes the audience** (`aud` claim)
-- The short credential lifetime provides temporal binding (liveness)
-- The VP signature binds all contained credentials to that specific transaction
+- The consent itself has no audience restriction
+- When presenting to a specific verifier, the presentation is bound to that verifier
+- Short validity periods provide temporal binding (user liveness)
 
-```
-┌─────────────────────────────────────────────────────────┐
-│ Verifiable Presentation (JWT)                           │
-│                                                         │
-│ iss: did:web:org-a.example.com (holder/presenter)      │
-│ aud: did:web:org-b.example.com (verifier) ← BINDING    │
-│ iat: 1704067200                                         │
-│ exp: 1704067260 (very short-lived)                     │
-│                                                         │
-│ vp: {                                                   │
-│   verifiableCredential: [                              │
-│     <organization-credential>,                          │
-│     <user-consent-credential>  ← no aud in VC          │
-│   ]                                                     │
-│ }                                                       │
-└─────────────────────────────────────────────────────────┘
-```
+This approach keeps the consent portable while still preventing misuse through presentation-level binding.
 
-This approach:
-- Follows the VC Data Model standard
-- Keeps credentials portable (not locked to one verifier)
-- Places trust in the organization to use credentials appropriately
-- Relies on short credential lifetime for liveness guarantees
-
-### Solution Overview
+#### Flow Overview
 
 The user authentication flow consists of two phases:
 
 1. **Session Establishment** - The user authenticates with an Identity Provider, creating an authentication session.
-2. **Credential Issuance** - When accessing external resources, the IDP issues a short-lived User Consent Credential.
+2. **Consent Attestation** - When accessing external resources, the IDP attests to the user's consent for their organization to act on their behalf.
 
-The User Consent Credential is then included in the Verifiable Presentation alongside other credentials (organization, service provider) when requesting access tokens via [GFI-004](GFI-004.html).
+This attestation is encoded as a Verifiable Credential (the User Consent Credential) and included in the Verifiable Presentation alongside other credentials when requesting access tokens via [GFI-004](GFI-004.html).
 
 #### Architecture
 
 The following diagram shows the complete flow from initial login through credential issuance to accessing external resources.
 
-```
-┌──────────┐      ┌──────────┐      ┌──────────────────┐      ┌─────────────────┐
-│   User   │      │  Client  │      │ Identity Provider│      │ Resource Server │
-│          │      │  (EHR)   │      │      (IDP)       │      │      (AS)       │
-└────┬─────┘      └────┬─────┘      └────────┬─────────┘      └────────┬────────┘
-     │                 │                     │                         │
-     │                 │   === Session Establishment (OIDC) ===        │
-     │ 1. Login        │                     │                         │
-     │────────────────>│                     │                         │
-     │                 │ 2. Redirect /authorize                        │
-     │<─ ─ ─ ─ ─ ─ ─ ─ ┤────────────────────>│                         │
-     │                 │                     │                         │
-     │ 3. Authenticate (e.g., DigiD)         │                         │
-     │──────────────────────────────────────>│                         │
-     │                 │                     │                         │
-     │ 4. Redirect back with code            │                         │
-     │<──────────────────────────────────────│                         │
-     │─ ─ ─ ─ ─ ─ ─ ─ >│                     │                         │
-     │                 │ 5. Exchange code    │                         │
-     │                 │────────────────────>│                         │
-     │                 │ 6. ID Token         │                         │
-     │                 │<────────────────────│                         │
-     │                 │                     │                         │
-     │ ... time passes, user works in EHR ...│                         │
-     │                 │                     │                         │
-     │                 │   === Credential Issuance (OpenID4VCI) ===    │
-     │ 7. Access external resource           │                         │
-     │────────────────>│                     │                         │
-     │                 │ 8. Redirect /authorize                        │
-     │<─ ─ ─ ─ ─ ─ ─ ─ ┤    (credential request)                       │
-     │                 │────────────────────>│                         │
-     │                 │                     │                         │
-     │ 9. (Session valid → instant, or consent screen)                 │
-     │<──────────────────────────────────────│                         │
-     │                 │                     │                         │
-     │ 10. Redirect back with code           │                         │
-     │<──────────────────────────────────────│                         │
-     │─ ─ ─ ─ ─ ─ ─ ─ >│                     │                         │
-     │                 │ 11. Exchange code   │                         │
-     │                 │────────────────────>│                         │
-     │                 │ 12. Access token    │                         │
-     │                 │<────────────────────│                         │
-     │                 │ 13. POST /credential│                         │
-     │                 │────────────────────>│                         │
-     │                 │ 14. User Consent VC │                         │
-     │                 │<────────────────────│                         │
-     │                 │                     │                         │
-     │                 │   === Resource Access (GFI-004) ===           │
-     │                 │ 15. Request Access Token                      │
-     │                 │     VP: Org VC + User Consent VC             │
-     │                 │──────────────────────────────────────────────>│
-     │                 │                     │                         │
-     │                 │ 16. Access Token    │                         │
-     │                 │<─────────────────────────────────────────────│
-     │                 │                     │                         │
-```
+<div>
+{% include user-authentication.svg %}
+</div>
 
-**Note**: Steps 8-10 (the authorization redirect for credential issuance) are near-instant if the user has a valid browser session with the IDP and has previously consented. The user may only see a brief loading indicator.
+**Note**: Steps 10-12 (the authorization redirect for credential issuance) are near-instant if the user has a valid browser session with the IDP and has previously consented. The user may only see a brief loading indicator.
 
 #### Actors and Transactions
 
 **Table: User Authentication - Actors and Transactions**
 
-| Actor             | Transaction                      | Initiator or Responder | Optionality | Reference                                           |
-| ----------------- | -------------------------------- | ---------------------- | ----------- | --------------------------------------------------- |
-| User              | Authenticate with IDP            | Initiator              | R           | [Session Establishment](#session-establishment)     |
-|                   | Consent to credential issuance   | Responder              | R           | [Credential Issuance](#credential-issuance)         |
-| Identity Provider | Authenticate User                | Responder              | R           | [Session Establishment](#session-establishment)     |
+| Actor             | Transaction                     | Initiator or Responder | Optionality | Reference                                           |
+| ----------------- | ------------------------------- | ---------------------- | ----------- | --------------------------------------------------- |
+| User              | Authenticate with IDP           | Initiator              | R           | [Session Establishment](#session-establishment)     |
+|                   | Consent to credential issuance  | Responder              | R           | [Credential Issuance](#credential-issuance)         |
+| Identity Provider | Authenticate User               | Responder              | R           | [Session Establishment](#session-establishment)     |
 |                   | Issue User Consent Credential   | Initiator              | R           | [Credential Issuance](#credential-issuance)         |
-|                   | Resolve key material [GFI-001]   | Responder              | R           | [\[GFI-001\]](GFI-001.html)                         |
-| Client (RP/EHR)   | Initiate user authentication     | Initiator              | R           | [Session Establishment](#session-establishment)     |
+|                   | Resolve key material [GFI-001]  | Responder              | R           | [\[GFI-001\]](GFI-001.html)                         |
+| Client (RP/EHR)   | Initiate user authentication    | Initiator              | R           | [Session Establishment](#session-establishment)     |
 |                   | Request User Consent Credential | Initiator              | R           | [Credential Issuance](#credential-issuance)         |
-|                   | Request Access Token [GFI-004]   | Initiator              | R           | [\[GFI-004\]](GFI-004.html)                         |
+|                   | Request Access Token [GFI-004]  | Initiator              | R           | [\[GFI-004\]](GFI-004.html)                         |
 | Verifier (AS)     | Verify User Consent Credential  | Responder              | R           | [Credential Verification](#credential-verification) |
-|                   | Resolve key material [GFI-001]   | Initiator              | R           | [\[GFI-001\]](GFI-001.html)                         |
+|                   | Resolve key material [GFI-001]  | Initiator              | R           | [\[GFI-001\]](GFI-001.html)                         |
 
 {: .grid .table-striped}
 
@@ -309,42 +236,42 @@ Host: idp.example.com
 The `authorization_details` parameter (URL-decoded) contains:
 
 ```json
-[{
-  "type": "openid_credential",
-  "credential_configuration_id": "UserIdentityCredential"
-}]
+[
+  {
+    "type": "openid_credential",
+    "credential_configuration_id": "UserIdentityCredential"
+  }
+]
 ```
 
 ##### Request Parameters
 
-| Parameter | Required | Description |
-| --------- | -------- | ----------- |
-| `response_type` | R | Must be `code` |
-| `client_id` | R | The client's identifier at the IDP |
-| `redirect_uri` | R | Where to send the authorization code |
-| `authorization_details` | R | JSON array specifying the credential type per RFC 9396 |
-| `code_challenge` | R | PKCE challenge (SHA256 of code_verifier, base64url-encoded) |
-| `code_challenge_method` | R | Must be `S256` |
-| `state` | R | Opaque value for CSRF protection |
-| `issuer_state` | O | Binds request to previous IDP context (e.g., from credential offer) |
-| `prompt` | O | Controls IDP behavior (see below) |
+| Parameter               | Required | Description                                                         |
+| ----------------------- | -------- | ------------------------------------------------------------------- |
+| `response_type`         | R        | Must be `code`                                                      |
+| `client_id`             | R        | The client's identifier at the IDP                                  |
+| `redirect_uri`          | R        | Where to send the authorization code                                |
+| `authorization_details` | R        | JSON array specifying the credential type per RFC 9396              |
+| `code_challenge`        | R        | PKCE challenge (SHA256 of code_verifier, base64url-encoded)         |
+| `code_challenge_method` | R        | Must be `S256`                                                      |
+| `state`                 | R        | Opaque value for CSRF protection                                    |
+| `issuer_state`          | O        | Binds request to previous IDP context (e.g., from credential offer) |
+| `prompt`                | O        | Controls IDP behavior (see below)                                   |
 
 {: .grid .table-striped}
 
 ##### The `prompt` Parameter
 
-The `prompt` parameter controls how the IDP handles the request:
+Since the credential represents user consent for delegation, the user should always be aware when a credential is issued. The `prompt` parameter controls the level of user interaction:
 
-| Value | Behavior | Use Case |
-| ----- | -------- | -------- |
-| (omitted) | IDP decides based on session state and consent history | Default - recommended for most cases |
-| `none` | Silent - fail immediately if user interaction needed | Check if credential can be issued without user interaction |
-| `consent` | Always show consent screen | When explicit user approval is required |
-| `login` | Force re-authentication | For sensitive operations requiring fresh authentication |
+| Value     | Behavior                                   | Use Case                                                |
+| --------- | ------------------------------------------ | ------------------------------------------------------- |
+| `consent` | Show consent screen (if session valid)     | Default - user confirms delegation                      |
+| `login`   | Force re-authentication, then show consent | For sensitive operations requiring fresh authentication |
 
 {: .grid .table-striped}
 
-**Recommended pattern**: First try with `prompt=none`. If the IDP returns `interaction_required` or `consent_required` error, retry without the prompt parameter to allow user interaction.
+The `prompt=none` option (silent authentication) is not appropriate for consent credentials, as the user should be aware when authorizing their organization to act on their behalf.
 
 #### User Consent
 
@@ -356,6 +283,7 @@ When the user is redirected to the IDP:
 4. **Authorization code** - Upon approval, IDP redirects back with an authorization code.
 
 The consent screen should clearly indicate:
+
 - That the user is authorizing their organization to act on their behalf
 - What identity claims will be included in the credential
 - That the credential may be used to access external resources
@@ -380,7 +308,7 @@ code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
 
 #### Credential Request
 
-Using the access token, the client requests the User Consent Credential from the credential endpoint:
+Using the access token, the client requests the User Consent Credential from the credential endpoint. The request includes a `proof` parameter - a JWT signed by the organization's key. The IDP uses the `kid` from the proof JWT header to determine which DID should be used as the credential subject:
 
 ```
 POST /credential HTTP/1.1
@@ -392,9 +320,33 @@ Content-Type: application/json
   "format": "jwt_vc_json",
   "credential_definition": {
     "type": ["VerifiableCredential", "UserConsentCredential"]
+  },
+  "proof": {
+    "proof_type": "jwt",
+    "jwt": "eyJhbGciOiJFUzI1NiIsInR5cCI6Im9wZW5pZDR2Y2ktcHJvb2Yrand0Iiwia2lkIjoiZGlkOndlYjpjYXJlLW9yZy1hLmV4YW1wbGUuY29tI2tleTEifQ..."
   }
 }
 ```
+
+The proof JWT structure:
+
+```json
+// Header
+{
+  "typ": "openid4vci-proof+jwt",
+  "alg": "ES256",
+  "kid": "did:web:care-org-a.example.com#key1"
+}
+// Payload
+{
+
+  "iss": "ehr.care-org.example.com",
+  "aud": "https://idp.example.com",
+  "iat": 1704067200,
+}
+```
+
+The IDP extracts the DID from the `kid` header (the part before `#`) and uses it as the `credentialSubject.id` in the issued credential. By verifying the proof signature, the IDP ensures the requesting organization controls the private key associated with that DID.
 
 #### Credential Response
 
@@ -521,23 +473,23 @@ The User Consent Credential contains claims about the delegation of authority fr
 
 #### Credential Subject Claims
 
-| Claim | Required | Description |
-| ----- | -------- | ----------- |
-| `id` | R | The organization's DID (the entity receiving the delegation) |
-| `actingFor` | R | Object containing the user's identity claims |
-| `consentGiven` | O | Timestamp when consent was given |
+| Claim          | Required | Description                                                  |
+| -------------- | -------- | ------------------------------------------------------------ |
+| `id`           | R        | The organization's DID (the entity receiving the delegation) |
+| `actingFor`    | R        | Object containing the user's identity claims                 |
+| `consentGiven` | O        | Timestamp when consent was given                             |
 
 {: .grid .table-striped}
 
 #### User Claims (within `actingFor`)
 
-| Claim | Required | Description |
-| ----- | -------- | ----------- |
-| `id` | R | The user's DID at the IDP |
-| `givenName` | O | User's given name |
-| `familyName` | O | User's family name |
-| `identifier` | O | National identifier (e.g., BSN pseudonym, UZI number) |
-| `assuranceLevel` | O | Level of identity assurance (e.g., eIDAS level) |
+| Claim            | Required | Description                                           |
+| ---------------- | -------- | ----------------------------------------------------- |
+| `id`             | R        | The user's DID at the IDP                             |
+| `givenName`      | O        | User's given name                                     |
+| `familyName`     | O        | User's family name                                    |
+| `identifier`     | O        | National identifier (e.g., BSN pseudonym, UZI number) |
+| `assuranceLevel` | O        | Level of identity assurance (e.g., eIDAS level)       |
 
 {: .grid .table-striped}
 
@@ -594,13 +546,13 @@ Audience binding occurs at the **Verifiable Presentation level**, not the creden
 
 ### Relationship to Other Specifications
 
-| Specification                         | Relationship                                                                  |
-| ------------------------------------- | ----------------------------------------------------------------------------- |
-| [Authentication](authentication.html) | User authentication extends the base authentication model with user consent   |
-| [GFI-001](GFI-001.html)               | IDP's DID is resolved to verify credential signatures                         |
-| [GFI-002](GFI-002.html)               | User Consent Credential issuance uses OpenID4VCI                              |
-| [GFI-004](GFI-004.html)               | User Consent Credential is included in the VP for access token requests       |
-| [Identification](identification.html) | User identifiers follow the identification guidelines                         |
+| Specification                         | Relationship                                                                |
+| ------------------------------------- | --------------------------------------------------------------------------- |
+| [Authentication](authentication.html) | User authentication extends the base authentication model with user consent |
+| [GFI-001](GFI-001.html)               | IDP's DID is resolved to verify credential signatures                       |
+| [GFI-002](GFI-002.html)               | User Consent Credential issuance uses OpenID4VCI                            |
+| [GFI-004](GFI-004.html)               | User Consent Credential is included in the VP for access token requests     |
+| [Identification](identification.html) | User identifiers follow the identification guidelines                       |
 
 {: .grid .table-striped}
 
@@ -675,6 +627,8 @@ grant_type=authorization_code&code=Qcb0Orv1zh&redirect_uri=https%3A%2F%2Fehr.car
 
 #### 5. Client Requests User Consent Credential
 
+The client includes a proof JWT signed with the organization's key:
+
 ```http
 POST /credential HTTP/1.1
 Host: idp.example.com
@@ -685,6 +639,10 @@ Content-Type: application/json
   "format": "jwt_vc_json",
   "credential_definition": {
     "type": ["VerifiableCredential", "UserConsentCredential"]
+  },
+  "proof": {
+    "proof_type": "jwt",
+    "jwt": "eyJhbGciOiJFUzI1NiIsInR5cCI6Im9wZW5pZDR2Y2ktcHJvb2Yrand0Iiwia2lkIjoiZGlkOndlYjpjYXJlLW9yZy1hLmV4YW1wbGUuY29tI2tleTEifQ..."
   }
 }
 ```
@@ -711,6 +669,7 @@ grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=eyJhb
 ```
 
 The `assertion` JWT contains a VP (with `aud` set to Care Provider X) containing:
+
 - Organization Credential (identifies Care Organization)
 - User Consent Credential (attests user consent for Care Organization to act on their behalf)
 
@@ -730,5 +689,4 @@ The client can now access protected resources at Care Provider X using this acce
 
 1. **IDP Discovery** - How does the Authorization Server discover which IDPs are trusted?
 2. **Role Claims** - Should role/function claims be included in the User Consent Credential (in `actingFor`) or in a separate Employment Credential issued by the organization?
-3. **Cross-border** - How does this align with eIDAS 2.0 and the EU Digital Identity Wallet?
-4. **Specific Consent** - Should there be an option for audience-specific consent (naming the intended recipient in the credential) for use cases requiring stronger guarantees?
+3. **Specific Consent** - Should there be an option for audience-specific consent (naming the intended recipient in the credential) for use cases requiring stronger guarantees?
