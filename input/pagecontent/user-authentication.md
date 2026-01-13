@@ -182,40 +182,11 @@ The Authorization Code Flow is used for credential issuance because it:
 
 #### Message Flow
 
-```
-┌────────┐      ┌─────────┐      ┌────────┐
-│ Client │      │ Browser │      │  IDP   │
-└───┬────┘      └────┬────┘      └───┬────┘
-    │                │               │
-    │ 1. Redirect to /authorize      │
-    │───────────────>│               │
-    │                │ 2. GET /authorize
-    │                │   (with session cookie)
-    │                │──────────────>│
-    │                │               │
-    │                │   Session valid? ───┐
-    │                │                     │ Yes: skip login
-    │                │   Consent needed? ──┤
-    │                │                     │ No: skip consent
-    │                │               │<────┘
-    │                │               │
-    │                │ 3. Redirect back with code
-    │                │<──────────────│
-    │ 4. Code        │               │
-    │<───────────────│               │
-    │                │               │
-    │ 5. POST /token (exchange code) │
-    │───────────────────────────────>│
-    │ 6. Access token                │
-    │<───────────────────────────────│
-    │                │               │
-    │ 7. POST /credential            │
-    │───────────────────────────────>│
-    │ 8. User Consent VC             │
-    │<───────────────────────────────│
-```
+<div>
+{% include openid4vci-consent-issuance.svg %}
+</div>
 
-With an active session and pre-approved consent, steps 2-3 complete in milliseconds.
+With an active session and pre-approved consent, steps 2-5 complete in milliseconds.
 
 #### Authorization Request
 
