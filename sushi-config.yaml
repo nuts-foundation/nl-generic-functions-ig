@@ -169,6 +169,7 @@ menu:
   Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
+  Credential Catalog: credential-catalog.html
   Artifacts: artifacts.html
   History: history.html
 
