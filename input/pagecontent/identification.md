@@ -29,7 +29,10 @@ Practitioners' main identifier is the UZI number (to be renamed in DEZI number) 
 
 ### Care Provider Identification
 
-Care providers' main identifier is the URA number as specified in the [nl-core-HealthcareProvider-Organization profile](http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization). The authentic source for this identifier is URA-register that is administered by CIBG. However, organization departments, locations and healthcare services aren't registered in the LRZa (URA-register). These entities can be identified by the mandatory [local data-object identifier](#data-object-identification). 
+Care providers' main identifier is the URA number as specified in the [nl-core-HealthcareProvider-Organization profile](http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization). The authentic source for this identifier is URA-register that is administered by CIBG. However, organization departments, locations and healthcare services aren't registered in the LRZa (URA-register). These entities can be identified by the mandatory [local data-object identifier](#data-object-identification).
+
+Care provider organizations are further classified by their type using the [Nictiz healthcare provider type codes](https://decor.nictiz.nl/ad/#/nictiz2bbr-/terminology/codesystems/2.16.840.1.113883.2.4.15.1060/2024-11-14T22:13:01).
+The system for this classification is `2.16.840.1.113883.2.4.15.1060`.
 
 ### Organization Identification
 
