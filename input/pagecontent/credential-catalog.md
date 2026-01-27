@@ -13,7 +13,7 @@ The `HealthcareProviderTypeCredential` is a verifiable credential that asserts t
 **Issuer**: A trusted authority responsible (e.g., Vektis).
 **Subject**: The healthcare provider organization, identified by their DID.
 **Claims**:
-- `healthcareProviderType`: A code representing the [type of healthcare provider](identification.md#careprovider.type) (e.g., "A1" for a specific provider category).
+- `healthcareProviderType`: A code representing the [type of healthcare provider](identification.html#careprovider.type) (e.g., "A1" for a specific provider category).
 
 **Non-normative example**:
 
