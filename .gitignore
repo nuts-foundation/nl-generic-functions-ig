@@ -22,3 +22,7 @@ Thumbs.db
 *.bkp
 
 translations/
+
+# JetBrains IDEs #
+##################
+.idea

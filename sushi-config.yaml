@@ -117,6 +117,12 @@ pages:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
 
+  credential-catalog.md:
+    title: Credential Catalog
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
   history.md:
     title: History
 
@@ -163,6 +169,7 @@ menu:
   Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
+  Credential Catalog: credential-catalog.html
   Artifacts: artifacts.html
   History: history.html
 
