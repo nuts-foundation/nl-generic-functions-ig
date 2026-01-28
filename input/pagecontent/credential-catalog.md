@@ -17,11 +17,10 @@ Unless specified otherwise, every credential uses the following Verifiable Crede
 
 #### HealthcareProviderRoleTypeCredential
 
-The `HealthcareProviderRoleTypeCredential` is a verifiable credential that asserts the type classification of a
-healthcare provider organization.
+The `HealthcareProviderRoleTypeCredential` is a verifiable credential that establishes the category or type of healthcare services,
+that a provider organization is authorized to offer (e.g., hospital, general practice, pharmacy, home care).
 
-**Purpose**: To establish the role of the healthcare provider organization (e.g., hospital, general practice, pharmacy, home care).
-**Issuer**: A trusted authority responsible (e.g., Vektis, t.b.d.).
+**Issuer**: A trusted authority responsible for governing and issuing the attribute (e.g., Vektis).
 **Subject**: The healthcare provider organization, identified by their DID.
 **Status**: trial use
 
