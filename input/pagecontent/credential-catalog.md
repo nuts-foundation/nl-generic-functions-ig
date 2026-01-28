@@ -10,7 +10,7 @@ Credentials defined here use identifiers that are specified by the Generic Funct
 The `HealthcareProviderTypeCredential` is a verifiable credential that asserts the type classification of a healthcare provider organization.
 
 **Purpose**: To establish the category or type of healthcare services that a provider organization is authorized to offer (e.g., hospital, general practice, pharmacy, home care).
-**Issuer**: A trusted authority responsible (e.g., Vektis).
+**Issuer**: A trusted authority responsible for governing and issuing the attribute (e.g., Vektis).
 **Subject**: The healthcare provider organization, identified by their DID.
 **Claims**:
 - `healthcareProviderType`: A code representing the [type of healthcare provider](identification.html#careprovider.type) (e.g., "A1" for a specific provider category).
