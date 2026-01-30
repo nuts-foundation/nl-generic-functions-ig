@@ -122,6 +122,12 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
+    credential-HealthcareProviderRoleTypeCredential.md:
+      title: HealthcareProviderRoleTypeCredential
+      generation: markdown
+    credential-DeziIDTokenCredential.md:
+      title: DeziIDTokenCredential
+      generation: markdown
 
   history.md:
     title: History
