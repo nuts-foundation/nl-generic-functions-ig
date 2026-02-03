@@ -6,7 +6,7 @@ This section defines the high-level requirements for authentication in Dutch hea
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **AUTH-001** | Support portable identity claims issued by authoritative sources | Healthcare professionals and organizations need credentials that can be used across different systems and verifiers without requiring the issuer to be online at the time of verification. |
+| **AUTH-001** | Identity claims SHALL be issued by the authoritative source that governs the claimed attribute | Each identity attribute (professional qualification, organization registration, role assignment) has a designated authoritative source responsible for its accuracy and lifecycle. Claims issued by parties other than the governing authority cannot be trusted and create accountability gaps. For example, a professional qualification claim must be issued by the registry that maintains professional registrations, not by an intermediary. |
 | **AUTH-002** | Support presenting a combination of claims from different authoritative sources in a single transaction | A single interaction may require proof of organization identity (from URA registry), professional qualification (from BIG registry), and role assignment (from employer) - all from different authoritative sources. |
 | **AUTH-003** | Verifiers SHALL be able to validate the complete chain of trust without runtime contact to the credential issuer | Runtime dependencies on external systems create availability risks and performance bottlenecks. Verification must be possible using only publicly available information and the presented credentials. |
 
