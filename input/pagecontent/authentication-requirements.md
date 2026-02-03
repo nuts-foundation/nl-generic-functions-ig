@@ -19,25 +19,27 @@ This section defines the high-level requirements for authentication in Dutch hea
 | **AUTH-006** | A single Care Organization must be able to work with multiple Service Providers without duplicating or sharing key material | Care organizations often work with multiple vendors (EHR, imaging, lab systems). Each relationship must be independently manageable and revocable. |
 | **AUTH-007** | Service Providers SHALL be able to identify themselves independently and demonstrate their qualifications and certifications | Service providers may need to prove compliance with standards (NEN 7510 certification, MedMij qualification) independent of any specific care organization relationship. |
 | **AUTH-008** | For audit and compliance purposes, it must be unambiguous which Service Provider performed an action on behalf of which Care Organization | Regulatory requirements (NEN 7510, AVG/GDPR) demand clear audit trails. Both the acting party and the responsible organization must be explicitly identifiable in every transaction. |
+| **AUTH-009** | Clients SHALL be able to verify the delegation from a Care Organization to a Service Provider before sending identity claims or protected health information | Clients must not leak sensitive data to unauthorized parties. Delegation verification must occur before the client sends any credentials or patient data, not as part of a response after data has already been transmitted. |
+| **AUTH-010** | Service Providers operating on behalf of Care Organizations SHALL publish verifiable delegation credentials in a discoverable location | Clients need a reliable way to obtain and verify delegation proofs before initiating authenticated requests. This enables pre-flight verification without requiring custom challenge-response protocols. |
 
 ## Security & Key Material
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **AUTH-009** | Authentication flows SHALL support minimal disclosure - only claims necessary for a specific transaction should be shared with the verifier | Privacy regulations (AVG/GDPR) require data minimization. Sharing unnecessary identity information increases privacy risks and potential for misuse. |
-| **AUTH-010** | Each party (Care Organization, Service Provider) SHALL maintain its own key material - no certificate/key sharing | Sharing private keys or certificates between organizations eliminates individual accountability, complicates revocation, and violates security best practices. |
-| **AUTH-011** | Authentication between two parties SHALL NOT depend on the runtime availability of third parties | National-scale healthcare infrastructure cannot depend on components whose downtime would block authentication. If an authorization server or resource server is available, authentication must succeed regardless of the availability of credential issuers or other infrastructure components. |
+| **AUTH-011** | Authentication flows SHALL support minimal disclosure - only claims necessary for a specific transaction should be shared with the verifier | Privacy regulations (AVG/GDPR) require data minimization. Sharing unnecessary identity information increases privacy risks and potential for misuse. |
+| **AUTH-012** | Each party (Care Organization, Service Provider) SHALL maintain its own key material - no certificate/key sharing | Sharing private keys or certificates between organizations eliminates individual accountability, complicates revocation, and violates security best practices. |
+| **AUTH-013** | Authentication between two parties SHALL NOT depend on the runtime availability of third parties | National-scale healthcare infrastructure cannot depend on components whose downtime would block authentication. If an authorization server or resource server is available, authentication must succeed regardless of the availability of credential issuers or other infrastructure components. |
 
 ## General & Non-Functional
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **AUTH-012** | Support use cases with and without direct end-user involvement (automated systems) | The healthcare sector requires both human-initiated access (professional accessing patient data) and automated system-to-system communication (lab results delivery, notifications). |
-| **AUTH-013** | Be user-friendly for healthcare professionals (authenticate once per session/day, not per transaction) | Healthcare professionals work under time pressure. Repeated authentication interrupts clinical workflow and reduces adoption. Back-channel mechanisms should minimize user interaction. |
-| **AUTH-014** | New claim types and authoritative sources SHALL be addable without requiring changes to existing infrastructure or implementations | The healthcare sector continuously develops new data exchange scenarios. Adding a new type of credential (e.g., a new professional qualification or organizational certification) must not require changes to authorization servers, clients, or resource servers that do not use that claim type. |
-| **AUTH-015** | Support multiple deployment models (integrated systems, managed services, cloud solutions) without specification changes | Organizations have varying technical maturity and vendor relationships. The specification must define interoperability at the boundary, not internal implementation choices. |
-| **AUTH-016** | Authentication overhead SHALL NOT noticeably impact clinical workflow | Healthcare professionals work under time pressure. Authentication delays interrupt patient care and reduce system adoption. |
-| **AUTH-017** | The authentication framework SHALL integrate with existing Dutch healthcare identity infrastructure (UZI/DEZI, URA, BSN) and be based on established international standards | The Dutch healthcare sector has significant investments in existing identity systems. New solutions must build upon this infrastructure rather than replace it. Using established standards (OAuth, OpenID Connect, etc.) ensures interoperability and reduces implementation risk. |
+| **AUTH-014** | Support use cases with and without direct end-user involvement (automated systems) | The healthcare sector requires both human-initiated access (professional accessing patient data) and automated system-to-system communication (lab results delivery, notifications). |
+| **AUTH-015** | Be user-friendly for healthcare professionals (authenticate once per session/day, not per transaction) | Healthcare professionals work under time pressure. Repeated authentication interrupts clinical workflow and reduces adoption. Back-channel mechanisms should minimize user interaction. |
+| **AUTH-016** | New claim types and authoritative sources SHALL be addable without requiring changes to existing infrastructure or implementations | The healthcare sector continuously develops new data exchange scenarios. Adding a new type of credential (e.g., a new professional qualification or organizational certification) must not require changes to authorization servers, clients, or resource servers that do not use that claim type. |
+| **AUTH-017** | Support multiple deployment models (integrated systems, managed services, cloud solutions) without specification changes | Organizations have varying technical maturity and vendor relationships. The specification must define interoperability at the boundary, not internal implementation choices. |
+| **AUTH-018** | Authentication overhead SHALL NOT noticeably impact clinical workflow | Healthcare professionals work under time pressure. Authentication delays interrupt patient care and reduce system adoption. |
+| **AUTH-019** | The authentication framework SHALL integrate with existing Dutch healthcare identity infrastructure (UZI/DEZI, URA, BSN) and be based on established international standards | The Dutch healthcare sector has significant investments in existing identity systems. New solutions must build upon this infrastructure rather than replace it. Using established standards (OAuth, OpenID Connect, etc.) ensures interoperability and reduces implementation risk. |
 
 ---
 
@@ -86,10 +88,10 @@ This section specifies requirements for an OAuth 2.0 profile that implements the
 
 - **Client identification** uses the technical identifier infrastructure (ID-003, ID-005) rather than traditional OAuth client registration, enabling clients to authenticate using cryptographic proof of their identity.
 - **Claims from authoritative sources** (ID-008 through ID-014) are incorporated into the token request flow, allowing verifiers to make authorization decisions based on trusted identity information.
-- **Delegation relationships** (AUTH-004 through AUTH-008) are expressed through the token request, explicitly identifying all parties involved in a transaction.
-- **Key material management** (ID-006, ID-007, AUTH-010) enables secure token binding and proof-of-possession mechanisms.
+- **Delegation relationships** (AUTH-004 through AUTH-010) are expressed through the token request, explicitly identifying all parties involved in a transaction.
+- **Key material management** (ID-006, ID-007, AUTH-012) enables secure token binding and proof-of-possession mechanisms.
 
-The profile addresses both human-initiated interactions requiring end-user authentication and automated system-to-system communication (AUTH-012), while ensuring that authentication overhead remains minimal for healthcare professionals (AUTH-013, AUTH-016).
+The profile addresses both human-initiated interactions requiring end-user authentication and automated system-to-system communication (AUTH-014), while ensuring that authentication overhead remains minimal for healthcare professionals (AUTH-015, AUTH-018).
 
 ## Client Registration & Discovery
 
@@ -106,7 +108,7 @@ The profile addresses both human-initiated interactions requiring end-user authe
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **OAUTH-007** | The OAuth profile SHALL support a back-channel token request flow (no user-agent redirect required) | Many healthcare interactions are system-to-system without user involvement (AUTH-012). Back-channel flows also improve user experience by avoiding repeated browser redirects (AUTH-013). |
+| **OAUTH-007** | The OAuth profile SHALL support a back-channel token request flow (no user-agent redirect required) | Many healthcare interactions are system-to-system without user involvement (AUTH-014). Back-channel flows also improve user experience by avoiding repeated browser redirects (AUTH-015). |
 | **OAUTH-008** | The token request SHALL support presenting claims about multiple subjects (e.g., care organization, healthcare professional, service provider) in a single request | A single transaction may require proof of multiple identities (AUTH-002). The token request must accommodate claims from different authoritative sources about different subjects. |
 | **OAUTH-009** | The token request SHALL clearly distinguish between the entity requesting the token (client) and the entities on whose behalf access is requested (subjects) | Delegation scenarios require explicit identification of all parties (AUTH-004, AUTH-008). The client authentication and the authorization grant serve different purposes. |
 | **OAUTH-010** | Claims presented in the token request SHALL be cryptographically signed by the appropriate party | The verifier must be able to validate that claims originate from the claimed issuer and are presented by the legitimate holder (AUTH-005, ID-001). |
@@ -132,7 +134,7 @@ The profile addresses both human-initiated interactions requiring end-user authe
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
 | **OAUTH-017** | The OAuth profile SHALL support incorporating end-user authentication claims into the token request | Healthcare professional identity must be included for access control and audit (AUTH-002). User authentication may occur separately from the token request. |
-| **OAUTH-018** | End-user authentication SHALL be decoupled from the token request flow | Users should authenticate once per session, not per token request (AUTH-013). The authentication result must be presentable in subsequent back-channel requests. |
+| **OAUTH-018** | End-user authentication SHALL be decoupled from the token request flow | Users should authenticate once per session, not per token request (AUTH-015). The authentication result must be presentable in subsequent back-channel requests. |
 | **OAUTH-019** | End-user authentication claims SHALL originate from authoritative sources (e.g., Dezi) | Professional identity claims must be trustworthy. Self-asserted user identity is insufficient for healthcare access control. |
 | **OAUTH-020** | The OAuth profile SHALL support a front-channel flow for end-user authentication when user interaction is required | Some scenarios require interactive user authentication (e.g., initial login, step-up authentication). The profile must accommodate browser-based authentication flows that redirect the user to an identity provider. |
 
@@ -143,36 +145,39 @@ The profile addresses both human-initiated interactions requiring end-user authe
 | **OAUTH-021** | The OAuth profile SHALL support authorization servers operating on behalf of multiple care organizations (multi-tenant) | Many care organizations use shared infrastructure or managed services. The token request must identify the specific organization context. |
 | **OAUTH-022** | Access tokens SHALL be bound to the specific care organization context, not just the authorization server | A multi-tenant authorization server issues tokens for different organizations. The token must unambiguously identify the responsible care organization. |
 | **OAUTH-023** | The OAuth profile SHALL support service providers requesting tokens on behalf of care organizations (delegation) | Service providers act on behalf of care organizations (AUTH-004). The delegation relationship must be expressed in the token request. |
+| **OAUTH-024** | Authorization servers SHALL publish the delegation relationships with the Care Organizations they operate on behalf of in a discoverable location | Clients need to obtain delegation information before sending identity claims (AUTH-009, AUTH-010). This can be achieved through OAuth Authorization Server Metadata (RFC 8414), a well-known endpoint, or other discoverable mechanisms. |
+| **OAUTH-025** | Clients SHALL verify the delegation from the Care Organization to the Service Provider operating the authorization server before initiating a token request | Sending identity claims to an unauthorized party leaks sensitive information. Verification must occur before any credentials are transmitted (AUTH-009). |
+| **OAUTH-026** | Published delegation relationships SHALL be cryptographically verifiable using the Care Organization's public key material without runtime contact to the Care Organization | Unsigned or self-asserted delegation claims cannot be trusted. Clients must be able to verify that the Care Organization explicitly authorized the delegation. This verification must not introduce runtime dependencies (AUTH-013). |
 
 ## Token Format & Introspection
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **OAUTH-024** | Access tokens SHALL be opaque to clients | Clients must not parse or depend on token contents. This decouples the client implementation from the authorization server's internal token format, allowing authorization servers to evolve their token structure without breaking clients. It also prevents clients from making authorization decisions based on token contents - that responsibility lies with the resource server. |
-| **OAUTH-025** | Resource servers SHALL be able to validate access tokens and extract identity claims | Resource servers need identity information for authorization decisions and audit logging. This may be through introspection or self-contained tokens. |
-| **OAUTH-026** | Token validation SHALL be possible without synchronous calls to the authorization server | Runtime dependencies create availability risks (AUTH-003, AUTH-011). Resource servers should be able to validate tokens independently. |
+| **OAUTH-027** | Access tokens SHALL be opaque to clients | Clients must not parse or depend on token contents. This decouples the client implementation from the authorization server's internal token format, allowing authorization servers to evolve their token structure without breaking clients. It also prevents clients from making authorization decisions based on token contents - that responsibility lies with the resource server. |
+| **OAUTH-028** | Resource servers SHALL be able to validate access tokens and extract identity claims | Resource servers need identity information for authorization decisions and audit logging. This may be through introspection or self-contained tokens. |
+| **OAUTH-029** | Token validation SHALL be possible without synchronous calls to the authorization server | Runtime dependencies create availability risks (AUTH-003, AUTH-013). Resource servers should be able to validate tokens independently. |
 
 ## Revocation
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **OAUTH-027** | The OAuth profile SHALL support revocation of credentials used in token requests | Compromised or withdrawn credentials must be detectable. Verifiers must be able to check credential status. |
-| **OAUTH-028** | Revocation status SHALL be checkable without synchronous calls to the credential issuer | Revocation checks must not create runtime dependencies (AUTH-003). Status information must be retrievable asynchronously and cacheable. |
+| **OAUTH-030** | The OAuth profile SHALL support revocation of credentials used in token requests | Compromised or withdrawn credentials must be detectable. Verifiers must be able to check credential status. |
+| **OAUTH-031** | Revocation status SHALL be checkable without synchronous calls to the credential issuer | Revocation checks must not create runtime dependencies (AUTH-003). Status information must be retrievable asynchronously and cacheable. |
 
 ## Privacy
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **OAUTH-029** | Token requests SHALL support minimal disclosure - only claims necessary for the specific transaction should be included | Privacy-by-design requires that verifiers receive only the information needed for their authorization decision (AUTH-009). |
+| **OAUTH-032** | Token requests SHALL support minimal disclosure - only claims necessary for the specific transaction should be included | Privacy-by-design requires that verifiers receive only the information needed for their authorization decision (AUTH-011). |
 
 ## Key Rotation
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **OAUTH-030** | The OAuth profile SHALL support key rotation without requiring changes to identifiers or configuration at other parties | Operational security requires periodic key replacement. The token request flow must accommodate updated key material without disrupting established relationships or requiring coordinated configuration changes (ID-007). |
+| **OAUTH-033** | The OAuth profile SHALL support key rotation without requiring changes to identifiers or configuration at other parties | Operational security requires periodic key replacement. The token request flow must accommodate updated key material without disrupting established relationships or requiring coordinated configuration changes (ID-007). |
 
 ## Performance
 
 | ID | Requirement | Rationale |
 |----|-------------|-----------|
-| **OAUTH-031** | Token requests SHALL complete within 400ms under normal conditions | Healthcare applications require responsive user experiences (AUTH-016). Authentication overhead must be minimized. |
+| **OAUTH-034** | Token requests SHALL complete within 400ms under normal conditions | Healthcare applications require responsive user experiences (AUTH-018). Authentication overhead must be minimized. |
