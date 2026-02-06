@@ -94,11 +94,11 @@ This is the principle requesting the data. Attributes may come from Identity Pro
 - `id`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
 - `properties`: this map contains at least the following attributes, but may be extended with other attributes required by the policy:
     - `client_id`: value identifying the application of the requester, e.g. `client_id` of the OAuth2-client.
-    - `client_qualifications`: list of items the client is qualified for.
+    - `client_qualifications`: array of strings of data exchanges the client is qualified for.
     - `subject_id`: identifier of the practitioner (CiBG Dezi-nummer/UZI)
     - `subject_organization_id`: identifier of the organization of the practitioner (URA)
     - `subject_organization`: name of the organization of the practitioner
-    - `subject_role`: role of the practitioner (from CiBG Dezi / BIG-register)
+    - `subject_role`: array of strings indicating the roles of the practitioner (from CiBG Dezi / BIG-register)
     - `subject_facility_type`: type of the organization of the practitioner (Vektis)
 
 #### Resource
@@ -159,10 +159,10 @@ Other input for the policy evaluation is added to the context.
     "properties": {
       "client_id": "cee473c4-d9be-487b-b719-f552189d5891",
       "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"],
-      "subject_id": "DEZI|002",
-      "subject_organization_id": "URA|123",
+      "subject_id": "900000009",
+      "subject_organization_id": "87654321",
       "subject_organization": "Harry Helpt",
-      "subject_role": "uzirole|01.015 (huisarts)",
+      "subject_role": ["01.041", "30.000", "01.010", "01.011"],
       "subject_facility_type": "Z3"
     }
   },
@@ -170,7 +170,6 @@ Other input for the policy evaluation is added to the context.
     "type": "MedicationRequest",
     "properties": {
       "status": "active",
-      "patient": "90546b0d-e323-47f3-909b-fb9504859f7b"
     }
   },
   "action": {
