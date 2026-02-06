@@ -87,60 +87,185 @@ Implementers are not required to use the Rego-policy-language (nor the OpenID Au
 ### Data models
 GF Authorization uses the information model specification of [OpenID AuthZen](https://openid.net/specs/authorization-api-1_0.html). The information model for requests and responses include the following entities: Subject, Action, Resource, Context, and Decision. The use of this information model is illustrated by an example of a data user searching for active MedicationRequests for a patient.
 
+#### Subject
+This is the principle requesting the data. Attributes may come from Identity Providers (CiBG DeZI) and or (client-)certificates. Attributes:
+
+- `type`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
+- `id`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
+- `properties`: this map contains at least the following attributes, but may be extended with other attributes required by the policy:
+    - `client_id`: value identifying the application of the requester, e.g. `client_id` of the OAuth2-client.
+    - `client_qualifications`: list of items the client is qualified for.
+    - `subject_id`: identifier of the practitioner (CiBG Dezi-nummer/UZI)
+    - `subject_organization_id`: identifier of the organization of the practitioner (URA)
+    - `subject_organization`: name of the organization of the practitioner
+    - `subject_role`: role of the practitioner (from CiBG Dezi / BIG-register)
+    - `subject_facility_type`: type of the organization of the practitioner (Vektis)
+
+#### Resource
+This is the requested data. Attributes are typically from the request URL and request parameters (e.g. FHIR search parameters).
+
+**NOTE TO REVIEWER/EDITOR: `action.fhir_rest` communicates similar information, should these 2 converge? Knooppunt PDP currently only uses `resource.type`**
+
+- `type`: the type of the resource, for example 'MedicationRequest'
+- `id`: the identifier of the resource, for example the FHIR Patient resource ID from the request URL.
+- `properties`: **NOTE TO REVIEWER/EDITOR: to be specified**
+
+#### Action
+The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
+
+It contains information about the request, and a parsed representation of the request if supported by this IG.
+Policy writers are encouraged to use the connection type-specific properties, e.g. `fhir_rest.search_params` over `request.query_params`.
+
+- `name`: the name of the action, for example 'search'. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
+- `connection_type_code` (required): indicates the type of the connection. Policy writers are encouraged to use the [HL7 EndpointConnectionType](http://terminology.hl7.org/CodeSystem/endpoint-connection-type) code system whenever applicable. 
+  The informs the policy engine on how to interpret the request.
+- `request`:
+  - `protocol` (required): the protocol of the request, for `HTTP/1.1`.
+  - `method` (required): the HTTP method of the request, for example 'GET', 'POST', 'PUT', etc.
+  - `path` (required): the path of the request, for example `/MedicationRequest`.
+  - `query_params`: a map of string arrays containing the query parameters of the request.
+  - `header`: a map of string arrays containing the header parameters of the request.
+  - `body`: base64 encoded body of the request, for example for a FHIR resource creation or update.
+- `fhir_rest`: if the request is a HL7 FHIR REST request, the following properties apply:
+  - `capability_checked`: a boolean indicating whether the interaction is allowed by the associated FHIR CapabilityStatement. **NOTE TO REVIEWER/EDITOR: Move CapabilityStatement to actual policy, instead of being policy input?**
+  - `interaction_type`: a string indicating the type of FHIR interaction, for example `read`, `search-type`, `create`, `update`, etc.
+  - `operation`: a string indicating the FHIR operation, for example `Patient-everything`. Only applicable if `interaction_type` is `operation`.
+  - `search_params`: a map of string arrays containing the FHIR search parameters of the request, for example `{"status": ["active"], "patient": ["Patient/90546b0d-e323-47f3-909b-fb9504859f7b"]}`.
+  - `include`: an array of strings containing the FHIR `_include` parameters of the request, for example `["MedicationRequest:medication"]`.
+  - `revinclude`: an array of strings containing the FHIR `_revinclude` parameters of the request, for example `["Provenance:target"]`.
+
+For requests that are scoped to a patient, `patient_bsn` and/or `patient_id` MUST be provided.
+They are typically derived from the request (e.g. FHIR search parameter `patient` or `identifier`).
+They could also be sourced from the authentication token, or be looked up in the EHR if only `patient_id` was provided in the request, and the policy requires the `patient_bsn` for the Mitz consent check.
+
+#### Context
+Other input for the policy evaluation is added to the context.
+
+- `context`:
+  - `data_holder_facility_type`: a string indicating the type of the organization of the data holder (Vektis), e.g. `Z3`.
+  - `data_holder_organization_id`: a string indicating the identifier of the organization of the data holder (URA), e.g. `123`.
+  - `patient_bsn`: a string indicating the BSN (identifier) of the patient.
+  - `patient_id`: a string uniquely identifying the patient in the system of the data holder, for example the FHIR Patient resource ID.
+  - `mitz_consent` a boolean indicating whether the Mitz consent check allows sharing the data.
+  - `purpose_of_use`: a string indicating the purpose of use of the request. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
+
+#### Example of a HL7 FHIR search request
+
 ```
 {
   "subject": {
     "type": "organization",
-    "id": "URA|123"
+    "id": "URA|123",
     "properties": {
-      "client_id": "cee473c4-d9be-487b-b719-f552189d5891"
-      "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"]
-      "subject_id": "DEZI|002"
-      "subject_organization_id": "URA|123"
-      "subject_organization": "Harry Helpt"
-      "subject_role": "uzirole|01.015 (huisarts)"
+      "client_id": "cee473c4-d9be-487b-b719-f552189d5891",
+      "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"],
+      "subject_id": "DEZI|002",
+      "subject_organization_id": "URA|123",
+      "subject_organization": "Harry Helpt",
+      "subject_role": "uzirole|01.015 (huisarts)",
+      "subject_facility_type": "Z3"
     }
   },
   "resource": {
     "type": "MedicationRequest",
     "properties": {
-      "status": "active"
+      "status": "active",
       "patient": "90546b0d-e323-47f3-909b-fb9504859f7b"
     }
   },
   "action": {
     "name": "search",
+    "connection_type_code": "hl7-fhir-rest",
+    "request": {
+      "protocol": "HTTP/1.1",
+      "method": "GET",
+      "path": "/MedicationRequest",
+      "query_params": {
+        "status": ["active"],
+        "patient": ["Patient/90546b0d-e323-47f3-909b-fb9504859f7b"]
+      },
+      "header": {
+        "Accept": ["application/fhir+json"]
+      }
+    },
+    "fhir_rest": {
+      "capability_checked": true,
+      "interaction_type": "search-type",
+      "search_params": {
+        "status": ["active"],
+        "patient": ["Patient/90546b0d-e323-47f3-909b-fb9504859f7b"]
+      }
+    },
     "properties": {
       "method": "GET"
     }
   },
   "context": {
-    "OTV-consent-decision": false
-    "consents": [{"resourceType": "Consent", "id"...etc}]
-    "time": "2025-10-26T01:22-07:00"
+    "data_holder_facility_type": "Z3",
+    "data_holder_organization_id": "URA|123",
+    "patient_bsn": "123456789",
+    "patient_id": "90546b0d-e323-47f3-909b-fb9504859f7b",
+    "mitz_consent": true,
     "purpose_of_use": "treatment"
   }
 }
 ```
-#### Subject
-This is the principle requesting the data (type, id and properties). Attributes may come from Identity Providers (CiBG DeZI) and or (client-)certificates
 
-#### Resource
-This is the requested data (type, id and properties). Attributes are typically from the request-url and request-parameters
-
-#### Action
-The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
-
-#### Context
-Other input for the policy evaluation is added to the context. For example the patient consents, OTV (Mitz) decision-outcome and the purpose-of-use (e.g. 'treatment', 'emergency' or 'research')
-
-
+**NOTE TO REVIEWER/EDITOR: Add more examples**
 
 ### Security and privacy considerations
 --TODO
 
-
 ### Example use cases
+
+### Advanced Care Planning (ACP) / Proactieve ZorgPlanning (PZP)
+
+The following policy allows the following FHIR requests, if the patient gave consent in Mitz:
+- `GET [base]/Patient?identifier=http://fhir.nl/fhir/NamingSystem/bsn|{context.patient_bsn}`
+- `GET [base]/Consent?patient=Patient/{context.patient_id}&scope=http://terminology.hl7.org/CodeSystem/consentscope|treatment&category=http://snomed.info/sct|129125009`
+
+```
+package pzp_gf
+
+import rego.v1
+
+#
+# This file implements the FHIR queries for PZP/ACP (Proactieve ZorgPlanning)
+# as specified by https://wiki.nuts.nl/books/pzp/page/pzp-volume-3-content
+#
+
+default allow := false
+allow if {
+    patient_gave_mitz_consent
+    is_allowed_query
+}
+
+default patient_gave_mitz_consent := false
+patient_gave_mitz_consent if {
+    input.context.mitz_consent == true
+}
+
+# GET [base]/Patient?identifier=http://fhir.nl/fhir/NamingSystem/bsn|{value}
+default is_allowed_query := false
+is_allowed_query if {
+    input.resource.type == "Patient"
+    input.action.fhir_rest.interaction_type == "search-type"
+    # identifier: exactly 1 identifier of type BSN
+    is_string(input.action.fhir_rest.search_params.identifier)
+    startswith(input.action.fhir_rest.search_params.identifier, "http://fhir.nl/fhir/NamingSystem/bsn|")
+}
+
+# GET [base]/Consent?patient={reference}&scope=http://terminology.hl7.org/CodeSystem/consentscope|treatment&category=http://snomed.info/sct|129125009
+is_allowed_query if {
+    input.resource.type == "Consent"
+    input.action.fhir_rest.interaction_type == "search-type"
+    # patient: reference Patient resource
+    startswith(input.action.fhir_rest.search_params.patient, "Patient/")
+    input.action.fhir_rest.search_params.scope == "http://terminology.hl7.org/CodeSystem/consentscope|treatment"
+    input.action.fhir_rest.search_params.category == "http://snomed.info/sct|129125009"
+}
+```
+
 --TODO
 <!-- #### Lokalization-service authorization
 
