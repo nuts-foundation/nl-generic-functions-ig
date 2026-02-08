@@ -16,29 +16,19 @@ You can build and test the Implementation Guide locally using Docker. This is us
 First, build the Docker image that contains all necessary tools (FHIR IG Publisher, Sushi, etc.):
 
 ```bash
-docker build . -t ig-builder
+make builder
 ```
 
-This creates a Docker image named `ig-builder` with all the required dependencies.
+#### Make Targets
 
-#### Run the Build
+| Command | Description |
+|---|---|
+| `make builder` | Build the Docker image with all dependencies |
+| `make check-syntax` | Run SUSHI only to validate FSH syntax (fast, seconds) |
+| `make ig-novalidate` | Full IG build, skipping terminology validation (faster) |
+| `make ig` | Full IG build with terminology validation |
 
-To build the Implementation Guide, run the following command from the project root:
-
-```bash
-docker run --rm --name=ig-builder \
-  -v ./input:/app/input \
-  -v ./output:/app/output \
-  -v ./ig.ini:/app/ig.ini \
-  -v ./sushi-config.yaml:/app/sushi-config.yaml \
-  ig-builder
-```
-
-This command:
-- Mounts the `input/` directory containing your FHIR resources
-- Mounts the `output/` directory where the built IG will be placed
-- Mounts the `ig.ini` and `sushi-config.yaml` configuration files
-- Runs the IG publisher to generate the output
+FHIR packages and build artifacts are cached in `build-cache/` to speed up subsequent builds.
 
 #### View the Results
 
