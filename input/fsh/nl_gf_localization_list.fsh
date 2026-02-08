@@ -16,7 +16,10 @@ Description: """A List profile for registering the availability of patient data
 at healthcare organizations for localization services. This profile is used to
 indicate that certain patient data is available at a specific organization and
 can be accessed for localization purposes."""
+* identifier 0..0
+* identifier ^comment = "Prohibited to prevent linkable information"
 * status 1..1
+* status ^comment = "All records are always current"
 * status = #current
 * mode 1..1
 * mode = #working
@@ -28,6 +31,7 @@ can be accessed for localization purposes."""
 * subject.identifier.system = "http://fhir.nl/fhir/NamingSystem/pseudo-bsn"
 * subject.reference 0..0
 * extension contains NlGfLocalizationCustodian named custodian 1..1
+* extension[custodian] ^comment = "The Organization which published the data"
 * source 0..0
 * entry 0..0
 * emptyReason 1..1
