@@ -56,7 +56,7 @@ When comparing the [Medmij Images List](https://simplifier.net/packages/nictiz.f
 
 
 ## Conclusie
-
+https://build.fhir.org/ig/nuts-foundation/nl-generic-functions-ig/branches/localization-using-FHIR-list/StructureDefinition-nl-gf-localization-list.html 
 
 
 ## Achtergrond keuzes AORTA m.b.t. FHIR List
