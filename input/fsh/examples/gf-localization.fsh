@@ -17,7 +17,7 @@ InstanceOf: NlGfLocalizationList
 Usage: #example
 Title: "Example NL Generic Functions Localization List"
 Description: "Example instance of the NlGfLocalizationList profile. It expresses an Organization with identifier (URA) 22222222 having a Medicatieafspraak of a patient with a pseudonymised identifier (BSN)"
-* insert AuthorAssignedIdentifier("https://cp1-test.example.org/nvi","f8141dc0-4c1f-4395-9d62-cf175324e92a","http://fhir.nl/fhir/NamingSystem/ura", "11111111")
+* insert AuthorAssignedIdentifier("https://cp1-test.example.org/nvi","a1b2c3d4-e5f6-7890-abcd-ef1234567890","http://fhir.nl/fhir/NamingSystem/ura", "11111111")
 * status = #current
 * mode = #working
 * code = $aorta-bouwsteentype-cs#MEDAFSPRAAK "Medicatieafspraak"

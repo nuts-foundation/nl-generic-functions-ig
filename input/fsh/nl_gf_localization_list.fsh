@@ -39,10 +39,12 @@ can be accessed for localization purposes."""
 * code 1..1
 * code from $aorta-bouwsteentype-vs (required)
 * subject 1..1
+* subject only Reference(Patient)
 * subject.identifier 1..1
 * subject.identifier.system = "http://fhir.nl/fhir/NamingSystem/pseudo-bsn"
 * subject.reference 0..0
 * source 1..1
+* source only Reference(Device)
 * source.reference ..0
 * source.type = $resource-types#Device
 * entry 0..0
