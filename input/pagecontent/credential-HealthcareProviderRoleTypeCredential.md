@@ -5,7 +5,7 @@ that a provider organization is authorized to offer (e.g., hospital, general pra
 
 **Issuer**: A trusted authority responsible for governing and issuing the attribute (e.g., Vektis).
 **Subject**: The healthcare provider organization, identified by their DID.
-**Status**: trial use
+**Status**: draft
 
 #### Attributes
 
