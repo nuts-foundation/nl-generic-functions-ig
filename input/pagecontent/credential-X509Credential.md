@@ -18,7 +18,7 @@ those certificates within the Nuts decentralized identity ecosystem using the `d
 
 **Signature algorithm**: `ES256`, `RS256` or `PS256`
 
-**Revocation method**: [Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/)
+**Revocation method**: [Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/), and certificate revocation checks (OCSP/CRL) through the `did:x509` DID resolution.
 
 **Proof of Possession**: presenter is holder: the identifier of the presenter must equal the credential subject
 identifier.
@@ -60,9 +60,9 @@ The fields in the `credentialSubject` are nested with their DID policies as keys
 
 ```json
 {
-  "sub": "did:x509:subject:O:Amsterdam",
+  "sub": "did:x509:subject:L:Amsterdam",
   "credentialSubject": {
-    "id": "did:x509:subject:O:Amsterdam",
+    "id": "did:x509:subject:L:Amsterdam",
     "subject": {
       "L": "Amsterdam"
     }
