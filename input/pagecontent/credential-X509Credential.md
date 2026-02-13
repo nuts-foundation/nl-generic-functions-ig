@@ -136,7 +136,7 @@ verifiers MUST perform the following, additional checks specific to the `X509Cre
 
 1. Issuer is a `did:x509` DID
 2. All fields in `credentialSubject` are present in the `did:x509` DID policies.
-3. Check that he JWT's `sub` claim matches the `credentialSubject.id` field.
+3. Check that the JWT's `sub` claim matches the `credentialSubject.id` field.
 4. Check credential time validity:
     - `issuanceDate` is equal to or later than certificate's `notBefore`
     - `expirationDate` (if present) is equal to or earlier than certificate's `notAfter`
