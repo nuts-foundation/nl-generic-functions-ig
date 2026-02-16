@@ -89,7 +89,7 @@ JWT Header:
     "<base64 encoded root CA certificate>"
   ],
   "x5t#S256": "WE4P5dd8DnLHSkyHaIjhp4udlkF9LqoKwCvu9gl38jk",
-  "kid": "did:x509:0:sha256:WE4P5dd8DnLHSkyHaIjhp4udlkF9LqoKwCvu9gl38jk::subject:O:OLVG::subject:L:Amsterdam::san:otherName:90000380#0"
+  "kid": "did:x509:0:sha256:did:x509:0:sha256:GwlhBZuEFlSHXSRUXQuTs3_YpQxAahColwJJj35US1A::san:otherName:2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000::subject:L:%2527S-GRAVENHAGE:o:T%25C3%25A9st%2520Zorginstelling%252003"
 }
 ```
 
@@ -106,21 +106,21 @@ JWT Payload:
       "VerifiableCredential",
       "X509Credential"
     ],
-    "issuer": "did:x509:0:sha256:WE4P5dd8DnLHSkyHaIjhp4udlkF9LqoKwCvu9gl38jk::subject:O:OLVG::subject:L:Amsterdam::san:otherName:90000380",
+    "issuer": "did:x509:0:sha256:GwlhBZuEFlSHXSRUXQuTs3_YpQxAahColwJJj35US1A::san:otherName:2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000::subject:L:%2527S-GRAVENHAGE:o:T%25C3%25A9st%2520Zorginstelling%252003",
     "issuanceDate": "2024-12-01T00:00:00Z",
     "credentialSubject": {
       "id": "did:web:example.com",
       "subject": {
-        "O": "OLVG",
-        "L": "Amsterdam"
+        "O": "Tést Zorginstelling 03",
+        "L": "S-GRAVENHAGE"
       },
       "san": {
-        "otherName": "90000380"
+        "otherName": "2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000"
       }
     }
   },
   "sub": "did:web:example.com",
-  "iss": "did:x509:0:sha256:WE4P5dd8DnLHSkyHaIjhp4udlkF9LqoKwCvu9gl38jk::subject:O:OLVG::subject:L:Amsterdam::san:otherName:90000380",
+  "iss": "did:x509:0:sha256:GwlhBZuEFlSHXSRUXQuTs3_YpQxAahColwJJj35US1A::san:otherName:2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000::subject:L:%2527S-GRAVENHAGE:o:T%25C3%25A9st%2520Zorginstelling%252003",
   "iat": 1733011200
 }
 ```
