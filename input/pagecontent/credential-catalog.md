@@ -18,8 +18,16 @@ Unless specified otherwise, every credential uses the following Verifiable Crede
 
 #### Credentials
 
+This IG defined the following credential types.
+
 | Credential                                                                                   | Description                                                                                                  | Status         |
 |----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------|
-| [HealthcareProviderRoleTypeCredential](credential-HealthcareProviderRoleTypeCredential.html) | Establishes the category or type of healthcare services a provider organization is authorized to offer.      | trial use      |
+| [HealthcareProviderRoleTypeCredential](credential-HealthcareProviderRoleTypeCredential.html) | Establishes the category or type of healthcare services a provider organization is authorized to offer.      | draft          |
 | [DeziIDTokenCredential](credential-DeziIDTokenCredential.html)                               | Wraps a Dezi OIDC ID-Token to assert the identity of a healthcare worker and their employment relationship.  | draft          |
 | [X509Credential](credential-X509Credential.html)                                             | Represents attributes from an X.509 certificate, anchored in a trusted CA through the `did:x509` DID method. | production use |
+
+##### Credential type status
+
+- **draft**: the credential is being developed and meant to be prototyped in non-production environments.
+- **trial use**: the credential can be used in small scale pilots and production environments. Future changes might not be backwards compatible.
+- **production use**: the credential is standardized and can be used in production environments. Future changes will be backwards compatible.
