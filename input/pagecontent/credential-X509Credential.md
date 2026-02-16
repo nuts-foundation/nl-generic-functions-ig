@@ -18,7 +18,8 @@ those certificates within the Nuts decentralized identity ecosystem using the `d
 
 **Signature algorithm**: `ES256`, `RS256` or `PS256`
 
-**Revocation method**: [Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/), and certificate revocation checks (OCSP/CRL) through the `did:x509` DID resolution.
+**Revocation method**: [Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/), and certificate
+revocation checks (OCSP/CRL) through the `did:x509` DID resolution.
 
 **Proof of Possession**: presenter is holder: the identifier of the presenter must equal the credential subject
 identifier.
@@ -40,31 +41,35 @@ with existing X.509 PKI infrastructure to use their certificates within the Nuts
 
 The `X509Credential` credentialSubject contains fields from the certificate's DID policies, grouped by policy type:
 
-| JSON Path                          | `did:x509` policy | Attribute   | Description                                 | Example               |
-|------------------------------------|-------------------|-------------|---------------------------------------------|-----------------------|
-| `credentialSubject.subject.C`      | `subject`         | `C`         | Country                                     | `NL`                  |
-| `credentialSubject.subject.CN`     | `subject`         | `CN`        | Common Name                                 | `example.com`         |
-| `credentialSubject.subject.L`      | `subject`         | `L`         | Locality                                    | `Amsterdam`           |
-| `credentialSubject.subject.ST`     | `subject`         | `ST`        | State/Province                              | `Noord-Holland`       |
-| `credentialSubject.subject.O`      | `subject`         | `O`         | Organisation                                | `Ziekenhuis Oost`     |
-| `credentialSubject.subject.OU`     | `subject`         | `OU`        | Organisation Unit                           | `Cardiology`          |
-| `credentialSubject.subject.STREET` | `subject`         | `STREET`    | Street Address                              | `Oosterpark 101`      |
-| `credentialSubject.san.email`      | `san`             | `email`     | Email address from Subject Alternative Name | `info@example.com`    |
-| `credentialSubject.san.dns`        | `san`             | `dns`       | DNS name from Subject Alternative Name      | `example.com`         |
-| `credentialSubject.san.uri`        | `san`             | `uri`       | URI from Subject Alternative Name           | `https://example.com` |
-| `credentialSubject.san.otherName`  | `san`             | `otherName` | Free-form attribute (e.g., URA number)      | `90000380`            |
-| `credentialSubject.eku.<OID>`      | `eku`             | Any OID     | Extended Key Usage                          | `1.3.6.1.5.5.7.3.2`   |
+| JSON Path                          | `did:x509` policy | Attribute   | Description                                                      | Example                                                          |
+|------------------------------------|-------------------|-------------|------------------------------------------------------------------|------------------------------------------------------------------|
+| `credentialSubject.subject.C`      | `subject`         | `C`         | Country                                                          | `NL`                                                             |
+| `credentialSubject.subject.CN`     | `subject`         | `CN`        | Common Name                                                      | `example.com`                                                    |
+| `credentialSubject.subject.L`      | `subject`         | `L`         | Locality                                                         | `Amsterdam`                                                      |
+| `credentialSubject.subject.ST`     | `subject`         | `ST`        | State/Province                                                   | `Noord-Holland`                                                  |
+| `credentialSubject.subject.O`      | `subject`         | `O`         | Organisation                                                     | `Ziekenhuis Oost`                                                |
+| `credentialSubject.subject.OU`     | `subject`         | `OU`        | Organisation Unit                                                | `Cardiology`                                                     |
+| `credentialSubject.subject.STREET` | `subject`         | `STREET`    | Street Address                                                   | `Oosterpark 101`                                                 |
+| `credentialSubject.san.email`      | `san`             | `email`     | Email address from Subject Alternative Name                      | `info@example.com`                                               |
+| `credentialSubject.san.dns`        | `san`             | `dns`       | DNS name from Subject Alternative Name                           | `example.com`                                                    |
+| `credentialSubject.san.uri`        | `san`             | `uri`       | URI from Subject Alternative Name                                | `https://example.com`                                            |
+| `credentialSubject.san.otherName`  | `san`             | `otherName` | Free-form attribute (e.g., string containing UZI and URA number) | `2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000` |
+| `credentialSubject.eku.<OID>`      | `eku`             | Any OID     | Extended Key Usage                                               | `1.3.6.1.5.5.7.3.2`                                              |
 
 Every field in the `credentialSubject` expresses an attribute from the certificate, through the `did:x509` policies.
 The fields in the `credentialSubject` are nested with their DID policies as keys, so `subject:L:Amsterdam`, becomes:
 
 ```json
 {
-  "sub": "did:x509:subject:L:Amsterdam",
+  "sub": "did:x509:0:sha256:GwlhBZuEFlSHXSRUXQuTs3_YpQxAahColwJJj35US1A::san:otherName:2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000::subject:L:%2527S-GRAVENHAGE:o:T%25C3%25A9st%2520Zorginstelling%252003",
   "credentialSubject": {
-    "id": "did:x509:subject:L:Amsterdam",
+    "id": "did:web:example.com:zorginstelling",
     "subject": {
-      "L": "Amsterdam"
+      "L": "S-GRAVENHAGE",
+      "O": "Tést Zorginstelling 03"
+    },
+    "san": {
+      "otherName": "2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000"
     }
   }
 }
@@ -125,7 +130,8 @@ JWT Payload:
 Credentials are considered to be revoked if either:
 
 - The certificate used to issue the credential is revoked (check using OCSP or CRL).
-  This MUST be reflected in the `did:x509` DID resolution result, so it's technically not part of the credential revocation checks.
+  This MUST be reflected in the `did:x509` DID resolution result, so it's technically not part of the credential
+  revocation checks.
 - The credential is listed as revoked in the Bitstring Status List
 
 #### Validation
@@ -145,8 +151,10 @@ If any of these checks fail, the credential MUST be rejected as invalid.
 
 #### Example use cases
 
-- Healthcare organizations using UZI server certificates to authenticate and establish organizational identity in the Nuts network.
-- Data holders verifying the organizational identity of a data requester based on their X.509 certificate attributes (e.g., organization name, URA number).
+- Healthcare organizations using UZI server certificates to authenticate and establish organizational identity in the
+  Nuts network.
+- Data holders verifying the organizational identity of a data requester based on their X.509 certificate attributes (
+  e.g., organization name, URA number).
 - Systems requiring both traditional PKI trust and decentralized identity verification.
 
 #### Security Considerations
@@ -161,4 +169,5 @@ Implementers MUST be aware of the following security considerations:
 
 #### Original work
 
-The `X509Credential` was originally defined by the Nuts Foundation as [RFC023](https://nuts-foundation.gitbook.io/drafts/rfc/rfc023-x509credential).
+The `X509Credential` was originally defined by the Nuts Foundation
+as [RFC023](https://nuts-foundation.gitbook.io/drafts/rfc/rfc023-x509credential).
