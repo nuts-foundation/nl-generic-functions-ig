@@ -122,6 +122,9 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
+    credential-X509Credential.md:
+      title: X509Credential
+      generation: markdown
     credential-HealthcareProviderRoleTypeCredential.md:
       title: HealthcareProviderRoleTypeCredential
       generation: markdown
