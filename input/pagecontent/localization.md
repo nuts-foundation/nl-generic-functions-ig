@@ -14,17 +14,16 @@ By adhering to these principles, this Implementation Guide supports consistent a
 
 ### Solution overview
 
-GF-Localization follows the choices made by the MinvWS Localization working group, see [GF-Lokalisatie, ADR's](https://github.com/orgs/minvws/projects/70/views/1). This guide specifies the choices made. Most impactful/striking choice are:
+GF-Localization is based on the IHE [MHD profile](https://profiles.ihe.net/ITI/MHD/) and follows the choices made by the MinvWS Localization working group, see [GF-Lokalisatie, ADR's](https://github.com/orgs/minvws/projects/70/views/1). This guide specifies the choices made. Most impactful/striking choice are:
 
 - using one national Medical Record Localization Service: the 'Nationale Verwijs Index' (NVI)
-- using a local metadata registry (LMR) per data holder
-- reusing the FHIR-interface of the data holder to act as LMR
 - using one national service for pseudonymizing and depseudonymizing citizen service numbers (BSN's): the Pseudonymization Service
+- using IHE [MHD profile](https://profiles.ihe.net/ITI/MHD/) to publish and find Localization records (transactions [ITI-65](https://profiles.ihe.net/ITI/MHD/ITI-65.html) and [ITI-66](https://profiles.ihe.net/ITI/MHD/ITI-66.html)).
 
 Here is a brief overview of the processes that are involved: 
-1. Every data holder registers the presence of data concerning a specific patient and data category at the Localization service. This localization record references a document (e.g. Patient, Medication or Imaging-resource) to represent the data category.
+1. Every data holder registers the presence of data concerning a specific patient and data category at the Localization service. 
 1. A data user (practitioner and/or system (EHR)) can now use the Localization service to discover data holders for a specific patient and data category.
-1. The Localization service checks access of the data requester to the referenced document before it exposes the localization record to the data user.
+
 
 These processes require the use of pseudonyms that are generated and resolved using a national Pseudonymization Service. The Localization service-response provides a list of data holders; the endpoints of these data holders (e.g. FHIR or DICOM-urls) need to be resolved using a [Care service (Query) Directory](./care-services.html#query-directory). This process is illustrated in [this example](./care-services.html#use-case-2-endpoint-discovery). 
 
@@ -36,30 +35,24 @@ For more detail on the topology of GF-Localization, see [GF-Lokalisatie, ADR-2](
 
 #### Localization Service
 
-A (Medical Record) Localization Service is responsible for managing the registration, maintenance, and publication of localization records. It should be able to create and update localization records. A Localization Service MUST implement these [FHIR capabilities](./CapabilityStatement-nl-gf-localization-repository.html) and basically involves creating and searching for FHIR DocumentReferences (see [Localization record](#localization-record))
-
-#### Local Metadata Register
-A Local Metadata Register (LMR) is responsible for managing the registration, maintenance, and publication of the metadata of one data holder (the custodian or the healthcare organization). To implement an LMR, existing FHIR-APIs of data sources can be used. Minimum requirements for a LMR are specified in this [FHIR capabilitystatement](./CapabilityStatement-nl-gf-localization-repository-lmr.html). HTTP-method HEAD SHALL be supported to allow the [Localization service](#localization-service) to check the access (consent) to the localization-record for the data user at the data holder.
+A (Medical Record) Localization Service is responsible for managing the registration, maintenance, and publication of localization records. It should be able to create and update localization records. A Localization Service MUST implement these [FHIR capabilities](https://profiles.ihe.net/ITI/MHD/CapabilityStatement-IHE.MHD.DocumentRecipient.UnContained.html)
 
 
 #### Pseudonymization Service
-The Pseudonymization Service is responsible for creating and retrieving Polymorphic Pseudonyms of Patient identifiers. It involves multiple interactions for both a FHIR request and a FHIR response:
-- the sender (of the request or response) posts their identifier/pseudonym AND the target organization to the Pseudonymization Service, which returns an opaque value.
-- the receiver (of the request or response)  exchanges the opaque value for a pseudonym at the Pseudonymization Service. 
-This version of the IG will not go into the details of this Pseudonymization Service and the effect on FHIR transactions. For information on this topic, see the [Logius BSNk-pp service](https://www.logius.nl/onze-dienstverlening/toegang/voorzieningen/bsnk-pp).
+The Pseudonymization Service is responsible for creating and retrieving Polymorphic Pseudonyms of Patient identifiers. More information will follow.
 
 ### Data models
 
 #### Localization record
 
-Within GF-Localization the [NL-gf-localization-DocumentReference profile](./StructureDefinition-nl-gf-localization-documentreference.html) is used to register, search, and validate localization records ([NL-GF-IG, ADR#10](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/10)).
+Within GF-Localization the [NL-gf-localization-List profile](./StructureDefinition-nl-gf-localization-list.html) is used to register, search, and validate localization records ([NL-GF-IG, ADR#10](https://github.com/nuts-foundation/nl-generic-functions-ig/issues/10)).
 This data model basically states ***"Care provider X has data of type Y for Patient Z"***. It contains the following elements:
 - **Organization identifier**: The care provider identifier (URA) representing the data holder/custodian.
 - **Patient identifier**: The pseudonymized BSN to identify the patient.
 - **Type**: Represents type of data stored at the data holder/custodian. ***No ValueSet has been decided upon yet [GF-Lokalisatie, ADR#62](https://github.com/minvws/generiekefuncties-lokalisatie/issues/62), so in this IG-version, a fixed LOINC code '55188-7' is used: "Patient data Document"***
 - **Url**: A link/url to a document (e.g. FHIR resource) that represents the data type of this localization record. This url used by the Localization service to check authorization (consent) at the data holder for the data user/requester.
 
-A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f2317.html) is in the IG artifacts.
+<!-- A [Location record example](./DocumentReference-52b792ba-11ae-42f3-bcc1-231f333f2317.html) is in the IG artifacts. -->
 
 
 ### Security and Privacy Considerations
@@ -122,7 +115,7 @@ For brevity, interactions to the Pseudonymization Service are left out here.
 #### Localization Service
 Potential future enhancements to the Localization Service include:
 - Audit logging capabilities (MUST HAVE, TODO)
-- ValueSet constraint on DocumentReference.type and/or DocumentReference.category
+- ValueSet constraint on List.designationType
 
 #### Pseudonymization Service
 - Specification of Pseudonymization Service API

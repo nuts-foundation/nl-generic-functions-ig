@@ -29,6 +29,7 @@ publisher:
 dependencies:
   nictiz.fhir.nl.r4.nl-core: 0.12.0-beta.4
   nictiz.fhir.nl.r4.zib2020: 0.12.0-beta.4
+  ihe.iti.mhd: 4.2.3
   # hl7.fhir.eu.base: 0.1.0-ballot # Depending on discussion with Nictiz if we want to base our profiles on this or not
 #
 #
