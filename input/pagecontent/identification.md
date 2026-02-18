@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2025-2026 Bram Wesselo
 SPDX-FileCopyrightText: 2025-2026 Rein Krul
 SPDX-FileCopyrightText: 2025-2026 Roland Groen
 
-SPDX-License-Identifier: EUPL-1.2
+SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
 ### Introduction

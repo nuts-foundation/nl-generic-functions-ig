@@ -1,7 +1,7 @@
 <!--
 SPDX-FileCopyrightText: 2025 Stichting Nuts
 
-SPDX-License-Identifier: EUPL-1.2
+SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
 Developer Certificate of Origin Version 1.1

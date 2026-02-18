@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2025 Bram Wesselo
 SPDX-FileCopyrightText: 2025 Rein Krul
 
-SPDX-License-Identifier: EUPL-1.2
+SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
 ### Introduction
