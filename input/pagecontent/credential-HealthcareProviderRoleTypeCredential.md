@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2026 Rein Krul
 SPDX-FileCopyrightText: 2026 Steven van der Vegt
 
-SPDX-License-Identifier: EUPL-1.2
+SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
 ### HealthcareProviderRoleTypeCredential
