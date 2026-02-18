@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2025 Stichting Nuts <info@nuts.nl>
+SPDX-FileCopyrightText: 2025 Stichting Nuts
 
 SPDX-License-Identifier: EUPL-1.2
 -->

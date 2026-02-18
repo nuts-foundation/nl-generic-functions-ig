@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2025-2026 Bram Wesselo <bram@wesselo.nl>
+SPDX-FileCopyrightText: 2025-2026 Bram Wesselo
 
 SPDX-License-Identifier: EUPL-1.2
 -->

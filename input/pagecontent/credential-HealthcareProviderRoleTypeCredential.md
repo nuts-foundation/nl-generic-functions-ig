@@ -1,6 +1,6 @@
 <!--
-SPDX-FileCopyrightText: 2026 Rein Krul <info@reinkrul.nl>
-SPDX-FileCopyrightText: 2026 Steven van der Vegt <github@svandervegt.nl>
+SPDX-FileCopyrightText: 2026 Rein Krul
+SPDX-FileCopyrightText: 2026 Steven van der Vegt
 
 SPDX-License-Identifier: EUPL-1.2
 -->

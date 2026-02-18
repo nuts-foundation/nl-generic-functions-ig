@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2026 Rein Krul <info@reinkrul.nl>
+SPDX-FileCopyrightText: 2026 Rein Krul
 
 SPDX-License-Identifier: EUPL-1.2
 -->

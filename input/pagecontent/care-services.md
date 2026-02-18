@@ -1,6 +1,6 @@
 <!--
-SPDX-FileCopyrightText: 2025 Bram Wesselo <bram@wesselo.nl>
-SPDX-FileCopyrightText: 2025 Rein Krul <info@reinkrul.nl>
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+SPDX-FileCopyrightText: 2025 Rein Krul
 
 SPDX-License-Identifier: EUPL-1.2
 -->

@@ -1,7 +1,7 @@
 <!--
-SPDX-FileCopyrightText: 2025 Bram Wesselo <bram@wesselo.nl>
-SPDX-FileCopyrightText: 2025 Rein Krul <info@reinkrul.nl>
-SPDX-FileCopyrightText: 2025 Roland Groen <roland@headease.nl>
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+SPDX-FileCopyrightText: 2025 Rein Krul
+SPDX-FileCopyrightText: 2025 Roland Groen
 
 SPDX-License-Identifier: EUPL-1.2
 -->
