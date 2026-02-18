@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2025-2026 Bram Wesselo <bram@wesselo.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
 
 
 > This is a copy of the Technical Agreement "Routering" and is maintained outside this Implementation Guide. The reason to include it in this IG:

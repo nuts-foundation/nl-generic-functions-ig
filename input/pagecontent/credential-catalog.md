@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2026 Rein Krul <info@reinkrul.nl>
+SPDX-FileCopyrightText: 2026 Steven van der Vegt <github@svandervegt.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### Credential Catalog
 
 This section describes the various types of verifiable credentials used in the authentication framework.

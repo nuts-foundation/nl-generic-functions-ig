@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2025-2026 Bram Wesselo <bram@wesselo.nl>
+SPDX-FileCopyrightText: 2025-2026 Jorrit Spee <jorrit@jorritspee.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Consent, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Consent aims to establish a standardized, interoperable system for using patient consent as a legal basis for processing medical data, enabling reliable and efficient exchange of health data across healthcare systems and organizations.

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo <bram@wesselo.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### Workflow specification
 
 <!-- ### Summary of workflow in FHIR core specification

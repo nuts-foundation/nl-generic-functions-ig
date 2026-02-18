@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Steven van der Vegt <github@svandervegt.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### DeziIDTokenCredential
 
 This specification specifies the `DeziIDTokenCredential` and includes steps to create and verify the credential.

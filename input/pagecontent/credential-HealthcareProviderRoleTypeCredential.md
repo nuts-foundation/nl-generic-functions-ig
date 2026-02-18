@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2026 Rein Krul <info@reinkrul.nl>
+SPDX-FileCopyrightText: 2026 Steven van der Vegt <github@svandervegt.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### HealthcareProviderRoleTypeCredential
 
 The `HealthcareProviderRoleTypeCredential` is a verifiable credential that establishes the category or type of healthcare services,

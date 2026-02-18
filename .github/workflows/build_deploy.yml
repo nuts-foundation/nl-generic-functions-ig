@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Bram Wesselo <bram@wesselo.nl>
+# SPDX-FileCopyrightText: 2025 Roland Groen <roland@headease.nl>
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 name: Build and Deploy static content to Pages with Docker
 
 on:

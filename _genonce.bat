@@ -1,3 +1,7 @@
+REM SPDX-FileCopyrightText: 2025 Bram Wesselo <bram@wesselo.nl>
+REM
+REM SPDX-License-Identifier: EUPL-1.2
+
 @ECHO OFF
 SET publisher_jar=publisher.jar
 SET input_cache_path=%CD%\input-cache

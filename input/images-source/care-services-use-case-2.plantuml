@@ -1,3 +1,7 @@
+' SPDX-FileCopyrightText: 2025 Bram Wesselo <bram@wesselo.nl>
+'
+' SPDX-License-Identifier: EUPL-1.2
+
 @startuml care-services-use-case-2
 
 skinparam roundcorner 20

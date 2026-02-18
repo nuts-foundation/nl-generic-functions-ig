@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2025-2026 Bram Wesselo <bram@wesselo.nl>
+# SPDX-FileCopyrightText: 2025-2026 Rein Krul <info@reinkrul.nl>
+# SPDX-FileCopyrightText: 2025-2026 Roland Groen <roland@headease.nl>
+# SPDX-FileCopyrightText: 2025-2026 Steven van der Vegt <github@svandervegt.nl>
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 # ╭─────────────────────────Commonly Used ImplementationGuide Properties───────────────────────────╮
 # │  The properties below are used to create the ImplementationGuide resource. The most commonly   │
 # │  used properties are included. For a list of all supported properties and their functions,     │
