@@ -29,7 +29,14 @@ COPY ./_updatePublisher.sh .
 RUN bash ./_updatePublisher.sh -y
 RUN chmod +x *.sh *.bat
 
+# Allow the JVM to use more memory for the IG Publisher
+ENV JAVA_TOOL_OPTIONS="-Xmx2g -Dfile.encoding=UTF-8"
+
+# Keep a copy of publisher.jar outside input-cache so it survives volume mounts
+RUN cp /app/input-cache/publisher.jar /app/publisher.jar
+
 # Note: ig.ini and sushi-config.yaml should be mounted as volumes when running the container
 # This allows for configuration changes without rebuilding the image
 
-CMD ["bash", "_genonce.sh"]
+# Copy publisher.jar into input-cache if missing (e.g. when volume is mounted over it), then run
+CMD ["bash", "-c", "cp -n /app/publisher.jar /app/input-cache/publisher.jar 2>/dev/null; bash _genonce.sh"]
