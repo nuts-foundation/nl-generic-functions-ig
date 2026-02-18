@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+SPDX-FileCopyrightText: 2025 Rein Krul
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across healthcare systems and organizations.

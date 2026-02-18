@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+SPDX-FileCopyrightText: 2025 Roland Groen
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 # Placeholder for introductory motivation, concepts, organization, etc
 <!-- # Motivation for NL Generic Functions IG. -->
 <!-- Rising healthcare costs are unsustainable in the long term. By making healthcare more efficient, we can ensure the sustainability of healthcare systems, safeguarding access to care for future generations. In The Netherlands, many patients visit multiple practitioners during their treatment, at different organizations. Continuous care coordination and/or collaboration comes with high costs. Currently, these practitioners either handover the patient to a different care-provider or practitioners use the same IT-system for collaboration. Both methods have severe disadvantages. 

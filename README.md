@@ -1,3 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+SPDX-FileCopyrightText: 2025 Rein Krul
+SPDX-FileCopyrightText: 2025 Roland Groen
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 # nuts-knooppunt-specs
 Specifications of the Nuts Knooppunt
 

@@ -1,3 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2025-2026 Bram Wesselo
+SPDX-FileCopyrightText: 2025-2026 Rein Krul
+SPDX-FileCopyrightText: 2025-2026 Roland Groen
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the Generic Function Identification, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Identification aims to establish a standardized, interoperable system for identifying healthcare organizations, IT vendor organizations, healthcare professionals, patients and data-objects, enabling reliable and efficient exchange of health data across healthcare systems and organizations.

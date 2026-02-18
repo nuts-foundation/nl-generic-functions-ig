@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: 2025 Bram Wesselo
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 set -e
 
 # Variables

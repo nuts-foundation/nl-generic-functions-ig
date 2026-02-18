@@ -1,3 +1,7 @@
+' SPDX-FileCopyrightText: 2025 Bram Wesselo
+'
+' SPDX-License-Identifier: EUPL-1.2
+
 @startuml workflow-base-f
 
 skinparam roundcorner 20
