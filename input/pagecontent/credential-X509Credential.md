@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Rein Krul <info@reinkrul.nl>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 ### X509Credential
 
 The `X509Credential` is a verifiable credential that bridges traditional X.509 Public Key Infrastructure (PKI) with
@@ -42,7 +48,7 @@ with existing X.509 PKI infrastructure to use their certificates within the Nuts
 The `X509Credential` credentialSubject contains fields from the certificate's DID policies, grouped by policy type:
 
 | JSON Path                          | `did:x509` policy | Attribute   | Description                                                      | Example                                                          |
-|------------------------------------|-------------------|-------------|------------------------------------------------------------------|------------------------------------------------------------------|
+| ---------------------------------- | ----------------- | ----------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
 | `credentialSubject.subject.C`      | `subject`         | `C`         | Country                                                          | `NL`                                                             |
 | `credentialSubject.subject.CN`     | `subject`         | `CN`        | Common Name                                                      | `example.com`                                                    |
 | `credentialSubject.subject.L`      | `subject`         | `L`         | Locality                                                         | `Amsterdam`                                                      |
@@ -102,10 +108,7 @@ JWT Payload:
       "https://www.w3.org/2018/credentials/v1",
       "https://nuts.nl/credentials/v1"
     ],
-    "type": [
-      "VerifiableCredential",
-      "X509Credential"
-    ],
+    "type": ["VerifiableCredential", "X509Credential"],
     "issuer": "did:x509:0:sha256:GwlhBZuEFlSHXSRUXQuTs3_YpQxAahColwJJj35US1A::san:otherName:2.16.528.1.1007.99.2110-1-900025039-S-90000382-00.000-00000000::subject:L:%2527S-GRAVENHAGE:o:T%25C3%25A9st%2520Zorginstelling%252003",
     "issuanceDate": "2024-12-01T00:00:00Z",
     "credentialSubject": {
@@ -144,8 +147,8 @@ verifiers MUST perform the following, additional checks specific to the `X509Cre
 2. All fields in `credentialSubject` are present in the `did:x509` DID policies.
 3. Check that the JWT's `sub` claim matches the `credentialSubject.id` field.
 4. Check credential time validity:
-    - `issuanceDate` is equal to or later than certificate's `notBefore`
-    - `expirationDate` (if present) is equal to or earlier than certificate's `notAfter`
+   - `issuanceDate` is equal to or later than certificate's `notBefore`
+   - `expirationDate` (if present) is equal to or earlier than certificate's `notAfter`
 
 If any of these checks fail, the credential MUST be rejected as invalid.
 
