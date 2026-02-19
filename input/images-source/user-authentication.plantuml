@@ -1,0 +1,61 @@
+@startuml user-authentication
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+autoactivate on
+autonumber
+
+!pragma teoz true
+
+participant  user as "User"
+participant  ehr as "Client\n (EHR)"
+participant idp as "Identity Provider\n (IDP)"
+participant as as "Resource Server\n (AS)"
+
+== Session Establishment (OIDC) ==
+
+user -> ehr: Login
+ehr --> user: Redirect to IDP
+user -> idp: Authenticate (e.g., DigiD)
+
+idp --> user: Redirect with code
+
+user -> ehr: follow redirect
+ehr -> idp: exchange code
+
+idp --> ehr: id-token
+deactivate
+
+== Credential Issuance (OpenID4VCI) ==
+
+user -> ehr: Access external resource
+ehr --> user: Redirect to idp
+user -> idp: follow redirect
+
+alt First time, no consent given
+    user -> idp: Give consent
+    deactivate idp
+end
+
+idp --> user: Redirect with code
+user -> ehr: Follow redirect
+ehr -> idp: Exchange code
+idp --> ehr: Access token
+ehr -> idp: Request credential
+idp --> ehr: User Consent VC
+
+== Request Access Token ==
+
+ehr -> as: Request access token\n VP: Org VC + User Consent VC
+as --> ehr: access token
+
+== Request Resource ==
+
+ehr -> as: request resource
+as --> ehr: resource
+ehr --> user: show information
+
+
+@enduml
+

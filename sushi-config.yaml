@@ -99,6 +99,9 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
+    user-authentication.md:
+      title: User Authentication
+      generation: markdown
     GFI-001.md:
       title: Request key material [GFI-001]
       generation: markdown
