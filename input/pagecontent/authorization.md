@@ -9,7 +9,7 @@ This guide outlines the data requirements and principles underlying the GF Autho
 - Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
-<!--  pfor policy makers -->
+<!--  for policy makers -->
 
 ### Solution overview
 
