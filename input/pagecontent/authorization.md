@@ -88,7 +88,7 @@ Implementers are not required to use the Rego-policy-language (nor the OpenID Au
 GF Authorization uses the information model specification of [OpenID AuthZen](https://openid.net/specs/authorization-api-1_0.html). The information model for requests and responses include the following entities: Subject, Action, Resource, Context, and Decision. The use of this information model is illustrated by an example of a data user searching for active MedicationRequests for a patient.
 
 #### Subject
-This is the principle requesting the data. Attributes may come from Identity Providers (CiBG DeZI) and or (client-)certificates. Attributes:
+This is the principal requesting the data. Attributes may come from Identity Providers (CiBG DeZI) and/or (client-)certificates. Attributes:
 
 - `type`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
 - `id`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
