@@ -118,7 +118,7 @@ Policy writers are encouraged to use the connection type-specific properties, e.
 
 - `name`: the name of the action, for example 'search'. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
 - `connection_type_code` (required): indicates the type of the connection. Policy writers are encouraged to use the [HL7 EndpointConnectionType](http://terminology.hl7.org/CodeSystem/endpoint-connection-type) code system whenever applicable. 
-  The informs the policy engine on how to interpret the request.
+  This value informs the policy engine on how to interpret the request.
 - `request`:
   - `protocol` (required): the protocol of the request, for `HTTP/1.1`.
   - `method` (required): the HTTP method of the request, for example 'GET', 'POST', 'PUT', etc.
