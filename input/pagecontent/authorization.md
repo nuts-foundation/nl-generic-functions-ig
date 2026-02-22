@@ -33,7 +33,7 @@ GF Authorization only specifies the input-variables, policy evaluation and outpu
 
 This IG distinguishes 4 categories of actors:
 1. Authoritative data sources
-1. Autorization policy makers
+1. Authorization policy makers
 1. Requesting party (Data user)
 1. Responding party (Data holder)
 
