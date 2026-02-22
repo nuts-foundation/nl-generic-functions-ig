@@ -17,7 +17,7 @@ On a high level, a data access/operation authorization starts with a request fro
 
 Just below this top level abstraction, there's a lot more to discuss:
 
-<img src="authorization-overview-transactions.png" width="100%" style="float: none" alt="Overview of authorization process"/>
+{% include authorization-overview-transactions.svg %}
 
 1. Authorization policy makers create authorization policies based on attributes specified in Healthcare Information models and standards. These attributes can be certain identifiers (BSN, URA, etc.), entity characteristics (organization type, practitioner role), permission records (qualifications, consent) and/or specified operations or capability statements for requesting and responding party
 2. Requesting and responding parties need to acquire attributes (data) from authoritative data sources. When to get this data is not specified here. A (PKIoverheid) certificate from a Trust Service Provider may be fetched once a year, a CiBG-DeZI-token may be fetched when a practitioner starts his/her shift and a VZVZ Mitz patient consent may be fetched, by the responding party, just after receiving a data request.

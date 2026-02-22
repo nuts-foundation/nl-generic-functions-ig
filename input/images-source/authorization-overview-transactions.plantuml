@@ -1,0 +1,74 @@
+@startuml authorization-overview-transactions
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial
+skinparam defaultTextAlignment center
+skinparam backgroundColor white
+
+skinparam rectangle {
+    BackgroundColor #FFF2CC
+    BorderColor #D6B000
+}
+
+' Top row: main actors
+rectangle "**Requesting party**\n**(Data user)**" as requesting {
+    rectangle "User" as user
+}
+
+rectangle "**Responding party**\n**(Data holder)**" as responding {
+    rectangle "4. Policy\nevaluation\n\n<size:10>PEP / PDP / PIP</size>" as policy_eval
+}
+
+rectangle "authorization\npolicy makers\n\n<size:10>PAP*</size>" as policy_makers
+
+' Flows between main actors
+requesting -right-> responding : "3. Request + claims"
+responding -[dashed]right-> policy_makers : "1. Registration of policy"
+
+' Force top row to stay on one level
+requesting -[hidden]right- responding
+responding -[hidden]right- policy_makers
+
+' Bottom row: authoritative data sources
+rectangle "Trust Service\nProviders\nCertificates\n\n<size:10>PIP*</size>" as trust
+rectangle "CiBG\nDeZI\n\n<size:10>PIP*</size>" as cibg_dezi
+rectangle "CiBG\nLRZa\n\n<size:10>PIP*</size>" as cibg_lrza
+rectangle "Care providers\nCare service\nDirectory\n\n<size:10>PIP*</size>" as care_dir
+rectangle "CiBG\nSBV-Z\n\n<size:10>PIP*</size>" as sbvz
+rectangle "Vektis\nOrganization\ntype\n\n<size:10>PIP*</size>" as vektis
+rectangle "VZVZ\nMitz\n\n<size:10>PIP-PDP*</size>" as mitz
+rectangle "NictiZ\nQualifications\n\n<size:10>PIP*</size>" as nictiz_qual
+rectangle "NictiZ/GF\nHealthcare\nInformation\nstandard\n\n<size:10>PIP*</size>" as nictiz_std
+
+' Force bottom row horizontal order
+trust -[hidden]right- cibg_dezi
+cibg_dezi -[hidden]right- cibg_lrza
+cibg_lrza -[hidden]right- care_dir
+care_dir -[hidden]right- sbvz
+sbvz -[hidden]right- vektis
+vektis -[hidden]right- mitz
+mitz -[hidden]right- nictiz_qual
+nictiz_qual -[hidden]right- nictiz_std
+
+' Force bottom row below top row
+requesting -[hidden]down- trust
+requesting -[hidden]down- cibg_dezi
+responding -[hidden]down- sbvz
+responding -[hidden]down- vektis
+
+' Arrows from data sources up: "2. Get claims from authoritative data sources"
+trust -up-> requesting : "2. Get claims from authoritative data sources"
+cibg_dezi -up-> requesting
+cibg_lrza -up-> requesting
+care_dir -up-> requesting
+sbvz -up-> responding
+vektis -up-> responding
+mitz -up-> responding
+nictiz_qual -up-> responding
+nictiz_std -[dashed]up-> policy_makers
+
+legend bottom
+  *: XACML-roles
+endlegend
+
+@enduml
