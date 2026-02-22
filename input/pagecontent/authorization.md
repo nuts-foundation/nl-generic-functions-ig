@@ -146,7 +146,7 @@ Other input for the policy evaluation is added to the context.
   - `data_holder_organization_id`: a string indicating the identifier of the organization of the data holder (URA), e.g. `123`.
   - `patient_bsn`: a string indicating the BSN (identifier) of the patient.
   - `patient_id`: a string uniquely identifying the patient in the system of the data holder, for example the FHIR Patient resource ID.
-  - `mitz_consent` a boolean indicating whether the Mitz consent check allows sharing the data.
+  - `mitz_consent`: a boolean indicating whether the Mitz consent check allows sharing the data.
   - `purpose_of_use`: a string indicating the purpose of use of the request. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
 
 #### Example of a HL7 FHIR search request
