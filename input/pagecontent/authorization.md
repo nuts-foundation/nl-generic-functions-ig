@@ -169,7 +169,7 @@ Other input for the policy evaluation is added to the context.
   "resource": {
     "type": "MedicationRequest",
     "properties": {
-      "status": "active",
+      "status": "active"
     }
   },
   "action": {
