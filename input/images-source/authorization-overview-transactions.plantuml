@@ -1,70 +1,56 @@
 @startuml authorization-overview-transactions
 
-skinparam roundcorner 20
 skinparam defaultFontName Arial
 skinparam defaultTextAlignment center
 skinparam backgroundColor white
+
+skinparam padding 0
+skinparam nodesep 4
+skinparam ranksep 4
+skinparam roundcorner 20
+
 
 skinparam rectangle {
     BackgroundColor #FFF2CC
     BorderColor #D6B000
 }
 
-' Top row: main actors
-rectangle "**Requesting party**\n**(Data user)**" as requesting {
-    rectangle "User" as user
+rectangle Actors {
+    rectangle "authorization\npolicy makers" as policy_makers
+    rectangle "**Responding party**\n**(Data holder)**" as responding {
+        rectangle "4. Policy\nevaluation" as policy_eval
+    }
+    rectangle "**Requesting party**\n**(Data user)**" as requesting {
+        rectangle "User" as user
+    }
 }
-
-rectangle "**Responding party**\n**(Data holder)**" as responding {
-    rectangle "4. Policy\nevaluation" as policy_eval
-}
-
-rectangle "authorization\npolicy makers" as policy_makers
 
 ' Flows between main actors
 requesting -right-> responding : "3. Request + claims"
-responding -[dashed]right-> policy_makers : "1. Registration of policy"
+policy_makers -[dashed]-> responding : "1. Registration of policy"
 
-' Force top row to stay on one level
-requesting -[hidden]right- responding
-responding -[hidden]right- policy_makers
+' Authoritative data sources
+rectangle "**Authoritative Data Sources**" as authoritativeDataSources #E8E8E8 {
+    rectangle "**Verifiable Claims**" as verifiableClaims {
+        rectangle "Vektis Organization Type" as vektis
+        rectangle "CiBG DeZI" as cibg_dezi
+        rectangle "CiBG LRZa" as cibg_lrza
+        rectangle "Trust Service Providers Certificates" as trust
+    }
 
-' Bottom row: authoritative data sources
-rectangle "Trust Service\nProviders\nCertificates" as trust
-rectangle "CiBG\nDeZI" as cibg_dezi
-rectangle "CiBG\nLRZa" as cibg_lrza
-rectangle "Care providers\nCare service\nDirectory" as care_dir
-rectangle "CiBG\nSBV-Z" as sbvz
-rectangle "Vektis\nOrganization\ntype" as vektis
-rectangle "VZVZ\nMitz" as mitz
-rectangle "NictiZ\nQualifications" as nictiz_qual
-rectangle "NictiZ/GF\nHealthcare\nInformation\nstandard" as nictiz_std
+    rectangle "**Other**" as otherClaims {
+        rectangle "NictiZ/GF Healthcare Information standard" as nictiz_std
+        rectangle "VZVZ Mitz" as mitz
+        rectangle "NictiZ Qualifications" as nictiz_qual
+        rectangle "CiBG SBV-Z" as sbvz
+    }
+}
 
-' Force bottom row horizontal order
-trust -[hidden]right- cibg_dezi
-cibg_dezi -[hidden]right- cibg_lrza
-cibg_lrza -[hidden]right- care_dir
-care_dir -[hidden]right- sbvz
-sbvz -[hidden]right- vektis
-vektis -[hidden]right- mitz
-mitz -[hidden]right- nictiz_qual
-nictiz_qual -[hidden]right- nictiz_std
 
-' Force bottom row below top row
-requesting -[hidden]down- trust
-requesting -[hidden]down- cibg_dezi
-responding -[hidden]down- sbvz
-responding -[hidden]down- vektis
+' Connections from data sources
+verifiableClaims -up-> requesting : "2. Get claims from\nauthoritative data sources"
+otherClaims -up-> responding
 
-' Arrows from data sources up: "2. Get claims from authoritative data sources"
-trust -up-> requesting : "2. Get claims from authoritative data sources"
-cibg_dezi -up-> requesting
-cibg_lrza -up-> requesting
-care_dir -up-> requesting
-sbvz -up-> responding
-vektis -up-> responding
-mitz -up-> responding
-nictiz_qual -up-> responding
 nictiz_std -[dashed]up-> policy_makers
 
 
