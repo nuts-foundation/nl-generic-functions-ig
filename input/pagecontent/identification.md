@@ -1,3 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2025-2026 Bram Wesselo
+SPDX-FileCopyrightText: 2025-2026 Rein Krul
+SPDX-FileCopyrightText: 2025-2026 Roland Groen
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the Generic Function Identification, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Identification aims to establish a standardized, interoperable system for identifying healthcare organizations, IT vendor organizations, healthcare professionals, patients and data-objects, enabling reliable and efficient exchange of health data across healthcare systems and organizations.
@@ -29,7 +37,13 @@ Practitioners' main identifier is the UZI number (to be renamed in DEZI number) 
 
 ### Care Provider Identification
 
-Care providers' main identifier is the URA number as specified in the [nl-core-HealthcareProvider-Organization profile](http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization). The authentic source for this identifier is URA-register that is administered by CIBG. However, organization departments, locations and healthcare services aren't registered in the LRZa (URA-register). These entities can be identified by the mandatory [local data-object identifier](#data-object-identification). 
+Care providers' main identifier is the URA number as specified in the [nl-core-HealthcareProvider-Organization profile](http://nictiz.nl/fhir/StructureDefinition/nl-core-HealthcareProvider-Organization). The authentic source for this identifier is URA-register that is administered by CIBG. However, organization departments, locations and healthcare services aren't registered in the LRZa (URA-register). These entities can be identified by the mandatory [local data-object identifier](#data-object-identification).
+
+#### Role
+<a name="careprovider.role"></a>
+Care provider organizations are further classified by their role using the [Nictiz healthcare provider roles](https://decor.nictiz.nl/ad/#/nictiz2bbr-/terminology/codesystems/2.16.840.1.113883.2.4.15.1060/2024-11-14T22:13:01).
+
+The system for this classification is `2.16.840.1.113883.2.4.15.1060`.
 
 ### Organization Identification
 

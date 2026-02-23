@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 <div markdown="1" class="w-100 bg-info">
 
 > [Open issues and Architectural Decision Records (ADRs) can be found in the GitHub repository](https://github.com/nuts-foundation/nl-generic-functions-ig/issues)

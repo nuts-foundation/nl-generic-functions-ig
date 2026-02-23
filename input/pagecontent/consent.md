@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2025-2026 Bram Wesselo
+SPDX-FileCopyrightText: 2025-2026 Jorrit Spee
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Consent, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Consent aims to establish a standardized, interoperable system for using patient consent as a legal basis for processing medical data, enabling reliable and efficient exchange of health data across healthcare systems and organizations.
@@ -32,9 +39,9 @@ GF Consent recognizes the possibility of using explicit consents stored decentra
 - Standardization ensures consistency of meaning (syntactical and semantic interoperability) between Consents records of various sources.
 
 ##### DHTV keeping copies of OTV consents
-In order to reduce operational dependencies on a central, national catalogue, the DHTV shall have the option to publish/subscribe to changes in consent preferences registered in the OTV. The following actions can be used by the data holder organization (DHTV) to store and use theses consent preferences locally:
+The DHTV can have the option to publish/subscribe to changes in consent preferences registered in the OTV. The following actions can be used by the DHTV of a data holder organization:
 1. Subscribing to Consent changes: A data holder organization can choose to subscribe to Consent record changes of a specific patient. See the chapters called 'Toestemmingsabonnement' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
-1. Receiving notification about Consent: Subscribers (see process 1) receive a notification when Consent changes occur in the Mitz consent preference catalogue. See the chapters called 'Toestemmingsnotificatie' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
+2. Receiving notification about Consent: Subscribers (see process 1) receive a notification when Consent changes occur in the Mitz consent preference catalogue. See the chapters called 'Toestemmingsnotificatie' in ["Implementatiehandleiding_Migreren-Abonneren-Notificeren-Registreren Toestemming"](https://vzvz.atlassian.net/wiki/spaces/MA11/pages/828314367/Bijlage+Architectuurdocumenten).
 
 #### Implicit consents
 

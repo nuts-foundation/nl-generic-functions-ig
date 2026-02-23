@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# SPDX-FileCopyrightText: 2025 Bram Wesselo
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 publisher_jar=publisher.jar
 input_cache_path=./input-cache/
 echo Checking internet connection...

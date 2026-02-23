@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Authorization, a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). The GF Authorization aims to establish a standardized, interoperable system for authorizing access to data and services of healthcare organizations, enabling reliable and efficient exchange of health data across healthcare systems and organizations.

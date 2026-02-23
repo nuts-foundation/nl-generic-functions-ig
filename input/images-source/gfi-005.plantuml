@@ -1,0 +1,22 @@
+' SPDX-FileCopyrightText: 2025 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml GFI-005
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+
+!pragma teoz true
+
+participant  client as "Client"
+participant  RS as "Resource Server"
+
+client -> client: Create DPoP Proof
+client -> RS: Authenticated API Request
+activate RS
+RS --> client: Authenticated API Response
+deactivate RS
+
+@enduml

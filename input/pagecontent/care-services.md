@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+SPDX-FileCopyrightText: 2025 Rein Krul
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across healthcare systems and organizations.
@@ -44,11 +51,12 @@ The Administration Client of the LRZa provides a user interface for healthcare p
 #### Administration Directory
 The Administration Directory persist all addressable entities of one or more healthcare organizations. The Administration Directory MAY implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-admin-client.html) for an Administration Client to create, update and delete resources. If you've implemented both an Administration Client & Directory, you can also choose to use proprietary formats/APIs/transactions between these components. 
 
-The Administration Directory MUST implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-update-client.html) to publish changes of addressable entities. These changes are consumed by an Update Client.
+The Administration Directory MUST implement [these capabilities](./CapabilityStatement-nl-gf-admin-directory-update-client.html) to publish changes of addressable entities. These changes are consumed by an [Update Client](#update-client). 
 
-The performance/availability requirements for an Administration Directory ([GF-Adressering, ADR#177](https://github.com/minvws/generiekefuncties-adressering/issues/177)):
+The performance/availability/data-quality requirements for an Administration Directory ([GF-Adressering, ADR#177](https://github.com/minvws/generiekefuncties-adressering/issues/177)):
 - **Query Response Time:** 95% of _history requests should be answered within 2000ms.
 - **Availability:** Minimum uptime of 99% between 8PM and 6AM (Europe/Amsterdam timezone).
+- **Data quality:** Resources should conform to the profiles under [Data models](#data-models), including valid references between reference (i.e. referential integrity)
 
 
 #### Update Client
@@ -72,7 +80,7 @@ During consolidation, multiple Administration Directories may have overlapping o
   - All Organization-instances MUST either link to a parent-Organization or have a URA-identifier (being a top-level Organization instance)
   - All Endpoint-instances MUST be linked to from one of the HealthcareService or Organization-instances.
 
-After consolidation, the Update Client writes the updates to a Query Directory. For each instance, the `meta.source` element is populated with the fully qualified URL of that instance at the originating Administration Directory ([GF-Adressering, ADR-6](https://github.com/minvws/generiekefuncties-adressering/issues/154)). The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
+After consolidation, the Update Client writes the updates to a Query Directory. The Update Client MAY use the same interactions a Administration Client uses to register entities in an Administration Directory.
 
 
 
@@ -96,38 +104,37 @@ A brief description of the data models and their profile for this guide:
 
 #### Organization
 Organizations are “umbrella” entities; these may be considered the administrative bodies under whose auspices care services are provided. An (top-level)Organization-instance has a URA `identifier`, `type`, `status`, and `name`. It may have additional attributes like `endpoint`. Departments of an institution, or other administrative units, may be represented as child Organizations of a parent Organization.
-The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) contains no extra constraints on top of mCSD & NL profiles. 
+The [NL-GF-Organization profile](./StructureDefinition-nl-gf-organization.html) is based on the NL-Core-Healthcare-Provider-Organization profile, adds constraints from the mCSD-Organization profile and requires an author-assigned identifier. 
 
 #### Endpoint
-An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. If an Organization does not have an Endpoint, it may still be reachable via an Endpoint at its parent Organization.
-
-The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on `.payloadType` ([GF-Adressering, ADR-8](https://github.com/minvws/generiekefuncties-adressering/issues/156)).
+An Organization may be reachable for electronic data exchange through electronic Endpoint(s). An Endpoint may be a FHIR server, an DICOM web services, or some other mechanism. 
+The [NL-GF-Endpoints profile](./StructureDefinition-nl-gf-endpoint.html) has an extra value set constraint on `.payloadType` ([GF-Adressering, ADR-8](https://github.com/minvws/generiekefuncties-adressering/issues/156)) and adds constraints from the mCSD-Endpoint profile.
 
 #### HealthcareService
 Healthcare services are used to publish which (medical) services are provided by a (child) Organization. Examples include surgical services, antenatal care services, or primary care services. These services in `HealthcareService.type` can be extended by references to specific ActivityDefinitions and PlanDefinitions that are supported. The combination of a HealthcareService offered at a Location may have specific attributes including contact person, hours of operation, etc.
-The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) contains a value set constraint on `.type` and `.specialty` and an extension on `.type` to refer to Activity/PlanDefinitions.
+The [NL-GF-HealthcareService profile](./StructureDefinition-nl-gf-healthcareservice.html) contains a value set constraint on `.type` and `.specialty` and an extension on `.type` to refer to Activity/PlanDefinitions. This profile also adds constraints from the mCSD-HealthcareService profile.
 
 #### Location
 Locations are physical places where care can be delivered such as buildings (NL: Vestiging), wards, rooms, or vehicles. A Location may have geographic attributes (address, geocode), attributes regarding its hours of operation, etc. Each Location is related to one (child) Organization. A location may have a hierarchical relationship with other locations (e.g. building > floor > room).
-The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) has no extra constraints on top of mCSD & NL profiles. 
+The [NL-GF-Location profile](./StructureDefinition-nl-gf-location.html) is based on the NL-Core-Healthcare-Provider profile, adds constraints from the mCSD-Location profile and requires an author-assigned identifier.
 
 
 #### PractitionerRole
 PractitionerRole resources are used to define the specific roles, specialties, and responsibilities that a Practitioner holds within an Organization. PractitionerRole enables precise modeling of relationships between practitioners and organizations, supporting scenarios like assigning practitioners to departments, specifying their roles (e.g., surgeon, nurse), and linking them to particular healthcare services or locations. A PractitionerRole may have contact details for phone, mail, or direct messaging.
-The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html): no extra constraints on top of mCSD & nl-core profiles. 
+The [NL-GF-PractitionerRole profile](./StructureDefinition-nl-gf-practitionerrole.html) is based on the NL-Core-HealthProfessional-PractitionerRole profile, adds constraints from the mCSD-PractitionerRole profile and requires an author-assigned identifier.
 
 
 #### Practitioner
 ***This resource type is out-of-scope for this IG-version***
 Practitioner is a health worker such as physician, nurse, pharmacist, community health worker, district health manager, etc. Practitioners have a name and may have qualifications (like in the Dutch BIG-register).  The registry (Administration Directory) of Practitioners may be operated by the Dutch BIG-register or similar organizations. 
-The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html): no extra constraints on top of mCSD & NL profiles. 
+The [NL-GF-Practitioner profile](./StructureDefinition-nl-gf-practitioner.html)is based on the NL-Core-HealthProfessional-Practitioner profile, adds constraints from the mCSD-Practitioner profile and requires an author-assigned identifier.
 
 
 #### OrganizationAffiliation
 ***This resource type is out-of-scope for this IG-version (waiting for [GF-Adressering, ADR#169](https://github.com/minvws/generiekefuncties-adressering/issues/169))***
 
 OrganizationAffiliation resources are used to represent relationships between organizations, such as a software vendor managing the Endpoint that is used by a care provider. It could also be used the represent multiple care providers working together under some agreement (e.g. in a region).
-The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) has no extra constraints on top of mCSD & NL profiles.  
+The [NL-GF-OrganizationAffiliation profile](./StructureDefinition-nl-gf-organizationaffiliation.html) is based on the mCSD-OrganizationAffiliation profile and requires an author-assigned identifier
 
 
 
@@ -152,10 +159,7 @@ The patient, Vera Brooks, consults with her physician who recommends surgery. Th
 
 #### Use Case #2: Endpoint Discovery
 Dr. West just created a referral (for patient Vera Brooks from use case #1). The EHR has to notify Hospital East and the Orthopedic department of this referral. This may include some recurring requests:
-- The EHR looks up the HealthcareService instance of the Orthopedic department at the Query Directory, fetches the related endpoints and checks if these support a 'Transfer of care' payload. If none found:
-    - The EHR looks up the associated Organization of the HealthcareService at the Query Directory, fetches related endpoints, and checks if these support a 'Transfer of care' payload. If none found:
-        - The EHR looks up the associated/parent Organization of the Organization at the Query Directory, fetches related endpoints, and checks if these support a 'Transfer of care' payload. If none found: repeat last step.
-- As soon as an endpoint is found, the EHR sends the notification and referral-workflow continues.
+- The EHR looks up the HealthcareService instance of the Orthopedic department at the Query Directory, fetches the related endpoints and checks if these support a 'Transfer of care' payload. The EHR sends the notification and referral-workflow continues.
 
 <div>
 {% include care-services-use-case-2.svg %}
