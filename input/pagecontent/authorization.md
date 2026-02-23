@@ -20,7 +20,7 @@ Just below this top level abstraction, there's a lot more to discuss:
 {% include authorization-overview-transactions.svg %}
 
 1. Authorization policy makers create authorization policies based on attributes specified in Healthcare Information models and standards. These attributes can be certain identifiers (BSN, URA, etc.), entity characteristics (organization type, practitioner role), permission records (qualifications, consent) and/or specified operations or capability statements for requesting and responding party
-2. Requesting and responding parties need to acquire attributes (data) from authoritative data sources. When to get this data is not specified here. A (PKIoverheid) certificate from a Trust Service Provider may be fetched once a year, a CiBG-DeZI-token may be fetched when a practitioner starts his/her shift and a VZVZ Mitz patient consent may be fetched, by the responding party, just after receiving a data request.
+2. Requesting and responding parties need to acquire attributes (data) from authoritative data sources. When to get this data is not specified here. A (PKIoverheid) certificate from a Trust Service Provider may be fetched once a year, a CiBG-Dezi-token may be fetched when a practitioner starts his/her shift and a VZVZ Mitz patient consent may be fetched, by the responding party, just after receiving a data request.
 3. The requesting party can now create a request and send it to the responding party along with 'claims'; statement on the e.g. identity or characteristics of the requesting party. The responding party may add additional claims or attributes, for example, a local patient consent and/or the VZVZ Mitz consent preference.
 4. The request and all claims/attributes are input for the authorization policy. The input is evaluated against the policy. The outcome is a decision on whether the request is allowed or denied.  
 
@@ -45,7 +45,7 @@ The role of these actors can be explained in [XACML](https://www.oasis-open.org/
 **Trust Service Provider Certificates**: 
 PKIoverheid certificates. Used to identify the organization operating the client or server of data user or data holder. 
 
-**CiBG-DeZI**: 
+**CiBG-Dezi**: 
 - Used to identify the practitioner and care provider
 - Role of the Practitioner. Uses (indirectly) the BIG-register as data source
 
@@ -55,6 +55,8 @@ PKIoverheid certificates. Used to identify the organization operating the client
 **Care service directories**:
 - Can data holder handle my request? 
 - Endpoint-url of data holder
+
+**NOTE TO REVIEWER/EDITOR: Care service directory and SBV-Z currently aren't used in the authorization process. Should we remove them?**
 
 **SBV-Z**:
 - Used to check the identity (BSN) of the patient
@@ -71,7 +73,7 @@ PKIoverheid certificates. Used to identify the organization operating the client
 **NictiZ Healthcare Information standards**:
 Healthcare Information standards define which operations a data user or data holder should use/support. These standards also define HealthCare Information Models (HCIM's) and therefore which data labels, codes or categories can be used in policies. 
 
-#### Autorization policy makers
+#### Authorization policy makers
 Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
 <!-- publishing policies, policies should be merged without negotiation... Legislation is always input-->
 
@@ -81,27 +83,27 @@ Creates a request, adds necessary attributes/claims about itself and sends it to
 #### Responding party (Data holder)
 Acquires attributes/claims about requesting party and e.g. the patient consent. Evaluates the request.
 May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism)
-Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy. 
-
+Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy.
 
 ### Data models
-GF Authorization uses the information model specification of [OpenID AuthZen](https://openid.net/specs/authorization-api-1_0.html). The information model for requests and responses include the following entities: Subject, Action, Resource, Context, and Decision. The use of this information model is illustrated by an example of a data user searching for active MedicationRequests for a patient.
 
-#### Subject
-This is the principal requesting the data. Attributes may come from Identity Providers (CiBG DeZI) and/or (client-)certificates. Attributes:
+#### Policy Input
 
-- `type`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
-- `id`: **NOTE TO REVIEWER/EDITOR: to be specified (required by Authorization API spec). Currently not used by Knooppunt PDP.**
-- `properties`: this map contains at least the following attributes, but may be extended with other attributes required by the policy:
-    - `client_id`: value identifying the application of the requester, e.g. `client_id` of the OAuth2-client.
-    - `client_qualifications`: array of strings of data exchanges the client is qualified for.
-    - `subject_id`: identifier of the practitioner (CiBG Dezi-nummer/UZI)
-    - `subject_organization_id`: identifier of the organization of the practitioner (URA)
-    - `subject_organization`: name of the organization of the practitioner
-    - `subject_role`: array of strings indicating the roles of the practitioner (from CiBG Dezi / BIG-register)
-    - `subject_facility_type`: type of the organization of the practitioner (Vektis)
+##### Subject
+This is the principal requesting the data. Attributes may come from Identity Providers (CiBG Dezi) and/or (client-)certificates.
+This IG defines the following attributes:
 
-#### Resource
+- `client_id`: value identifying the application of the requester, e.g. `client_id` of the OAuth2-client.
+- `client_qualifications`: array of strings of data exchanges the client is qualified for.
+- `subject_id`: identifier of the practitioner (CiBG Dezi-nummer/UZI)
+- `subject_organization_id`: identifier of the organization of the practitioner (URA)
+- `subject_organization`: name of the organization of the practitioner
+- `subject_role`: array of strings indicating the roles of the practitioner (from CiBG Dezi / BIG-register)
+- `subject_facility_type`: type of the organization of the practitioner (Vektis)
+
+This list can be extended with additional attributes for specific use-cases if needed.
+
+##### Resource
 This is the requested data. Attributes are typically from the request URL and request parameters (e.g. FHIR search parameters).
 
 **NOTE TO REVIEWER/EDITOR: `action.fhir_rest` communicates similar information, should these 2 converge? Knooppunt PDP currently only uses `resource.type`**
@@ -110,7 +112,7 @@ This is the requested data. Attributes are typically from the request URL and re
 - `id`: the identifier of the resource, for example the FHIR Patient resource ID from the request URL.
 - `properties`: **NOTE TO REVIEWER/EDITOR: to be specified**
 
-#### Action
+##### Action
 The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
 
 It contains information about the request, and a parsed representation of the request if supported by this IG.
@@ -138,33 +140,41 @@ For requests that are scoped to a patient, `patient_bsn` and/or `patient_id` MUS
 They are typically derived from the request (e.g. FHIR search parameter `patient` or `identifier`).
 They could also be sourced from the authentication token, or be looked up in the EHR if only `patient_id` was provided in the request, and the policy requires the `patient_bsn` for the Mitz consent check.
 
-#### Context
+##### Context
 Other input for the policy evaluation is added to the context.
 
-- `context`:
-  - `data_holder_facility_type`: a string indicating the type of the organization of the data holder (Vektis), e.g. `Z3`.
-  - `data_holder_organization_id`: a string indicating the identifier of the organization of the data holder (URA), e.g. `123`.
-  - `patient_bsn`: a string indicating the BSN (identifier) of the patient.
-  - `patient_id`: a string uniquely identifying the patient in the system of the data holder, for example the FHIR Patient resource ID.
-  - `mitz_consent`: a boolean indicating whether the Mitz consent check allows sharing the data.
-  - `purpose_of_use`: a string indicating the purpose of use of the request. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
+- `data_holder_facility_type`: a string indicating the type of the organization of the data holder (Vektis), e.g. `Z3`.
+- `data_holder_organization_id`: a string indicating the identifier of the organization of the data holder (URA), e.g. `123`.
+- `patient_bsn`: a string indicating the BSN (identifier) of the patient.
+- `patient_id`: a string uniquely identifying the patient in the system of the data holder, for example the FHIR Patient resource ID.
+- `mitz_consent`: a boolean indicating whether the Mitz consent check allows sharing the data.
+- `purpose_of_use`: a string indicating the purpose of use of the request. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
+
+If the data exchange is scoped to a patient, `patient_bsn` and/or `patient_id` MUST be provided in the context.
+They are typically derived from the request (e.g. FHIR search parameter `patient` or `identifier`), but they could also be sourced from the authentication token,
+or be looked up in the EHR if only `patient_id` was provided in the request, or vice versa.
+If both `patient_bsn` and `patient_id` are provided, they MUST refer to the same patient.
+
+#### Policy Output
+
+The output of the policy evaluation is a decision on whether the request is allowed or denied.
+This is represented by the `allow` boolean variable (`true` or `false`) in the Rego policy.
+
+Any other output SHALL be considered as informational and SHALL NOT be used for the decision of allowing or denying the request.
+For example, a policy may output the reason for denial, which can be logged for auditing or debugging purposes.
 
 #### Example of a HL7 FHIR search request
 
 ```
 {
   "subject": {
-    "type": "organization",
-    "id": "URA|123",
-    "properties": {
-      "client_id": "cee473c4-d9be-487b-b719-f552189d5891",
-      "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"],
-      "subject_id": "900000009",
-      "subject_organization_id": "87654321",
-      "subject_organization": "Harry Helpt",
-      "subject_role": ["01.041", "30.000", "01.010", "01.011"],
-      "subject_facility_type": "Z3"
-    }
+    "client_id": "cee473c4-d9be-487b-b719-f552189d5891",
+    "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"],
+    "subject_id": "900000009",
+    "subject_organization_id": "87654321",
+    "subject_organization": "Harry Helpt",
+    "subject_role": ["01.041", "30.000", "01.010", "01.011"],
+    "subject_facility_type": "Z3"
   },
   "resource": {
     "type": "MedicationRequest",
@@ -194,9 +204,6 @@ Other input for the policy evaluation is added to the context.
         "status": ["active"],
         "patient": ["Patient/90546b0d-e323-47f3-909b-fb9504859f7b"]
       }
-    },
-    "properties": {
-      "method": "GET"
     }
   },
   "context": {
@@ -217,7 +224,7 @@ Other input for the policy evaluation is added to the context.
 
 ### Example use cases
 
-### Advanced Care Planning (ACP) / Proactieve ZorgPlanning (PZP)
+#### Advanced Care Planning (ACP) / Proactieve ZorgPlanning (PZP)
 
 The following policy allows the following FHIR requests, if the patient gave consent in Mitz:
 - `GET [base]/Patient?identifier=http://fhir.nl/fhir/NamingSystem/bsn|{context.patient_bsn}`
@@ -250,7 +257,8 @@ is_allowed_query if {
     input.resource.type == "Patient"
     input.action.fhir_rest.interaction_type == "search-type"
     # identifier: exactly 1 identifier of type BSN
-    count(input.action.fhir_rest.search_params.identifier) == 1
+    is_string(input.context.patient_bsn)
+    input.context.patient_bsn != ""
     startswith(input.action.fhir_rest.search_params.identifier[0], "http://fhir.nl/fhir/NamingSystem/bsn|")
 }
 
@@ -259,7 +267,8 @@ is_allowed_query if {
     input.resource.type == "Consent"
     input.action.fhir_rest.interaction_type == "search-type"
     # patient: reference Patient resource
-    count(input.action.fhir_rest.search_params.patient) == 1
+    is_string(input.context.patient_id)
+    input.context.patient_id != ""
     startswith(input.action.fhir_rest.search_params.patient[0], "Patient/")
     input.action.fhir_rest.search_params.scope == ["http://terminology.hl7.org/CodeSystem/consentscope|treatment"]
     input.action.fhir_rest.search_params.category == ["http://snomed.info/sct|129125009"]
