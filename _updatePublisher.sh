@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# SPDX-FileCopyrightText: 2025 Bram Wesselo
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 pubsource=https://github.com/HL7/fhir-ig-publisher/releases/latest/download/
 publisher_jar=publisher.jar
 dlurl=$pubsource$publisher_jar

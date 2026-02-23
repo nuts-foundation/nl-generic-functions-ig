@@ -1,3 +1,7 @@
+' SPDX-FileCopyrightText: 2025 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
 @startuml GFI-003
 
 skinparam roundcorner 20

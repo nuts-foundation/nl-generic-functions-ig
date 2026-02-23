@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Steven van der Vegt
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### DeziIDTokenCredential
 
 This specification specifies the `DeziIDTokenCredential` and includes steps to create and verify the credential.

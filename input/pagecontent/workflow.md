@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 Bram Wesselo
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### Workflow specification
 
 <!-- ### Summary of workflow in FHIR core specification

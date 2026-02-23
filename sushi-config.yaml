@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2025-2026 Bram Wesselo
+# SPDX-FileCopyrightText: 2025-2026 Rein Krul
+# SPDX-FileCopyrightText: 2025-2026 Roland Groen
+# SPDX-FileCopyrightText: 2025-2026 Steven van der Vegt
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 # ╭─────────────────────────Commonly Used ImplementationGuide Properties───────────────────────────╮
 # │  The properties below are used to create the ImplementationGuide resource. The most commonly   │
 # │  used properties are included. For a list of all supported properties and their functions,     │
@@ -122,6 +129,9 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
+    credential-X509Credential.md:
+      title: X509Credential
+      generation: markdown
     credential-HealthcareProviderRoleTypeCredential.md:
       title: HealthcareProviderRoleTypeCredential
       generation: markdown

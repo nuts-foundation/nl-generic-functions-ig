@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Bram Wesselo
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 <Task xmlns="http://hl7.org/fhir">
     <id value="eOverdracht-Task-eov-test-1-1b" />
     <meta>

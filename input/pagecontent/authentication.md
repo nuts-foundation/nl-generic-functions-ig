@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2025 Roland Groen
+SPDX-FileCopyrightText: 2025 Steven van der Vegt
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### Introduction
 
 Authentication verifies the identity of entities, such as healthcare professionals and organizations, within healthcare systems.

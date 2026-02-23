@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Roland Groen
+# SPDX-FileCopyrightText: 2025 Steven van der Vegt
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 builder:
 	docker build -t ig-builder .
 

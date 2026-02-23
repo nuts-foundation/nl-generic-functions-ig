@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2026 Rein Krul
+SPDX-FileCopyrightText: 2026 Steven van der Vegt
+
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 ### HealthcareProviderRoleTypeCredential
 
 The `HealthcareProviderRoleTypeCredential` is a verifiable credential that establishes the category or type of healthcare services,
@@ -5,7 +12,7 @@ that a provider organization is authorized to offer (e.g., hospital, general pra
 
 **Issuer**: A trusted authority responsible for governing and issuing the attribute (e.g., Vektis).
 **Subject**: The healthcare provider organization, identified by their DID.
-**Status**: trial use
+**Status**: draft
 
 #### Attributes
 

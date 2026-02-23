@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Bram Wesselo
+# SPDX-FileCopyrightText: 2025 Roland Groen
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 FROM eclipse-temurin:21-jdk-jammy
 LABEL maintainer="roland@headease.nl"
 
