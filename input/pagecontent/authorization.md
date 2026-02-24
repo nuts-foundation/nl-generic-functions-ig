@@ -10,7 +10,7 @@ This FHIR Implementation Guide specifies the technical components of the Generic
 
 This guide outlines the data requirements and principles underlying the GF Authorization. Key design principles include:
 
-- International standards: The solution should be based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
+- International standards: The solution is based on international standards, lowering the bar for international (European) data exchange and adoption by internationally operating software vendors.
 - Policy Based Access Control (PBAC) is used to control access to data. PBAC can be used for Role-Based, Attribute-Based and more complex business logic to determine access control. This enables patient-level, operation-level and/or resource-level permissions for various healthcare processes or secondary (e.g. research) use-cases.
 - Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
 
@@ -42,9 +42,6 @@ This IG distinguishes 4 categories of actors:
 1. Authorization policy makers
 1. Requesting party (Data user)
 1. Responding party (Data holder)
-
-The role of these actors can be explained in [XACML](https://www.oasis-open.org/committees/xacml/repository/cs-xacml-specification-1.1.pdf) terms. We'll not go into this here, but XACML-roles are added in the [solution overview](#solution-overview) figure.
-
 
 #### Authoritative data sources
 
@@ -88,14 +85,15 @@ Creates a request, adds necessary attributes/claims about itself and sends it to
 
 #### Responding party (Data holder)
 Acquires attributes/claims about requesting party and e.g. the patient consent. Evaluates the request.
-May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism)
-Implementers are not required to use the Rego-policy-language (nor the OpenID AuthZen API) in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy.
+May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism).
+Implementers are not required to use the Rego-policy-language in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy.
 
-### Data models
 
-#### Policy Input
+### Policy Input Data Model
 
-##### Subject
+This section defined the data model of the policy input.
+
+#### Subject
 This is the principal requesting the data. Attributes may come from Identity Providers (CiBG Dezi) and/or (client-)certificates.
 This IG defines the following attributes:
 
@@ -109,7 +107,7 @@ This IG defines the following attributes:
 
 This list can be extended with additional attributes for specific use-cases if needed.
 
-##### Resource
+#### Resource
 This is the requested data. Attributes are typically from the request URL and request parameters (e.g. FHIR search parameters).
 
 **NOTE TO REVIEWER/EDITOR: `action.fhir_rest` communicates similar information, should these 2 converge? Knooppunt PDP currently only uses `resource.type`**
@@ -118,7 +116,7 @@ This is the requested data. Attributes are typically from the request URL and re
 - `id`: the identifier of the resource, for example the FHIR Patient resource ID from the request URL.
 - `properties`: **NOTE TO REVIEWER/EDITOR: to be specified**
 
-##### Action
+#### Action
 The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
 
 It contains information about the request, and a parsed representation of the request if supported by this IG.
@@ -146,7 +144,7 @@ For requests that are scoped to a patient, `patient_bsn` and/or `patient_id` MUS
 They are typically derived from the request (e.g. FHIR search parameter `patient` or `identifier`).
 They could also be sourced from the authentication token, or be looked up in the EHR if only `patient_id` was provided in the request, and the policy requires the `patient_bsn` for the Mitz consent check.
 
-##### Context
+#### Context
 Other input for the policy evaluation is added to the context.
 
 - `data_holder_facility_type`: a string indicating the type of the organization of the data holder (Vektis), e.g. `Z3`.
@@ -160,14 +158,6 @@ If the data exchange is scoped to a patient, `patient_bsn` and/or `patient_id` M
 They are typically derived from the request (e.g. FHIR search parameter `patient` or `identifier`), but they could also be sourced from the authentication token,
 or be looked up in the EHR if only `patient_id` was provided in the request, or vice versa.
 If both `patient_bsn` and `patient_id` are provided, they MUST refer to the same patient.
-
-#### Policy Output
-
-The output of the policy evaluation is a decision on whether the request is allowed or denied.
-This is represented by the `allow` boolean variable (`true` or `false`) in the Rego policy.
-
-Any other output SHALL be considered as informational and SHALL NOT be used for the decision of allowing or denying the request.
-For example, a policy may output the reason for denial, which can be logged for auditing or debugging purposes.
 
 #### Example of a HL7 FHIR search request
 
@@ -222,6 +212,15 @@ For example, a policy may output the reason for denial, which can be logged for 
   }
 }
 ```
+
+### Policy Output
+
+The output of the policy evaluation is a decision on whether the request is allowed or denied.
+This is represented by the `allow` boolean variable (`true` or `false`) in the Rego policy.
+
+Any other output SHALL be considered as informational and SHALL NOT be used for the decision of allowing or denying the request.
+For example, a policy may output the reason for denial, which can be logged for auditing or debugging purposes.
+
 
 **NOTE TO REVIEWER/EDITOR: Add more examples**
 
@@ -280,9 +279,3 @@ is_allowed_query if {
     input.action.fhir_rest.search_params.category == ["http://snomed.info/sct|129125009"]
 }
 ```
-
---TODO
-
-
-### Roadmap
---TODO
