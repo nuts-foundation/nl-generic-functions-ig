@@ -1,0 +1,60 @@
+' SPDX-FileCopyrightText: 2026 Rein Krul
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+@startuml authorization-overview-transactions
+
+skinparam defaultFontName Arial
+skinparam defaultTextAlignment center
+skinparam backgroundColor white
+
+skinparam padding 0
+skinparam nodesep 4
+skinparam ranksep 4
+skinparam roundcorner 20
+
+
+skinparam rectangle {
+    BackgroundColor #FFF2CC
+    BorderColor #D6B000
+}
+
+rectangle Actors {
+    rectangle "authorization\npolicy makers" as policy_makers
+    rectangle "**Responding party**\n**(Data holder)**" as responding {
+        rectangle "4. Policy\nevaluation" as policy_eval
+    }
+    rectangle "**Requesting party**\n**(Data user)**" as requesting {
+        rectangle "User" as user
+    }
+}
+
+' Flows between main actors
+requesting -right-> responding : "3. Request + claims"
+policy_makers -[dashed]-> responding : "1. Registration of policy"
+
+' Authoritative data sources
+rectangle "**Authoritative Data Sources**" as authoritativeDataSources #E8E8E8 {
+    rectangle "**Verifiable Claims**" as verifiableClaims {
+        rectangle "Vektis Organization Type" as vektis
+        rectangle "CiBG DeZI" as cibg_dezi
+        rectangle "CiBG LRZa" as cibg_lrza
+        rectangle "Trust Service Providers Certificates" as trust
+    }
+
+    rectangle "**Other**" as otherClaims {
+        rectangle "NictiZ/GF Healthcare Information standard" as nictiz_std
+        rectangle "VZVZ Mitz" as mitz
+        rectangle "NictiZ Qualifications" as nictiz_qual
+        rectangle "CiBG SBV-Z" as sbvz
+    }
+}
+
+
+' Connections from data sources
+verifiableClaims -up-> requesting : "2. Get claims from\nauthoritative data sources"
+otherClaims -up-> responding
+
+nictiz_std -[dashed]up-> policy_makers
+
+
+@enduml
