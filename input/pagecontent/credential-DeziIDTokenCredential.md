@@ -22,11 +22,11 @@ The credential is a non-standard credential since it wraps the Dezi OIDC ID-Toke
 
 **Terminology:**
 
-| Claim | Code or system |
-| ----  | -------------- |
-| `HealthcareProvider.identifier` | URA code (UZI Register Abonneenummer) identifying the healthcare organization. OID: `2.16.528.1.1007.3.3` |
-| `Employee.identifier` | UZI/Dezi-id code identifying the healthcare worker. OID: `2.16.528.1.1007.3.1` |
-| `Employee.roles` | valueset [RoleCodeNL for care givers](https://decor.nictiz.nl/pub/medicatieproces/mp-html-20200122T161947/voc-2.16.840.1.113883.2.4.3.11.60.1.11.2-2018-09-10T000000.html) |
+| Claim                           | Code or system                                                                                                                                                             |
+|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `HealthcareProvider.identifier` | URA code (UZI Register Abonneenummer) identifying the healthcare organization. OID: `2.16.528.1.1007.3.3`                                                                  |
+| `Employee.identifier`           | UZI/Dezi-id code identifying the healthcare worker. OID: `2.16.528.1.1007.3.1`                                                                                             |
+| `Employee.roles`                | valueset [RoleCodeNL for care givers](https://decor.nictiz.nl/pub/medicatieproces/mp-html-20200122T161947/voc-2.16.840.1.113883.2.4.3.11.60.1.11.2-2018-09-10T000000.html) |
 
 #### Semantic relations
 
@@ -78,6 +78,7 @@ It asserts that Healthcare Provider _Medisch centrum_ (URA 87654321) employs _B.
   },
   "proof": {
     "type": "DeziIDJWT",
+    "version": "2024",
     "jwt": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFNY2p3cjgxMGpOVUZHVHR6T21MeTRTNnN5cVJ1aVZ1YVM0UmZyWmZwOEk9In0.eyJhdWQiOiIwMDZmYmYzNC1hODBiLTRjODEtYjZlOS01OTM2MDA2NzVmYjIiLCJleHAiOjE3MDE5MzM2OTcsImluaXRpYWxzIjoiQi5CLiIsImlzcyI6Imh0dHBzOi8vbWF4LnByb2VmdHVpbi5EZXppLW9ubGluZS5yZG9iZWhlZXIubmwiLCJsb2FfYXV0aG4iOiJodHRwOi8vZWlkYXMuZXVyb3BhLmV1L0xvQS9oaWdoIiwibG9hX0RlemkiOiJodHRwOi8vZWlkYXMuZXVyb3BhLmV1L0xvQS9oaWdoIiwibmJmIjoxNzAxOTMzNjI3LCJyZWxhdGlvbnMiOlt7ImVudGl0eV9uYW1lIjoiWm9yZ2FhbmJpZWRlciIsInJvbGVzIjpbIjAxLjA0MSIsIjMwLjAwMCIsIjAxLjAxMCIsIjAxLjAxMSJdLCJ1cmEiOiI4NzY1NDMyMSJ9XSwic3VybmFtZSI6IkphbnNlbiIsInN1cm5hbWVfcHJlZml4IjoidmFuIGRlciIsIkRlemlfaWQiOiI5MDAwMDAwMDkifQ.SIGNATURE"
   }
 }
@@ -87,23 +88,24 @@ It asserts that Healthcare Provider _Medisch centrum_ (URA 87654321) employs _B.
 
 To create a `DeziIDTokenCredential` from a Dezi ID-Token JWT, perform the following mapping:
 
-| Credential field | Source | Description |
-| ---------------- | ------ | ----------- |
-| `@context` | Static | Always `["https://www.w3.org/ns/credentials/v2", "https://example.org/contexts/dezi/v1"]` |
-| `type` | Static | Always `["VerifiableCredential", "DeziIDTokenCredential"]` |
-| `issuer` | `jwt.iss` | The Dezi issuer, represented as a URL (e.g., `https://max.proeftuin.Dezi-online.rdobeheer.nl`) |
-| `validFrom` | `jwt.nbf` | Convert epoch timestamp to ISO 8601 datetime |
-| `validUntil` | `jwt.exp` | Convert epoch timestamp to ISO 8601 datetime |
-| `credentialSubject.id` | Derived | DID representing the healthcare provider |
-| `credentialSubject.identifier` | `jwt.relations[n].ura` | URA of the selected healthcare provider |
-| `credentialSubject.name` | `jwt.relations[n].entity_name` | Name of the selected healthcare organization |
-| `credentialSubject.employee.identifier` | `jwt.Dezi_id` | The healthcare worker's Dezi/UZI number |
-| `credentialSubject.employee.initials` | `jwt.initials` | Initials of the healthcare worker |
-| `credentialSubject.employee.surnamePrefix` | `jwt.surname_prefix` | Surname prefix |
-| `credentialSubject.employee.surname` | `jwt.surname` | Family name of the healthcare worker |
-| `credentialSubject.employee.roles` | `jwt.relations[n].roles` | Role codes for the selected organization |
-| `proof.type` | Static | Always `DeziIDJWT` |
-| `proof.jwt` | Input | The original signed JWT from Dezi |
+| Credential field                           | Source                         | Description                                                                                    |
+|--------------------------------------------|--------------------------------|------------------------------------------------------------------------------------------------|
+| `@context`                                 | Static                         | Always `["https://www.w3.org/ns/credentials/v2", "https://example.org/contexts/dezi/v1"]`      |
+| `type`                                     | Static                         | Always `["VerifiableCredential", "DeziIDTokenCredential"]`                                     |
+| `issuer`                                   | `jwt.iss`                      | The Dezi issuer, represented as a URL (e.g., `https://max.proeftuin.Dezi-online.rdobeheer.nl`) |
+| `validFrom`                                | `jwt.nbf`                      | Convert epoch timestamp to ISO 8601 datetime                                                   |
+| `validUntil`                               | `jwt.exp`                      | Convert epoch timestamp to ISO 8601 datetime                                                   |
+| `credentialSubject.id`                     | Derived                        | DID representing the healthcare provider                                                       |
+| `credentialSubject.identifier`             | `jwt.relations[n].ura`         | URA of the selected healthcare provider                                                        |
+| `credentialSubject.name`                   | `jwt.relations[n].entity_name` | Name of the selected healthcare organization                                                   |
+| `credentialSubject.employee.identifier`    | `jwt.Dezi_id`                  | The healthcare worker's Dezi/UZI number                                                        |
+| `credentialSubject.employee.initials`      | `jwt.initials`                 | Initials of the healthcare worker                                                              |
+| `credentialSubject.employee.surnamePrefix` | `jwt.surname_prefix`           | Surname prefix                                                                                 |
+| `credentialSubject.employee.surname`       | `jwt.surname`                  | Family name of the healthcare worker                                                           |
+| `credentialSubject.employee.roles`         | `jwt.relations[n].roles`       | Role codes for the selected organization                                                       |
+| `proof.type`                               | Static                         | Always `DeziIDJWT`                                                                             |
+| `proof.version`                            | Depends on Dezi version        | `2024` for Dezi ID tokens according to april 2024 specification (with the `relations` claim).  |
+| `proof.jwt`                                | Input                          | The original signed JWT from Dezi                                                              |
 
 **Notes on creation:**
 
@@ -118,21 +120,22 @@ The `proof.type` of this credential is a custom `DeziIDJWT` and contains the JWT
 
 Validation consists of the following steps:
 
-1. Verify the JWT following the instructions of Dezi (signature validation using JWKS, expiration checks, etc.)
-2. Verify that the values from the credential subject match with the values in the JWT:
+1. Verify the Dezi JWT version is supported by the implementation.
+2. Verify the JWT following the instructions of Dezi (signature validation using JWKS, expiration checks, etc.)
+3. Verify that the values from the credential subject match with the values in the JWT:
 
-| Credential path | JWT path | Validation rule |
-| --------------- | -------- | --------------- |
-| `vc.issuer` | `jwt.iss` | Must match (after DID resolution if applicable) |
-| `vc.validFrom` | `jwt.nbf` | Must be equal (converted to epoch) |
-| `vc.validUntil` | `jwt.exp` | Must be equal (converted to epoch) |
-| `vc.credentialSubject.identifier` | `jwt.relations[].ura` | At least one relation must have matching URA |
-| `vc.credentialSubject.name` | `jwt.relations[].entity_name` | Must match the entity_name of the matching relation |
-| `vc.credentialSubject.employee.identifier` | `jwt.uzi_id` or `jwt.Dezi_id` | Must be equal |
-| `vc.credentialSubject.employee.initials` | `jwt.initials` | Must be equal |
-| `vc.credentialSubject.employee.surnamePrefix` | `jwt.surname_prefix` | Must be equal |
-| `vc.credentialSubject.employee.surname` | `jwt.surname` | Must be equal |
-| `vc.credentialSubject.employee.roles` | `jwt.relations[].roles` | All credential roles must exist in the roles array of the matching relation |
+| Credential path                               | JWT path                      | Validation rule                                                             |
+|-----------------------------------------------|-------------------------------|-----------------------------------------------------------------------------|
+| `vc.issuer`                                   | `jwt.iss`                     | Must match (after DID resolution if applicable)                             |
+| `vc.validFrom`                                | `jwt.nbf`                     | Must be equal (converted to epoch)                                          |
+| `vc.validUntil`                               | `jwt.exp`                     | Must be equal (converted to epoch)                                          |
+| `vc.credentialSubject.identifier`             | `jwt.relations[].ura`         | At least one relation must have matching URA                                |
+| `vc.credentialSubject.name`                   | `jwt.relations[].entity_name` | Must match the entity_name of the matching relation                         |
+| `vc.credentialSubject.employee.identifier`    | `jwt.uzi_id` or `jwt.Dezi_id` | Must be equal                                                               |
+| `vc.credentialSubject.employee.initials`      | `jwt.initials`                | Must be equal                                                               |
+| `vc.credentialSubject.employee.surnamePrefix` | `jwt.surname_prefix`          | Must be equal                                                               |
+| `vc.credentialSubject.employee.surname`       | `jwt.surname`                 | Must be equal                                                               |
+| `vc.credentialSubject.employee.roles`         | `jwt.relations[].roles`       | All credential roles must exist in the roles array of the matching relation |
 
 #### Proof of possession
 
@@ -156,6 +159,7 @@ This credential can only be expressed using JSON or JSON-LD encoding with a cust
 {
   "proof": {
     "type": "DeziIDJWT",
+    "version": "2024",
     "jwt": "eyJhbGciOiJSUzI1NiIs..."
   }
 }
