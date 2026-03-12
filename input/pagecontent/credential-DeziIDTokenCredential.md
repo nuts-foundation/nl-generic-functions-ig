@@ -86,7 +86,7 @@ It asserts that Healthcare Provider _Medisch centrum_ (URA 87654321) employs _B.
 
 #### Creating the Credential from a Dezi Attestation
 
-To create a `DeziIDTokenCredential` from a Dezi attestation JWT obtained from the userinfo endpoint, perform the following mapping:
+To create a `DeziIDTokenCredential` from a Dezi attestation, perform the following mapping:
 
 | Credential field                           | Source               | Description                                                                               |
 |--------------------------------------------|----------------------|-------------------------------------------------------------------------------------------|
@@ -100,7 +100,7 @@ To create a `DeziIDTokenCredential` from a Dezi attestation JWT obtained from th
 | `credentialSubject.name`                   | `jwt.abonnee_naam`   | Name of the healthcare organization                                                       |
 | `credentialSubject.employee.identifier`    | `jwt.dezi_nummer`    | The healthcare worker's Dezi number                                                       |
 | `credentialSubject.employee.initials`      | `jwt.voorletters`    | Initials of the healthcare worker                                                         |
-| `credentialSubject.employee.surnamePrefix` | `jwt.voorvoegsel`    | Surname prefix (may be null)                                                              |
+| `credentialSubject.employee.surnamePrefix` | `jwt.voorvoegsel`    | Surname prefix                                                                            |
 | `credentialSubject.employee.surname`       | `jwt.achternaam`     | Family name of the healthcare worker                                                      |
 | `credentialSubject.employee.roles`         | `jwt.rol_code`       | Single role code as an array (in v0.7 each attestation contains one role)                 |
 | `proof.type`                               | Static               | Always `DeziIDJWT07` (the `07` suffix indicates Dezi v0.7 specification)                  |
@@ -109,9 +109,7 @@ To create a `DeziIDTokenCredential` from a Dezi attestation JWT obtained from th
 **Notes on creation:**
 
 - In Dezi v0.7, each attestation contains a single role (`rol_code`). If a healthcare worker has multiple roles, multiple attestations will be issued.
-- The `credentialSubject.id` should be constructed as a DID that identifies the healthcare provider. The exact method depends on the DID infrastructure in use.
-- Timestamps in the JWT (`nbf`, `exp`) are Unix epoch seconds and must be converted to ISO 8601 format.
-- The attestation is obtained from the userinfo endpoint after successful OIDC authentication, not from the id_token.
+- The attestation is obtained from the user info object, gotten from the userinfo endpoint after successful OIDC authentication, not from the id_token, nor is it the user info object itself.
 
 #### Validation
 
