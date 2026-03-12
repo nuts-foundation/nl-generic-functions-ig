@@ -109,7 +109,7 @@ To create a `DeziIDTokenCredential` from a Dezi attestation, perform the followi
 **Notes on creation:**
 
 - In Dezi v0.7, each attestation contains a single role (`rol_code`). If a healthcare worker has multiple roles, multiple attestations will be issued.
-- The attestation is obtained from the user info object, gotten from the userinfo endpoint after successful OIDC authentication, not from the id_token, nor is it the user info object itself.
+- The attestation is the signed JWT contained in a Dezi-specific claim in the OIDC UserInfo response. It is retrieved from the UserInfo endpoint after successful OIDC authentication and is distinct from both the ID Token and the full UserInfo JSON object.
 
 #### Validation
 
