@@ -135,8 +135,8 @@ pages:
     credential-HealthcareProviderRoleTypeCredential.md:
       title: HealthcareProviderRoleTypeCredential
       generation: markdown
-    credential-DeziIDTokenCredential.md:
-      title: DeziIDTokenCredential
+    credential-DeziUserCredential.md:
+      title: DeziUserCredential
       generation: markdown
 
   history.md:
