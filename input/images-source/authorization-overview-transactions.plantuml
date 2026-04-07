@@ -45,7 +45,6 @@ rectangle "**Authoritative Data Sources**" as authoritativeDataSources #E8E8E8 {
         rectangle "NictiZ/GF Healthcare Information standard" as nictiz_std
         rectangle "VZVZ Mitz" as mitz
         rectangle "NictiZ Qualifications" as nictiz_qual
-        rectangle "CiBG SBV-Z" as sbvz
     }
 }
 
