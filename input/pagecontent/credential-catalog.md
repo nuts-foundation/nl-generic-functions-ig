@@ -29,9 +29,10 @@ This IG defined the following credential types.
 
 | Credential                                                                                   | Description                                                                                                  | Status         |
 |----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------|
-| [HealthcareProviderRoleTypeCredential](credential-HealthcareProviderRoleTypeCredential.html) | Establishes the category or type of healthcare services a provider organization is authorized to offer.      | draft          |
-| [DeziUserCredential](credential-DeziUserCredential.html)                                     | Wraps a Dezi "verklaring" from the OIDC UserInfo object to assert the identity of a healthcare worker and their employment relationship.  | draft          |
-| [X509Credential](credential-X509Credential.html)                                             | Represents attributes from an X.509 certificate, anchored in a trusted CA through the `did:x509` DID method. | production use |
+| [HealthcareProviderRoleTypeCredential](credential-HealthcareProviderRoleTypeCredential.html)             | Establishes the category or type of healthcare services a provider organization is authorized to offer.      | draft          |
+| [DeziUserCredential](credential-DeziUserCredential.html)                                                 | Wraps a Dezi "verklaring" from the OIDC UserInfo object to assert the identity of a healthcare worker and their employment relationship.  | draft          |
+| [HealthcareProfessionalDelegationCredential](credential-HealthcareProfessionalDelegationCredential.html) | Asserts that a healthcare professional has delegated a defined set of authorized actions to a healthcare provider, as the VC counterpart of the AORTA SAML mandate token. | draft          |
+| [X509Credential](credential-X509Credential.html)                                                         | Represents attributes from an X.509 certificate, anchored in a trusted CA through the `did:x509` DID method. | production use |
 
 ##### Credential type status
 
