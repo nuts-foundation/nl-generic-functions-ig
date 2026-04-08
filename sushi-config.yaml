@@ -138,6 +138,9 @@ pages:
     credential-DeziUserCredential.md:
       title: DeziUserCredential
       generation: markdown
+    credential-PatientEnrollmentCredential.md:
+      title: PatientEnrollmentCredential
+      generation: markdown
 
   history.md:
     title: History
