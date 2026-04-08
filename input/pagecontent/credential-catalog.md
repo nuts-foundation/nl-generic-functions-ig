@@ -31,6 +31,7 @@ This IG defined the following credential types.
 |----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------|
 | [HealthcareProviderRoleTypeCredential](credential-HealthcareProviderRoleTypeCredential.html) | Establishes the category or type of healthcare services a provider organization is authorized to offer.      | draft          |
 | [DeziUserCredential](credential-DeziUserCredential.html)                                     | Wraps a Dezi "verklaring" from the OIDC UserInfo object to assert the identity of a healthcare worker and their employment relationship.  | draft          |
+| [PatientEnrollmentCredential](credential-PatientEnrollmentCredential.html)                   | Asserts that a patient is enrolled with a healthcare provider organization, establishing a patient care-giving relationship as legal basis for data exchange. | draft          |
 | [X509Credential](credential-X509Credential.html)                                             | Represents attributes from an X.509 certificate, anchored in a trusted CA through the `did:x509` DID method. | production use |
 
 ##### Credential type status
