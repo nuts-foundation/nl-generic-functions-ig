@@ -8,7 +8,7 @@ LABEL maintainer="roland@headease.nl"
 
 # Install native compilation dependencies.
 RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install -y gcc g++ make apt-utils
+RUN apt-get install -y gcc g++ make apt-utils graphviz
 
 # Install Node from NodeSource.
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -

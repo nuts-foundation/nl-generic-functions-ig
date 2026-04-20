@@ -1,0 +1,51 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml notified-pull-cancellation
+autonumber
+
+title "Notified Pull — cancellation scenarios"
+skinparam roundCorner 7
+skinparam sequenceGroupBorderThickness .5
+
+participant "Placer" as placer order 10
+participant "Fulfiller" as fulfiller order 20
+
+== Placer cancels before Fulfiller started (requested or accepted) ==
+
+placer -> placer : PUT Coordination Task\n(Task.status = cancelled)
+placer -> fulfiller ++: POST notification Bundle
+fulfiller --> placer --: 200 OK
+
+== Placer cancels after Fulfiller started (in-progress) ==
+
+placer -> placer : Create CancellationRequest Task\n(Task.code = abort,\nTask.focus → Coordination Task)
+placer -> fulfiller ++: POST notification Bundle
+fulfiller --> placer --: 200 OK
+
+fulfiller -> placer ++: GET CancellationRequest Task
+placer --> fulfiller --: 200 OK\nTask
+
+alt Fulfiller accepts
+  fulfiller -> placer ++: PUT CancellationRequest Task\n(Task.status = accepted)
+  placer --> fulfiller --: 200 OK\nTask
+  placer -> placer : PUT Coordination Task\n(Task.status = cancelled)
+  placer -> fulfiller ++: POST notification Bundle
+  fulfiller --> placer --: 200 OK
+else Fulfiller refuses
+  fulfiller -> placer ++: PUT CancellationRequest Task\n(Task.status = rejected)
+  placer --> fulfiller --: 200 OK\nTask
+end
+
+== Fulfiller declines or abandons the order ==
+
+alt From requested
+  fulfiller -> placer ++: PUT Coordination Task\n(Task.status = rejected)
+  placer --> fulfiller --: 200 OK\nTask
+else From in-progress
+  fulfiller -> placer ++: PUT Coordination Task\n(Task.status = failed)
+  placer --> fulfiller --: 200 OK\nTask
+end
+
+@enduml

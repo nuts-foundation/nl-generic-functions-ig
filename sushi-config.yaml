@@ -124,6 +124,12 @@ pages:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
 
+  notified-pull.md:
+    title: Notified Pull
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
   credential-catalog.md:
     title: Credential Catalog
     extension:
@@ -185,6 +191,7 @@ menu:
   Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
+  Notified Pull: notified-pull.html
   Credential Catalog: credential-catalog.html
   Artifacts: artifacts.html
   History: history.html
