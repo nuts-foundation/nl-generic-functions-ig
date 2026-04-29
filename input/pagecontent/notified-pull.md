@@ -13,7 +13,7 @@ This page specifies a Dutch profile on the [HL7 Clinical Order Workflows (COW) I
 
 The goal is a single, internationally-grounded specification for future iterations of both.
 
-This profile adopts **COW pattern 2 — "Task at Placer with Subscriptions"**: the Coordination Task lives at the Placer, and the Fulfiller is notified via an R4 Subscription Backport event and then pulls. See [Why pattern 2?](#why-pattern-2) for the rationale.
+This profile adopts **COW pattern 2 — "Task at Placer with Subscriptions"**: the Coordination Task lives at the Placer, and the Fulfiller is notified via an R4 Subscription Backport event and then pulls. See [Why pattern 2?](#why-pattern-2) for the rationale. The transport layer — Subscription, SubscriptionTopic and notification Bundle — is specified on the [Notification](notification.html) page and is reused as-is here.
 
 Access control (mTLS, OAuth 2.0, client/authorization assertions) is **out of scope** of this page; it is specified separately and agreed between partners. The only access-control concept retained here is the `notification-authorization-hint`, because it crosses the transport/policy boundary — see [Notification authorization hint](#notification-authorization-hint).
 
@@ -43,9 +43,7 @@ Example payloads below correspond to the step numbers in the diagram. The same f
 
 | Step | Resource                                         | Referral (single candidate)                                                                                                                    | Transfer of care (multiple candidates)                                                                                                                                                                    |
 |------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1    | Subscription                                     | [np-referral-subscription](Subscription-np-referral-subscription.html)                                                                         | [np-eov-subscription](Subscription-np-eov-subscription.html) (one per candidate Fulfiller)                                                                                                                 |
 | 2    | Request + Coordination Task(s)                   | [np-referral-servicerequest](ServiceRequest-np-referral-servicerequest.html), [np-referral-coordination-task](Task-np-referral-coordination-task.html) | [np-eov-servicerequest](ServiceRequest-np-eov-servicerequest.html), [np-eov-coordination-task-a](Task-np-eov-coordination-task-a.html) + [np-eov-coordination-task-b](Task-np-eov-coordination-task-b.html) |
-| 3    | Notification Bundle (with SubscriptionStatus)    | [np-referral-notification-bundle](Bundle-np-referral-notification-bundle.html) / [np-referral-subscription-status](Parameters-np-referral-subscription-status.html) | [np-eov-notification-bundle](Bundle-np-eov-notification-bundle.html) / [np-eov-subscription-status](Parameters-np-eov-subscription-status.html) (analogous Bundle sent to each candidate)                   |
 | 9    | Dataset queries — derived from PlanDefinition    | [np-bgz-plandefinition](PlanDefinition-np-bgz-plandefinition.html) (BgZ dataset)                                                               | [np-eov-plandefinition](PlanDefinition-np-eov-plandefinition.html) (eOverdracht dataset)                                                                                                                   |
 {:.grid .table-hover}
 
@@ -53,7 +51,7 @@ The pattern has four layers, each specified separately below:
 
 1. **Request** — a FHIR Request resource at the Placer describes *what is being ordered*: a `ServiceRequest` for a referral, a `MedicationRequest` for a medication handoff, etc. The Request is the clinical payload; the Task does not duplicate its content.
 2. **Workflow** — a COW Coordination Task at the Placer references the Request (`Task.focus`) and tracks the lifecycle of the order. Status is advanced by the Fulfiller; cancellation after acceptance is negotiated with the Placer.
-3. **Transport** — a FHIR R5 Subscription Backport event notifies the Fulfiller that the Coordination Task has changed. The notification carries no clinical content.
+3. **Transport** — a FHIR R5 Subscription Backport event notifies the Fulfiller that the Coordination Task has changed. The notification carries no clinical content. See the [Notification](notification.html) page.
 4. **Data** — the Fulfiller pulls resources from the Placer's FHIR endpoint, using queries derived from the Request.
 
 ### Why pattern 2?
@@ -68,37 +66,11 @@ Pattern 2 is chosen because:
 - Transport (Subscription) and workflow (Task) are cleanly separated, so the same transport serves multiple use cases.
 - The notification can remain small and free of clinical content, matching Dutch data-minimization expectations.
 
-### Subscription
+### Transport
 
-Profile: [NlCowSubscription](StructureDefinition-nl-cow-subscription.html).
+The transport layer is specified on the [Notification](notification.html) page: a broad, long-lived Subscription per partner against an NL-specific SubscriptionTopic (one per use case, e.g. referral, transfer of care), and a `backport-subscription-notification` Bundle whose `notification-event.focus` references the Coordination Task at the Placer.
 
-The profile uses a **broad, long-lived Subscription per partner**, not per-case. One Subscription covers all Coordination Tasks the Placer may send to a given Fulfiller.
-
-A Subscription MUST exist at the Placer for the targeted Fulfiller before any notifications flow. How the Subscription is created is **use-case defined**: it may be created in-band (the Fulfiller POSTs a Subscription to the Placer) or out-of-band (the Placer records it from the addressing function, which publishes the Fulfiller's notification endpoint per organization). The Placer MUST check for an existing Subscription for the Fulfiller before sending notifications; beyond that, the creation mechanism does not affect runtime behavior.
-
-The Subscription profile (`NlCowSubscription`) SHALL:
-
-- set `Subscription.status = active` while in use and `off` to retire the channel;
-- set `Subscription.channel.type = rest-hook` with the Fulfiller's notification endpoint;
-- identify the sending organization via the R5 cross-version `Subscription.managingEntity` extension, using a URA identifier;
-- reference a single NL-specific `SubscriptionTopic` per use case (e.g. referral, transfer of care).
-
-### Notification
-
-Conforms to the HL7 Subscription Backport IG `backport-subscription-notification` Bundle profile; no additional NL constraints in this draft.
-
-Each Coordination Task event at the Placer triggers one notification to the Fulfiller.
-
-The notification is a FHIR `Bundle` of type `history` conforming to the Subscription Backport IG `SubscriptionNotification` profile, further constrained by `NlCowNotificationBundle`. It contains a `Parameters` resource (SubscriptionStatus) with:
-
-- `subscription` — reference to the registered Subscription;
-- `type = event-notification`;
-- `status = active` or `off`;
-- `topic` — canonical URL of the NL SubscriptionTopic;
-- `notification-event.focus` — reference to the Coordination Task at the Placer;
-- `notification-event` MAY carry a `notification-authorization-hint` (see [Notification authorization hint](#notification-authorization-hint)).
-
-The notification carries **no FHIR queries, no dataset content, and no workflow status**. The Fulfiller learns the status by reading the referenced Coordination Task.
+Notified Pull adds one additional element on top of the generic transport: each `notification-event` MAY carry a `notification-authorization-hint` — see [Notification authorization hint](#notification-authorization-hint). The notification carries **no FHIR queries, no dataset content, and no workflow status**. The Fulfiller learns the status by reading the referenced Coordination Task.
 
 ### Coordination Task
 
@@ -135,7 +107,7 @@ Some use cases — eOverdracht in particular — let the Placer offer a patient 
 - One `ServiceRequest` describes the clinical order; it is created once.
 - N Coordination Tasks reference the same ServiceRequest via `Task.focus`, each with a different `Task.owner` (one per candidate Fulfiller).
 - All Tasks share a `Task.groupIdentifier` so they can be correlated as one solicitation.
-- Each Task triggers its own notification via the Placer's Subscription to that candidate.
+- Each Task triggers its own notification to that candidate.
 - During solicitation `ServiceRequest.performer` is left empty; candidates are known from the Tasks' owners, not from the ServiceRequest. Setting `performer` is appropriate only once a candidate has been selected, and even then it is optional — `Task.owner` on the selected Task remains the authoritative signal. This is COW's distinction between "Request Placed (No Performer)" and "Request Placed (Performer Selected)".
 
 When a Fulfiller accepts, the Placer **selects** that Task by setting `Task.businessStatus = selected`, and cancels the others with `Task.status = cancelled` and `Task.statusReason = "not selected"`. Each cancellation fires its own notification so the losing candidates are informed. These are direct cancellations — none of the Tasks have reached `in-progress`, so no `CancellationRequest Task` is required.
@@ -210,13 +182,11 @@ Inclusion of the hint is optional. Its wire format and processing rules are out 
 
 | TA NP                                             | This profile                                                    |
 |---------------------------------------------------|-----------------------------------------------------------------|
-| Notification Task (STU3 Task, POSTed to receiver) | Notification Bundle (R4 Backport SubscriptionNotification)      |
-| Task.code = `pull-notification`                   | `SubscriptionTopic` canonical URL                               |
-| Task.groupIdentifier                              | Subscription identifier (reused across notifications)           |
-| Task.identifier                                   | `notification-event.event-number`                               |
+| Notification Task (STU3 Task, POSTed to receiver) | Notification Bundle — see [Notification](notification.html)     |
+| Task.code = `pull-notification`                   | SubscriptionTopic canonical URL — see [Notification](notification.html) |
 | Task.status = `requested` / `cancelled`           | Coordination Task status / CancellationRequest Task             |
 | Workflow Task                                     | Coordination Task (same role, COW-profiled)                     |
-| Task.input:authorization-base                     | `notification-event` `notification-authorization-hint`          |
+| Task.input:authorization-base                     | `notification-authorization-hint` on the notification           |
 | Task.input:query-available-resources              | Derived from Request / PlanDefinition (see Data retrieval)      |
 | Task.input:read-available-resource                | Idem                                                            |
 | Task.input:get-workflow-task                      | Obsolete — Coordination Task is always referenced               |
@@ -228,7 +198,7 @@ Inclusion of the hint is optional. Its wire format and processing rules are out 
 
 | eOverdracht                                       | This profile                                                    |
 |---------------------------------------------------|-----------------------------------------------------------------|
-| Empty POST to Task endpoint                       | Notification Bundle referencing a Coordination Task             |
+| Empty POST to Task endpoint                       | Notification referencing a Coordination Task — see [Notification](notification.html) |
 | Task (STU3, Nictiz eOverdracht profile)           | Coordination Task + Request (COW-profiled, R4)                  |
 | Task.input:nursingHandoff (document reference)    | Request.code + dataset queries via PlanDefinition               |
 | Task.status transitions gate access               | Coordination Task status transitions + notification-authorization-hint |
@@ -237,8 +207,7 @@ Inclusion of the hint is optional. Its wire format and processing rules are out 
 
 ### Open questions
 
-1. **R4 Backport on STU3** — TA NP v1.0.1 is STU3-based. Determine whether the Subscription Backport IG can be applied to STU3 servers, or whether STU3 implementations need a transition path.
-2. **Query list location** — this draft derives queries from the Request resource and an optional PlanDefinition. The alternative is carrying them on `Coordination Task.input`, matching TA NP v1.0.1 more closely. To be decided by the working group.
-3. **SubscriptionTopic ownership** — whether NL topics are published per-dataset (Nictiz) or per-use-case (Twiin/Nuts), and under which canonical base URL.
-4. **`additional-context` for deltas** — whether the notification should hint at which resource types changed since the last event, or the Fulfiller always refetches from the Request-derived query list.
-5. **Patient identification / BSN placement** — this draft places the BSN on `Coordination Task.for.identifier`. Alternatives are carrying it via the access-control layer (the OAuth `patient` claim, à la TA NP v1.0.1), via a Patient resource reference only, or inside the notification itself. Needs working-group discussion.
+1. **Query list location** — this draft derives queries from the Request resource and an optional PlanDefinition. The alternative is carrying them on `Coordination Task.input`, matching TA NP v1.0.1 more closely. To be decided by the working group.
+1. **SubscriptionTopic ownership** — whether NL topics are published per-dataset (Nictiz) or per-use-case (Twiin/Nuts), and under which canonical base URL.
+1. **notification-authorization-hint requirement** — align (or discard) the notification-authorization-hint to conform to Generic Function Authentication
+1. **Patient identification / BSN placement** — this draft places the BSN on `Coordination Task.for.identifier`. Alternatives are carrying it via the access-control layer (the OAuth `patient` claim, à la TA NP v1.0.1), via a Patient resource reference only, or inside the notification itself. Needs working-group discussion.

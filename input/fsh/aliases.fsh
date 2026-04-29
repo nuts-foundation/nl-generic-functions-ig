@@ -48,3 +48,4 @@ Alias: $condition-clinical = http://terminology.hl7.org/CodeSystem/condition-cli
 Alias: $condition-ver-status = http://terminology.hl7.org/CodeSystem/condition-ver-status
 Alias: $data-absent-reason = http://terminology.hl7.org/CodeSystem/data-absent-reason
 Alias: $fhir-url = http://fhir.nl/fhir/NamingSystem/url/fhir
+Alias: $zorgzwaartepakket = http://istandaarden.nl/ibieb/codelijsten/COD163
