@@ -92,7 +92,7 @@ It asserts that Healthcare Provider _Medisch centrum_ (URA 87654321) employs _B.
 
 The Dezi attestation ("verklaring") is obtained as a signed JWT from the Dezi OIDC UserInfo endpoint.
 
-To create a `DeziUserCredential` from this attestation, perform the following mapping:
+To create a `DeziUserCredential` from this attestation, perform the following mapping. In the table below, `jwt.<claim>` refers to a claim in the attestation JWT.
 
 | Credential field                           | Source                         | Description                                                                                    |
 |--------------------------------------------|--------------------------------|------------------------------------------------------------------------------------------------|
@@ -112,7 +112,7 @@ To create a `DeziUserCredential` from this attestation, perform the following ma
 | `credentialSubject.employee.role_name`     | `jwt.rol_naam`                 | Human-readable name of the role                                                                |
 | `credentialSubject.employee.role_registry` | `jwt.rol_code_bron`            | Registry from which the role originates (e.g., `http://www.dezi.nl/rol_code_bron/big`)              |
 | `proof.type`                               | Static                         | Always `DeziIDJWT07`                                                                           |
-| `proof.jwt`                                | Input                          | The original signed JWT from Dezi                                                              |
+| `proof.jwt`                                | Input                          | The original signed attestation ("verklaring") JWT obtained from the Dezi UserInfo endpoint    |
 
 **Notes on creation:**
 
