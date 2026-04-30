@@ -23,13 +23,23 @@ The credential is a non-standard credential since it wraps the Dezi OIDC ID-Toke
 
 **Terminology:**
 
+| Term                       | Definition                                                                                                                                |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| Dezi                       | Dutch identity provider that issues attestations for healthcare workers via OIDC.                                                         |
+| Attestation ("verklaring") | A signed JWT obtained from the Dezi OIDC UserInfo endpoint that asserts a Dezi user's identity and their role at a healthcare provider.   |
+| Abonnee                    | Subscriber organization (a healthcare provider) registered with Dezi.                                                                     |
+| URA                        | UZI Register Abonneenummer — identifier of the abonnee organization.                                                                      |
+| UZI/Dezi number            | Personal identifier of the healthcare worker issued by Dezi.                                                                              |
+
+**Claims and code systems:**
+
 | Claim                           | Code or system                                                                                                                                                             |
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `HealthcareProvider.identifier` | URA code (UZI Register Abonneenummer) identifying the healthcare organization. OID: `2.16.528.1.1007.3.3`                                                                  |
 | `Employee.identifier`           | UZI/Dezi-id code identifying the healthcare worker. OID: `2.16.528.1.1007.3.1`                                                                                             |
 | `Employee.role`                 | valueset [RoleCodeNL for care givers](https://decor.nictiz.nl/pub/medicatieproces/mp-html-20200122T161947/voc-2.16.840.1.113883.2.4.3.11.60.1.11.2-2018-09-10T000000.html) |
 | `Employee.role_name`            | Human-readable name of the role                                                                                                                                            |
-| `Employee.role_registry`        | Registry from which the role originates (e.g., `http://www.dezi.nl/rol_code_bron/big`)                                                                                          |
+| `Employee.role_registry`        | Registry from which the role originates (e.g., `http://www.dezi.nl/rol_code_bron/big`)                                                                                     |
 
 #### Semantic relations
 
@@ -63,7 +73,7 @@ It asserts that Healthcare Provider _Medisch centrum_ (URA 87654321) employs _B.
   ],
   "type": ["VerifiableCredential", "DeziUserCredential"],
   "id": "61b1fafc-4ec7-4489-a280-8d0a50a3d5a9",
-  "issuer": "abonnee.dezi.nl",
+  "issuer": "https://abonnee.dezi.nl",
   "issuanceDate": "2024-11-21T09:46:16Z",
   "expirationDate": "2025-02-21T09:46:16Z",
   "credentialSubject": {
@@ -94,25 +104,25 @@ The Dezi attestation ("verklaring") is obtained as a signed JWT from the Dezi OI
 
 To create a `DeziUserCredential` from this attestation, perform the following mapping. In the table below, `jwt.<claim>` refers to a claim in the attestation JWT.
 
-| Credential field                           | Source                         | Description                                                                                    |
-|--------------------------------------------|--------------------------------|------------------------------------------------------------------------------------------------|
-| `@context`                                 | Static                         | Always `["https://www.w3.org/2018/credentials/v1"]`                                            |
-| `type`                                     | Static                         | Always `["VerifiableCredential", "DeziUserCredential"]`                                        |
-| `id`                                       | `jwt.jti`                      | Unique identifier of the attestation, taken from the JWT ID claim                              |
-| `issuer`                                   | `jwt.iss`                      | The Dezi issuer (e.g., `abonnee.dezi.nl`), copied verbatim from the JWT `iss` claim            |
-| `issuanceDate`                             | `jwt.nbf`                      | Convert epoch timestamp to ISO 8601 datetime                                                   |
-| `expirationDate`                           | `jwt.exp`                      | Convert epoch timestamp to ISO 8601 datetime                                                   |
-| `credentialSubject.identifier`             | `jwt.abonnee_nummer`           | Abonnee nummer (URA) of the healthcare provider                                                |
-| `credentialSubject.name`                   | `jwt.abonnee_naam`             | Name of the healthcare organization                                                            |
-| `credentialSubject.employee.identifier`    | `jwt.dezi_nummer`              | The healthcare worker's Dezi number                                                            |
-| `credentialSubject.employee.initials`      | `jwt.voorletters`              | Initials of the healthcare worker                                                              |
-| `credentialSubject.employee.surnamePrefix` | `jwt.voorvoegsel`              | Surname prefix                                                                                 |
-| `credentialSubject.employee.surname`       | `jwt.achternaam`               | Family name of the healthcare worker                                                           |
-| `credentialSubject.employee.role`          | `jwt.rol_code`                 | Role code for the selected organization                                                        |
-| `credentialSubject.employee.role_name`     | `jwt.rol_naam`                 | Human-readable name of the role                                                                |
-| `credentialSubject.employee.role_registry` | `jwt.rol_code_bron`            | Registry from which the role originates (e.g., `http://www.dezi.nl/rol_code_bron/big`)              |
-| `proof.type`                               | Static                         | Always `DeziIDJWT07`                                                                           |
-| `proof.jwt`                                | Input                          | The original signed attestation ("verklaring") JWT obtained from the Dezi UserInfo endpoint    |
+| Credential field                           | Source               | Description                                                                                 |
+|--------------------------------------------|----------------------|---------------------------------------------------------------------------------------------|
+| `@context`                                 | Static               | Always `["https://www.w3.org/2018/credentials/v1"]`                                         |
+| `type`                                     | Static               | Always `["VerifiableCredential", "DeziUserCredential"]`                                     |
+| `id`                                       | `jwt.jti`            | Unique identifier of the attestation, taken from the JWT ID claim                           |
+| `issuer`                                   | `jwt.iss`            | The Dezi issuer (e.g., `abonnee.dezi.nl`), copied verbatim from the JWT `iss` claim         |
+| `issuanceDate`                             | `jwt.nbf`            | Convert epoch timestamp to ISO 8601 datetime                                                |
+| `expirationDate`                           | `jwt.exp`            | Convert epoch timestamp to ISO 8601 datetime                                                |
+| `credentialSubject.identifier`             | `jwt.abonnee_nummer` | Abonnee nummer (URA) of the healthcare provider                                             |
+| `credentialSubject.name`                   | `jwt.abonnee_naam`   | Name of the healthcare organization                                                         |
+| `credentialSubject.employee.identifier`    | `jwt.dezi_nummer`    | The healthcare worker's Dezi number                                                         |
+| `credentialSubject.employee.initials`      | `jwt.voorletters`    | Initials of the healthcare worker                                                           |
+| `credentialSubject.employee.surnamePrefix` | `jwt.voorvoegsel`    | Surname prefix                                                                              |
+| `credentialSubject.employee.surname`       | `jwt.achternaam`     | Family name of the healthcare worker                                                        |
+| `credentialSubject.employee.role`          | `jwt.rol_code`       | Role code for the selected organization                                                     |
+| `credentialSubject.employee.role_name`     | `jwt.rol_naam`       | Human-readable name of the role                                                             |
+| `credentialSubject.employee.role_registry` | `jwt.rol_code_bron`  | Registry from which the role originates (e.g., `http://www.dezi.nl/rol_code_bron/big`)      |
+| `proof.type`                               | Static               | Always `DeziIDJWT07`                                                                        |
+| `proof.jwt`                                | Input                | The original signed attestation ("verklaring") JWT obtained from the Dezi UserInfo endpoint |
 
 **Notes on creation:**
 
