@@ -90,7 +90,9 @@ It asserts that Healthcare Provider _Medisch centrum_ (URA 87654321) employs _B.
 
 #### Creating the Credential from a Dezi Attestation
 
-To create a `DeziUserCredential` from a Dezi attestation, perform the following mapping:
+The Dezi attestation ("verklaring") is obtained as a signed JWT from the Dezi OIDC UserInfo endpoint.
+
+To create a `DeziUserCredential` from this attestation, perform the following mapping:
 
 | Credential field                           | Source                         | Description                                                                                    |
 |--------------------------------------------|--------------------------------|------------------------------------------------------------------------------------------------|
