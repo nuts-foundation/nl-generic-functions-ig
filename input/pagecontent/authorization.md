@@ -16,6 +16,8 @@ This guide outlines the data requirements and principles underlying the GF Autho
 - Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
+
+See [Authorization Information Model](authorization-model.html) for the proposed shared authorization model across trust frameworks, including the use-case scope convention for OAuth 2.0 access tokens. It complements the policy input data model defined below.
 <!--  for policy makers -->
 
 ### Solution overview

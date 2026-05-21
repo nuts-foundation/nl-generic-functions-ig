@@ -1,0 +1,110 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-evaluation
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 10
+skinparam activity {
+  BackgroundColor #FFF2CC
+  BorderColor #D6B000
+}
+skinparam noteBackgroundColor #F8F8F8
+skinparam noteBorderColor #999999
+
+' Happy path. Any check failure results in rejection (not shown).
+
+legend top right
+  Input categories on each step:
+    **R**  Request inputs
+    **L1** Nictiz catalogue (layer 1)
+    **L2** Trust framework registry (layer 2)
+endlegend
+
+start
+
+:Receive AT request;
+note right
+  **R**: use-case scope token (uc),
+  requested operations,
+  asserted identity claims,
+  patient context
+end note
+
+:Look up UseCase by uc;
+note right
+  **L1**: UseCase catalogue
+end note
+
+:For each requested operation,
+identify the Transactiegroep and
+Transactie it belongs to;
+note right
+  **L1**: Transactiegroep,
+  Transactie, Operation catalogue
+  **R**: requested operations
+end note
+
+:Resolve required Systeemrol
+and Bedrijfsrol per operation;
+note right
+  **L1**: Transactie definition
+end note
+
+:Verify ServiceProvider's Qualifications
+cover every required Systeemrol;
+note right
+  **L2**: ServiceProvider Qualifications
+  Derived: required Systeemrollen
+end note
+
+:Verify ServiceProvider delegation
+authorizes every required Systeemrol;
+note right
+  **L2**: ServiceProvider delegation
+  Derived: required Systeemrollen
+end note
+
+:Verify HealthcareProfessional-to-
+HealthcareOrganization delegation
+authorizes every required Bedrijfsrol;
+note right
+  **L2**: HCP-to-HCO delegation
+  **R**: asserted HCP identity
+  Derived: required Bedrijfsrollen
+end note
+
+:Verify the asserted rolcode is
+permitted for every requested
+operation per the AuthorizationPolicy;
+note right
+  **L2**: AuthorizationPolicy
+  allowed_combinations
+  **R**: asserted rolcode
+  **R**: requested operations
+end note
+
+:Verify the asserted identity claims
+match the AuthenticationProfile
+required claims for the use case;
+note right
+  **R**: asserted identity claims
+  **L2**: AuthenticationProfile
+  required claim types
+end note
+
+:Mint AccessToken with uc claim,
+minted SoF scopes, carried claims,
+patient context;
+note right
+  **L1**: Operation -> Zib ->
+  FHIRResource (derives SoF scopes)
+end note
+
+:Return AccessToken;
+
+stop
+
+@enduml
