@@ -1,0 +1,67 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-nictiz
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classBackgroundColor #FFF2CC
+skinparam classBorderColor #D6B000
+skinparam classFontStyle bold
+hide circle
+
+class Informatiestandaard {
+  name
+  version
+}
+
+class UseCase {
+  name
+}
+
+class Transactiegroep {
+  name
+  direction
+}
+
+class Transactie {
+  name
+  FHIR_or_CDA_profiles
+}
+
+class Operation {
+  verb
+  artifact
+  version
+}
+
+class Systeemrol {
+  name
+  type
+}
+
+class Bedrijfsrol {
+  name
+}
+
+class Zib {
+  name
+  version
+}
+
+class FHIRResource {
+  resourceType
+}
+
+Informatiestandaard "1" --> "*" UseCase : contains
+UseCase "1" --> "*" Transactiegroep : groups
+Transactiegroep "1" --> "*" Transactie : composed of
+Transactie "1" --> "*" Operation : decomposes into
+Transactie "1" --> "2" Systeemrol : exchanges between
+Transactie "*" --> "*" Bedrijfsrol : performed by
+Operation "*" --> "1..*" Zib : artifact references
+Zib "1" --> "1..*" FHIRResource : profiles
+
+@enduml

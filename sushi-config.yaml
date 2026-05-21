@@ -123,6 +123,9 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
+    authorization-model.md:
+      title: Authorization Information Model
+      generation: markdown
 
   credential-catalog.md:
     title: Credential Catalog

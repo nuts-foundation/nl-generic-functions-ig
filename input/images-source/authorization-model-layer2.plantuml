@@ -1,0 +1,108 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-layer2
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classFontStyle bold
+skinparam classBackgroundColor #E1F5FE
+skinparam classBorderColor #0277BD
+hide circle
+
+' Nictiz-layer entities referenced from this diagram (yellow, layer 1)
+class UseCase <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+}
+class Systeemrol <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+}
+class Bedrijfsrol <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+}
+
+' Governance
+class TrustFramework {
+  namespace
+  governance_authority
+}
+
+class AuthenticationProfile {
+  required_claim_types[]
+}
+
+class AuthorizationPolicy {
+  allowed_combinations[]
+}
+
+' Identity claims (abstract + concrete kinds)
+abstract class IdentityClaim {
+  type
+  value
+}
+
+class Qualification {
+  product
+  version
+}
+
+class HealthcareProfessionalDelegation {
+  authorizedBedrijfsrollen[]
+}
+
+class ServiceProviderDelegation {
+  authorizedSysteemrollen[]
+}
+
+' Actors
+class HealthcareProfessional {
+  identifier
+  rolcode
+}
+
+class HealthcareOrganization {
+  identifier
+  role_type
+}
+
+class ServiceProvider {
+  client_id
+}
+
+class Patient {
+  identifier (BSN)
+}
+
+' Governance relationships
+TrustFramework "1" --> "*" AuthenticationProfile : defines
+TrustFramework "1" --> "*" AuthorizationPolicy : defines
+TrustFramework "1" --> "*" IdentityClaim : defines vocabulary of
+
+AuthenticationProfile "1" --> "1" UseCase : profiles
+AuthorizationPolicy "1" --> "1" UseCase : for
+
+' Identity claim hierarchy: qualification and delegations are kinds of IdentityClaim
+Qualification -up-|> IdentityClaim
+HealthcareProfessionalDelegation -up-|> IdentityClaim
+ServiceProviderDelegation -up-|> IdentityClaim
+
+' Qualification: trust framework issues, service provider holds, concerns a systeemrol
+TrustFramework "1" --> "*" Qualification : issues
+ServiceProvider "1" --> "*" Qualification : holds
+Qualification "*" --> "1" Systeemrol : concerns
+
+' Delegation chain: HCP -> HCO (bedrijfsrol), HCO -> SP (systeemrol)
+HealthcareProfessional "1" --> "*" HealthcareProfessionalDelegation : issues
+HealthcareOrganization "1" --> "*" HealthcareProfessionalDelegation : receives
+HealthcareProfessionalDelegation "*" --> "*" Bedrijfsrol : authorizes
+
+HealthcareOrganization "1" --> "*" ServiceProviderDelegation : issues
+ServiceProvider "1" --> "*" ServiceProviderDelegation : receives
+ServiceProviderDelegation "*" --> "*" Systeemrol : authorizes
+
+HealthcareProfessional "*" --> "1" HealthcareOrganization : employed by
+HealthcareProfessional "*" --> "*" Patient : treats
+
+@enduml
