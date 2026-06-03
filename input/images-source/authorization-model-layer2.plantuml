@@ -12,10 +12,7 @@ skinparam classBackgroundColor #E1F5FE
 skinparam classBorderColor #0277BD
 hide circle
 
-' Nictiz-layer entities referenced from this diagram (yellow, layer 1)
-class UseCase <<Nictiz layer>> #FFF2CC ##D6B000 {
-  name
-}
+' === Layer 1 (Nictiz) roles the credentials concern/delegate - yellow ===
 class Systeemrol <<Nictiz layer>> #FFF2CC ##D6B000 {
   name
 }
@@ -23,86 +20,66 @@ class Bedrijfsrol <<Nictiz layer>> #FFF2CC ##D6B000 {
   name
 }
 
-' Governance
-class TrustFramework {
-  namespace
-  governance_authority
-}
-
-class AuthenticationProfile {
-  required_claim_types[]
-}
-
-class AuthorizationPolicy {
-  allowed_combinations[]
-}
-
-' Identity claims (abstract + concrete kinds)
-abstract class IdentityClaim {
-  type
-  value
-}
-
-class Qualification {
-  product
-  version
-}
-
-class HealthcareProfessionalDelegation {
-  authorizedBedrijfsrollen[]
-}
-
-class ServiceProviderDelegation {
-  authorizedSysteemrollen[]
-}
-
-' Actors
+' === Actors - pale blue ===
 class HealthcareProfessional {
   identifier
   rolcode
 }
-
 class HealthcareOrganization {
   identifier
   role_type
 }
-
 class ServiceProvider {
   client_id
 }
-
 class Patient {
   identifier (BSN)
 }
 
-' Governance relationships
-TrustFramework "1" --> "*" AuthenticationProfile : defines
-TrustFramework "1" --> "*" AuthorizationPolicy : defines
-TrustFramework "1" --> "*" IdentityClaim : defines vocabulary of
+' === Identity claims carried by credentials (about the requester) - mid-blue ===
+abstract class IdentityClaim #64B5F6 ##0D47A1 {
+  type
+  value
+}
+class Qualification #64B5F6 ##0D47A1 {
+  product
+  version
+}
+class HealthcareProfessionalDelegation #64B5F6 ##0D47A1
+class ServiceProviderDelegation #64B5F6 ##0D47A1
 
-AuthenticationProfile "1" --> "1" UseCase : profiles
-AuthorizationPolicy "1" --> "1" UseCase : for
-
-' Identity claim hierarchy: qualification and delegations are kinds of IdentityClaim
 Qualification -up-|> IdentityClaim
 HealthcareProfessionalDelegation -up-|> IdentityClaim
 ServiceProviderDelegation -up-|> IdentityClaim
 
-' Qualification: trust framework issues, service provider holds, concerns a systeemrol
-TrustFramework "1" --> "*" Qualification : issues
-ServiceProvider "1" --> "*" Qualification : holds
-Qualification "*" --> "1" Systeemrol : concerns
+' === Context claims (about the request and the patient) - mid-blue ===
+abstract class ContextClaim #64B5F6 ##0D47A1 {
+  type
+  value
+}
+class Enrollment #64B5F6 ##0D47A1
 
-' Delegation chain: HCP -> HCO (bedrijfsrol), HCO -> SP (systeemrol)
+Enrollment -up-|> ContextClaim
+
+' === Qualification: held by the service provider, certifies it for a systeemrol ===
+ServiceProvider "1" --> "*" Qualification : holds
+Qualification "*" --> "1" Systeemrol : certifies for
+
+' === Delegation chain: HCP -> HCO (bedrijfsrol), HCO -> SP (systeemrol) ===
 HealthcareProfessional "1" --> "*" HealthcareProfessionalDelegation : issues
 HealthcareOrganization "1" --> "*" HealthcareProfessionalDelegation : receives
-HealthcareProfessionalDelegation "*" --> "*" Bedrijfsrol : authorizes
+HealthcareProfessionalDelegation "*" --> "*" Bedrijfsrol : delegates
 
 HealthcareOrganization "1" --> "*" ServiceProviderDelegation : issues
 ServiceProvider "1" --> "*" ServiceProviderDelegation : receives
-ServiceProviderDelegation "*" --> "*" Systeemrol : authorizes
+ServiceProviderDelegation "*" --> "*" Systeemrol : delegates
 
 HealthcareProfessional "*" --> "1" HealthcareOrganization : employed by
-HealthcareProfessional "*" --> "*" Patient : treats
+HealthcareProfessional "*" --> "*" Patient : enrolls/treats
+
+' === Enrollment: the professional enrolls the patient at the organisation ===
+HealthcareProfessional "1" --> "*" Enrollment : issues
+HealthcareOrganization "1" --> "*" Enrollment : receives
+Enrollment "*" --> "1" Patient : concerns
 
 @enduml

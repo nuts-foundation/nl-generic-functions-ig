@@ -13,7 +13,7 @@ skinparam classBorderColor #2E7D32
 hide circle
 
 ' Layer 1 (Nictiz) entities referenced from this diagram (yellow)
-class UseCase <<Nictiz layer>> #FFF2CC ##D6B000 {
+class Transactie <<Nictiz layer>> #FFF2CC ##D6B000 {
   name
 }
 class Operation <<Nictiz layer>> #FFF2CC ##D6B000 {
@@ -36,14 +36,14 @@ class ServiceProvider <<Layer 2>> #E1F5FE ##0277BD {
 
 ' Layer 3: OAuth wire artefacts
 class AccessTokenRequest {
-  uc
+  tx
   operations[]
   asserted_claims[]
   patient
 }
 
 class AccessToken {
-  uc
+  tx
   scope[]
   patient
   claims[]
@@ -57,13 +57,13 @@ class SoFScope {
 
 ' AT request: what the ServiceProvider sends to the AS
 ServiceProvider "1" --> "*" AccessTokenRequest : sends
-AccessTokenRequest "*" --> "1" UseCase : names
-AccessTokenRequest "*" --> "*" Operation : requests
+AccessTokenRequest "*" --> "1" Transactie : names
+AccessTokenRequest "*" --> "*" Operation : narrows (optional)
 AccessTokenRequest "*" --> "*" IdentityClaim : asserts
 
 ' AT issued: what the AS returns on success
 AccessTokenRequest "1" ..> "1" AccessToken : results in (if approved)
-AccessToken "1" --> "1" UseCase : authorizes
+AccessToken "1" --> "1" Transactie : authorizes
 AccessToken "1" --> "*" IdentityClaim : carries
 AccessToken "1" --> "*" SoFScope : carries
 SoFScope "*" --> "1" FHIRResource : resource references

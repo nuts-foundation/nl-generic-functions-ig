@@ -1,0 +1,68 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-role-resolution
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classFontStyle bold
+skinparam classBackgroundColor #E1F5FE
+skinparam classBorderColor #0277BD
+hide circle
+
+' === Layer 1 (Nictiz catalogue) - yellow ===
+class UseCase <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+}
+class Transactiegroep <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+}
+class Transactie <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+  direction
+}
+class Bedrijfsrol <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+}
+class Systeemrol <<Nictiz layer>> #FFF2CC ##D6B000 {
+  name
+  type
+}
+
+' === Layer 2: framework role resolution + policy - blue ===
+class RolePrerequisite
+class AuthorizationRole {
+  name
+}
+class PermissionMatrix {
+  allowed_combinations[]
+}
+class SysteemrolPrerequisite
+
+' === Layer 2: claim vocabulary - mid-blue ===
+class IdentityClaim #64B5F6 ##0D47A1
+class ContextClaim #64B5F6 ##0D47A1
+
+' === Catalogue: a Transactie belongs to one UseCase; it couples both role kinds ===
+UseCase "1" --> "*" Transactiegroep : groups
+Transactiegroep "1" --> "*" Transactie : per direction
+Transactie "*" --> "*" Bedrijfsrol : performed by
+Transactie "1" --> "2" Systeemrol : exchanges between
+
+' === Use-case context gate (intent: consent, treatment relationship, purpose) ===
+UseCase "1" --> "*" ContextClaim : context gate
+
+' === Professional side: claims -> RolePrerequisite (OR) -> AuthorizationRole -> matrix ===
+RolePrerequisite "*" --> "1" AuthorizationRole : resolves to
+RolePrerequisite "1" --> "*" IdentityClaim : requires
+AuthorizationRole "*" --> "1" Bedrijfsrol : refines
+PermissionMatrix "1" --> "*" AuthorizationRole : permits
+PermissionMatrix "1" --> "*" Transactie : for
+
+' === System side: claims -> SysteemrolPrerequisite (OR) -> Systeemrol (no matrix) ===
+SysteemrolPrerequisite "*" --> "1" Systeemrol : resolves to
+SysteemrolPrerequisite "1" --> "*" IdentityClaim : requires
+
+@enduml

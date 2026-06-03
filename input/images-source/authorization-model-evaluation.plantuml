@@ -27,75 +27,51 @@ start
 
 :Receive AT request;
 note right
-  **R**: use-case scope token (uc),
-  requested operations,
+  **R**: transactie scope token (tx),
+  optional operations,
   asserted identity claims,
-  patient context
+  context claims
 end note
 
-:Look up UseCase by uc;
+:Look up the Transactie by tx;
 note right
-  **L1**: UseCase catalogue
+  **L1**: Transactie catalogue
+  (derives its Systeemrol and UseCase)
 end note
 
-:For each requested operation,
-identify the Transactiegroep and
-Transactie it belongs to;
+:Resolve the AuthorizationRole:
+a RolePrerequisite resolves the
+asserted identity claims;
 note right
-  **L1**: Transactiegroep,
-  Transactie, Operation catalogue
-  **R**: requested operations
+  **L2**: RolePrerequisites
+  **R**: asserted rolcode and
+  HCP-to-HCO delegation
 end note
 
-:Resolve required Systeemrol
-and Bedrijfsrol per operation;
+:Resolve the Systeemrol:
+the SysteemrolPrerequisite resolves
+the ServiceProvider's claims;
 note right
-  **L1**: Transactie definition
+  **L2**: SysteemrolPrerequisite
+  **R**: Qualification and
+  ServiceProvider delegation
 end note
 
-:Verify ServiceProvider's Qualifications
-cover every required Systeemrol;
+:Check the PermissionMatrix permits
+(AuthorizationRole, Transactie);
 note right
-  **L2**: ServiceProvider Qualifications
-  Derived: required Systeemrollen
-end note
-
-:Verify ServiceProvider delegation
-authorizes every required Systeemrol;
-note right
-  **L2**: ServiceProvider delegation
-  Derived: required Systeemrollen
-end note
-
-:Verify HealthcareProfessional-to-
-HealthcareOrganization delegation
-authorizes every required Bedrijfsrol;
-note right
-  **L2**: HCP-to-HCO delegation
-  **R**: asserted HCP identity
-  Derived: required Bedrijfsrollen
-end note
-
-:Verify the asserted rolcode is
-permitted for every requested
-operation per the AuthorizationPolicy;
-note right
-  **L2**: AuthorizationPolicy
+  **L2**: PermissionMatrix
   allowed_combinations
-  **R**: asserted rolcode
-  **R**: requested operations
 end note
 
-:Verify the asserted identity claims
-match the AuthenticationProfile
-required claims for the use case;
+:Evaluate the use case's context gate;
 note right
-  **R**: asserted identity claims
-  **L2**: AuthenticationProfile
-  required claim types
+  **L2**: required ContextClaims
+  **R**: asserted context claims
+  (enrollment, consent, purpose)
 end note
 
-:Mint AccessToken with uc claim,
+:Mint AccessToken with tx claim,
 minted SoF scopes, carried claims,
 patient context;
 note right
