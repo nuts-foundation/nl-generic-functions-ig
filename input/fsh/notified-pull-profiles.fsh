@@ -1,7 +1,7 @@
 Alias: $taskparam                = http://fhir.nl/fhir/NamingSystem/TaskParameter
 Alias: $task-code-cs             = http://hl7.org/fhir/CodeSystem/task-code
 Alias: $backport-topic           = http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-topic-canonical
-Alias: $backport-filter          = http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria
+Alias: $backport-filter         = http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria
 Alias: $sub-managingEntity       = http://hl7.org/fhir/5.0/StructureDefinition/extension-Subscription.managingEntity
 
 
