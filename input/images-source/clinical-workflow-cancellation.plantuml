@@ -2,7 +2,7 @@
 '
 ' SPDX-License-Identifier: EUPL-1.2
 
-@startuml notified-pull-cancellation
+@startuml clinical-workflow-cancellation
 autonumber
 
 title "Notified Pull — cancellation scenarios"

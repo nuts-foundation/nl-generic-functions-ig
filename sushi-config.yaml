@@ -124,6 +124,12 @@ pages:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
 
+  building-blocks.md:
+    title: Building blocks
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
   notification.md:
     title: Notification
     extension:
@@ -135,7 +141,15 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
- 
+    subscription-topics-exploration.md:
+      title: Subscription Topics Exploration
+      generation: markdown
+
+  clinical-workflow.md:
+    title: Clinical Workflow
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
 
   credential-catalog.md:
     title: Credential Catalog
@@ -198,8 +212,12 @@ menu:
   Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
+  Building blocks: building-blocks.html
   Notification: notification.html
-  Notified Pull: notified-pull.html
+  Notified Pull:
+    Notified Pull: notified-pull.html
+    Subscription Topics Exploration: subscription-topics-exploration.html
+  Clinical Workflow: clinical-workflow.html
   Credential Catalog: credential-catalog.html
   Artifacts: artifacts.html
   History: history.html

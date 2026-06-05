@@ -2,7 +2,7 @@
 '
 ' SPDX-License-Identifier: EUPL-1.2
 
-@startuml notified-pull-task-lifecycle
+@startuml clinical-workflow-task-lifecycle
 
 title "Coordination Task lifecycle"
 hide empty description
