@@ -1,0 +1,77 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-bridge
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classFontStyle bold
+skinparam nodesep 14
+skinparam ranksep 34
+hide circle
+
+title Layer 1 to Layer 2 bridge (generic model; concrete values marked "e.g.")
+
+' --------- Layer 1 (yellow / orange) ---------
+class "Transaction  <<query>>\n[e.g. Raadplegen medicatieafspraak]" as TX #FFF2CC {
+  type = initial
+}
+class "QueryParameters  <<concept group>>" as QP #FFF2CC
+
+class "Patient identifier  <<identifier>>\n[e.g. Identificatienummer = BSN]" as PID #FFF2CC {
+  WHO the data is about (data-subject)
+}
+class "Query-scope identifiers  <<identifier>>\n[e.g. behandeling-id, record-id]" as SID #FFF2CC {
+  WHICH records to return, stays in layer 1
+}
+class "Query filters  <<filter>>\n[e.g. product code; usage period]" as QF #FFF2CC {
+  independent, each optional
+}
+
+class "Dataset (primary)  <<primary>>" as DSP #FFF2CC
+class "Dataset (building block)  <<zib>>" as DSB #FFE6CC
+
+' --------- Layer 2 (blue / purple) ---------
+class "Patient  <<data-subject>>" as PAT #DAE8FC
+
+class "HealthcareProfessional\n<<IdentityClaim, requester-provided>>" as HP #DAE8FC
+class "HealthcareOrganization\n<<IdentityClaim, requester-provided>>" as HO #DAE8FC
+class "Enrollment - treatment relationship\n<<ContextClaim, requester-provided>>" as ENR #DAE8FC
+class "Consent (e.g. Mitz or local registration)\n<<context check, source-side>>" as MITZ #E5D9F2
+
+' --------- Layer 1 structure ---------
+TX --> QP : profiles
+QP o-- PID
+QP o-- SID
+QP o-- QF
+QP --> "1" DSP : concepts member of
+DSP ..> DSB : imports (for payload concepts, not query params)
+PID -[hidden]down- SID
+SID -[hidden]down- QF
+
+' --------- claim layout: identity claims on one level, then context below ---------
+HP -[hidden]right- HO
+HP -[hidden]down- ENR
+ENR -[hidden]down- MITZ
+
+' --------- bridges ---------
+PID -[hidden]down- PAT
+PID ..> PAT : identifies (data-subject)
+TX ..> HP : requester is
+TX ..> HO : requester acts for
+ENR ..> PAT : about
+MITZ ..> PAT : about
+
+legend left
+  Colour = layer:
+  Yellow = Layer 1 (Nictiz) concept
+  Orange = Layer 1 building-block dataset (imported)
+  Blue   = Layer 2 (trust framework): requester-provided claim / data-subject
+  Purple = Layer 2: evaluated source-side (not requester-provided)
+  --
+  Arrows: solid = layer-1 structure; dashed = cross-layer reference
+endlegend
+
+@enduml

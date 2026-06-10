@@ -21,22 +21,23 @@ legend top right
     **R**  Request inputs
     **L1** Nictiz catalogue (layer 1)
     **L2** Trust framework registry (layer 2)
+    **L3** Realisation catalogue (interactietabel)
 endlegend
 
 start
 
 :Receive AT request;
 note right
-  **R**: transactie scope token (tx),
+  **R**: transaction scope token (tx),
   optional operations,
   asserted identity claims,
   context claims
 end note
 
-:Look up the Transactie by tx;
+:Look up the Transaction by tx;
 note right
-  **L1**: Transactie catalogue
-  (derives its Systeemrol and UseCase)
+  **L1**: Transaction catalogue
+  (derives its SystemRole and UseCase)
 end note
 
 :Resolve the AuthorizationRole:
@@ -44,24 +45,28 @@ a RolePrerequisite resolves the
 asserted identity claims;
 note right
   **L2**: RolePrerequisites
-  **R**: asserted rolcode and
+  **R**: asserted rolcode;
   HCP-to-HCO delegation
+  (under mandate only)
 end note
 
-:Resolve the Systeemrol:
-the SysteemrolPrerequisite resolves
-the ServiceProvider's claims;
+:Resolve the QualifiedSystemRole:
+the SystemRolePrerequisite resolves
+the ServiceProvider's claims and checks
+that it covers the Transaction;
 note right
-  **L2**: SysteemrolPrerequisite
+  **L2**: SystemRolePrerequisite,
+  QualifiedSystemRole coverage
   **R**: Qualification and
   ServiceProvider delegation
 end note
 
 :Check the PermissionMatrix permits
-(AuthorizationRole, Transactie);
+(AuthorizationRole, Transaction);
 note right
   **L2**: PermissionMatrix
-  allowed_combinations
+  (always present, may be trivial;
+  absent entry = deny)
 end note
 
 :Evaluate the use case's context gate;
@@ -71,12 +76,12 @@ note right
   (enrollment, consent, purpose)
 end note
 
-:Mint AccessToken with tx claim,
-minted SoF scopes, carried claims,
-patient context;
+:Mint AccessToken with the tx scope
+token, minted SoF scopes, carried
+claims, patient context;
 note right
-  **L1**: Operation -> Zib ->
-  FHIRResource (derives SoF scopes)
+  **L3**: Operation -> FHIR profile ->
+  resourceType (derives SoF scopes)
 end note
 
 :Return AccessToken;

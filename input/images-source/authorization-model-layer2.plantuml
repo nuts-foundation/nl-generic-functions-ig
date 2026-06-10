@@ -13,10 +13,10 @@ skinparam classBorderColor #0277BD
 hide circle
 
 ' === Layer 1 (Nictiz) roles the credentials concern/delegate - yellow ===
-class Systeemrol <<Nictiz layer>> #FFF2CC ##D6B000 {
+class SystemRole <<Nictiz layer>> #FFF2CC ##D6B000 {
   name
 }
-class Bedrijfsrol <<Nictiz layer>> #FFF2CC ##D6B000 {
+class BusinessRole <<Nictiz layer>> #FFF2CC ##D6B000 {
   name
 }
 
@@ -47,10 +47,15 @@ class Qualification #64B5F6 ##0D47A1 {
 }
 class HealthcareProfessionalDelegation #64B5F6 ##0D47A1
 class ServiceProviderDelegation #64B5F6 ##0D47A1
+class Membership #64B5F6 ##0D47A1 {
+  framework
+  information_standard [optional]
+}
 
 Qualification -up-|> IdentityClaim
 HealthcareProfessionalDelegation -up-|> IdentityClaim
 ServiceProviderDelegation -up-|> IdentityClaim
+Membership -up-|> IdentityClaim
 
 ' === Context claims (about the request and the patient) - mid-blue ===
 abstract class ContextClaim #64B5F6 ##0D47A1 {
@@ -61,18 +66,21 @@ class Enrollment #64B5F6 ##0D47A1
 
 Enrollment -up-|> ContextClaim
 
-' === Qualification: held by the service provider, certifies it for a systeemrol ===
+' === Qualification: held by the service provider, certifies it for a system role ===
 ServiceProvider "1" --> "*" Qualification : holds
-Qualification "*" --> "1" Systeemrol : certifies for
+Qualification "*" --> "1" SystemRole : certifies for
 
-' === Delegation chain: HCP -> HCO (bedrijfsrol), HCO -> SP (systeemrol) ===
+' === Membership: organisational admission to a framework / information standard ===
+HealthcareOrganization "1" --> "*" Membership : holds
+
+' === Delegation chain: HCP -> HCO (business role), HCO -> SP (system role) ===
 HealthcareProfessional "1" --> "*" HealthcareProfessionalDelegation : issues
 HealthcareOrganization "1" --> "*" HealthcareProfessionalDelegation : receives
-HealthcareProfessionalDelegation "*" --> "*" Bedrijfsrol : delegates
+HealthcareProfessionalDelegation "*" --> "*" BusinessRole : delegates
 
 HealthcareOrganization "1" --> "*" ServiceProviderDelegation : issues
 ServiceProvider "1" --> "*" ServiceProviderDelegation : receives
-ServiceProviderDelegation "*" --> "*" Systeemrol : delegates
+ServiceProviderDelegation "*" --> "*" SystemRole : delegates
 
 HealthcareProfessional "*" --> "1" HealthcareOrganization : employed by
 HealthcareProfessional "*" --> "*" Patient : enrolls/treats
@@ -81,5 +89,10 @@ HealthcareProfessional "*" --> "*" Patient : enrolls/treats
 HealthcareProfessional "1" --> "*" Enrollment : issues
 HealthcareOrganization "1" --> "*" Enrollment : receives
 Enrollment "*" --> "1" Patient : concerns
+
+' === Layout: credentials in one row so the IdentityClaim arrows run parallel (hidden, no semantics) ===
+Qualification -[hidden]right- HealthcareProfessionalDelegation
+HealthcareProfessionalDelegation -[hidden]right- ServiceProviderDelegation
+ServiceProviderDelegation -[hidden]right- Membership
 
 @enduml
