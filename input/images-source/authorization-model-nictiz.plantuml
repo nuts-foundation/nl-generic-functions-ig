@@ -12,11 +12,22 @@ skinparam classBorderColor #D6B000
 skinparam classFontStyle bold
 hide circle
 
-title Layer 1: Nictiz information-standard model (functional core)
+title Information layer (L1): the Nictiz information-standard model (functional core)
 
 class InformationStandard {
   name
   version
+}
+class Dataset {
+  name
+  version
+}
+class DatasetConcept {
+  name
+  type : group | item
+  valueDomain  [item only]
+  conformance  [baseline]
+  cardinality  [baseline]
 }
 class UseCase {
   name
@@ -30,41 +41,29 @@ class Transaction {
   version
   type : initial | back | stationary
 }
+class BusinessRole {
+  name
+}
 class SystemRole {
   name
   kind
 }
-class BusinessRole {
-  name
-}
-class Dataset {
-  name
-  version
-}
-class DatasetConcept {
-  name
-  type : group | item
-  valueDomain  [item only]
-  conformance  [baseline]
-  cardinality  [baseline]
-}
 
-InformationStandard "1" --> "*" UseCase : contains
-InformationStandard "1" --> "*" Dataset : defines (primary)
-UseCase "1" --> "*" TransactionGroup : groups
-TransactionGroup "1" --> "*" Transaction : composed of
-Transaction "*" --> "0..*" SystemRole : involves (sender / receiver)
-Transaction "*" --> "*" BusinessRole : performed by
-Transaction "*" --> "*" DatasetConcept : selects + profiles
+InformationStandard "1" -down-> "*" Dataset : defines (primary)
+InformationStandard "1" -down-> "*" UseCase : contains
+DatasetConcept "*" -up-> "1" Dataset : member of
+UseCase "1" -down-> "*" TransactionGroup : groups
+TransactionGroup "1" -down-> "*" Transaction : composed of
+Transaction "*" -up-> "*" DatasetConcept : selects + profiles
 DatasetConcept "group 1" o-- "*" DatasetConcept : contains (concept tree)
-DatasetConcept "*" --> "1" Dataset : member of
+Transaction "*" -down-> "*" BusinessRole : performed by
+Transaction "*" -down-> "0..*" SystemRole : involves (sender / receiver)
 
 note bottom of DatasetConcept
-  "selects + profiles" = the transaction dataset:
+  "selects + profiles" the transaction dataset:
   the transaction picks a subset and restricts each
   concept's baseline conformance / cardinality.
-  (Building-block / zib inheritance and the FHIR/CDA
-  representation are omitted here.)
+  Dataset details are omitted here for brevity.
 end note
 
 @enduml

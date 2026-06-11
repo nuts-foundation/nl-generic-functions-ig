@@ -19,7 +19,7 @@ title Role resolution and permission: two parallel pipelines
 ' === Shared input: the presented claims (mid-blue) ===
 class IdentityClaim #64B5F6 ##0D47A1
 
-' === Professional pipeline (left) ===
+' === Business-role pipeline (left) ===
 class RolePrerequisite
 class AuthorizationRole {
   name
@@ -28,31 +28,31 @@ class PermissionMatrix {
   allowed_combinations[]
 }
 
-' === System pipeline (right) ===
+' === System-role pipeline (right) ===
 class SystemRolePrerequisite
 class QualifiedSystemRole {
   name
 }
 
 ' === Layer 1 (Nictiz catalogue) - yellow ===
-class Transaction <<Nictiz layer>> #FFF2CC ##D6B000 {
+class Transaction <<information layer>> #FFF2CC ##D6B000 {
   name
 }
-class BusinessRole <<Nictiz layer>> #FFF2CC ##D6B000 {
+class BusinessRole <<information layer>> #FFF2CC ##D6B000 {
   name
 }
-class SystemRole <<Nictiz layer>> #FFF2CC ##D6B000 {
+class SystemRole <<information layer>> #FFF2CC ##D6B000 {
   name
 }
 
-' === Professional side: claims -> RolePrerequisite (OR) -> AuthorizationRole -> matrix ===
+' === Business-role side: claims -> RolePrerequisite (OR) -> AuthorizationRole -> matrix ===
 RolePrerequisite "*" -up-> "*" IdentityClaim : requires
 RolePrerequisite "*" --> "1" AuthorizationRole : resolves to
 AuthorizationRole "*" --> "1" BusinessRole : refines
 PermissionMatrix "1" -up-> "*" AuthorizationRole : permits
 PermissionMatrix "1" --> "*" Transaction : for
 
-' === System side: claims -> SystemRolePrerequisite (OR) -> QualifiedSystemRole (no matrix) ===
+' === System-role side: claims -> SystemRolePrerequisite (OR) -> QualifiedSystemRole (no matrix) ===
 SystemRolePrerequisite "*" -up-> "*" IdentityClaim : requires
 SystemRolePrerequisite "*" --> "1" QualifiedSystemRole : resolves to
 QualifiedSystemRole "*" --> "1" SystemRole : refines

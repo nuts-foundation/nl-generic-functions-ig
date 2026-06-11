@@ -19,9 +19,9 @@ skinparam noteBorderColor #999999
 legend top right
   Input categories on each step:
     **R**  Request inputs
-    **L1** Nictiz catalogue (layer 1)
-    **L2** Trust framework registry (layer 2)
-    **L3** Realisation catalogue (interactietabel)
+    **L1** information layer (catalogue)
+    **L2** trust layer (registry)
+    **L3** realisation layer (interactietabel)
 endlegend
 
 start

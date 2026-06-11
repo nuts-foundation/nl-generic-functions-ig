@@ -13,13 +13,13 @@ skinparam classBorderColor #2E7D32
 hide circle
 
 ' Layer 1 (Nictiz) entities referenced from this diagram (yellow)
-class Transaction <<Nictiz layer>> #FFF2CC ##D6B000 {
+class Transaction <<information layer>> #FFF2CC ##D6B000 {
   name
 }
 
-' Layer 3 realisation entities (green, like the OAuth artefacts):
-' the Operation is the AORTA interactietabel interactionId, not a
-' Nictiz layer-1 concept; FHIRResource is its FHIR realisation target.
+' Realisation-layer entities (green, like the OAuth artefacts):
+' the Operation is the AORTA interactietabel interactionId, not an
+' information-layer concept; FHIRResource is its FHIR realisation target.
 class Operation <<interactietabel>> {
   verb
   artifact
@@ -30,11 +30,11 @@ class FHIRResource <<FHIR>> {
 }
 
 ' Layer 2 entities referenced from this diagram (blue)
-abstract class IdentityClaim <<Layer 2>> #E1F5FE ##0277BD {
+abstract class IdentityClaim <<trust layer>> #E1F5FE ##0277BD {
   type
   value
 }
-class ServiceProvider <<Layer 2>> #E1F5FE ##0277BD {
+class ServiceProvider <<trust layer>> #E1F5FE ##0277BD {
   client_id
 }
 

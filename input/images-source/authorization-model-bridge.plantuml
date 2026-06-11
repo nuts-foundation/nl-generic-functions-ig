@@ -12,7 +12,7 @@ skinparam nodesep 14
 skinparam ranksep 34
 hide circle
 
-title Layer 1 to Layer 2 bridge (generic model; concrete values marked "e.g.")
+title Information layer (L1) to trust layer (L2) bridge (generic model; concrete values marked "e.g.")
 
 ' --------- Layer 1 (yellow / orange) ---------
 class "Transaction  <<query>>\n[e.g. Raadplegen medicatieafspraak]" as TX #FFF2CC {
@@ -66,10 +66,10 @@ MITZ ..> PAT : about
 
 legend left
   Colour = layer:
-  Yellow = Layer 1 (Nictiz) concept
-  Orange = Layer 1 building-block dataset (imported)
-  Blue   = Layer 2 (trust framework): requester-provided claim / data-subject
-  Purple = Layer 2: evaluated source-side (not requester-provided)
+  Yellow = information layer (L1) concept
+  Orange = information layer: building-block dataset (imported)
+  Blue   = trust layer (L2): requester-provided claim / data-subject
+  Purple = trust layer: evaluated source-side (not requester-provided)
   --
   Arrows: solid = layer-1 structure; dashed = cross-layer reference
 endlegend
