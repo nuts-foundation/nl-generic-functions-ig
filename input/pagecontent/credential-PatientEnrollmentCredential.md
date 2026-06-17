@@ -17,7 +17,7 @@ It is one way of asserting a patient care-giving relationship between a patient 
 
 **Purpose**: Assert that a patient (identified by BSN) is enrolled with a healthcare provider organization, signed by the healthcare worker who performed the BSN validation. The credential establishes a patient care-giving relationship that can serve as the legal basis for subsequent healthcare data exchanges.
 
-**Issuer**: `did:x509` of the healthcare professional or named employee that signs the credential. The certificate MUST be a UZI healthcare professional pass (pastype `Z`) or a named employee pass (pastype `N`).
+**Issuer**: `did:x509` of the healthcare professional or named employee that signs the credential. The certificate MUST be a UZI healthcare professional pass (pastype `Z`) or a named employee pass (pastype `N`); other pastypes MUST be rejected.
 
 **Subject**: `did:web` of the healthcare provider organization the patient is enrolled with.
 
@@ -31,7 +31,7 @@ It is one way of asserting a patient care-giving relationship between a patient 
 
 This credential replaces the AORTA SAML enrollment token used to register a patient with a care organization. The signer (a healthcare worker on a Z- or N-pas) takes responsibility for the BSN validation procedure.
 
-The credential carries no claim about the URA number of the healthcare provider: the issuer (an individual healthcare worker) cannot make a claim about the URA number of the organization. The binding between the subject `did:web` and the URA number is established through a separate `HealthcareProviderCredential` presented in the same Verifiable Presentation.
+The credential names the healthcare provider organization the patient is enrolled with (`hasEnrollment.issuedTo`) by its URA number. The binding between that URA number and the subject `did:web` of the healthcare provider must still be established through a separate `HealthcareProviderCredential` presented in the same Verifiable Presentation.
 
 The `HealthcareWorker` type is used regardless of whether the signer holds a healthcare professional pass (pastype `Z`) or a named employee pass (pastype `N`). Since `HealthcareProfessional` is a subtype of `HealthcareWorker`, both cases are covered. The role code is not relevant to the enrollment and is therefore not included.
 
@@ -44,6 +44,7 @@ All fields below are scoped to `credentialSubject`.
     <tr>
       <th>Path</th>
       <th>IRI</th>
+      <th>Card.</th>
       <th>Description / validation</th>
     </tr>
   </thead>
@@ -51,56 +52,91 @@ All fields below are scoped to `credentialSubject`.
     <tr>
       <td><code>id</code></td>
       <td>-</td>
+      <td>1</td>
       <td><code>did:web</code> of the healthcare provider organization</td>
     </tr>
     <tr>
       <td><code>@type</code></td>
       <td><code>gis:HealthcareProvider</code></td>
+      <td>1</td>
       <td>Always <code>HealthcareProvider</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.@type</code></td>
       <td><code>gis:PatientEnrollment</code></td>
+      <td>1</td>
       <td>Always <code>PatientEnrollment</code></td>
+    </tr>
+    <tr>
+      <td><code>hasEnrollment.issuedTo.@type</code></td>
+      <td><code>gis:HealthcareProvider</code></td>
+      <td>1</td>
+      <td>Always <code>HealthcareProvider</code></td>
+    </tr>
+    <tr>
+      <td><code>hasEnrollment.issuedTo.identifier.@type</code></td>
+      <td><code>schema:PropertyValue</code></td>
+      <td>1</td>
+      <td>Always <code>Identifier</code></td>
+    </tr>
+    <tr>
+      <td><code>hasEnrollment.issuedTo.identifier.system</code></td>
+      <td><code>schema:propertyID</code></td>
+      <td>1</td>
+      <td>Always <code>http://fhir.nl/fhir/NamingSystem/ura</code></td>
+    </tr>
+    <tr>
+      <td><code>hasEnrollment.issuedTo.identifier.value</code></td>
+      <td><code>schema:value</code></td>
+      <td>1</td>
+      <td>URA number of the healthcare provider organization the patient is enrolled with</td>
     </tr>
     <tr>
       <td><code>hasEnrollment.patient.@type</code></td>
       <td><code>gis:Patient</code></td>
+      <td>1</td>
       <td>Always <code>Patient</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.patient.identifier.@type</code></td>
       <td><code>schema:PropertyValue</code></td>
+      <td>1</td>
       <td>Always <code>Identifier</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.patient.identifier.system</code></td>
       <td><code>schema:propertyID</code></td>
+      <td>1</td>
       <td>Always <code>http://fhir.nl/fhir/NamingSystem/bsn</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.patient.identifier.value</code></td>
       <td><code>schema:value</code></td>
+      <td>1</td>
       <td>BSN of the patient</td>
     </tr>
     <tr>
       <td><code>hasEnrollment.enrolledBy.@type</code></td>
       <td><code>gis:HealthcareWorker</code></td>
+      <td>1</td>
       <td>Always <code>HealthcareWorker</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.enrolledBy.identifier.@type</code></td>
       <td><code>schema:PropertyValue</code></td>
+      <td>1</td>
       <td>Always <code>Identifier</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.enrolledBy.identifier.system</code></td>
       <td><code>schema:propertyID</code></td>
+      <td>1</td>
       <td>Always <code>http://fhir.nl/fhir/NamingSystem/uzi-nr-pers</code></td>
     </tr>
     <tr>
       <td><code>hasEnrollment.enrolledBy.identifier.value</code></td>
       <td><code>schema:value</code></td>
+      <td>1</td>
       <td>UZI number of the executor; MUST correspond to the UZI number in the issuer DID</td>
     </tr>
   </tbody>
@@ -117,6 +153,10 @@ graph TD
     VC -->|credentialSubject| HP["HealthcareProvider"]
     HP -->|id| HPID["did:web:huisarts-delinden.nl"]
     HP -->|hasEnrollment| PE["PatientEnrollment"]
+    PE -->|issuedTo| ITO["HealthcareProvider"]
+    ITO -->|identifier| ITOID["Identifier"]
+    ITOID -->|system| ITOSYS["http://fhir.nl/fhir/NamingSystem/ura"]
+    ITOID -->|value| ITOVAL["12345678 (URA)"]
     PE -->|patient| PAT["Patient"]
     PAT -->|identifier| PATID["Identifier"]
     PATID -->|system| PATSYS["http://fhir.nl/fhir/NamingSystem/bsn"]
@@ -166,6 +206,7 @@ The credential uses the GIS JSON-LD context, which is shared across GIS credenti
     "authorizationRule": "gis:authorizationRule",
     "authorizedActions": "gis:authorizedActions",
     "hasEnrollment": "gis:hasEnrollment",
+    "issuedTo": "gis:issuedTo",
     "patient": "gis:patient",
     "enrolledBy": "gis:enrolledBy",
     "services": "gis:services"
@@ -218,30 +259,31 @@ JWT Payload:
       "@type": "HealthcareProvider",
       "hasEnrollment": {
         "@type": "PatientEnrollment",
+        "issuedTo": {
+          "@type": "HealthcareProvider",
+          "identifier": {
+            "@type": "Identifier",
+            "system": "http://fhir.nl/fhir/NamingSystem/ura",
+            "value": "12345678"
+          }
+        },
         "patient": {
           "@type": "Patient",
-          "identifier": [{
+          "identifier": {
             "@type": "Identifier",
             "system": "http://fhir.nl/fhir/NamingSystem/bsn",
             "value": "999911234"
-          }]
+          }
         },
         "enrolledBy": {
           "@type": "HealthcareWorker",
-          "identifier": [{
+          "identifier": {
             "@type": "Identifier",
             "system": "http://fhir.nl/fhir/NamingSystem/uzi-nr-pers",
             "value": "90001234"
-          }]
+          }
         }
       }
-    },
-    "credentialStatus": {
-      "id": "https://credential-service.eat-europe.nl/statuslist/zv-90001234#4521",
-      "type": "StatusList2021Entry",
-      "statusPurpose": "revocation",
-      "statusListIndex": "4521",
-      "statusListCredential": "https://credential-service.eat-europe.nl/statuslist/zv-90001234"
     }
   }
 }
