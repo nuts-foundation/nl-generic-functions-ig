@@ -141,6 +141,15 @@ pages:
     credential-HealthcareProfessionalDelegationCredential.md:
       title: HealthcareProfessionalDelegationCredential
       generation: markdown
+    credential-HealthcareProviderCredential.md:
+      title: HealthcareProviderCredential
+      generation: markdown
+    credential-ServiceProviderCredential.md:
+      title: ServiceProviderCredential
+      generation: markdown
+    credential-ServiceProviderDelegationCredential.md:
+      title: ServiceProviderDelegationCredential
+      generation: markdown
 
   history.md:
     title: History

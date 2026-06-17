@@ -32,6 +32,9 @@ This IG defined the following credential types.
 | [HealthcareProviderRoleTypeCredential](credential-HealthcareProviderRoleTypeCredential.html)             | Establishes the category or type of healthcare services a provider organization is authorized to offer.      | draft          |
 | [DeziUserCredential](credential-DeziUserCredential.html)                                                 | Wraps a Dezi "verklaring" from the OIDC UserInfo object to assert the identity of a healthcare worker and their employment relationship.  | draft          |
 | [HealthcareProfessionalDelegationCredential](credential-HealthcareProfessionalDelegationCredential.html) | Asserts that a healthcare professional has delegated a defined set of authorized actions to a healthcare provider, as the VC counterpart of the AORTA SAML mandate token. | draft          |
+| [HealthcareProviderCredential](credential-HealthcareProviderCredential.html)                             | Identifies a healthcare provider by its URA number, built from UZI server certificate material through the `did:x509` DID method. | draft          |
+| [ServiceProviderCredential](credential-ServiceProviderCredential.html)                                   | Asserts that a service provider is authorized within the agreement framework and competent to provide one or more services. | draft          |
+| [ServiceProviderDelegationCredential](credential-ServiceProviderDelegationCredential.html)               | Asserts that a healthcare provider authorizes a service provider to act on its behalf within a defined authorization scope. | draft          |
 | [X509Credential](credential-X509Credential.html)                                                         | Represents attributes from an X.509 certificate, anchored in a trusted CA through the `did:x509` DID method. | production use |
 
 ##### Credential type status
