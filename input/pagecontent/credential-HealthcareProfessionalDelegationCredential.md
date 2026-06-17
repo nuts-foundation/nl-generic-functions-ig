@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2026 Steven van der Vegt
+SPDX-FileCopyrightText: 2026 Rein Krul
 
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
