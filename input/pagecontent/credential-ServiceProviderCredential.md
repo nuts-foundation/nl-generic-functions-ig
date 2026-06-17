@@ -33,13 +33,13 @@ It does not assert any authority to act on behalf of a healthcare provider; that
 
 **Proof of Possession**: presenter is holder: the identifier of the presenter MUST equal the credential subject identifier.
 
-**Trust anchors**: the system operator (`stelselhouder`) of the agreement framework. The issuer `did:web` MUST use a `.nl` top-level domain.
+**Trust anchors**: the system operator (`stelselhouder`) of the agreement framework. Framework-specific issuer and trust requirements are defined per agreement framework; see [Agreement framework specifics](#agreement-framework-specifics).
 
 #### Background
 
 This credential provides the application and service context of a service provider. It confirms that the service provider is authorized within the agreement framework, not that it may act on behalf of a particular healthcare provider. The authority to act on behalf of a healthcare provider is carried by the [`ServiceProviderDelegationCredential`](credential-ServiceProviderDelegationCredential.html).
 
-The set of valid values for `services` is determined by the applicable agreement framework (`afspraakstelsel`). Initially the defined services are `gbc-client` and `gbc-server`.
+The set of valid values for `services` is determined by the applicable agreement framework (`afspraakstelsel`); see [Agreement framework specifics](#agreement-framework-specifics) for the AORTA service definitions.
 
 #### Attributes
 
@@ -77,7 +77,7 @@ All fields below are scoped to `credentialSubject`.
       <td><code>services</code></td>
       <td><code>gis:services</code></td>
       <td>1..*</td>
-      <td>Services the service provider is competent to provide; initially <code>gbc-client</code> or <code>gbc-server</code></td>
+      <td>Services the service provider is competent to provide, as defined by the agreement framework</td>
     </tr>
   </tbody>
 </table>
@@ -98,55 +98,11 @@ graph TD
 
 #### JSON-LD Context
 
-The credential uses the GIS JSON-LD context, which is shared across GIS credentials:
-
-```json
-{
-  "@context": {
-    "gis": "http://gis-nl.example/",
-    "schema": "http://schema.org/",
-
-    "HealthcareProvider": "gis:HealthcareProvider",
-    "HealthcareProfessional": "gis:HealthcareProfessional",
-    "HealthcareWorker": "gis:HealthcareWorker",
-    "Patient": "gis:Patient",
-    "ServiceProvider": "gis:ServiceProvider",
-
-    "Delegation": "gis:Delegation",
-    "DelegationScope": "gis:DelegationScope",
-    "PatientEnrollment": "gis:PatientEnrollment",
-
-    "Identifier": "schema:PropertyValue",
-    "identifier": {
-      "@id": "schema:identifier",
-      "@container": "@set"
-    },
-    "system": "schema:propertyID",
-    "value": "schema:value",
-    "roleCode": {
-      "@id": "gis:roleCode",
-      "@type": "http://fhir.nl/fhir/NamingSystem/uzi-rolcode"
-    },
-    "name": "schema:name",
-
-    "hasDelegation": "gis:hasDelegation",
-    "issuedTo": "gis:issuedTo",
-    "issuedBy": "gis:issuedBy",
-    "delegatedBy": "gis:delegatedBy",
-    "scope": "gis:scope",
-    "authorizationRule": "gis:authorizationRule",
-    "authorizedActions": "gis:authorizedActions",
-    "hasEnrollment": "gis:hasEnrollment",
-    "patient": "gis:patient",
-    "enrolledBy": "gis:enrolledBy",
-    "services": "gis:services"
-  }
-}
-```
+The credential uses the shared [GIS JSON-LD context](credential-jsonld-context.html).
 
 #### Example credential
 
-The following is a non-normative example of a `ServiceProviderCredential` using the [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model-1.1/#json-web-token) JWT encoding. It asserts that the service provider identified by `did:web:dienstverlener.example.nl` is authorized to provide the `gbc-client` service.
+The following is a non-normative example of a `ServiceProviderCredential` using the [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model-1.1/#json-web-token) JWT encoding, using values from the AORTA agreement framework (see [Agreement framework specifics](#agreement-framework-specifics)). It asserts that the service provider identified by `did:web:dienstverlener.example.nl` is authorized to provide the `gbc-client` service.
 
 JWT Header:
 
@@ -192,10 +148,23 @@ JWT Payload:
 
 In addition to the generic validation steps from the [Credential Catalog](credential-catalog.html#profile), verifiers MUST perform the following checks:
 
-1. The issuer is the `did:web` of a trusted system operator (`stelselhouder`) of the agreement framework, using a `.nl` top-level domain.
+1. The issuer is the `did:web` of a trusted system operator (`stelselhouder`) of the agreement framework. Framework-specific issuer requirements apply; see [Agreement framework specifics](#agreement-framework-specifics).
 2. The credential `type` array includes `ServiceProviderCredential`.
 3. The `services` claim contains at least one service defined by the agreement framework.
 4. The `sub` claim matches `credentialSubject.id` (if present).
+
+#### Agreement framework specifics
+
+The main specification above is agreement-framework-generic. The issuer identity and the value set for `services` are defined per agreement framework (`afspraakstelsel`).
+
+##### AORTA
+
+Within the AORTA agreement framework:
+
+- **Issuer**: the AORTA system operator (`stelselhouder`). The issuer `did:web` MUST use a `.nl` top-level domain (e.g. `did:web:stelselhouder.example.nl`).
+- **Services**: the `services` claim MUST contain one or more of the AORTA-defined services. Initially the defined services are:
+  - `gbc-client` — the service provider acts as a client requesting data.
+  - `gbc-server` — the service provider acts as a server providing data.
 
 #### Example use cases
 

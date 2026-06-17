@@ -114,51 +114,7 @@ graph TD
 
 #### JSON-LD Context
 
-The credential uses the GIS JSON-LD context, which is shared across GIS credentials:
-
-```json
-{
-  "@context": {
-    "gis": "http://gis-nl.example/",
-    "schema": "http://schema.org/",
-
-    "HealthcareProvider": "gis:HealthcareProvider",
-    "HealthcareProfessional": "gis:HealthcareProfessional",
-    "HealthcareWorker": "gis:HealthcareWorker",
-    "Patient": "gis:Patient",
-    "ServiceProvider": "gis:ServiceProvider",
-
-    "Delegation": "gis:Delegation",
-    "DelegationScope": "gis:DelegationScope",
-    "PatientEnrollment": "gis:PatientEnrollment",
-
-    "Identifier": "schema:PropertyValue",
-    "identifier": {
-      "@id": "schema:identifier",
-      "@container": "@set"
-    },
-    "system": "schema:propertyID",
-    "value": "schema:value",
-    "roleCode": {
-      "@id": "gis:roleCode",
-      "@type": "http://fhir.nl/fhir/NamingSystem/uzi-rolcode"
-    },
-    "name": "schema:name",
-
-    "hasDelegation": "gis:hasDelegation",
-    "issuedTo": "gis:issuedTo",
-    "issuedBy": "gis:issuedBy",
-    "delegatedBy": "gis:delegatedBy",
-    "scope": "gis:scope",
-    "authorizationRule": "gis:authorizationRule",
-    "authorizedActions": "gis:authorizedActions",
-    "hasEnrollment": "gis:hasEnrollment",
-    "patient": "gis:patient",
-    "enrolledBy": "gis:enrolledBy",
-    "services": "gis:services"
-  }
-}
-```
+The credential uses the shared [GIS JSON-LD context](credential-jsonld-context.html).
 
 #### Example credential
 
