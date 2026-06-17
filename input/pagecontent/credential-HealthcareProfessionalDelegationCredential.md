@@ -28,7 +28,7 @@ The healthcare professional signs the credential with the signing key of their U
 
 This credential replaces the AORTA SAML mandate token used to delegate authority from a healthcare professional to a healthcare provider.
 
-The credential carries no claim about the URA number of the healthcare provider: the issuer (an individual healthcare professional) cannot make a claim about the URA number of the organization. The binding between the subject `did:web` and the URA number must be established through an additional credential presented in the same Verifiable Presentation.
+The credential names the healthcare provider the mandate is issued to (`hasDelegation.issuedTo`) by its URA number. The binding between that URA number and the subject `did:web` of the healthcare provider must still be established through an additional credential presented in the same Verifiable Presentation.
 
 By signing the credential with their UZI Z-pas, the healthcare professional makes a personal claim about the scope of the delegation: the authorization rule and the set of authorized actions.
 
@@ -63,6 +63,30 @@ All fields below are scoped to `credentialSubject`.
       <td><code>gis:Delegation</code></td>
       <td>1</td>
       <td>Always <code>Delegation</code></td>
+    </tr>
+    <tr>
+      <td><code>hasDelegation.issuedTo.@type</code></td>
+      <td><code>gis:HealthcareProvider</code></td>
+      <td>1</td>
+      <td>Always <code>HealthcareProvider</code></td>
+    </tr>
+    <tr>
+      <td><code>hasDelegation.issuedTo.identifier.@type</code></td>
+      <td><code>schema:PropertyValue</code></td>
+      <td>1</td>
+      <td>Always <code>Identifier</code></td>
+    </tr>
+    <tr>
+      <td><code>hasDelegation.issuedTo.identifier.system</code></td>
+      <td><code>schema:propertyID</code></td>
+      <td>1</td>
+      <td>Always <code>http://fhir.nl/fhir/NamingSystem/ura</code></td>
+    </tr>
+    <tr>
+      <td><code>hasDelegation.issuedTo.identifier.value</code></td>
+      <td><code>schema:value</code></td>
+      <td>1</td>
+      <td>URA number of the healthcare provider within which the mandate is valid</td>
     </tr>
     <tr>
       <td><code>hasDelegation.delegatedBy.@type</code></td>
@@ -128,6 +152,10 @@ graph TD
     VC -->|credentialSubject| HP["HealthcareProvider"]
     HP -->|id| HPID["did:web:huisarts-delinden.nl"]
     HP -->|hasDelegation| DEL["Delegation"]
+    DEL -->|issuedTo| ITO["HealthcareProvider"]
+    ITO -->|identifier| ITOID["Identifier"]
+    ITOID -->|system| ITOSYS["http://fhir.nl/fhir/NamingSystem/ura"]
+    ITOID -->|value| ITOVAL["12345678 (URA)"]
     DEL -->|delegatedBy| HCP["HealthcareProfessional"]
     HCP -->|identifier| HCPID["Identifier"]
     HCPID -->|system| HCPSYS["http://fhir.nl/fhir/NamingSystem/uzi-nr-pers"]
@@ -172,6 +200,7 @@ The credential uses the GIS JSON-LD context, which is shared across GIS credenti
     "name": "schema:name",
 
     "hasDelegation": "gis:hasDelegation",
+    "issuedTo": "gis:issuedTo",
     "delegatedBy": "gis:delegatedBy",
     "scope": "gis:scope",
     "authorizationRule": "gis:authorizationRule",
@@ -231,13 +260,21 @@ JWT Payload:
       "@type": "HealthcareProvider",
       "hasDelegation": {
         "@type": "Delegation",
+        "issuedTo": {
+          "@type": "HealthcareProvider",
+          "identifier": {
+            "@type": "Identifier",
+            "system": "http://fhir.nl/fhir/NamingSystem/ura",
+            "value": "12345678"
+          }
+        },
         "delegatedBy": {
           "@type": "HealthcareProfessional",
-          "identifier": [{
+          "identifier": {
             "@type": "Identifier",
             "system": "http://fhir.nl/fhir/NamingSystem/uzi-nr-pers",
             "value": "90001234"
-          }],
+          },
           "roleCode": "01.015"
         },
         "scope": {
@@ -255,7 +292,7 @@ JWT Payload:
 
 In addition to the generic validation steps from the [Credential Catalog](credential-catalog.html#profile), verifiers MUST perform the following checks:
 
-1. The issuer is a `did:x509` DID anchored in a trusted PKIoverheid intermediate CA for UZI healthcare professional passes (or a future GIS-VN intermediate CA).
+1. The issuer is a `did:x509` DID anchored in a trusted PKIoverheid intermediate CA for UZI healthcare professional passes (or a future GIS-VN intermediate CA), see "Trust Anchors" section.
 2. The pastype encoded in the issuer `did:x509` MUST be `Z` (healthcare professional pass). Other pastypes (e.g. `N` for named employee passes) MUST be rejected.
 3. The UZI number in `credentialSubject.hasDelegation.delegatedBy.identifier.value` MUST correspond to the UZI number encoded in the issuer `did:x509`.
 4. The UZI role code in `credentialSubject.hasDelegation.delegatedBy.roleCode` MUST correspond to the role code encoded in the issuer `did:x509`.
@@ -266,3 +303,13 @@ In addition to the generic validation steps from the [Credential Catalog](creden
 
 - A healthcare professional delegating a defined set of actions to the healthcare provider they work for, replacing the AORTA SAML mandate token.
 - A healthcare provider presenting proof of a personal mandate from a healthcare professional when requesting access to data held by another care organization, in addition to the organisational credentials of the requesting party.
+
+#### Trust Anchors
+
+The following trust chains are used for validating the credential:
+
+- Staat der Nederlanden Root CA - G3
+  - Staat der Nederlanden Organisatie Persoon CA - G3
+    - UZI-register Zorgverlener CA G3
+
+Refer to [https://cert.pkioverheid.nl/](https://cert.pkioverheid.nl/) for the certificates.
