@@ -16,7 +16,6 @@ This guide outlines the data requirements and principles underlying the GF Autho
 - Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
-<!--  for policy makers -->
 
 ### Solution overview
 
@@ -26,7 +25,7 @@ Just below this top level abstraction, there's a lot more to discuss:
 
 {% include authorization-overview-transactions.svg %}
 
-1. Authorization policy makers create authorization policies based on attributes specified in Healthcare Information models and standards. These attributes can be certain identifiers (BSN, URA, etc.), entity characteristics (organization type, practitioner role), permission records (qualifications, consent) and/or specified operations or capability statements for requesting and responding party
+1. Authorization policymakers create authorization policies based on attributes specified in Healthcare Information models and standards. These attributes can be certain identifiers (BSN, URA, etc.), entity characteristics (organization type, practitioner role), permission records (qualifications, consent) and/or specified operations or capability statements for requesting and responding party
 2. Requesting and responding parties need to acquire attributes (data) from authoritative data sources. When to get this data is not specified here. A (PKIoverheid) certificate from a Trust Service Provider may be fetched once a year, a CiBG-Dezi-token may be fetched when a practitioner starts his/her shift and a VZVZ Mitz patient consent may be fetched, by the responding party, just after receiving a data request.
 3. The requesting party can now create a request and send it to the responding party along with 'claims'; statement on the e.g. identity or characteristics of the requesting party. The responding party may add additional claims or attributes, for example, a local patient consent and/or the VZVZ Mitz consent preference.
 4. The request and all claims/attributes are input for the authorization policy. The input is evaluated against the policy. The outcome is a decision on whether the request is allowed or denied.  
@@ -40,9 +39,9 @@ GF Authorization only specifies the input-variables, policy evaluation and outpu
 
 This IG distinguishes 4 categories of actors:
 1. Authoritative data sources
-1. Authorization policy makers
-1. Requesting party (Data user)
-1. Responding party (Data holder)
+2. Authorization policymakers
+3. Requesting party (Data user)
+4. Responding party (Data holder)
 
 #### Authoritative data sources
 
@@ -56,15 +55,6 @@ PKIoverheid certificates. Used to identify the organization operating the client
 **CiBG-LRZa**:
 - Registry of care providers and their care service directory endpoint-urls
 
-**Care service directories**:
-- Can data holder handle my request? 
-- Endpoint-url of data holder
-
-**NOTE TO REVIEWER/EDITOR: Care service directory and SBV-Z currently aren't used in the authorization process. Should we remove them?**
-
-**SBV-Z**:
-- Used to check the identity (BSN) of the patient
-
 **Vektis Organization type**:
 - Vektis is the source of the care provider type. A care provider can be one or more types. For example: a pharmacy, hospital, general practitioner, care at home, etc.
 
@@ -77,9 +67,8 @@ PKIoverheid certificates. Used to identify the organization operating the client
 **NictiZ Healthcare Information standards**:
 Healthcare Information standards define which operations a data user or data holder should use/support. These standards also define HealthCare Information Models (HCIM's) and therefore which data labels, codes or categories can be used in policies. 
 
-#### Authorization policy makers
+#### Authorization policymakers
 Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
-<!-- publishing policies, policies should be merged without negotiation... Legislation is always input-->
 
 #### Requesting party (Data user)
 Creates a request, adds necessary attributes/claims about itself and sends it to the responding party 
@@ -96,26 +85,24 @@ This section defined the data model of the policy input.
 
 #### Subject
 This is the principal requesting the data. Attributes may come from Identity Providers (CiBG Dezi) and/or (client-)certificates.
-This IG defines the following attributes:
 
-- `client_id`: value identifying the application of the requester, e.g. `client_id` of the OAuth2-client.
-- `client_qualifications`: array of strings of data exchanges the client is qualified for.
-- `subject_id`: identifier of the practitioner (CiBG Dezi-nummer/UZI)
-- `subject_organization_id`: identifier of the organization of the practitioner (URA)
-- `subject_organization`: name of the organization of the practitioner
-- `subject_role`: array of strings indicating the roles of the practitioner (from CiBG Dezi / BIG-register)
-- `subject_facility_type`: type of the organization of the practitioner (Vektis)
+- `client.id`: value identifying the application of the requester, e.g. the `client_id` of the OAuth2-client.
+- `client.scopes`: array of policy names the client is requesting access for, derived from the space-separated OAuth2 `scope` claim.
+- `user.id`: identifier of the practitioner (CiBG Dezi-nummer/UZI).
+- `user.role`: role of the practitioner (from CiBG Dezi / BIG-register).
+- `organization.ura`: identifier of the organization of the practitioner (URA).
+- `organization.name`: name of the organization of the practitioner.
+- `organization.facility_type`: type of the organization of the practitioner (Vektis).
 
-This list can be extended with additional attributes for specific use-cases if needed.
+Additional attributes specific to a use-case may be added to the subject.
 
 #### Resource
-This is the requested data. Attributes are typically from the request URL and request parameters (e.g. FHIR search parameters).
+This is the requested data.
 
-**NOTE TO REVIEWER/EDITOR: `action.fhir_rest` communicates similar information, should these 2 converge? Knooppunt PDP currently only uses `resource.type`**
-
-- `type`: the type of the resource, for example 'MedicationRequest'
-- `id`: the identifier of the resource, for example the FHIR Patient resource ID from the request URL.
-- `properties`: **NOTE TO REVIEWER/EDITOR: to be specified**
+- `type`: the FHIR resource type, e.g. `MedicationRequest`.
+- `id`: the FHIR resource ID from the request, if applicable.
+- `version_id`: the version ID of the resource, if applicable.
+- `consents`: array of local consent records that give the requesting party access to the requested resource, enriched by the Policy Information Point. These are data-holder-local consent records (e.g. recorded when a referral was sent), distinct from patient consent preferences in VZVZ Mitz. Each object contains a `scope` string identifying the type of access granted (e.g. `eoverdracht`).
 
 #### Action
 The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
@@ -123,8 +110,8 @@ The action performed by the request. For example 'GET' (read/search), 'POST' (cr
 It contains information about the request, and a parsed representation of the request if supported by this IG.
 Policy writers are encouraged to use the connection type-specific properties, e.g. `fhir_rest.search_params` over `request.query_params`.
 
-- `name`: the name of the action, for example 'search'. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
-- `connection_type_code` (required): indicates the type of the connection. Policy writers are encouraged to use the [HL7 EndpointConnectionType](http://terminology.hl7.org/CodeSystem/endpoint-connection-type) code system whenever applicable. 
+- `name`: the name of the action, for example `search`. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
+- `connection_type_code` (required): indicates the type of the connection. Policy writers are encouraged to use the [HL7 EndpointConnectionType](http://terminology.hl7.org/CodeSystem/endpoint-connection-type) code system whenever applicable.
   This value informs the policy engine on how to interpret the request.
 - `request`:
   - `protocol` (required): the protocol of the request, for `HTTP/1.1`.
@@ -134,7 +121,7 @@ Policy writers are encouraged to use the connection type-specific properties, e.
   - `header`: a map of string arrays containing the header parameters of the request.
   - `body`: base64 encoded body of the request, for example for a FHIR resource creation or update.
 - `fhir_rest`: if the request is a HL7 FHIR REST request, the following properties apply:
-  - `capability_checked`: a boolean indicating whether the interaction is allowed by the associated FHIR CapabilityStatement. **NOTE TO REVIEWER/EDITOR: Move CapabilityStatement to actual policy, instead of being policy input?**
+  - `capability_checked`: a boolean indicating whether the interaction is allowed by the associated FHIR CapabilityStatement. It's set to `true` by the PDP after validating the request against the policy's FHIR CapabilityStatement.
   - `interaction_type`: a string indicating the type of FHIR interaction, for example `read`, `search-type`, `create`, `update`, etc.
   - `operation`: a string indicating the FHIR operation, for example `Patient-everything`. Only applicable if `interaction_type` is `operation`.
   - `search_params`: a map of string arrays containing the FHIR search parameters of the request, for example `{"status": ["active"], "patient": ["Patient/90546b0d-e323-47f3-909b-fb9504859f7b"]}`.
@@ -162,22 +149,28 @@ If both `patient_bsn` and `patient_id` are provided, they MUST refer to the same
 
 #### Example of a HL7 FHIR search request
 
-```
+```json
 {
   "subject": {
-    "client_id": "cee473c4-d9be-487b-b719-f552189d5891",
-    "client_qualifications": ["http://nictiz.nl/fhir/CapabilityStatement/mp-MedicationData.RetrieveServe","http://nictiz.nl/fhir/CapabilityStatement/bgz2017-servercapabilities","Twiin-TA-notification"],
-    "subject_id": "900000009",
-    "subject_organization_id": "87654321",
-    "subject_organization": "Harry Helpt",
-    "subject_role": ["01.041", "30.000", "01.010", "01.011"],
-    "subject_facility_type": "Z3"
+    "client": {
+      "id": "cee473c4-d9be-487b-b719-f552189d5891",
+      "scopes": ["medicatieoverdracht", "bgz"]
+    },
+    "user": {
+      "id": "900000009",
+      "role": "01.041"
+    },
+    "organization": {
+      "ura": "URA|87654321",
+      "name": "Harry Helpt",
+      "facility_type": "Z3"
+    }
   },
   "resource": {
     "type": "MedicationRequest",
-    "properties": {
-      "status": "active"
-    }
+    "id": "",
+    "version_id": "",
+    "consents": []
   },
   "action": {
     "name": "search",
@@ -209,7 +202,7 @@ If both `patient_bsn` and `patient_id` are provided, they MUST refer to the same
     "patient_bsn": "123456789",
     "patient_id": "90546b0d-e323-47f3-909b-fb9504859f7b",
     "mitz_consent": true,
-    "purpose_of_use": "treatment"
+    "purpose_of_use": "TREAT"
   }
 }
 ```
@@ -222,8 +215,44 @@ This is represented by the `allow` boolean variable (`true` or `false`) in the R
 Any other output SHALL be considered as informational and SHALL NOT be used for the decision of allowing or denying the request.
 For example, a policy may output the reason for denial, which can be logged for auditing or debugging purposes.
 
+#### Example: allowed (normative)
 
-**NOTE TO REVIEWER/EDITOR: Add more examples**
+The following is the normative output of a policy evaluation that allows the request:
+
+```json
+{
+  "allow": true
+}
+```
+
+#### Example: denied with reasons (non-normative)
+
+Implementations MAY return additional detail, for example to support logging and debugging. The following is a non-normative example of a denied request:
+
+```json
+{
+  "allow": false,
+  "reasons": [
+    {
+      "code": "not_allowed",
+      "description": "Patient did not give Mitz consent"
+    },
+    {
+      "code": "unexpected_input",
+      "description": "Could not complete Mitz consent check: Missing subject role"
+    }
+  ]
+}
+```
+
+Each reason SHOULD contain a `code` and a human-readable `description`. The `code` SHOULD be one of the following values, but implementations MAY extend this list with additional codes for implementation-specific purposes:
+
+- `info`: informational message, not a reason for denial.
+- `not_allowed`: the policy explicitly denied the request.
+- `unexpected_input`: required input was missing or invalid.
+- `not_implemented`: the policy or interaction type is not supported.
+- `internal_error`: an internal error occurred during policy evaluation.
+- `pip_error`: the Policy Information Point could not be reached or returned an error.
 
 ### Security and privacy considerations
 --TODO
