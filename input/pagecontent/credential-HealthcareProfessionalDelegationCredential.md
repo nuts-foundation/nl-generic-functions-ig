@@ -140,7 +140,13 @@ All fields below are scoped to `credentialSubject`.
   </tbody>
 </table>
 
-The set of valid values for `authorizationRule` and `authorizedActions` is determined by the applicable agreement framework (`afspraakstelsel`) and is yet to be decided.
+The set of valid values for `authorizationRule` and `authorizedActions` is determined by the applicable agreement framework (`afspraakstelsel`).
+
+<div class="stu-note" markdown="1">
+
+**Editorial note**: The definitive value sets for `authorizationRule` and `authorizedActions` are still to be determined.
+
+</div>
 
 #### Semantic relations
 
@@ -169,7 +175,7 @@ graph TD
 
 #### JSON-LD Context
 
-The credential uses the shared [GIS JSON-LD context](credential-jsonld-context.html).
+The credential uses the [GIS JSON-LD context](credential-jsonld-context.html).
 
 #### Example credential
 

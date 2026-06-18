@@ -27,7 +27,7 @@ It does not assert any authority to act on behalf of a healthcare provider; that
 
 **Proof type**: [JWT](https://www.w3.org/TR/vc-data-model-1.1/#json-web-token)
 
-**Signature algorithm**: `ES256` (recommended) or `ES512`
+**Signature algorithm**: `ES256` (recommended), `ES512` or `PS256`
 
 **Revocation method**: [Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/) via the optional `credentialStatus` field (not currently used).
 
@@ -98,7 +98,7 @@ graph TD
 
 #### JSON-LD Context
 
-The credential uses the shared [GIS JSON-LD context](credential-jsonld-context.html).
+The credential uses the [GIS JSON-LD context](credential-jsonld-context.html).
 
 #### Example credential
 

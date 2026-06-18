@@ -6,9 +6,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 ### GIS JSON-LD Context
 
-The GIS credentials share a single JSON-LD context, referenced from each credential's `@context`. It is defined here once so the individual credential pages do not repeat it.
+The GIS credentials use the following JSON-LD context, referenced from each credential's `@context`. It maps the terms used across the GIS credentials (`HealthcareProvider`, `ServiceProvider`, `Delegation`, `PatientEnrollment`, identifiers, delegation and enrollment relations) to the `gis:` (`http://gis-nl.example/`) and `schema:` (`http://schema.org/`) namespaces.
 
-The context maps the terms used across the GIS credentials (`HealthcareProvider`, `ServiceProvider`, `Delegation`, `PatientEnrollment`, identifiers, delegation and enrollment relations) to the `gis:` (`http://gis-nl.example/`) and `schema:` (`http://schema.org/`) namespaces.
+<div class="stu-note" markdown="1">
+
+**Editorial note**: The `gis:` namespace URL `http://gis-nl.example/` is a placeholder. The definitive context URL is still to be determined.
+
+</div>
 
 ```json
 {

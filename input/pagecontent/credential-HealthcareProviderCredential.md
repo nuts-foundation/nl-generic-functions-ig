@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 ### HealthcareProviderCredential
 
-The `HealthcareProviderCredential` proves that a healthcare provider can be uniquely identified within the agreement framework (`afspraakstelsel`) by its URA number (`UZI-register Abonneenummer`).
+The `HealthcareProviderCredential` proves that a healthcare provider can be uniquely identified by its URA number (`UZI-register Abonneenummer`).
 It identifies the healthcare provider but carries no authorization information itself.
 
 The credential is built from the healthcare provider's UZI server certificate through the `did:x509` DID method.
@@ -105,7 +105,7 @@ graph TD
     VC[HealthcareProviderCredential]
     VC -->|issuer| ISSUER["did:x509 (UZI server certificate)"]
     VC -->|credentialSubject| HP["HealthcareProvider"]
-    HP -->|id| HPID["did:web:huisarts-delinden.nl"]
+    HP -->|id| HPID["did:web:huisarts.example.nl"]
     HP -->|identifier| HPIDENT["Identifier"]
     HPIDENT -->|system| HPSYS["http://fhir.nl/fhir/NamingSystem/ura"]
     HPIDENT -->|value| HPVAL["12345678 (URA)"]
@@ -114,11 +114,11 @@ graph TD
 
 #### JSON-LD Context
 
-The credential uses the shared [GIS JSON-LD context](credential-jsonld-context.html).
+The credential uses the [GIS JSON-LD context](credential-jsonld-context.html).
 
 #### Example credential
 
-The following is a non-normative example of a `HealthcareProviderCredential` using the [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model-1.1/#json-web-token) JWT encoding. It asserts that the healthcare provider identified by `did:web:huisarts-delinden.nl` has URA `12345678`.
+The following is a non-normative example of a `HealthcareProviderCredential` using the [W3C Verifiable Credentials Data Model 1.1](https://www.w3.org/TR/vc-data-model-1.1/#json-web-token) JWT encoding. It asserts that the healthcare provider identified by `did:web:huisarts.example.nl` has URA `12345678`.
 
 JWT Header:
 
@@ -141,7 +141,7 @@ JWT Payload:
 ```json
 {
   "iss": "did:x509:0:sha256:YmFzZTY0...dHJ1c3Q=::subject:O:Huisarts%20De%20Linden::san:otherName:2.16.528.1.1007.99.2110-1-12345678-S-90000382-00.000-12345678",
-  "sub": "did:web:huisarts-delinden.nl",
+  "sub": "did:web:huisarts.example.nl",
   "jti": "urn:uuid:3e671c46-7a3b-4c1e-9b2a-4f8e6d2c1a5b",
   "nbf": 1740000000,
   "exp": 1786320000,
@@ -157,7 +157,7 @@ JWT Payload:
     "issuanceDate": "2025-02-20T00:00:00Z",
     "expirationDate": "2026-08-08T00:00:00Z",
     "credentialSubject": {
-      "id": "did:web:huisarts-delinden.nl",
+      "id": "did:web:huisarts.example.nl",
       "@type": "HealthcareProvider",
       "identifier": {
         "@type": "Identifier",
@@ -190,4 +190,10 @@ In addition to the generic validation steps from the [Credential Catalog](creden
 
 #### Trust Anchors
 
-The credential is validated against the PKIoverheid trust chain for UZI server certificates. Refer to [https://cert.pkioverheid.nl/](https://cert.pkioverheid.nl/) for the certificates.
+The following trust chains are used for validating the credential:
+
+- Staat der Nederlanden Private Root CA - G1
+  - Staat der Nederlanden Private Services CA - G1
+    - UZI-register Private Server CA G1
+
+Refer to [https://cert.pkioverheid.nl/](https://cert.pkioverheid.nl/) for the certificates.
