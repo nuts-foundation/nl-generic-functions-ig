@@ -35,6 +35,7 @@ This IG defined the following credential types.
 | [HealthcareProviderCredential](credential-HealthcareProviderCredential.html)                             | Identifies a healthcare provider by its URA number, built from UZI server certificate material through the `did:x509` DID method. | draft          |
 | [ServiceProviderCredential](credential-ServiceProviderCredential.html)                                   | Asserts that a service provider is authorized within the agreement framework and competent to provide one or more services. | draft          |
 | [ServiceProviderDelegationCredential](credential-ServiceProviderDelegationCredential.html)               | Asserts that a healthcare provider authorizes a service provider to act on its behalf within a defined authorization scope. | draft          |
+| [PatientEnrollmentCredential](credential-PatientEnrollmentCredential.html)                               | Asserts that a patient is enrolled with a healthcare provider organization, establishing a patient care-giving relationship as legal basis for data exchange. | draft          |
 | [X509Credential](credential-X509Credential.html)                                                         | Represents attributes from an X.509 certificate, anchored in a trusted CA through the `did:x509` DID method. | production use |
 
 ##### Credential type status
