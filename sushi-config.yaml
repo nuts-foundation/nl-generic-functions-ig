@@ -129,6 +129,9 @@ pages:
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
+    credential-jsonld-context.md:
+      title: GIS JSON-LD Context
+      generation: markdown
     credential-X509Credential.md:
       title: X509Credential
       generation: markdown
@@ -140,6 +143,15 @@ pages:
       generation: markdown
     credential-HealthcareProfessionalDelegationCredential.md:
       title: HealthcareProfessionalDelegationCredential
+      generation: markdown
+    credential-HealthcareProviderCredential.md:
+      title: HealthcareProviderCredential
+      generation: markdown
+    credential-ServiceProviderCredential.md:
+      title: ServiceProviderCredential
+      generation: markdown
+    credential-ServiceProviderDelegationCredential.md:
+      title: ServiceProviderDelegationCredential
       generation: markdown
     credential-PatientEnrollmentCredential.md:
       title: PatientEnrollmentCredential
