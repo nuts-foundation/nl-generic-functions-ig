@@ -17,7 +17,7 @@ This guide outlines the data requirements and principles underlying the GF Autho
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
 
-See [Authorization Information Model](authorization-model.html) for the proposed shared authorization model across trust frameworks, including the use-case scope convention for OAuth 2.0 access tokens. It complements the policy input data model defined below.
+See [Authorization Information Model](authorization-model.html) for the proposed shared authorization model across trust frameworks, including the transaction scope convention for OAuth 2.0 access tokens. That proposal moves the identity and permission checks to token issuance and partly reworks the model on this page: the policy evaluation defined below remains as a runtime enforcement point, to which a trust framework can assign context checks and state rules.
 <!--  for policy makers -->
 
 ### Solution overview

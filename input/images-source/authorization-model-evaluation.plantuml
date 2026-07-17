@@ -28,7 +28,7 @@ start
 
 :Receive AT request;
 note right
-  **R**: transaction scope token (tx),
+  **R**: transaction identifier (tx),
   optional operations,
   asserted identity claims,
   context claims
@@ -69,16 +69,19 @@ note right
   absent entry = deny)
 end note
 
-:Evaluate the use case's context gate;
+:Evaluate the context checks
+declared for issuance;
 note right
-  **L2**: required ContextClaims
+  **L2**: context checks; each check's
+  enforcement point is declared
+  per use case
   **R**: asserted context claims
   (enrollment, consent, purpose)
 end note
 
-:Mint AccessToken with the tx scope
-token, minted SoF scopes, carried
-claims, patient context;
+:Issue AccessToken with the tx
+identifier, granted SoF scopes,
+carried claims, patient context;
 note right
   **L3**: Operation -> FHIR profile ->
   resourceType (derives SoF scopes)
