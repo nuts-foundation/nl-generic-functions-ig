@@ -1,0 +1,95 @@
+@startuml openid4vci-consent-issuance
+
+title OpenID4VCI: Request UserConsentCredential
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial 
+hide footbox
+autoactivate on
+
+participant user as "User\n browser"
+participant ehr as "Client\n ehr.app"
+participant idp as "IDP\n idp.example"
+participant rs as "Resource Server\n rs.app"
+
+user -> ehr: GET /external-resource
+
+ehr -> idp: GET /.well-known/openid-credential-issuer
+idp --> ehr: 200 OK
+
+note left
+{
+  "credential_issuer": "https://idp.example",
+  "authorization_servers": [
+    "https://auth.idp.example"
+  ],
+  "credential_endpoint": "https://idp.example/credential",
+  "credential_configuration_ids": {
+    "UserConsentCredential": {
+      "format": "jwt_vc_json",
+      "cryptographic_binding_methods_supported": [
+        "did:web", "did:key"
+      ],
+      ...
+    }
+  }
+}
+end note
+
+
+group OpenID4VCI: Authorization Code Flow
+
+autonumber
+ehr --> user: 302 Found: auth.idp.example/authorize
+user -> idp: GET /authorize
+note right
+response_type=code
+  &client_id=ehr.app
+  &authorization_details...
+  &redirect_uri=https://ehr.app/callback
+end note
+idp --> user: 200 OK
+note left: html with\n consent form
+user -> idp: POST /consent
+note right: "User Alice consents to Organization A\n acting on her behalf"
+idp --> user: 302 Found: ehr.app/callback
+note left: code=Spl...
+user -> ehr: GET /callback
+ehr -> idp: POST /token
+note right
+grant_type=authorization_code
+  &client_id=ehr.app
+  &code=Spl...
+  &redirect_uri=https://ehr.app/callback
+end note
+idp --> ehr: 200 OK
+note left: access-token
+ehr -> idp: POST /credential
+note right
+Authorization: access-token
+
+{
+  "format": "jwt_vc_json",
+  "credential_definition": {
+    "type": ["VerifiableCredential",
+      "UserConsentCredential"]
+  },
+  "proof": {
+    "proof_type": "jwt",
+    "jwt": "eyJ..."
+  }
+}
+end note
+idp --> ehr: 200 OK
+note left: credential
+autonumber stop
+end
+ehr -> rs: [GFI-004]: Request AT
+rs --> ehr: 200 OK
+ehr -> rs: GET /resource
+rs --> ehr: 200 OK
+note left: external-resource
+ehr --> user: 200 OK
+note left: html with\n external resource
+
+@enduml
