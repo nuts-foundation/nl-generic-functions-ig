@@ -1,0 +1,38 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml notified-pull-task-lifecycle
+
+title "Coordination Task lifecycle"
+hide empty description
+skinparam roundCorner 7
+
+state requested
+state accepted
+state "in-progress" as inprogress
+state rejected
+state cancelled
+state completed
+state failed
+
+[*] --> requested : Placer creates
+
+requested --> accepted    : Fulfiller
+requested --> inprogress  : Fulfiller (shortcut)
+requested --> rejected    : Fulfiller
+requested --> cancelled   : Placer
+
+accepted --> inprogress   : Fulfiller
+accepted --> cancelled    : Placer
+
+inprogress --> completed  : Fulfiller
+inprogress --> failed     : Fulfiller
+inprogress --> cancelled  : Placer\n(via CancellationRequest Task)
+
+rejected  --> [*]
+cancelled --> [*]
+completed --> [*]
+failed    --> [*]
+
+@enduml

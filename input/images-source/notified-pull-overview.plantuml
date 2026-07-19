@@ -1,0 +1,41 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml notified-pull-overview
+autonumber
+
+title "Notified Pull — happy path"
+skinparam roundCorner 7
+skinparam sequenceGroupBorderThickness .5
+
+participant "Placer" as placer order 10
+participant "Fulfiller" as fulfiller order 20
+
+== Pre-coordination (once per partner) ==
+
+placer -> placer : Register Subscription for Fulfiller\n(broad, long-lived)
+
+== Notification ==
+
+placer -> placer : Create Request + Coordination Task\n(Task.status = requested)
+placer -> fulfiller ++: POST notification Bundle
+fulfiller --> placer --: 200 OK
+
+== Pull ==
+
+fulfiller -> placer ++: GET Coordination Task\n(_include Task.focus, Task.for)
+placer --> fulfiller --: 200 OK\nTask + Request + Patient
+
+fulfiller -> placer ++: PUT Coordination Task\n(Task.status = in-progress)
+placer --> fulfiller --: 200 OK\nTask
+
+loop FHIR queries derived from Request (optional PlanDefinition)
+  fulfiller -> placer ++: FHIR search / read
+  placer --> fulfiller --: 200 OK\nBundle / resource
+end
+
+fulfiller -> placer ++: PUT Coordination Task\n(Task.status = completed)
+placer --> fulfiller --: 200 OK\nTask
+
+@enduml
