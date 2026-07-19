@@ -5,6 +5,11 @@ SPDX-FileCopyrightText: 2025 Roland Groen
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
+<div class="stu-note">
+<strong>Deprecated:</strong> VWS has published an official version of this specification.
+Implementors should use the <a href="https://minvws.github.io/generiekefuncties-docs/localization.html">MinVWS Localization specification</a> instead of this page.
+</div>
+
 ### Introduction
 This FHIR Implementation Guide specifies the Generic Function 'Medical Record Localization' (GF Localization), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GF-Localization provides a standardized framework that enables healthcare professionals to discover which organizations hold relevant patient data of a specific type, ensuring GDPR compliance through proportionality and subsidiarity principles while facilitating secure and efficient health information exchange.
 

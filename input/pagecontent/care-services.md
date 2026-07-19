@@ -5,6 +5,11 @@ SPDX-FileCopyrightText: 2025 Rein Krul
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
+<div class="stu-note">
+<strong>Deprecated:</strong> VWS has published an official version of this specification.
+Implementors should use the <a href="https://minvws.github.io/generiekefuncties-docs/care-services.html">MinVWS Care Services specification</a> instead of this page.
+</div>
+
 ### Introduction
 
 This FHIR Implementation Guide specifies the technical components of the Generic Function Addressing (GFA), a national initiative led by the Dutch Ministry of Health, Welfare and Sport (VWS). GFA aims to establish a standardized, interoperable system for discovering and sharing current (digital) addresses of healthcare providers, enabling reliable and efficient exchange of health data across healthcare systems and organizations.
