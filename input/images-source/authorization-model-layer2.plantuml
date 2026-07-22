@@ -36,11 +36,19 @@ class Qualification <<IdentityClaim>> #64B5F6 ##0D47A1 {
   version
 }
 class ServiceProviderDelegation <<IdentityClaim>> #64B5F6 ##0D47A1
+class UserAssertion <<IdentityClaim>> #64B5F6 ##0D47A1 {
+  identifier
+  rolcode
+  session_validity
+}
 class Membership <<IdentityClaim>> #64B5F6 ##0D47A1 {
   framework
   information_standard [optional]
 }
-class HealthcareProfessionalDelegation <<IdentityClaim>> #64B5F6 ##0D47A1
+class HealthcareProfessionalDelegation <<IdentityClaim>> #64B5F6 ##0D47A1 {
+  identifier
+  rolcode
+}
 class Enrollment <<ContextClaim>> #64B5F6 ##0D47A1
 
 ' === Information layer (L1) roles - yellow (bottom row) ===
@@ -61,6 +69,8 @@ ServiceProvider "1" -down-> "*" Qualification : holds
 HealthcareOrganization "1" -down-> "*" ServiceProviderDelegation : issues
 ServiceProvider "1" -down-> "*" ServiceProviderDelegation : receives
 HealthcareOrganization "1" -down-> "*" Membership : holds
+HealthcareProfessional "1" -down-> "*" UserAssertion : issues
+ServiceProvider "1" -down-> "*" UserAssertion : receives
 HealthcareProfessional "1" -down-> "*" HealthcareProfessionalDelegation : issues
 HealthcareOrganization "1" -down-> "*" HealthcareProfessionalDelegation : receives
 HealthcareProfessional "1" -down-> "*" Enrollment : issues
@@ -76,7 +86,8 @@ Enrollment "*" -up-> "1" Patient : concerns
 ServiceProvider -[hidden]right- HealthcareOrganization
 Qualification -[hidden]right- ServiceProviderDelegation
 ServiceProviderDelegation -[hidden]right- Membership
-Membership -[hidden]right- HealthcareProfessionalDelegation
+Membership -[hidden]right- UserAssertion
+UserAssertion -[hidden]right- HealthcareProfessionalDelegation
 HealthcareProfessionalDelegation -[hidden]right- Enrollment
 SystemRole -[hidden]right- BusinessRole
 

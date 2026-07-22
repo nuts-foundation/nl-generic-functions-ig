@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 ### Introduction
 
-Dutch healthcare data exchange runs under several trust frameworks (AORTA-on-FHIR, MedMij, Twiin, Nuts use-case communities). Each one has, over time, built its own authorization model. Each model is well documented within its own framework. But it is framework-local: it lives spread over registry definitions, policy documents, and wire conventions, in a vocabulary that only works inside that framework. No shared national model exists. The models overlap conceptually: qualifications, delegations, roles, and context checks appear in all of them. Yet they never align, and there is no shared vocabulary to compare them in.
+Dutch healthcare data exchange runs under several trust frameworks (AORTA-on-FHIR, MedMij, Twiin, Nuts use-case communities). Each one has, over time, built its own authorization model. Each model is well documented within its own framework. But it is framework-local: it lives spread over registry definitions, policy documents, and wire conventions, in a vocabulary that only works inside that framework. The models overlap conceptually: qualifications, delegations, roles, and context checks appear in all of them. Yet they never align: no shared vocabulary exists to compare them in.
 
 This proposal makes the model explicit. Its goal is twofold. First, it defines a shared _authorization information model_ in which each trust framework can express its own policies, layered on top of the Nictiz information-standard catalogue as the common basis. Second, it derives from that model one OAuth 2.0 convention for requesting access tokens, so that the frameworks share a wire format where they interoperate.
 
@@ -35,7 +35,7 @@ The Examples section shows every construct introduced below as a filled-in table
 
 This proposal models authorization in three layers. The layering is a modelling decision, not a given: it is chosen because the layers have different owners, change at different rates, and answer different questions. A layer groups concerns, not authors; one governance body can author artefacts in more than one layer.
 
-- **Layer 1, Information Standards** (the _information layer_) defines _what_ transactions exist and _what data_ they carry. In the Netherlands most information standards are maintained by Nictiz; this proposal adopts the Nictiz meta-model, per the [Handleiding Wiki documentatie](https://informatiestandaarden.nictiz.nl/wiki/Handleiding_Wiki_documentatie), as the layer-1 vocabulary. It catalogues information standards, use cases, transaction groups, transactions, system roles, business roles, and the datasets they operate on. The data definitions (datasets, zibs) are part of this layer; there is no separate data layer. The same for all trust frameworks.
+- **Layer 1, Information Standards** (the _information layer_) defines _what_ transactions exist and _what data_ they carry. In the Netherlands most information standards are maintained by Nictiz; this proposal adopts the Nictiz meta-model, per the [Handleiding Wiki documentatie](https://informatiestandaarden.nictiz.nl/wiki/Handleiding_Wiki_documentatie), as the layer-1 vocabulary. It catalogues information standards, use cases, transaction groups, transactions, system roles, business roles, and the datasets they operate on. The data definitions (datasets, zibs) are part of this layer; there is no separate data layer. This layer is the same for all trust frameworks.
 - **Layer 2, Trust Framework** (the _trust layer_) specifies _who_ may perform _which_ transactions, and under what conditions: role resolution, the permission matrix, qualifications, the delegation chain, identity claims, context claims. Today these constructs are filled per framework (VZVZ, MedMij, Twiin, Nuts-toepassingen). The model does not tie them to per-framework governance: with a shared vocabulary, layer-2 policies can be lifted to national governance where that is wanted.
 - **Layer 3, Realisation** (the _realisation layer_) specifies _how_ a transaction reaches the wire: the FHIR profiles that represent its data, the wire-level operations that carry it, and how a single authorization decision surfaces in an OAuth 2.0 exchange. The wire artefacts are the access-token request, the issued access token, and the granted scopes that the resource server enforces. This proposal realises the granted scopes as SMART on FHIR v2 scopes; the model does not depend on that choice.
 
@@ -61,7 +61,7 @@ Three structural points matter for authorization:
 - **There is no operation concept in layer 1.** The functional model stops at the transaction. The fine-grained wire-level operations are realisation constructs and are introduced in layer 3.
 - **Lifecycle rules are layer-1 facts.** Where an information standard defines a lifecycle for its data (status values and the permitted transitions), that state machine belongs to this layer. It surfaces in authorization as state rules on layer-3 operations, enforced by the resource server at request time; layer 3 works out why such rules never ride the access token.
 
-The transaction dataset itself shows which constructs belong in layer 2; the design notes contain that derivation.
+The transaction dataset itself shows what belongs in layer 2; the design notes contain that derivation.
 
 #### Layer 2: Trust Framework
 
@@ -73,16 +73,17 @@ This view shows who the actors are, the credentials carrying the identity claims
 
 {% include authorization-model-layer2.svg %}
 
-- **HealthcareProfessional, HealthcareOrganization, ServiceProvider**: the three actor layers of the professional channel. The professional is employed by an organisation; the organisation is served by a service provider. The model names healthcare organisations because the trust frameworks do; organisations outside care are out of scope here, though the mechanism does not preclude them.
+- **HealthcareProfessional, HealthcareOrganization, ServiceProvider**: the three actors of the professional channel. The professional is employed by an organisation; the organisation is served by a service provider. The model names healthcare organisations because the trust frameworks do; organisations outside care are out of scope here, though the mechanism does not preclude them.
 - **Patient**: the data subject, referenced via their BSN in the `patient` attribute of the AccessTokenRequest. In the professional channel the request principal is the ServiceProvider acting for the professional and the organisation; in the patient channel the patient is also the authenticated principal, requesting via their PGO (see the MedMij example).
-- **IdentityClaim** (abstract): a typed assertion about the requester. Generalises rolcode, organisation identifiers, the system-role or business-role assertion, the Qualification, the Membership, and the two delegations. Each trust framework defines its own vocabulary.
+- **IdentityClaim** (abstract): a typed assertion about the requester. Generalises rolcode, organisation identifiers, the system-role or business-role assertion, the Qualification, the Membership, the UserAssertion, and the two standing delegations. Each trust framework defines its own vocabulary.
 - **Qualification**: the claim by which a ServiceProvider asserts that its product passed qualification for a given system role. The qualification itself is an upstream certification process; the claim asserts its result. AORTA records qualification results in TKID; a successful MedMij qualification admits the party into the DVA (provider-side) or DVP (PGO-side) role. Qualification here is product qualification: it certifies software for a system role. Professional competences (a nurse qualified for medicatie-toediening, say) are not Qualifications in this model; they travel as rolcodes or other identity claims and feed role resolution.
-- **HealthcareProfessional-to-HealthcareOrganization delegation**: the credential by which a professional delegates a set of business roles to their organisation. It is the _mandaattoken_ behind the matrix's `delegatable` flag. It is needed whenever the role is exercised by someone other than the professional who holds it: the organisation acting unattended, or an authenticated user who lacks the required rolcode and works under the professional's responsibility. A professional with the required rolcode asserts the role directly. Whether the delegation surfaces as a wire credential at all depends on the enforcement topology (below).
+- **UserAssertion**: the claim by which the system asserts which professional is acting: their identifier and rolcode, valid for the working session. It is the professional's short-lived delegation of their identity to the system they are logged into. Attended means a UserAssertion is present; the design notes work out how it relates to the standing delegations below.
+- **HealthcareProfessional-to-HealthcareOrganization delegation**: the credential by which a professional delegates a set of business roles to their organisation. It is the _mandaattoken_ behind the matrix's `delegatable` flag. It is needed whenever the role is exercised by someone other than the professional who holds it: the organisation acting unattended, or an authenticated user who lacks the required rolcode and works under the professional's responsibility. The delegation carries the professional's identifier and rolcode: under an unattended mandate it is the only claim that brings them, and role resolution reads the rolcode from it. A professional with the required rolcode asserts the role directly. Whether the delegation surfaces as a wire credential at all depends on the enforcement topology (below).
 - **ServiceProvider delegation**: the credential by which an organisation delegates a set of system roles to its service provider.
 - **Membership**: the claim by which a HealthcareOrganization asserts its admission to a trust framework, or to a specific information standard within it. The organisational counterpart of the Qualification: where the Qualification certifies a product for a system role, the Membership certifies that the organisation meets the framework's non-technical requirements (participation agreements, security and privacy norms). Realisations: the MedMij and Twiin deelnemersovereenkomst, AORTA's aansluitvoorwaarden. Prerequisites reference it like any other identity claim; it is slow-changing and typically binds at registration time.
 - **ContextClaim** (abstract) and **Enrollment**: assertions about the request and the patient, not the requester. `Enrollment` is the treatment relationship: the professional issues it to the organisation, attesting that they enrol or treat the patient. It feeds the use case's context checks, not role resolution.
 
-The delegation chain runs at two layers: the professional-to-organisation delegation at business-role level, the service-provider delegation at system-role level. Each step delegates only what it can express; a professional is not a system, so cannot delegate a system role. The identity claims feed the role resolution below; the context claims, such as the Enrollment, feed the use case's context checks.
+The delegation chain runs at two layers: the professional-to-organisation delegation at business-role level, the service-provider delegation at system-role level. Each step delegates only what it can express; a professional is not a system, so it cannot delegate a system role. The identity claims feed the role resolution below; the context claims, such as the Enrollment, feed the use case's context checks.
 
 ##### Role resolution and permission
 
@@ -90,7 +91,7 @@ The delegation chain runs at two layers: the professional-to-organisation delega
 
 The diagram shows two pipelines. Both start from the presented claims, and both end in the same thing: permission for one transaction. The business-role pipeline resolves the acting person's role and consults a policy; the system-role pipeline is a single check. The two pipelines are evaluated independently, in no particular order.
 
-**The business-role pipeline.** A `RolePrerequisite` resolves the presented identity claims to an `AuthorizationRole`: one business role refined by a set of claims, typically rolcodes. A role may have several prerequisites; satisfying any one resolves the role. The resolved role then meets the `PermissionMatrix`, which keys on (AuthorizationRole, Transaction) and yields allow or deny plus a `delegatable` flag. A slice of the AORTA medication matrix as illustration. Each row is one AuthorizationRole with its matrix verdict; the RolePrerequisites that resolve these roles (the rolcode sets) are separate registry entries, shown in the worked example:
+**The business-role pipeline.** A `RolePrerequisite` resolves the presented identity claims to an `AuthorizationRole`: one business role refined by a set of claims, typically rolcodes. A role may have several prerequisites; satisfying any one resolves the role. The resolved role is then looked up in the `PermissionMatrix`, which keys on (AuthorizationRole, Transaction) and yields allow or deny plus a `delegatable` flag. A slice of the AORTA medication matrix as illustration. Each row is one AuthorizationRole with its matrix verdict; the RolePrerequisites that resolve these roles (the rolcode sets) are separate registry entries, shown in the worked example:
 
 | AuthorizationRole                    | refines business role | Raadplegen medicatieafspraak | delegatable |
 | ------------------------------------ | --------------------- | ---------------------------- | ----------- |
@@ -103,7 +104,7 @@ The matrix is always present; its content may be trivial. For medication, AORTA 
 
 **The system-role pipeline.** One check: the Qualification and the ServiceProvider delegation must name the transaction's system role. The transaction itself declares which system role it involves, so naming the role is naming the permitted transactions; no matrix is needed. The business-role pipeline does need one, because a business role carries no per-transaction verdicts.
 
-One refinement exists, for standards whose system roles are coarse. Medicatieproces 9 defines roughly fifty system roles, one per subject-activity pair (e.g. `MedicatieafspraakRaadplegend`): naming the role pins down a single transaction. A standard with a handful of generic system roles would grant every transaction of the role with one qualification. For that case the trust framework MAY refine: a `QualifiedSystemRole` covers a subset of one system role's transactions, and the `SystemRolePrerequisite` resolves the ServiceProvider's claims to that refined role. Without a refinement, the qualification grants every transaction of the system role.
+One refinement exists, for standards whose system roles are coarse. Medicatieproces 9 defines roughly fifty system roles, one per subject-activity pair (e.g. `MedicatieafspraakRaadplegend`): naming the role pins down a single transaction. For a standard with a handful of generic system roles, one qualification would grant every transaction of the role. For that case the trust framework may refine: a `QualifiedSystemRole` covers a subset of one system role's transactions, and the `SystemRolePrerequisite` resolves the ServiceProvider's claims to that refined role. Without a refinement, the qualification grants every transaction of the system role.
 
 The model has two role constructs, and they answer different questions. An AuthorizationRole answers: which requesters may act in this business role? A QualifiedSystemRole answers: which transactions of this system role does the qualification cover? Side by side:
 
@@ -134,9 +135,9 @@ Some rules can only be evaluated while handling the request, because they read t
 
 The information-layer entity (`Transaction`) appears in yellow; trust-layer entities (`IdentityClaim`, `ServiceProvider`) in blue; realisation-layer entities, including the `Operation` and `FHIRResource`, in green.
 
-- **AccessTokenRequest**: what the ServiceProvider sends to the AS. Its `scope` parameter carries exactly one transaction identifier (the `tx`) and, optionally, operation identifiers (interactie-ids) that narrow the granted scopes. The request further carries the asserted identity claims and the context claims. The `patient` attribute carries the data-subject BSN where the transaction concerns a patient; the AS enforces that the patient identifier in the eventual query equals the issued AT's `patient` attribute.
+- **AccessTokenRequest**: what the ServiceProvider sends to the AS. Its `scope` parameter carries exactly one transaction identifier (the `tx`) and, optionally, operation identifiers (interactie-ids) that narrow the granted scopes. The request further carries the asserted identity claims and the context claims. The `patient` attribute carries the data-subject BSN where the transaction concerns a patient; the AS binds it at issuance, and the resource server (or a policy decision point in front of it) enforces that the patient identifier in the query equals the issued AT's `patient` attribute.
 - **AccessToken**: the OAuth 2.0 artefact returned on success. Authorizes exactly one transaction, carries the verified identity claims, and carries the granted SMART on FHIR scopes.
-- **SoFScope**: a [SMART on FHIR v2](https://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context.html) scope (`<context>/<Resource>.<crud>`). The unit of resource-server enforcement, granted at issuance from the requested operations via the profile and FHIR resource type. A scope MAY carry additional search parameters (e.g. `patient/Observation.rs?category=...`) where the operation-to-scope mapping defines them.
+- **SoFScope**: a [SMART on FHIR v2](https://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context.html) scope (`<context>/<Resource>.<crud>`). The unit of resource-server enforcement, granted at issuance from the requested operations via the profile and FHIR resource type. A scope may carry additional search parameters (e.g. `patient/Observation.rs?category=...`) where the operation-to-scope mapping defines them.
 
 Note the asymmetry between request and response: the **request carries the transaction identifier** (optionally narrowed by interactie-ids), the **response carries the transaction identifier plus the granted SMART on FHIR scopes**. The AS converts requested operations into scopes when it issues the AT.
 
@@ -189,7 +190,7 @@ Examples:
 aorta.tx.mp.verstrekkingsverzoek-raadplegen.3-0-0
 aorta.tx.mp.medicatieafspraak-beschikbaarstellen.3-0-0
 aorta.tx.mp.medicatieoverzicht-raadplegen.3-0-0
-medmij.tx.medicatie.medicatieafspraak-raadplegen.1-0
+medmij.tx.mp.medicatieafspraak-raadplegen.1-0
 ```
 
 Segment rules:
@@ -204,7 +205,7 @@ The use case the transaction belongs to is derivable from the catalogue and is n
 
 #### Operation identifier format
 
-Operations are the fine-grained interactie-ids that MAY appear in the request scope alongside the transaction identifier, to narrow the granted scopes for least-privilege. Each must name one of the operations that realise the scoped transaction (the AS verifies this at issuance), and omitting them requests all of the transaction's operations. The general shape is `<verb>:<artifact>:<version>` (e.g. `search:mp-MedicationAgreement:1`); the exact format is information-standard-specific and registered in the realisation catalogue. The segment rules and the registered prefixes are listed in the [appendix](#appendix-operation-identifier-format-details).
+Operations are the fine-grained interactie-ids that may appear in the request scope alongside the transaction identifier, to narrow the granted scopes for least-privilege. Each must name one of the operations that realise the scoped transaction (the AS verifies this at issuance), and omitting them requests all of the transaction's operations. The general shape is `<verb>:<artifact>:<version>` (e.g. `search:mp-MedicationAgreement:1`); the exact format is information-standard-specific and registered in the realisation catalogue. The segment rules and the registered prefixes are listed in the [appendix](#appendix-operation-identifier-format-details).
 
 #### Scope entries are opaque strings
 
@@ -222,7 +223,9 @@ For the purpose of policy matching, both the transaction identifier and the oper
 
 #### Conformance: issued AT
 
-> **REQ-5 (SHALL).** The transaction identifier SHALL appear in the AT's `scope` alongside the granted SMART on FHIR scopes. The `scope` member is standard in both JWT access tokens and introspection responses, so the transaction identifier is visible to the resource server and the audit subsystem without any non-standard field.
+> **REQ-5 (SHALL).** The transaction identifier SHALL appear in the AT's `scope` alongside the granted SMART on FHIR scopes.
+
+_Rationale: the `scope` member is standard in both JWT access tokens and introspection responses, so the transaction identifier is visible to the resource server and the audit subsystem without any non-standard field._
 
 #### Conformance: AS behaviour
 
@@ -236,7 +239,7 @@ For the purpose of policy matching, both the transaction identifier and the oper
 >
 > **REQ-8 (SHALL).** The context checks of the scoped transaction's use case SHALL be enforced before data is released. The trust framework SHALL declare, per use case, the enforcement point of each check: the AS at token issuance, the AS at token introspection, or a policy decision point at the resource server. The AS SHALL evaluate the checks declared for issuance before issuing the AT.
 >
-> **REQ-9 (SHALL).** The AS SHALL reject the request if the transaction is unknown, no PermissionMatrix entry permits the resolved AuthorizationRole, any check in REQ-7 fails, or any context check declared for issuance fails.
+> **REQ-9 (SHALL).** The AS SHALL reject the request if the transaction is unknown, any check in REQ-7 fails, or any context check declared for issuance fails.
 
 #### Identity claims, context, and verification
 
@@ -251,9 +254,9 @@ In current Dutch implementations these claims appear in several forms, sometimes
 
 Which claims a request must carry follows from the prerequisites: exactly those the scoped transaction's RolePrerequisite and SystemRolePrerequisite read to resolve the AuthorizationRole and the QualifiedSystemRole. There is no separate required-claims list to maintain.
 
-**Context checks.** Role resolution answers "who is the requester"; the context checks answer "is sharing this patient's data allowed". They evaluate ContextClaims about the request rather than the requester: the patient (BSN), the Enrollment (the treatment relationship), consent, and purpose-of-use. Purpose-of-use is the requester's declared purpose for the request; it is distinct from the legal basis (grondslag) that makes sharing lawful, although the declared purpose determines which legal basis must hold. The checks are attached to the use case because the claims they evaluate concern the intent, which all the use case's transactions share; attaching identical checks per transaction would only duplicate them. A trust framework MAY narrow the checks for an individual transaction, never loosen them. Because a transaction belongs to exactly one use case, the scoped transaction fixes which checks apply. Where each check is enforced is declared per use case (REQ-8); the design notes discuss that choice.
+**Context checks.** Role resolution answers "who is the requester"; the context checks answer "is sharing this patient's data allowed". They evaluate ContextClaims about the request rather than the requester: the patient (BSN), the Enrollment (the treatment relationship), consent, and purpose-of-use. Purpose-of-use is the requester's declared purpose for the request; it is distinct from the legal basis (grondslag) that makes sharing lawful, although the declared purpose determines which legal basis must hold. The checks are attached to the use case because the claims they evaluate concern the intent, which all the use case's transactions share; attaching identical checks per transaction would only duplicate them. A trust framework may narrow the checks for an individual transaction; it may never loosen them. Because a transaction belongs to exactly one use case, the scoped transaction fixes which checks apply. Where each check is enforced is declared per use case (REQ-8); the design notes discuss that choice.
 
-> **REQ-10 (SHALL).** The client SHALL present the identity claims needed to resolve the AuthorizationRole and the QualifiedSystemRole for the scoped transaction, together with the ContextClaims required by the context checks declared for issuance (the use case's checks, possibly narrowed for the scoped transaction). The AS SHALL verify role resolution, the matrix permission, and the issuance-declared context checks independently, and SHALL reject the request if any required claim is absent or any check fails.
+> **REQ-10 (SHALL).** The client SHALL present the identity claims needed to resolve the AuthorizationRole and the QualifiedSystemRole for the scoped transaction, together with the ContextClaims required by the context checks declared for issuance (the use case's checks, possibly narrowed for the scoped transaction). The AS verifies these claims under REQ-7 and REQ-8 and rejects under REQ-9; an absent required claim fails the check that reads it.
 
 ### Adoption
 
@@ -277,7 +280,7 @@ Open issue: custodianship of the shared vocabulary (this chapter) once more than
 
 {% include authorization-model-evaluation.svg %}
 
-Happy path. Any check failure results in rejection, not shown for clarity. The legend on the diagram marks each step's input sources: **R** for the AT request, **L1** for the information-layer catalogue, **L2** for the trust-layer registry, **L3** for the realisation-layer catalogue (the interactietabel). Steps that depend on derived context (e.g. "the required system role per operation") inherit their source from the step that resolved that context.
+Happy path. Any check failure results in rejection; failure paths are omitted for clarity. The legend on the diagram marks each step's input sources: **R** for the AT request, **L1** for the information-layer catalogue, **L2** for the trust-layer registry, **L3** for the realisation-layer catalogue (the interactietabel). Steps that depend on derived context (e.g. "the required system role per operation") inherit their source from the step that resolved that context.
 
 Because the AT is scoped to a single transaction, role resolution, the system-role coverage check, the matrix lookup, and the issuance-declared context checks are each evaluated once for that transaction; any operations in the request only narrow the granted scopes.
 
@@ -293,16 +296,18 @@ _This section is rationale, not specification: it argues the design decisions th
 - An _operation_ is too fine: it is a wire-level interactie-id used for least-privilege scope granting, below the grain at which permission is decided. It is also reusable across transactions, so an operation alone does not identify the intent.
 - An AT covers one activity the requester performs (one transaction, e.g. `Raadplegen verstrekkingsverzoek`). A request that needs several transactions at once (a full medication overview for one patient) is served by an overview transaction such as Medicatieoverzicht, itself one transaction, or by issuing several ATs.
 
-This makes the wire chattier, and that cost is accepted deliberately. A viewer that opens the full Medicatiebouwstenen use case touches seven raadplegen transactions and therefore needs seven token requests, each a round trip to the source-side AS (the AS is usually co-located with the RS). Three things bound the cost. The requests are independent, so they can be issued in parallel. The issued AT is cacheable per (transaction, patient) within its lifetime, so the volume is per viewer session, not per screen refresh. Batching several transactions into one AT was considered and rejected. The prerequisites and the context checks are per transaction. A bundled AT must either satisfy every bundled transaction's conditions at once, which fails entirely when one check fails (and checks can conflict: consent may cover one data category but not another), or be evaluated loosely at bundle level. Loose evaluation erodes the per-transaction granularity of consent and audit; it is exactly the implicit-scope pattern this proposal removes. How many ATs one wire exchange may issue is a layer-3 profiling choice (a framework can adopt a batching or token-exchange profile without touching the model), as long as each issued AT stays scoped to one transaction.
+This makes the wire chattier, and that cost is accepted deliberately. A viewer that opens the full Medicatiebouwstenen use case touches seven raadplegen transactions and therefore needs seven token requests, each a round trip to the source-side AS (the AS is usually co-located with the RS). Three things bound the cost. The requests are independent, so they can be issued in parallel. The issued AT is cacheable per (transaction, patient) within its lifetime, so the volume is per viewer session, not per screen refresh.
 
-#### Why consent, treatment relationship, and purpose are layer-2 constructs
+Batching several transactions into one AT was considered and rejected. The prerequisites and the context checks are per transaction. A bundled AT must either satisfy every bundled transaction's conditions at once, which fails entirely when one check fails (and checks can conflict: consent may cover one data category but not another), or be evaluated loosely at bundle level. Loose evaluation erodes the per-transaction granularity of consent and audit; it is exactly the ambiguity this proposal removes. How many ATs one wire exchange may issue is a layer-3 profiling choice (a framework can adopt a batching or token-exchange profile without touching the model), as long as each issued AT stays scoped to one transaction.
 
-The layer-2 constructs can be derived from the transaction dataset itself. A transaction carries a selection of dataset concepts, each optionally restricted: the concept holds a baseline conformance and cardinality, and the transaction may narrow them, never loosen. The kind of concept follows the transaction's direction. A query transaction (raadplegen) carries a `QueryParameters` group of identifiers and filters, project-specific. A delivery transaction (beschikbaarstellen, sturen) carries the zib payload; zibs enter as building-block datasets the payload concepts inherit from. That transaction dataset determines exactly what layer 2 can and cannot decide on. The bridge below maps the concepts of a query transaction onto the authorization constructs they touch.
+#### Why consent, treatment relationship, and purpose live in layer 2
+
+Before a source shares data, it decides on two kinds of information. The first kind is defined by the information standard: which data elements a transaction exchanges, which query parameters it accepts, and which values those parameters may take. Checking it needs no one's word, because the standard itself is the reference. This is layer 1. The second kind is facts the standard cannot contain: who the requester is, that the patient is under treatment, that the patient consented. Such a fact is valid only because a trusted party attests it: a claim. This is layer 2. Consent, the treatment relationship, and purpose-of-use are facts of the second kind, which is why they live in layer 2. The bridge below shows the split for a query transaction.
 
 {% include authorization-model-bridge.svg %}
 
-- **The patient identifier (BSN) is the data-subject join key.** It appears in the query parameters as a layer-1 concept, and layer 2 joins on it: the AS enforces that the BSN in the query equals the `patient` attribute of the access token, and the context claims (consent, treatment relationship) are about that same patient. Whether a patient is involved is itself a layer-1 fact: if the transaction dataset carries no patient identifier, there is no data-subject, the `patient` attribute on the access token is absent, and the patient-bound context claims do not apply.
-- **Consent, treatment relationship, and purpose are absent from the dataset.** No dataset concept carries them. That confirms they are layer-2 constructs: ContextClaims evaluated by the trust framework, not data the transaction exchanges. The consent check is the source's responsibility, whether against a national facility (Mitz) or a local consent registration; it is not part of the requester-provided claim set, and the diagram marks it separately.
+- **The BSN sits in both layers, because each layer asks a different question about it.** Layer 1 defines that the query names a patient. Whether the requester may ask about this particular patient is a layer-2 question: the AS binds the `patient` attribute at issuance, the resource server (or a policy decision point in front of it) checks that the BSN in the query equals that attribute, and the context claims (consent, treatment relationship) are about that same patient. Whether a patient is involved at all is a layer-1 fact: if the transaction dataset carries no patient identifier, there is no data subject, the `patient` attribute is absent, and the patient-bound context claims do not apply.
+- **The consent check is the source's responsibility.** Unlike the other context claims, consent is not presented by the requester: the source evaluates it itself, whether against a national facility (Mitz) or a local consent registration. The diagram marks it separately.
 
 Everything else in the query stays in layer 1: record-narrowing identifiers (a behandeling-id, a record-id) map to no layer-2 claim, and payload actor concepts (a record's prescriber) relate to the requester's identity claims in type only, never in instance.
 
@@ -322,9 +327,11 @@ _Which point for the context checks._ The context checks have no single right en
 
 The OAuth wire is asymmetric here: the request side has a claim-carrying convention (the AccessTokenRequest), the response side has none. A topology that wants a third party to verify source-side claims at response time therefore needs a wire convention that this proposal does not define. Verifying source-side claims at registration time or at token-issuance time avoids that gap, and fails before any data is assembled.
 
-#### Delegation lifetimes: standing and session
+#### One delegation mechanism, two uses
 
-Delegation has two lifetimes, and only one of them is a layer-2 credential. The _standing_ delegations (professional to organisation, organisation to service provider) change rarely and are governed by the matrix's `delegatable` flag and the qualification regime. The _session_ delegation, an authenticated user authorizing the system to act in their name for the duration of a session, is the authentication context itself; on the OAuth wire it is the grant behind the access token, not a credential the model adds. Attended means exactly that such a session delegation from an authenticated user exists; where it does not, a standing delegation must carry the role instead.
+Every delegation in this model is the same mechanism: a party authorizes another to act with its authority, for a bounded period. The professional uses it in two ways. Acting in person, the professional delegates the use of their identity to the system they are logged into; the system asserts this with a UserAssertion naming the professional and their rolcode, valid for the working session. Acting under mandate, the professional has delegated the business role itself to the organisation: standing, valid until revoked; whoever operates the system, or the system running unattended, acts in the professional's name.
+
+The two uses differ in duration and in what is conveyed (an identity versus a business role). The model keeps them apart for one reason only: under mandate the authenticated actor, if there is one, is not the role holder. The PermissionMatrix keys on that fact with its delegatable flag, and REQ-7 tests it. Attended means a UserAssertion is present. For the audit trail the distinction changes nothing: the source logs the acting individual where one exists, and the mandate where one is used.
 
 ### Examples
 
@@ -485,18 +492,19 @@ Translation table for the information-layer (L1) catalogue terms:
 | Qualification          | kwalificatie        |
 {:.grid .table-hover}
 
+- **AccessTokenRequest**: the OAuth 2.0 request sent by the ServiceProvider to the AS, carrying the transaction identifier (`tx`), optional operation identifiers, asserted identity claims, and context claims.
 - **AS**: Authorization Server, issues access tokens.
 - **AT**: Access Token.
-- **AccessTokenRequest**: the OAuth 2.0 request sent by the ServiceProvider to the AS, carrying the transaction identifier (`tx`), optional operation identifiers, asserted identity claims, and context claims.
 - **AuthorizationRole**: the subject the PermissionMatrix keys on; one business role refined by a set of identity claims (typically rolcodes), resolved from presented claims by a RolePrerequisite.
 - **Business role** (bedrijfsrol): the role a person plays in a transaction (Voorschrijver, Verstrekker, Toediener, ...). Unit of HealthcareProfessional-to-HealthcareOrganization delegation, and the role an AuthorizationRole refines.
+- **Context check**: a per-use-case rule that evaluates ContextClaims; its enforcement point (AS at issuance, AS at introspection, or a policy decision point at the resource server) is declared per use case (REQ-8).
+- **ContextClaim**: a typed assertion about the request context rather than the requester (patient, Enrollment, consent, purpose-of-use), evaluated by the use case's context checks.
+- **Credential**: a set of one or more claims made by an issuer, in the W3C Verifiable Credentials sense of the term (not the NIST sense). This chapter writes credential where claims travel bundled as one artefact (the two delegations) and claim for a single assertion.
 - **Dataset**: a tree of dataset concepts; either a primary dataset of an information standard or an imported building-block dataset (such as a zib).
 - **DatasetConcept**: one node of a dataset (a group or an item), carrying a baseline conformance and cardinality that a transaction may restrict.
 - **DEZI**: the successor programme to the UZI register for identifying healthcare professionals; it keeps the identifier and rolcode concepts. This chapter uses UZI/rolcode terminology.
-- **IdentityClaim**: a typed assertion about the requester that the policy evaluates. Carried in many wire formats (signed SAML claim, Verifiable Credential, JWT claim by a trusted AS, mTLS-derived claim, ...).
-- **Context check**: a per-use-case rule that evaluates ContextClaims; its enforcement point (AS at issuance, AS at introspection, or a policy decision point at the resource server) is declared per use case (REQ-8).
-- **ContextClaim**: a typed assertion about the request context rather than the requester (patient, Enrollment, consent, purpose-of-use), evaluated by the use case's context checks.
 - **Enrollment**: a ContextClaim for the patient's treatment relationship; the professional issues it to the organisation, attesting that they enrol or treat the patient.
+- **IdentityClaim**: a typed assertion about the requester that the policy evaluates. Carried in many wire formats (signed SAML claim, Verifiable Credential, JWT claim by a trusted AS, mTLS-derived claim, ...).
 - **Information layer (L1)**: the layer of the information standards; the Nictiz catalogue of use cases, transactions, roles, and datasets.
 - **Information standard** (informatiestandaard): a healthcare information standard (e.g. Medicatieproces, BgZ), in the Netherlands mostly maintained by Nictiz.
 - **Legal basis** (grondslag): the legal ground that makes sharing lawful (consent, treatment relationship, statutory duty). Distinct from purpose-of-use.
@@ -515,12 +523,13 @@ Translation table for the information-layer (L1) catalogue terms:
 - **System role** (systeemrol): the role a system plays in a transaction (Sturend, Ontvangend, Raadplegend, Beschikbaarstellend). Unit of qualification and of ServiceProvider delegation.
 - **SystemRolePrerequisite**: a layer 2 rule that resolves a ServiceProvider's claims (notably its Qualification and delegation) to a QualifiedSystemRole; the system-role counterpart of a RolePrerequisite, with no matrix.
 - **Transaction** (transactie): a single interaction within a transaction group, e.g. `Raadplegen verstrekkingsverzoek` (the consumer queries a source) or `Beschikbaarstellen verstrekkingsverzoeken` (the source returns the requested data). The leaf functional unit of layer 1 and the unit the PermissionMatrix authorizes against; belongs to exactly one use case. Not to be confused with the FHIR transaction interaction (an atomic `Bundle` POST), which appears as a verb in operation tokens.
-- **Transaction group** (transactiegroep): a named group of related transactions, e.g. `Verstrekkingsverzoek (raadplegen/beschikbaarstellen)`.
 - **Transaction dataset** (transactiedataset): the subset of dataset concepts a transaction selects, each optionally restricted (conformance, cardinality, condition) relative to its baseline.
+- **Transaction group** (transactiegroep): a named group of related transactions, e.g. `Verstrekkingsverzoek (raadplegen/beschikbaarstellen)`.
 - **Transaction identifier**: the identifier of the scoped transaction, carried in the OAuth `scope` of the AT request and the issued AT; format `<governance-body>.tx.<information-standard>.<transaction>.<version>`.
 - **Trust framework**: an independently governed set of agreements for data exchange (afsprakenstelsel).
 - **Trust layer (L2)**: the layer of the trust-framework constructs: role resolution, the permission matrix, qualifications, delegations, identity and context claims.
 - **Use case**: a sub-chapter of an information standard. A catalogue grouping of transaction groups; defines the intent and the context checks; not carried on the wire.
+- **UserAssertion**: the IdentityClaim by which the system asserts the acting professional's identity and rolcode, valid for the working session; the professional's short-lived delegation of their identity to the system. Attended means a UserAssertion is present.
 - **Zib**: _zorginformatiebouwsteen_, a Dutch healthcare data model construct, published as a building-block dataset.
 
 ### References
