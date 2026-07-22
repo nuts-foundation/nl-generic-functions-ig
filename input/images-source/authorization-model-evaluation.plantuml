@@ -29,7 +29,6 @@ start
 :Receive AT request;
 note right
   **R**: transaction identifier (tx),
-  optional operations,
   asserted identity claims,
   context claims
 end note

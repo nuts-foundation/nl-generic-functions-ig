@@ -10,6 +10,8 @@ skinparam roundcorner 5
 skinparam classFontStyle bold
 skinparam classBackgroundColor #E8F5E9
 skinparam classBorderColor #2E7D32
+skinparam nodesep 24
+skinparam ranksep 50
 hide circle
 
 ' Layer 1 (Nictiz) entities referenced from this diagram (yellow)
@@ -41,13 +43,12 @@ class ServiceProvider <<trust layer>> #E1F5FE ##0277BD {
 ' Layer 3: OAuth wire artefacts
 class AccessTokenRequest {
   tx
-  operations[]
   asserted_claims[]
   patient
 }
 
 class AccessToken {
-  scope[]  [incl. tx token]
+  scope[]  [incl. tx identifier]
   patient
   claims[]
 }
@@ -58,21 +59,25 @@ class SoFScope {
   crud
 }
 
-' Realisation: operations are reusable wire-level building blocks
-Operation "*" --> "*" Transaction : realises
-Operation "*" --> "1" FHIRResource : targets (fhir.resourceType)
+' === Wire-artefact row relations (horizontal, top row) ===
+ServiceProvider "1" -right-> "*" AccessTokenRequest : sends
+AccessTokenRequest "1" .right.> "1" AccessToken : results in (if approved)
+AccessToken "1" -right-> "*" SoFScope : carries
 
-' AT request: what the ServiceProvider sends to the AS
-ServiceProvider "1" --> "*" AccessTokenRequest : sends
-AccessTokenRequest "*" --> "1" Transaction : names
-AccessTokenRequest "*" --> "*" Operation : narrows (optional)
-AccessTokenRequest "*" --> "*" IdentityClaim : asserts
+' === Wire artefact -> referenced entity (down) ===
+AccessTokenRequest "*" -down-> "*" IdentityClaim : asserts
+AccessTokenRequest "*" -down-> "1" Transaction : names
+AccessToken "1" -down-> "*" IdentityClaim : carries
+AccessToken "1" -down-> "1" Transaction : authorizes
+SoFScope "*" -down-> "1" Operation : derived from
+SoFScope "*" -down-> "1" FHIRResource : resource references
 
-' AT issued: what the AS returns on success
-AccessTokenRequest "1" ..> "1" AccessToken : results in (if approved)
-AccessToken "1" --> "1" Transaction : authorizes
-AccessToken "1" --> "*" IdentityClaim : carries
-AccessToken "1" --> "*" SoFScope : carries
-SoFScope "*" --> "1" FHIRResource : resource references
+' === Catalogue row relations (horizontal, bottom row) ===
+' Realisation: operations are reusable realisation building blocks
+Operation "*" -left-> "*" Transaction : realises
+Operation "*" -right-> "1" FHIRResource : targets (fhir.resourceType)
+
+' === Layout rows (hidden, no semantics) ===
+IdentityClaim -[hidden]right- Transaction
 
 @enduml
