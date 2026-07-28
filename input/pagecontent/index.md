@@ -65,6 +65,7 @@ The [FHIR Workflow Mangement Communication patterns](https://hl7.org/fhir/R4/wor
     - [Get data for home care](./usecase-view-all-data.html)
     - [Referral/Nursing handoff](./usecase-nursing-handoff.html) -->
 
+- [Record Identifiers](./record-identifiers.html): whitepaper on record identifiers in clinical data exchange: disclosure risks, identifier schemes, and who decides what (draft)
 - [Artifacts](./artifacts.html): a comprehensive list of all artifacts that are used in SCP 
 
 <!-- - [Changes & Issues](history.html) -->
