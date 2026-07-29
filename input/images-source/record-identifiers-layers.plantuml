@@ -1,0 +1,23 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml record-identifiers-layers
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial
+
+rectangle "**Verwijsbrief** (referral letter)\nidentifier: 0b8f (assigner: URA 12345678)" as biz #FFFFB5;line:AAAA55
+rectangle "**Task** - Hospital EHR (source)\nURL: https://hospital-a.nl/Task/5f2f\nResource.id: 5f2f\nidentifier: 0b8f" as src #B5D5FF;line:5588BB
+rectangle "**Task** - Home care system (copy)\nURL: https://homecare-b.nl/Task/81c3\nResource.id: 81c3\nidentifier: 0b8f\nmeta.source: https://hospital-a.nl" as cpy #B5D5FF;line:5588BB
+
+src -up-> biz : represents
+cpy -up-> biz : represents
+src .right.> cpy : copied to
+
+legend
+  <back:#FFFFB5>   </back> business object (information layer)
+  <back:#B5D5FF>   </back> FHIR resource (implementation layer)
+endlegend
+
+@enduml

@@ -1,0 +1,24 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml record-identifiers-model
+
+skinparam roundcorner 20
+skinparam defaultFontName Arial
+hide empty members
+hide circle
+
+class "Business object" as BO #FFFFB5;line:AAAA55
+class "Representation" as Rep #B5D5FF;line:5588BB
+abstract class "Identifier" as Id #EEEEEE;line:999999
+class "Name\n(business identifier)" as Name #EEEEEE;line:999999
+class "Address\n(logical id + base URL)" as Addr #EEEEEE;line:999999
+
+Rep "0..*" -left-> "1" BO : stands for
+Name "0..*" -up-> "1" BO : names
+Addr "1" -up-> "1" Rep : addresses
+Name -down-|> Id
+Addr -down-|> Id
+
+@enduml
