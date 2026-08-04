@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2026 Steven van der Vegt
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
-Disclosure risks, identifier schemes, and who decides what. Status: draft. Condensed revision of [Record Identifiers](./record-identifiers.html); the full analysis and the eOverdracht worked example live there.
+Disclosure risks, identifier schemes, and who decides what. Status: draft.
 
 ### Problem statement
 
@@ -59,7 +59,7 @@ A secret key is unnecessary only when the input is itself genuinely random and k
 
 ### Examples
 
-The first three examples show the passing schemes, each identifying the same internal record, key `4711` in the source system's database. The fourth shows the two uniqueness mechanisms of REQ-05. The values are illustrative.
+The first three examples show the passing schemes, each identifying the same internal record, key `4711` in the source system's database. The later examples show the requirements at work: uniqueness mechanisms, identity claim verification, and the notification payload. The values are illustrative.
 
 **Random (UUIDv4).** Generate once at record creation, with any UUID library, and store with the record:
 
@@ -119,6 +119,43 @@ Deduplication matches values exactly, and RFC 4122 fixes the canonical UUID form
 
 Without step 3, any connected party could stamp another organisation's identifier on a record of its own, spoofing the issuer, and receivers would merge the two records silently. An alternative to `urn:ietf:rfc:3986` is a system URI designated by the trust framework, carrying the bare UUID as value. Such a system could signal what `urn:ietf:rfc:3986` cannot: that the value claims to meet the baseline of this document. It costs an invented namespace and deviates from common practice; whether the signal is worth that is an open question. Under either system the entropy guarantee comes from REQ-03, not from the system.
 
+**Id-only notification (REQ-09).** The notification as every party on the channel sees it, trimmed to the relevant fields: a history Bundle whose first entry reports the event, and whose second entry carries the focus reference without the resource:
+
+```json
+{
+  "resourceType": "Bundle",
+  "type": "history",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:c3a5d8f1-9b2e-4d67-8a4c-5e1f7b9d2a36",
+      "resource": {
+        "resourceType": "Parameters",
+        "parameter": [
+          { "name": "subscription", "valueReference": { "reference": "Subscription/7f3e9a2c-5d18-4b6f-9c3a-8e2d4f6b1a59" } },
+          { "name": "status", "valueCode": "active" },
+          { "name": "type", "valueCode": "event-notification" },
+          {
+            "name": "notification-event",
+            "part": [
+              { "name": "event-number", "valueString": "42" },
+              { "name": "timestamp", "valueInstant": "2026-07-16T09:15:00Z" },
+              { "name": "focus", "valueReference": { "reference": "Task/5f2f9a4e-8c1d-4b6e-9d3a-7c0e2f4b8a1d" } }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "https://sender.example/fhir/Task/5f2f9a4e-8c1d-4b6e-9d3a-7c0e2f4b8a1d",
+      "request": { "method": "GET", "url": "Task/5f2f9a4e-8c1d-4b6e-9d3a-7c0e2f4b8a1d" },
+      "response": { "status": "200" }
+    }
+  ]
+}
+```
+
+With REQ-02 and REQ-03 met, the Task reference reveals one thing: a Task exists at the sender. The receiver retrieves it by direct read; no search is needed. The event-number and timestamp belong to the notification protocol itself and reveal per-channel volume and timing whatever the identifier scheme is.
+
 ### Requirements
 
 The rules use RFC 2119 keywords and are numbered **REQ-nn**. Each rule sits at the decision level that owns it, where owning means setting the rule's content. The levels still interact: a trust-framework rule can be conditional, the information standard then decides for its exchange whether the condition holds, and the vendor implements the result. REQ-06 shows the chain: the trust framework fixes how an identity claim is verified, whether an exchange requires deduplication at all and on which identifier is an information-standard decision (REQ-07), and the vendor builds the check. Adoption of the trust-framework rules is voluntary in the sense that joining the trust framework is; once adopted, they bind every participant.
@@ -144,6 +181,8 @@ The rules use RFC 2119 keywords and are numbered **REQ-nn**. Each rule sits at t
 - **REQ-10** (human use): an information standard SHALL determine whether an issued business identifier is used by people: read aloud on the phone, typed over from a letter, quoted in correspondence. If it is, the standard SHALL require a transcription-friendly form: a case-insensitive alphabet without ambiguous characters, grouped in short blocks, optionally with a check digit. This constrains the encoding, not the entropy. Making the value itself shorter weakens REQ-03, and that decision belongs to the trust framework.
 
 REQ-08 and REQ-09 govern the use of identifiers in references and notifications rather than their construction. They are parked here because no better home exists yet; a future page on referencing and resolving records would be their natural place, and this document would then keep only the construction rules.
+
+A note on the payload choice in REQ-09. A payload without any reference is not automatically the more careful choice: the receiver must then find the record by searching, and a search response can contain more records than the notification concerned. A reference that meets REQ-02 and REQ-03, retrieved by direct read, discloses exactly one opaque reference and nothing else. The examples show such a payload.
 
 #### Vendor level
 
