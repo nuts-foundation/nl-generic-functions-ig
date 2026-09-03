@@ -94,6 +94,12 @@ pages:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
 
+  record-identifiers.md:
+    title: Record Identifiers
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
   authentication.md:
     title: Authentication
     extension:
@@ -201,6 +207,7 @@ menu:
   Localization: localization.html
   Consent: consent.html
   Identification: identification.html
+  Record Identifiers: record-identifiers.html
   Authentication: authentication.html
   Authorization: authorization.html
   Credential Catalog: credential-catalog.html
