@@ -1,0 +1,39 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml subscription-topics-l0
+autonumber
+
+title "L0 catch-all: GP subscribes to every change for one patient"
+skinparam roundCorner 7
+skinparam sequenceGroupBorderThickness .5
+
+participant "Hospital EHR\n(Subscription Server)" as hosp order 10
+participant "GP system\n(Subscription Client)" as gp order 20
+
+== Subscribe (in-band, once) ==
+
+gp -> hosp ++: POST Subscription\n(criteria = topic canonical URL,\nfilter patient.identifier = BSN)
+hosp --> gp --: 201 Created (status = requested)
+hosp -> gp ++: handshake-notification
+gp --> hosp --: 200 OK
+hosp -> hosp : Subscription.status = active
+
+== Event: any write in the patient's record ==
+
+hosp -> hosp : New lab result stored\n(Observation, category = laboratory)
+hosp -> gp ++: event-notification, event-number = 7\n(focus = Observation/d9c3..., id-only)
+gp --> hosp --: 200 OK
+
+opt GP decides to pull
+  gp -> hosp ++: GET Observation/d9c3...
+  hosp --> gp --: 200 OK + resource
+end
+
+== Channel guard ==
+
+hosp -> gp : heartbeat-notification\n(every heartbeat-period seconds)
+note over gp : On a missed event-number:\nGET Subscription/$events\nOn a missed heartbeat:\nGET Subscription/$status
+
+@enduml

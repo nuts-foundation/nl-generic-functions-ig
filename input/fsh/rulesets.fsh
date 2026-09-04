@@ -49,6 +49,14 @@ RuleSet: BundleEntryWithFullurl (fullUrl, resource, method, url)
 * entry[=].request.url = "{url}"
 
 
+RuleSet: CustodianAssignedIdentifier (system, value, assigner-system, assigner-value)
+* identifier[+].system = {system}
+* identifier[=].value = {value}
+* identifier[=].use = #official
+* identifier[=].assigner.identifier.system = {assigner-system}
+* identifier[=].assigner.identifier.value = {assigner-value}
+* identifier[=].assigner.identifier.type = $provenance-participant-type#custodian
+
 
 RuleSet: AuthorAssignedIdentifier (system, value, assigner-system, assigner-value)
 * identifier[+].system = {system}

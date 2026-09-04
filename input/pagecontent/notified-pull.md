@@ -6,239 +6,166 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 ### Introduction
 
-This page specifies a Dutch profile on the [HL7 Clinical Order Workflows (COW) IG](https://build.fhir.org/ig/HL7/cow/) for the **Notified Pull** exchange pattern: a Placer informs a Fulfiller that an order is available, and the Fulfiller pulls the associated data on its own terms. The profile harmonizes two existing Dutch specifications that solve the same problem differently:
+**Notified Pull** is a data-availability exchange pattern: a Sender publishes a notification saying that one or more resources are available, and the Receiver pulls those resources on its own terms.
 
-- [Twiin Technical Agreement Notified Pull v1.0.1](https://twiin.nl/tanp)
-- [Nuts eOverdracht leveranciersspecificatie](https://nuts-foundation.gitbook.io/bolts/eoverdracht/leveranciersspecificatie)
+In its base form, described on this page, Notified Pull is **fire-and-forget**. The Sender does not expect the Receiver to accept, reject, report progress, or signal completion. The data exists at the Sender; the notification points the Receiver at it; what happens after that is the Receiver's concern. Workflows that need acceptance, lifecycle and cancellation negotiation (referrals, transfers of care) layer the [HL7 Clinical Order Workflow (COW) IG](https://build.fhir.org/ig/HL7/cow/) on top of this pattern; that combination is specified separately.
 
-The goal is a single, internationally-grounded specification for future iterations of both.
+This page builds on the generic [Notification](./notification.html) transport (Subscription, SubscriptionTopic, notification Bundle, `notification-event`). It adds three things:
 
-This profile adopts **COW pattern 2 — "Task at Placer with Subscriptions"**: the Coordination Task lives at the Placer, and the Fulfiller is notified via an R4 Subscription Backport event and then pulls. See [Why pattern 2?](#why-pattern-2) for the rationale.
-
-Access control (mTLS, OAuth 2.0, client/authorization assertions) is **out of scope** of this page; it is specified separately and agreed between partners. The only access-control concept retained here is the `notification-authorization-hint`, because it crosses the transport/policy boundary — see [Notification authorization hint](#notification-authorization-hint).
-
-### Terminology
-
-This profile uses COW terminology throughout. The table below maps it to the Dutch-language and legacy-specification terms for readers coming from TA NP, eOverdracht, or the domain in general.
-
-| COW (this profile)            | Twiin TA NP v1.0.1          | Nuts eOverdracht                 | Dutch                         |
-|-------------------------------|-----------------------------|----------------------------------|-------------------------------|
-| Placer                        | Sending Organization        | Sending System / sender          | Bronhouder / verzender        |
-| Fulfiller                     | Receiving Organization      | Receiving System                 | Ontvangende organisatie       |
-| Coordination Task             | Workflow Task               | Task                             | Workflow-Task                 |
-| Request (Task.focus)          | — (implicit)                | Composition / referral           | Opdracht / verwijzing         |
-| CancellationRequest Task      | Notification Cancellation   | — (Task.status=cancelled)        | Annuleringsverzoek            |
-| Subscription (R4 Backport)    | —                           | —                                | Abonnement                    |
-| Notification Bundle           | Notification message        | Empty POST (notification)        | Notificatie                   |
-| notification-authorization-hint | authorization-base          | Nuts Authorization Credential    | grondslag-token               |
-{:.grid .table-hover}
-
-"Request" refers to any FHIR [Workflow Request resource](https://hl7.org/fhir/R4/workflow.html#respatterns) — typically `ServiceRequest`, `MedicationRequest`, `DeviceRequest`, or any other request-type resource permitted by the use case.
-
-### Overview
+- the semantics of `notification-event.focus` for data-availability events,
+- how the patient (subject) is identified,
+- how the `notification-authorization-hint` carried on the transport is used to scope the pull.
 
 {% include notified-pull-overview.svg %}
 
-Example payloads below correspond to the step numbers in the diagram. The same flow drives both use cases; only the Request content and the referenced PlanDefinition differ.
+### When to use Notified Pull
 
-| Step | Resource                                         | Referral (single candidate)                                                                                                                    | Transfer of care (multiple candidates)                                                                                                                                                                    |
-|------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1    | Subscription                                     | [np-referral-subscription](Subscription-np-referral-subscription.html)                                                                         | [np-eov-subscription](Subscription-np-eov-subscription.html) (one per candidate Fulfiller)                                                                                                                 |
-| 2    | Request + Coordination Task(s)                   | [np-referral-servicerequest](ServiceRequest-np-referral-servicerequest.html), [np-referral-coordination-task](Task-np-referral-coordination-task.html) | [np-eov-servicerequest](ServiceRequest-np-eov-servicerequest.html), [np-eov-coordination-task-a](Task-np-eov-coordination-task-a.html) + [np-eov-coordination-task-b](Task-np-eov-coordination-task-b.html) |
-| 3    | Notification Bundle (with SubscriptionStatus)    | [np-referral-notification-bundle](Bundle-np-referral-notification-bundle.html) / [np-referral-subscription-status](Parameters-np-referral-subscription-status.html) | [np-eov-notification-bundle](Bundle-np-eov-notification-bundle.html) / [np-eov-subscription-status](Parameters-np-eov-subscription-status.html) (analogous Bundle sent to each candidate)                   |
-| 9    | Dataset queries — derived from PlanDefinition    | [np-bgz-plandefinition](PlanDefinition-np-bgz-plandefinition.html) (BgZ dataset)                                                               | [np-eov-plandefinition](PlanDefinition-np-eov-plandefinition.html) (eOverdracht dataset)                                                                                                                   |
+The pattern fits when:
+
+- the Sender wants to make data available to a known Receiver without coordinating a workflow;
+- the Receiver controls whether, when and how to pull (data minimisation, freshness, user-driven retrieval);
+- audit ("who fetched what when") is sufficient as a verification mechanism and is handled server-side on the Sender;
+- the data set is well-defined enough that no negotiation is needed about *what* is being made available.
+
+It does **not** fit when:
+
+- the Sender needs the Receiver to accept or reject the exchange;
+- the Sender needs to track receiver-side processing state (in-progress, completed, failed);
+- the Sender needs to negotiate cancellation after the Receiver has begun acting on the data;
+- multiple candidate Receivers must be solicited and one chosen.
+
+Use cases of that shape layer the COW workflow on top of Notified Pull.
+
+### Trade-offs
+
+The fire-and-forget stance has explicit, deliberate costs:
+
+- **No protocol-level retry.** If the Receiver never pulls, the Sender does not learn it from this protocol. The Sender inspects its own access logs.
+- **No application-level confirmation.** A pull tells the Sender the data was *fetched*, not that it was *consumed* or *acted upon*. If consumption confirmation is required, the use case needs a workflow layer.
+- **Cancellation only by withdrawal.** There is no acknowledged cancellation handshake. The Sender cancels by withdrawing the data or revoking access; the Receiver discovers it on the next pull attempt (`410 Gone`, `404 Not Found`, or `403 Forbidden`).
+
+Implementers and use-case owners should weigh these costs explicitly. If any of them is unacceptable, the use case belongs in a workflow profile, not in plain Notified Pull.
+
+### Single-resource notifications
+
+The simplest pattern: one notification, one resource.
+
+`notification-event.focus` references the clinical resource directly:
+
+- a new lab result: `focus → Observation/abc123`
+- a discharge summary made available: `focus → DocumentReference/def456`
+- a medication dispense record: `focus → MedicationDispense/ghi789`
+
+The Receiver performs a standard FHIR `read` against the Sender's endpoint. Patient identity comes from the resource's `.subject` field (see [Subject identification](#subject-identification)).
+
+### Multi-resource notifications
+
+When the Sender wants to make a coherent set of resources available in a single event, `notification-event.focus` references a **container resource** that aggregates the references. Three FHIR resources are reasonable containers; the choice is driven by what semantics best match the use case:
+
+| Container          | Best for                                                  | Notes                                                                                                                                  |
+|--------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `List`             | Generic collection of resources (recommended default)     | `List.subject` carries the patient; `List.entry.item` carries each reference; `List.code` can label the collection (e.g. "BgZ snapshot") |
+| `Composition`      | Document-style aggregates with a narrative structure      | Use when the set represents a coherent clinical document (e.g. a transfer-of-care summary). `Composition.section.entry` carries the references |
+| `DocumentReference` | Document or binary content (e.g. PDF/A handoff document) | Use when the actual payload is a document rather than discrete resources                                                               |
 {:.grid .table-hover}
 
-The pattern has four layers, each specified separately below:
+For most data-availability events the **`List`** container is sufficient and the recommended default.
 
-1. **Request** — a FHIR Request resource at the Placer describes *what is being ordered*: a `ServiceRequest` for a referral, a `MedicationRequest` for a medication handoff, etc. The Request is the clinical payload; the Task does not duplicate its content.
-2. **Workflow** — a COW Coordination Task at the Placer references the Request (`Task.focus`) and tracks the lifecycle of the order. Status is advanced by the Fulfiller; cancellation after acceptance is negotiated with the Placer.
-3. **Transport** — a FHIR R5 Subscription Backport event notifies the Fulfiller that the Coordination Task has changed. The notification carries no clinical content.
-4. **Data** — the Fulfiller pulls resources from the Placer's FHIR endpoint, using queries derived from the Request.
+#### Example: List container
 
-### Why pattern 2?
+```
+List
+  status: current
+  mode: snapshot
+  code: <use-case-bound code, e.g. "BgZ snapshot">
+  subject: Reference(Patient with identifier = BSN)
+  date: 2026-05-11T10:30:00+02:00
+  entry:
+    - item: Reference(Observation/...)
+    - item: Reference(Condition/...)
+    - item: Reference(MedicationStatement/...)
+```
 
-The COW IG defines two patterns. **Pattern 1 ("Task at Fulfiller")** has the Placer push the Task into the Fulfiller's FHIR endpoint; this matches TA NP v1.0.1's current design. **Pattern 2 ("Task at Placer with Subscriptions")** keeps the Task at the Placer and uses a Subscription to notify the Fulfiller, which then pulls — matching the "pull" semantics of Notified Pull.
+A container instance lives at the Sender's FHIR endpoint and is read by the Receiver like any other resource. The Receiver MAY pull the container alone (for routing or display) and pull entries on demand, or pull everything eagerly with `_include`.
 
-Pattern 2 is chosen because:
+Multiple `notification-event.focus` references (without a container) are also valid for small ad-hoc groups; the trade-off is that the Receiver loses the explicit aggregation and any metadata the container would carry.
 
-- **Stronger Fulfiller authentication at the Placer.** In pattern 1 the Placer only trusts that the notification endpoint published for the Fulfiller in the addressing function is the correct one; it has no further assurance about who ultimately acts on the Task. In pattern 2 the Fulfiller must authenticate to the Placer every time it reads or updates the Task, giving the Placer a direct, repeatable identity check at the moment it matters.
-- The Placer remains the source of truth for the Task; delta updates flow naturally via new notifications on the same Task.
-- The Fulfiller does not need to host a writable FHIR Task endpoint to accept incoming orders; a thin notification endpoint is enough.
-- Transport (Subscription) and workflow (Task) are cleanly separated, so the same transport serves multiple use cases.
-- The notification can remain small and free of clinical content, matching Dutch data-minimization expectations.
+### Updates to a previously notified set
 
-### Subscription
+When a previously notified resource set evolves (an item changes, an item is added, or an item is removed), the Sender SHOULD send a new notification on the same Subscription with an incremented `event-number` and the same `notification-event.focus`. The Receiver detects the new event and decides what to pull again. Pulling everything is always safe but rarely necessary; two FHIR mechanisms let the Receiver minimise what it pulls.
 
-Profile: [NlCowSubscription](StructureDefinition-nl-cow-subscription.html).
+**`meta.lastUpdated` on individual resources.** Every FHIR resource instance carries `meta.lastUpdated`, which the server sets whenever the resource is modified. After a `read` the Receiver compares this against its cached value and refreshes only when newer. The corresponding `_lastUpdated` search parameter does the same job for a set: `GET [base]/Observation?patient=X&_lastUpdated=ge<timestamp>` returns only resources updated since the timestamp. This works for any resource the Receiver has seen before, including each entry in a container.
 
-The profile uses a **broad, long-lived Subscription per partner**, not per-case. One Subscription covers all Coordination Tasks the Placer may send to a given Fulfiller.
+**`_history` for explicit version chains.** Retrieving the history of a resource (`GET [base]/List/abc/_history`) returns every version with its own `meta.lastUpdated`. For a container focus this is the only reliable way to detect *membership* changes: an entry that was removed does not produce an updated version of the now-missing resource, so a `_lastUpdated` query against the items alone cannot surface a removal. History requires the Sender to retain past versions, which is the FHIR default behaviour.
 
-A Subscription MUST exist at the Placer for the targeted Fulfiller before any notifications flow. How the Subscription is created is **use-case defined**: it may be created in-band (the Fulfiller POSTs a Subscription to the Placer) or out-of-band (the Placer records it from the addressing function, which publishes the Fulfiller's notification endpoint per organization). The Placer MUST check for an existing Subscription for the Fulfiller before sending notifications; beyond that, the creation mechanism does not affect runtime behavior.
+The two patterns combine. For a single-resource focus, a `read` followed by a `meta.lastUpdated` comparison is usually sufficient. For a container focus, the Receiver typically reads the container (or its `_history`) to detect membership changes and then uses `_lastUpdated`-filtered searches or per-item `read`s to refresh the items it still wants.
 
-The Subscription profile (`NlCowSubscription`) SHALL:
+### Subject identification
 
-- set `Subscription.status = active` while in use and `off` to retire the channel;
-- set `Subscription.channel.type = rest-hook` with the Fulfiller's notification endpoint;
-- identify the sending organization via the R5 cross-version `Subscription.managingEntity` extension, using a URA identifier;
-- reference a single NL-specific `SubscriptionTopic` per use case (e.g. referral, transfer of care).
+The patient identity (BSN, in the Dutch context) is **not** carried on the notification wire. Two complementary mechanisms apply:
 
-### Notification
+- **On the focus resource** at the Sender. The clinical resource or container carries the subject in the usual FHIR way: `Resource.subject.identifier` for a clinical resource focus, `List.subject.identifier` / `Composition.subject.identifier` / `DocumentReference.subject.identifier` for a container focus. The Receiver learns the BSN at the moment it reads the focus resource (or via `_include` when fetching it). This is the standard FHIR pattern.
+- **Encoded inside the `notification-authorization-hint` token.** When the Sender needs to scope the pull to the patient without exposing the BSN to the Receiver in the clear, it encodes the BSN into the opaque token using a Sender-only key. The Receiver plays the token back; the Sender's authorization server decodes it and constrains the pull. See [Authorization base](#authorization-base).
 
-Conforms to the HL7 Subscription Backport IG `backport-subscription-notification` Bundle profile; no additional NL constraints in this draft.
+Routing the notification internally before pulling (to a specific department, mailbox or user) is a separate concern from subject identification, and is covered by a routing label rather than by exposing the subject. See [Open questions](#open-questions).
 
-Each Coordination Task event at the Placer triggers one notification to the Fulfiller.
+### Authorization base
 
-The notification is a FHIR `Bundle` of type `history` conforming to the Subscription Backport IG `SubscriptionNotification` profile, further constrained by `NlCowNotificationBundle`. It contains a `Parameters` resource (SubscriptionStatus) with:
+The transport layer's `notification-authorization-hint` extension carries an opaque token from the Sender to the Receiver. The Receiver plays it back in subsequent access-token requests; the Sender's authorization server decodes it and authorizes the pull. The token is opaque to the Receiver and is not interpreted by it.
 
-- `subscription` — reference to the registered Subscription;
-- `type = event-notification`;
-- `status = active` or `off`;
-- `topic` — canonical URL of the NL SubscriptionTopic;
-- `notification-event.focus` — reference to the Coordination Task at the Placer;
-- `notification-event` MAY carry a `notification-authorization-hint` (see [Notification authorization hint](#notification-authorization-hint)).
+For Notified Pull, a practical pattern is to **encode the patient identifier (BSN), the scope of resources made available, and a validity window into the token, using a Sender-only key**:
 
-The notification carries **no FHIR queries, no dataset content, and no workflow status**. The Fulfiller learns the status by reading the referenced Coordination Task.
+- the BSN does not need to travel as clear-text in the notification or in `additional-context`;
+- the Sender retains authoritative control over scope: a Receiver presenting a valid token still cannot pull data outside the scope encoded in it;
+- the audit trail naturally ties access-token usage to the originating notification.
 
-### Coordination Task
+Costs of this approach:
 
-Profile: [NlCowCoordinationTask](StructureDefinition-nl-cow-coordination-task.html).
+- the Receiver cannot route internally on BSN before pulling (a routing label is needed if pre-pull routing is required, see [Open questions](#open-questions));
+- the Sender implements an internal encode/decode mechanism and key management;
+- token semantics are Sender-defined, so a Receiver cannot rely on common parsing.
 
-The Coordination Task is hosted at the Placer and is the single point of truth for the lifecycle of one order. The profile constrains at minimum:
+The token's wire format and processing rules are out of scope of this page and belong to the access-control specification agreed between partners. Inclusion of the hint is optional; whether a use case requires it depends on the access-control model in play.
 
-| Element                    | Card. | Description                                                                       |
-|----------------------------|-------|-----------------------------------------------------------------------------------|
-| `Task.status`              | 1..1  | See [state machine](#state-machine).                                              |
-| `Task.intent`              | 1..1  | Fixed `order`.                                                                    |
-| `Task.code`                | 1..1  | Identifies the use case (e.g. referral, transfer of care).                        |
-| `Task.focus`               | 1..1  | Reference to the Request resource describing what is ordered.                     |
-| `Task.for.identifier`      | 1..1  | Patient BSN — see [Patient identification](#patient-identification).              |
-| `Task.requester`           | 1..1  | Placer (organization + acting practitioner).                                      |
-| `Task.owner`               | 1..1  | Fulfiller.                                                                        |
-| `Task.restriction.period`  | 0..1  | Window during which the data will remain available for pull.                      |
-{:.grid .table-hover}
+### Data unavailability
 
-`Task.focus` is a generic FHIR `Reference`; this profile binds it to any FHIR Workflow Request resource (`ServiceRequest`, `MedicationRequest`, `DeviceRequest`, …) so the same Coordination Task structure drives different clinical orders.
+When the Sender decides the data should no longer be retrievable (because it was wrong, superseded, withdrawn or expired), it either removes the resource from its FHIR endpoint or revokes the access that the `notification-authorization-hint` token grants. Subsequent `read` requests receive a standard HTTP response that doubles as the withdrawal signal:
 
-`accepted` marks the Fulfiller's commitment to the order; `in-progress` marks active fulfillment, which is typically the phase during which the data pull happens. They are distinct transitions so the Placer can observe "agreed to do it" and "working on it" as separate events.
+- `410 Gone`: the resource was here and has been deliberately removed. Use this when the Sender is willing to confirm that the withdrawal happened.
+- `404 Not Found`: the URL does not resolve to a resource. Use this when the Sender does not want to disclose whether the resource ever existed.
+- `403 Forbidden`: the Receiver's authorization (typically the authorization-base) has been rejected. This response implies nothing about whether the resource exists; the existence check sits behind the access step.
 
-#### State machine
+There is no `cancel` operation in Notified Pull and no follow-up notification announcing withdrawal. The HTTP response on the next pull *is* the signal. A Receiver that never re-pulls will not learn of the withdrawal; that is the deliberate price of fire-and-forget.
 
-{% include notified-pull-task-lifecycle.svg %}
+Per-case workflow cancellation with an acknowledged handshake between Sender and Receiver requires the COW workflow profile.
 
-The `in-progress` transition marks the boundary at which the Placer loses the ability to cancel unilaterally. Before that (`requested` or `accepted`) the Placer MAY set `Task.status = cancelled` directly. Once the Fulfiller has moved the Task to `in-progress`, cancellation by the Placer MUST be negotiated via a separate [CancellationRequest Task](#cancellation), per [COW cancellation rules](https://build.fhir.org/ig/HL7/fhir-cow-ig/en/cancelling-and-modifying-requests.html).
+### Sender intent and receiver-side state tracking
 
-#### Soliciting multiple Fulfillers
+> **Under discussion.** This section captures working-group suggestions for the middle ground between pure fire-and-forget and a full COW workflow. Nothing here is normative yet.
 
-Some use cases — eOverdracht in particular — let the Placer offer a patient to several candidate Fulfillers in parallel and proceed with whichever one accepts first. The pattern is **one ServiceRequest and multiple Coordination Tasks**:
+Some use cases want lightweight tracking of whether the Receiver has fetched, viewed or processed the data, without committing to a full COW workflow lifecycle. Three approaches are on the table:
 
-- One `ServiceRequest` describes the clinical order; it is created once.
-- N Coordination Tasks reference the same ServiceRequest via `Task.focus`, each with a different `Task.owner` (one per candidate Fulfiller).
-- All Tasks share a `Task.groupIdentifier` so they can be correlated as one solicitation.
-- Each Task triggers its own notification via the Placer's Subscription to that candidate.
-- During solicitation `ServiceRequest.performer` is left empty; candidates are known from the Tasks' owners, not from the ServiceRequest. Setting `performer` is appropriate only once a candidate has been selected, and even then it is optional — `Task.owner` on the selected Task remains the authoritative signal. This is COW's distinction between "Request Placed (No Performer)" and "Request Placed (Performer Selected)".
+**Server-side audit only.** The Sender already logs every `read` request on the focus resource and its referenced entries; "was it pulled" is derivable from those access logs without any Receiver-side participation. No protocol additions, no Receiver obligation. Tells the Sender only about fetches, not about consumption or downstream action.
 
-When a Fulfiller accepts, the Placer **selects** that Task by setting `Task.businessStatus = selected`, and cancels the others with `Task.status = cancelled` and `Task.statusReason = "not selected"`. Each cancellation fires its own notification so the losing candidates are informed. These are direct cancellations — none of the Tasks have reached `in-progress`, so no `CancellationRequest Task` is required.
+**Receiver-updated status on the focus resource.** The Sender exposes a status field on the focus resource (for example, a `processing-status` extension on the `List` container) that the Receiver updates from `pending` to `viewed` or `processed`. State lives on the resource the Receiver already pulled. The Sender accepts and validates the updates, and decides which Receivers may set which values. Couples state semantics to the focus resource type.
 
-**Privacy caveat.** Pre-selection, every candidate has a valid Coordination Task referencing the same ServiceRequest. Access-control policy MUST limit what each candidate can actually pull until selection — typically minimal or de-identified content during solicitation, full dataset only after `businessStatus = selected`. The `notification-authorization-hint` is the natural place to encode this phase: a pre-selection token with minimal scope, a post-selection token with the full dataset. This is a use-case policy concern, out of scope for this transport profile, but it must be implemented somewhere.
+**A separate Task carrying the acknowledgement.** The Sender creates a Task with `focus` on the data and `status = requested`; the Receiver updates the Task's `status` to `received` or `completed` as it makes progress. Conceptually this is COW Lite: a single Task, no Request resource, no multi-candidate solicitation, no cancellation negotiation. It re-uses the FHIR Task state machine and is unambiguous from the Sender's perspective. The risk is conceptual drift: an acknowledgement Task is shape-wise similar to a COW Coordination Task and the two should not be confused in mixed deployments.
 
-### Data retrieval
+In all three approaches, the Sender's intent (whether tracking is expected at all, and which mechanism applies) should be discoverable from the SubscriptionTopic, so a Receiver knows up-front whether a notification implies an obligation to update state somewhere.
 
-Once the Fulfiller has read the Coordination Task, it performs the FHIR queries needed to retrieve the ordered dataset. **This profile does not place the query list in the notification.**
+### Relationship to other layers
 
-The recommended approach is to derive the query list from the Request resource:
-
-- `Request.code` identifies the dataset (e.g. BgZ, eOverdracht dataset), bound to a Dutch value set;
-- optionally, `Request.instantiatesCanonical` references a `PlanDefinition` that enumerates the FHIR queries for that dataset. A `PlanDefinition` lets a dataset specification publish its query list once and be referenced by every Request, rather than every Placer re-listing the same queries. It is optional: a Fulfiller MAY implement the query list directly from the dataset code.
-
-This keeps the notification thin, keeps queries versionable alongside the dataset specification, and matches standard FHIR workflow practice. For per-case additions beyond the canonical dataset, see [Adding information per layer](#adding-information-per-layer).
-
-#### Adding information per layer
-
-> **Under discussion.** This subsection is still being debated by the working group.
-
-This subsection describes further possibilities for adding information to each layer. Keeping them separate means a change in one does not force changes in the others.
-
-**Transport — notification.** The notification carries no clinical content. It MAY carry a `notification-authorization-hint` (the Placer's opaque legal-basis token) on `SubscriptionStatus.notification-event`. That placement gets the token to the Fulfiller before any pull.
-
-**Workflow — Coordination Task.** `Task.input` is a repeating slot for per-case parameters. This profile uses it for one thing: a Placer-supplied **supplemental FHIR query**, e.g. `valueString = "Observation?category=laboratory&date=ge2026-01-01"`. A Coordination Task MAY carry zero or more such entries. No other per-case parameters are standardised in this draft.
-
-**Data — Request and PlanDefinition.** The dataset itself is shared; case-specific additions are not.
-
-- **Shared**: a `PlanDefinition` publishes the canonical list of FHIR queries for a dataset (BgZ, eOverdracht, …). One PlanDefinition per dataset, one central owner — Nictiz is the natural fit for Dutch information standards. Versioned by canonical URL (e.g. `http://nictiz.nl/fhir/PlanDefinition/bgz|1.2.0`) and referenced from `Request.instantiatesCanonical`. Placers do not re-list queries; Fulfillers resolve the PlanDefinition once per version and cache it.
-- **Per case**: `Request.supportingInfo` for *specific resource instances* the Placer has already identified (e.g. the trigger Observation behind the referral); `Task.input` supplemental-query for *ad-hoc queries* that extend the canonical dataset for this case only.
-
-| Layer      | Shared                         | Per-case                                                  |
-|------------|--------------------------------|-----------------------------------------------------------|
-| Transport  | `SubscriptionTopic`            | `notification-authorization-hint` on `notification-event` |
-| Workflow   | `Task.code`                    | `Task.input` supplemental-query                           |
-| Data       | Nictiz `PlanDefinition`        | `Request.supportingInfo`, `Task.input` supplemental-query |
-{:.grid .table-hover}
-
-### Cancellation
-
-Profile (for the sub-Task used after the Fulfiller has started): [NlCowCancellationRequestTask](StructureDefinition-nl-cow-cancellationrequest-task.html).
-
-{% include notified-pull-cancellation.svg %}
-
-Cancellation is COW-native: the Placer never uses `Subscription.status = off` to signal per-case cancellation; the Subscription is transport, not workflow.
-
-- **Placer cancels before Fulfiller started** (Task is `requested` or `accepted`) — Placer updates `Coordination Task.status = cancelled` and sends a notification so the Fulfiller observes the change.
-- **Placer cancels after Fulfiller started** (Task is `in-progress`) — Placer creates a `CancellationRequest Task` with `Task.code = abort` and `Task.focus` referencing the Coordination Task. A notification points the Fulfiller to this new Task. The Fulfiller reads it and either accepts (Placer then sets the Coordination Task to `cancelled`) or rejects it.
-- **Fulfiller declines or abandons** — Fulfiller updates the Coordination Task to `rejected` (from `requested`) or `failed` (from `in-progress`). No separate Task is needed; the Fulfiller is the authorized owner of these status transitions.
-
-### Patient identification
-
-> **Under discussion.** The placement and conveyance of the BSN is still being debated by the working group.
-
-The Fulfiller needs the patient's BSN before pulling any clinical data, for routing, identity-matching, and legal-basis evaluation. This profile places the BSN on the Coordination Task itself:
-
-- `Task.for.identifier.system = http://fhir.nl/fhir/NamingSystem/bsn`
-- `Task.for.identifier.value = <BSN>`
-
-`Task.for.reference` MAY additionally point to a `Patient` resource at the Placer, but the identifier MUST be present. This keeps the BSN within the FHIR graph and decoupled from the access-control layer — unlike TA NP v1.0.1, which could alternatively carry the BSN in an OAuth `patient` claim.
-
-### Notification authorization hint
-
-Many Notified Pull use cases are referrals or transfers of care. In those scenarios, the legal basis for disclosure is **not** always a recorded patient consent or an existing treatment relationship between patient and Fulfiller: it can be the referral itself (presumed consent under WGBO), inter-collegial consultation, or another Placer-determined ground.
-
-The `notification-authorization-hint` is an opaque token issued by the Placer that encodes this decision. It rides on `SubscriptionStatus.notification-event` using the Backport IG's [`notification-authorization-hint`](http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/notification-authorization-hint) extension, so it reaches the Fulfiller before any pull. The Fulfiller plays it back in subsequent access-token requests so the Placer's authorization server can verify the legal basis it itself decided upon; the Fulfiller does not interpret the token.
-
-Inclusion of the hint is optional. Its wire format and processing rules are out of scope of this page and are settled in the access-control specification agreed between partners.
-
-### Mapping: Twiin TA NP v1.0.1 → this profile
-
-| TA NP                                             | This profile                                                    |
-|---------------------------------------------------|-----------------------------------------------------------------|
-| Notification Task (STU3 Task, POSTed to receiver) | Notification Bundle (R4 Backport SubscriptionNotification)      |
-| Task.code = `pull-notification`                   | `SubscriptionTopic` canonical URL                               |
-| Task.groupIdentifier                              | Subscription identifier (reused across notifications)           |
-| Task.identifier                                   | `notification-event.event-number`                               |
-| Task.status = `requested` / `cancelled`           | Coordination Task status / CancellationRequest Task             |
-| Workflow Task                                     | Coordination Task (same role, COW-profiled)                     |
-| Task.input:authorization-base                     | `notification-event` `notification-authorization-hint`          |
-| Task.input:query-available-resources              | Derived from Request / PlanDefinition (see Data retrieval)      |
-| Task.input:read-available-resource                | Idem                                                            |
-| Task.input:get-workflow-task                      | Obsolete — Coordination Task is always referenced               |
-| Task.for.identifier (BSN) or OAuth patient claim  | `Coordination Task.for.identifier` (BSN)                        |
-| Notification Cancellation (conditional update)    | CancellationRequest Task (if accepted) or status update         |
-{:.grid .table-hover}
-
-### Mapping: Nuts eOverdracht → this profile
-
-| eOverdracht                                       | This profile                                                    |
-|---------------------------------------------------|-----------------------------------------------------------------|
-| Empty POST to Task endpoint                       | Notification Bundle referencing a Coordination Task             |
-| Task (STU3, Nictiz eOverdracht profile)           | Coordination Task + Request (COW-profiled, R4)                  |
-| Task.input:nursingHandoff (document reference)    | Request.code + dataset queries via PlanDefinition               |
-| Task.status transitions gate access               | Coordination Task status transitions + notification-authorization-hint |
-| Nuts Authorization Credential                     | `notification-authorization-hint`                               |
-{:.grid .table-hover}
+- **Transport** ([Notification](./notification.html)): provides the Subscription, SubscriptionTopic, notification Bundle and `notification-event` mechanics that Notified Pull uses unchanged. This page extends that transport only by giving `notification-event.focus` a data-availability meaning and by describing how the `notification-authorization-hint` is used.
+- **Workflow** (COW profile, separate page): a COW workflow that uses Notified Pull for the data-fetch part references this page. In that case `notification-event.focus` points at a Coordination Task rather than a clinical resource or container; the workflow page adds the Task lifecycle, multi-candidate solicitation, and cancellation negotiation on top.
+- **Endpoint discovery** ([Care Services Directory](./care-services.html)): the notification endpoint to which the Sender POSTs a notification Bundle is resolved per Receiver organisation via the addressing function (mCSD-based directory). NP uses the resolved endpoint unchanged.
+- **Internal routing** ([Routing](./routing.html)): how the Receiver routes a landed notification to the right department, mailbox or user is specified by TA Routing using `HealthcareService`, `Location` and optionally `ActivityDefinition` published in an mCSD Directory. See [Pre-pull routing](#pre-pull-routing) for how NP carries a routing hint that points the Receiver at one of those primitives.
+- **Access control** (out of scope): mTLS, OAuth, JWT assertions, and the wire format and validation rules for the `notification-authorization-hint` token are specified by the partners' access-control agreement.
 
 ### Open questions
 
-1. **R4 Backport on STU3** — TA NP v1.0.1 is STU3-based. Determine whether the Subscription Backport IG can be applied to STU3 servers, or whether STU3 implementations need a transition path.
-2. **Query list location** — this draft derives queries from the Request resource and an optional PlanDefinition. The alternative is carrying them on `Coordination Task.input`, matching TA NP v1.0.1 more closely. To be decided by the working group.
-3. **SubscriptionTopic ownership** — whether NL topics are published per-dataset (Nictiz) or per-use-case (Twiin/Nuts), and under which canonical base URL.
-4. **`additional-context` for deltas** — whether the notification should hint at which resource types changed since the last event, or the Fulfiller always refetches from the Request-derived query list.
-5. **Patient identification / BSN placement** — this draft places the BSN on `Coordination Task.for.identifier`. Alternatives are carrying it via the access-control layer (the OAuth `patient` claim, à la TA NP v1.0.1), via a Patient resource reference only, or inside the notification itself. Needs working-group discussion.
+See also the [Subscription Topics Exploration](subscription-topics-exploration.html), a working-group discussion document on the granularity of subscriber-initiated subscriptions.
+
+1. **Container resource default.** This draft proposes `List` as the default multi-resource container, with `Composition` and `DocumentReference` as use-case-driven alternatives. Working group to confirm.
+2. **Routing label.** Whether the spec should define an explicit internal routing label (department, mailbox, specialism) for pre-pull routing. Real Dutch deployments often need this; the open question is where it lives (`notification-event.additional-context`, on a separate resource, etc.) and how it relates to the BSN-in-authorization-base pattern.
+3. **Authorization-base structure.** Whether the spec should recommend any minimum structure for the token (e.g. carry expiry, scope ids, signature algorithm) or leave it entirely opaque.
+4. **Container ↔ focus cardinality.** Whether to support multiple focuses pointing at multiple containers in a single notification, or restrict to one focus (single resource or single container) per event.

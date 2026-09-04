@@ -16,11 +16,12 @@ This guide outlines the data requirements and principles underlying the GF Autho
 - Stakeholder Responsibility: Healthcare providers are accountable for implementing correct authorization
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
+
 <!--  for policy makers -->
 
 ### Solution overview
 
-On a high level, a data access/operation authorization starts with a request from the requesting party, for example: a practitioner requesting data. This request, along with information of the requesting party and e.g. patient consent records form the *input data* for the process. This input is *evaluated by a policy* by a responding party; this could be a data holder. The outcome is a *decision* (allow or deny). Basically: Input --> policy evaluation --> Output
+On a high level, a data access/operation authorization starts with a request from the requesting party, for example: a practitioner requesting data. This request, along with information of the requesting party and e.g. patient consent records form the _input data_ for the process. This input is _evaluated by a policy_ by a responding party; this could be a data holder. The outcome is a _decision_ (allow or deny). Basically: Input --> policy evaluation --> Output
 
 Just below this top level abstraction, there's a lot more to discuss:
 
@@ -29,16 +30,16 @@ Just below this top level abstraction, there's a lot more to discuss:
 1. Authorization policy makers create authorization policies based on attributes specified in Healthcare Information models and standards. These attributes can be certain identifiers (BSN, URA, etc.), entity characteristics (organization type, practitioner role), permission records (qualifications, consent) and/or specified operations or capability statements for requesting and responding party
 2. Requesting and responding parties need to acquire attributes (data) from authoritative data sources. When to get this data is not specified here. A (PKIoverheid) certificate from a Trust Service Provider may be fetched once a year, a CiBG-Dezi-token may be fetched when a practitioner starts his/her shift and a VZVZ Mitz patient consent may be fetched, by the responding party, just after receiving a data request.
 3. The requesting party can now create a request and send it to the responding party along with 'claims'; statement on the e.g. identity or characteristics of the requesting party. The responding party may add additional claims or attributes, for example, a local patient consent and/or the VZVZ Mitz consent preference.
-4. The request and all claims/attributes are input for the authorization policy. The input is evaluated against the policy. The outcome is a decision on whether the request is allowed or denied.  
-
+4. The request and all claims/attributes are input for the authorization policy. The input is evaluated against the policy. The outcome is a decision on whether the request is allowed or denied.
 
 #### Scope
-GF Authorization only specifies the input-variables, policy evaluation and output-variables of the authorization decision. ***How to obtain and verify the inputs, is out-of-scope***; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials. Execution of the request and architectural design (e.g. Policy Enforcement Point or AAA-proxies) are also out of scope. 
 
+GF Authorization only specifies the input-variables, policy evaluation and output-variables of the authorization decision. **_How to obtain and verify the inputs, is out-of-scope_**; other pages in this IG specify the use of authoritative sources, certificates and/or verifiable credentials. Execution of the request and architectural design (e.g. Policy Enforcement Point or AAA-proxies) are also out of scope.
 
 ### Components (actors)
 
 This IG distinguishes 4 categories of actors:
+
 1. Authoritative data sources
 1. Authorization policy makers
 1. Requesting party (Data user)
@@ -46,55 +47,66 @@ This IG distinguishes 4 categories of actors:
 
 #### Authoritative data sources
 
-**Trust Service Provider Certificates**: 
-PKIoverheid certificates. Used to identify the organization operating the client or server of data user or data holder. 
+**Trust Service Provider Certificates**:
+PKIoverheid certificates. Used to identify the organization operating the client or server of data user or data holder.
 
-**CiBG-Dezi**: 
+**CiBG-Dezi**:
+
 - Used to identify the practitioner and care provider
 - Role of the Practitioner. Uses (indirectly) the BIG-register as data source
 
 **CiBG-LRZa**:
+
 - Registry of care providers and their care service directory endpoint-urls
 
 **Care service directories**:
-- Can data holder handle my request? 
+
+- Can data holder handle my request?
 - Endpoint-url of data holder
 
 **NOTE TO REVIEWER/EDITOR: Care service directory and SBV-Z currently aren't used in the authorization process. Should we remove them?**
 
 **SBV-Z**:
+
 - Used to check the identity (BSN) of the patient
 
 **Vektis Organization type**:
+
 - Vektis is the source of the care provider type. A care provider can be one or more types. For example: a pharmacy, hospital, general practitioner, care at home, etc.
 
 **VZVZ Mitz**:
+
 - Patient Consent preference registry
 
 **NictiZ Qualifications**:
+
 - Is data user (care provider and software) qualified for the request? This source claims the data user to be abled to use some CapabilityStatements from NictiZ Healthcare Information standards. The request should be in scope of the CapabilityStatements.
 
 **NictiZ Healthcare Information standards**:
-Healthcare Information standards define which operations a data user or data holder should use/support. These standards also define HealthCare Information Models (HCIM's) and therefore which data labels, codes or categories can be used in policies. 
+Healthcare Information standards define which operations a data user or data holder should use/support. These standards also define HealthCare Information Models (HCIM's) and therefore which data labels, codes or categories can be used in policies.
 
 #### Authorization policy makers
+
 Authorization policies SHALL be expressed in the [Rego policy language](https://www.openpolicyagent.org/docs/policy-language) to avoid semantic ambiguity and support automated testing.
+
 <!-- publishing policies, policies should be merged without negotiation... Legislation is always input-->
 
 #### Requesting party (Data user)
-Creates a request, adds necessary attributes/claims about itself and sends it to the responding party 
+
+Creates a request, adds necessary attributes/claims about itself and sends it to the responding party
 
 #### Responding party (Data holder)
+
 Acquires attributes/claims about requesting party and e.g. the patient consent. Evaluates the request.
 May have recorded resource-level access for data user while sending notification (TA Notified Pull mechanism).
 Implementers are not required to use the Rego-policy-language in production systems, but the outcome of their authorization decisions SHALL match the outcome using the original, specified authorization policy.
-
 
 ### Policy Input Data Model
 
 This section defined the data model of the policy input.
 
 #### Subject
+
 This is the principal requesting the data. Attributes may come from Identity Providers (CiBG Dezi) and/or (client-)certificates.
 This IG defines the following attributes:
 
@@ -109,6 +121,7 @@ This IG defines the following attributes:
 This list can be extended with additional attributes for specific use-cases if needed.
 
 #### Resource
+
 This is the requested data. Attributes are typically from the request URL and request parameters (e.g. FHIR search parameters).
 
 **NOTE TO REVIEWER/EDITOR: `action.fhir_rest` communicates similar information, should these 2 converge? Knooppunt PDP currently only uses `resource.type`**
@@ -118,13 +131,14 @@ This is the requested data. Attributes are typically from the request URL and re
 - `properties`: **NOTE TO REVIEWER/EDITOR: to be specified**
 
 #### Action
+
 The action performed by the request. For example 'GET' (read/search), 'POST' (create) , 'PUT' (update).
 
 It contains information about the request, and a parsed representation of the request if supported by this IG.
 Policy writers are encouraged to use the connection type-specific properties, e.g. `fhir_rest.search_params` over `request.query_params`.
 
 - `name`: the name of the action, for example 'search'. **NOTE TO REVIEWER/EDITOR: Currently not used by Knooppunt PDP.**
-- `connection_type_code` (required): indicates the type of the connection. Policy writers are encouraged to use the [HL7 EndpointConnectionType](http://terminology.hl7.org/CodeSystem/endpoint-connection-type) code system whenever applicable. 
+- `connection_type_code` (required): indicates the type of the connection. Policy writers are encouraged to use the [HL7 EndpointConnectionType](http://terminology.hl7.org/CodeSystem/endpoint-connection-type) code system whenever applicable.
   This value informs the policy engine on how to interpret the request.
 - `request`:
   - `protocol` (required): the protocol of the request, for `HTTP/1.1`.
@@ -146,6 +160,7 @@ They are typically derived from the request (e.g. FHIR search parameter `patient
 They could also be sourced from the authentication token, or be looked up in the EHR if only `patient_id` was provided in the request, and the policy requires the `patient_bsn` for the Mitz consent check.
 
 #### Context
+
 Other input for the policy evaluation is added to the context.
 
 - `data_holder_facility_type`: a string indicating the type of the organization of the data holder (Vektis), e.g. `Z3`.
@@ -222,10 +237,10 @@ This is represented by the `allow` boolean variable (`true` or `false`) in the R
 Any other output SHALL be considered as informational and SHALL NOT be used for the decision of allowing or denying the request.
 For example, a policy may output the reason for denial, which can be logged for auditing or debugging purposes.
 
-
 **NOTE TO REVIEWER/EDITOR: Add more examples**
 
 ### Security and privacy considerations
+
 --TODO
 
 ### Example use cases
@@ -233,6 +248,7 @@ For example, a policy may output the reason for denial, which can be logged for 
 #### Advanced Care Planning (ACP) / Proactieve ZorgPlanning (PZP)
 
 The following policy allows the following FHIR requests, if the patient gave consent in Mitz:
+
 - `GET [base]/Patient?identifier=http://fhir.nl/fhir/NamingSystem/bsn|{context.patient_bsn}`
 - `GET [base]/Consent?patient=Patient/{context.patient_id}&scope=http://terminology.hl7.org/CodeSystem/consentscope|treatment&category=http://snomed.info/sct|129125009`
 
