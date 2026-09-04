@@ -248,12 +248,14 @@ TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the no
 | Notification Task (STU3 Task, POSTed to receiver) | Notification Bundle, see [Notification](notification.html)      |
 | Task.code = `pull-notification`                   | SubscriptionTopic canonical URL, see [Notification](notification.html) |
 | Task.status = `requested` / `cancelled`           | Coordination Task status / CancellationRequest Task             |
+| Task.status = `received`                          | `received`, optional                                            |
 | Workflow Task                                     | Coordination Task (same role, COW-profiled)                     |
 | Task.input:authorization-base                     | Basis recorded at the Placer, see [Authorization basis](#authorization-basis) |
-| Task.input:query-available-resources              | Derived from Request / PlanDefinition (see Data retrieval)      |
-| Task.input:read-available-resource                | Idem                                                            |
+| Task.input:query-available-resources              | `Task.input` supplemental-query (per order); the canonical dataset via a PlanDefinition on the Request |
+| Task.input:read-available-resource                | `Task.input` supplemental-resource                              |
 | Task.input:get-workflow-task                      | Obsolete; the Coordination Task is always referenced            |
-| Task.for.identifier (BSN) or OAuth patient claim  | `Coordination Task.for.identifier` (BSN)                        |
+| Task.for.identifier (BSN) or OAuth patient claim  | `Task.for.identifier`, populated once the Fulfiller may know the BSN; no OAuth claim |
+| Task.groupIdentifier (correlates delta updates)   | Not used; a delta is an update of the same Coordination Task    |
 | Notification Cancellation (conditional update)    | CancellationRequest Task (if accepted) or status update         |
 {:.grid .table-hover}
 
@@ -263,7 +265,9 @@ TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the no
 |---------------------------------------------------|-----------------------------------------------------------------|
 | Empty POST to Task endpoint                       | Notification referencing a Coordination Task, see [Notification](notification.html) |
 | Task (STU3, Nictiz eOverdracht profile)           | Coordination Task + Request (COW-profiled, R4)                  |
-| Task.input:nursingHandoff (document reference)    | Request.code + dataset queries via PlanDefinition               |
+| Task.input:nursingHandoff (document reference)    | The dataset via Request.code and a PlanDefinition; the handoff document itself as `Task.input` supplemental-resource |
+| One Task per candidate receiver                   | One Coordination Task per candidate, correlated on `Task.focus` |
+| BSN kept off the Task                             | `Task.for` references the Patient; `Task.for.identifier` absent until selection |
 | Task.status transitions gate access               | Coordination Task status transitions + access record at the Placer |
 | Nuts Authorization Credential                     | Basis recorded at the Placer, see [Authorization basis](#authorization-basis) |
 {:.grid .table-hover}
