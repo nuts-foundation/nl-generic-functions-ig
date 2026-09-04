@@ -44,8 +44,7 @@ Description: "The transfer-of-care order. performer is intentionally absent: dur
 * intent = #order
 * code = $sct#308292007 "Transfer of care"
 * instantiatesCanonical = "http://nictiz.nl/fhir/PlanDefinition/eoverdracht|4.0.0"
-* subject.identifier.system = $bsn
-* subject.identifier.value = "999900450"
+* subject = Reference(Patient/a91c3e7d-58b2-4f06-9d14-6e2b7c0a5f38) "Patient at the Placer"
 * authoredOn = "2026-04-17T09:10:00+02:00"
 * requester.identifier.system = $ura
 * requester.identifier.value = "11111111"
@@ -56,15 +55,16 @@ Instance:    np-eov-coordination-task-a
 InstanceOf:  NlCowCoordinationTask
 Usage:       #example
 Title:       "eOverdracht — Coordination Task (candidate A)"
-Description: "Coordination Task offering the transfer to Fulfiller A. Shares groupIdentifier with the task offered to Fulfiller B."
+Description: "Coordination Task offering the transfer to Fulfiller A. Correlated with the task offered to Fulfiller B through the shared Task.focus."
+* identifier.system = $uuid
+* identifier.value = "urn:uuid:8a1d4f6c-2e97-4b3a-a5c8-7d0f9e2b6c14"
 * status = #requested
 * intent = #order
-* code = $sct#308292007 "Transfer of care"
+* code.coding[0] = $task-code#fulfill
+* code.coding[+] = $sct#308292007 "Transfer of care"
 * focus = Reference(ServiceRequest/np-eov-servicerequest)
-* groupIdentifier.system = $uuid
-* groupIdentifier.value = "urn:uuid:4a7a0c9c-9d51-4b14-9d21-0bd0eeb57f10"
-* for.identifier.system = $bsn
-* for.identifier.value = "999900450"
+// No BSN during solicitation; the Placer adds Task.for.identifier after selection.
+* for = Reference(Patient/a91c3e7d-58b2-4f06-9d14-6e2b7c0a5f38)
 * authoredOn = "2026-04-17T09:15:00+02:00"
 * requester.identifier.system = $ura
 * requester.identifier.value = "11111111"
@@ -79,15 +79,16 @@ Instance:    np-eov-coordination-task-b
 InstanceOf:  NlCowCoordinationTask
 Usage:       #example
 Title:       "eOverdracht — Coordination Task (candidate B)"
-Description: "Parallel Coordination Task offering the same ServiceRequest to Fulfiller B. Same groupIdentifier as candidate A. The Placer will select the first to accept, cancelling the other with statusReason 'not selected'."
+Description: "Parallel Coordination Task offering the same ServiceRequest to Fulfiller B. Same Task.focus as candidate A. The Placer will select the first to accept, cancelling the other with statusReason 'not selected'."
+* identifier.system = $uuid
+* identifier.value = "urn:uuid:e5b7c2a9-3f18-4d6e-8a2b-9c4f1d7e0b35"
 * status = #requested
 * intent = #order
-* code = $sct#308292007 "Transfer of care"
+* code.coding[0] = $task-code#fulfill
+* code.coding[+] = $sct#308292007 "Transfer of care"
 * focus = Reference(ServiceRequest/np-eov-servicerequest)
-* groupIdentifier.system = $uuid
-* groupIdentifier.value = "urn:uuid:4a7a0c9c-9d51-4b14-9d21-0bd0eeb57f10"
-* for.identifier.system = $bsn
-* for.identifier.value = "999900450"
+// No BSN during solicitation; the Placer adds Task.for.identifier after selection.
+* for = Reference(Patient/a91c3e7d-58b2-4f06-9d14-6e2b7c0a5f38)
 * authoredOn = "2026-04-17T09:15:00+02:00"
 * requester.identifier.system = $ura
 * requester.identifier.value = "11111111"

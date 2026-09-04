@@ -5,14 +5,16 @@
 @startuml clinical-workflow-cancellation
 autonumber
 
-title "Notified Pull — cancellation scenarios"
+title "Notified Pull: cancellation scenarios"
 skinparam roundCorner 7
 skinparam sequenceGroupBorderThickness .5
 
 participant "Placer" as placer order 10
 participant "Fulfiller" as fulfiller order 20
 
-== Placer cancels before Fulfiller started (requested or accepted) ==
+note over placer, fulfiller : Every Task write at the Placer notifies the Task owner,\nincluding the Fulfiller's own writes. Those echoes are omitted here.
+
+== Placer cancels before Fulfiller started (requested, received or accepted) ==
 
 placer -> placer : PUT Coordination Task\n(Task.status = cancelled)
 placer -> fulfiller ++: POST notification Bundle
@@ -20,7 +22,7 @@ fulfiller --> placer --: 200 OK
 
 == Placer cancels after Fulfiller started (in-progress) ==
 
-placer -> placer : Create CancellationRequest Task\n(Task.code = abort,\nTask.focus → Coordination Task)
+placer -> placer : Create CancellationRequest Task\n(Task.code = abort,\nTask.focus = Coordination Task)
 placer -> fulfiller ++: POST notification Bundle
 fulfiller --> placer --: 200 OK
 
@@ -40,7 +42,7 @@ end
 
 == Fulfiller declines or abandons the order ==
 
-alt From requested
+alt From requested or received
   fulfiller -> placer ++: PUT Coordination Task\n(Task.status = rejected)
   placer --> fulfiller --: 200 OK\nTask
 else From in-progress

@@ -9,6 +9,7 @@ hide empty description
 skinparam roundCorner 7
 
 state requested
+state received
 state accepted
 state "in-progress" as inprogress
 state rejected
@@ -18,10 +19,16 @@ state failed
 
 [*] --> requested : Placer creates
 
+requested --> received    : Fulfiller (optional)
 requested --> accepted    : Fulfiller
 requested --> inprogress  : Fulfiller (shortcut)
 requested --> rejected    : Fulfiller
 requested --> cancelled   : Placer
+
+received --> accepted     : Fulfiller
+received --> inprogress   : Fulfiller (shortcut)
+received --> rejected     : Fulfiller
+received --> cancelled    : Placer
 
 accepted --> inprogress   : Fulfiller
 accepted --> cancelled    : Placer

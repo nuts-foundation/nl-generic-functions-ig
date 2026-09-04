@@ -5,7 +5,7 @@
 @startuml clinical-workflow-overview
 autonumber
 
-title "Notified Pull — happy path"
+title "Notified Pull: happy path"
 skinparam roundCorner 7
 skinparam sequenceGroupBorderThickness .5
 
@@ -29,6 +29,8 @@ placer --> fulfiller --: 200 OK\nTask + Request + Patient
 
 fulfiller -> placer ++: PUT Coordination Task\n(Task.status = in-progress)
 placer --> fulfiller --: 200 OK\nTask
+placer -> fulfiller ++: POST notification Bundle\n(Task changed; Fulfiller ignores its own write)
+fulfiller --> placer --: 200 OK
 
 loop FHIR queries derived from Request (optional PlanDefinition)
   fulfiller -> placer ++: FHIR search / read
@@ -37,5 +39,7 @@ end
 
 fulfiller -> placer ++: PUT Coordination Task\n(Task.status = completed)
 placer --> fulfiller --: 200 OK\nTask
+placer -> fulfiller ++: POST notification Bundle\n(Task changed; Fulfiller ignores its own write)
+fulfiller --> placer --: 200 OK
 
 @enduml
