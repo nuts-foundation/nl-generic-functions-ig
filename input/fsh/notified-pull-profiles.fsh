@@ -47,6 +47,7 @@ carries the BSN once the Fulfiller may know it (per Fulfiller, per phase, as the
 * for.identifier 0..1
 * for.identifier.system = "http://fhir.nl/fhir/NamingSystem/bsn"
 * for.identifier.value 1..1
+* obeys nl-cow-bsn-before-in-progress
 * requester 1..1
 * owner 1..1
 * restriction.period 0..1
@@ -91,3 +92,9 @@ Description: "Business-status codes used by this profile that the COW business-s
 * ^caseSensitive = true
 * ^content = #complete
 * #selected "Selected" "Among several candidate Fulfillers offered the same order, this Task's owner was selected by the Placer."
+
+
+Invariant:   nl-cow-bsn-before-in-progress
+Description: "From in-progress on, the Coordination Task carries the patient's BSN in Task.for.identifier."
+Severity:    #error
+Expression:  "status in ('in-progress' | 'completed' | 'failed') implies for.identifier.value.exists()"

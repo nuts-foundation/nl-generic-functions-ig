@@ -43,12 +43,12 @@ The diagram shows the happy path of one order. The Placer creates a Request and 
 
 {% include clinical-workflow-overview.svg %}
 
-Example payloads below correspond to the step numbers in the diagram. The same flow drives both use cases; only the Request content and the referenced PlanDefinition differ.
+Example payloads below correspond to the step numbers in the diagram. The same flow drives both use cases; only the Request content and the dataset differ.
 
 | Step | Resource                                         | Referral (single candidate)                                                                                                                    | Transfer of care (multiple candidates)                                                                                                                                                                    |
 |------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 2    | Request + Coordination Task(s)                   | [np-referral-servicerequest](ServiceRequest-np-referral-servicerequest.html), [np-referral-coordination-task](Task-np-referral-coordination-task.html) | [np-eov-servicerequest](ServiceRequest-np-eov-servicerequest.html), [np-eov-coordination-task-a](Task-np-eov-coordination-task-a.html) + [np-eov-coordination-task-b](Task-np-eov-coordination-task-b.html) |
-| 11   | Dataset queries, derived from PlanDefinition     | [np-bgz-plandefinition](PlanDefinition-np-bgz-plandefinition.html) (BgZ dataset)                                                               | [np-eov-plandefinition](PlanDefinition-np-eov-plandefinition.html) (eOverdracht dataset)                                                                                                                   |
+| 11   | Dataset query list, shown here as a PlanDefinition (one way to publish it) | [np-bgz-plandefinition](PlanDefinition-np-bgz-plandefinition.html) (BgZ dataset)                                                               | [np-eov-plandefinition](PlanDefinition-np-eov-plandefinition.html) (eOverdracht dataset)                                                                                                                   |
 {:.grid .table-hover}
 
 The pattern has four layers, each specified separately below:
@@ -82,7 +82,7 @@ The notification carries **no FHIR queries, no dataset content, no workflow stat
 
 ### Coordination Task
 
-Profile: [NlCowCoordinationTask](StructureDefinition-nl-cow-coordination-task.html), derived from COW's [Coordination Task](https://build.fhir.org/ig/HL7/fhir-cow-ig/StructureDefinition-coordination-task.html) profile (1.0.0-ballot). The rows below are what COW requires plus what this profile adds or narrows.
+Profile: [NlCowCoordinationTask](StructureDefinition-nl-cow-coordination-task.html), derived from COW's [Coordination Task](https://build.fhir.org/ig/HL7/fhir-cow-ig/StructureDefinition-coordination-task.html) profile (1.0.0-ballot). The table below summarises the main rules; [Appendix A](#appendix-a-element-rules) lists every rule, so that a technical agreement can adopt them without referencing the FHIR profiles.
 
 The Coordination Task is hosted at the Placer and is the single point of truth for the lifecycle of one order. The profile constrains at minimum:
 
@@ -121,7 +121,7 @@ Adopting this profile costs an existing TA NP v1.0.1 or eOverdracht implementati
 
 #### State machine
 
-The profile allows the full FHIR [Task state machine](https://hl7.org/fhir/R4/task.html#statemachine), as COW does. The diagram shows the transitions this profile gives a meaning. `received` is optional: the Fulfiller acknowledges the order before deciding, which TA NP v1.0.1 and COW's state overview both use. Other FHIR states (`draft`, `ready`, `on-hold`, `entered-in-error`) are allowed but carry no workflow meaning here.
+The profile allows the full FHIR [Task state machine](https://hl7.org/fhir/R4/task.html#statemachine), as COW does. The diagram shows the transitions this profile gives a meaning. `received` is optional: the Fulfiller acknowledges the order before deciding, which TA NP v1.0.1 and COW's state overview both use. The shortcut from `requested` straight to `in-progress` is only available when the BSN is already on the Task (see [Patient identification](#patient-identification)); otherwise the Fulfiller goes through `accepted` and waits for the Placer's update. Other FHIR states (`draft`, `ready`, `on-hold`, `entered-in-error`) are allowed but carry no workflow meaning here.
 
 {% include clinical-workflow-task-lifecycle.svg %}
 
@@ -166,7 +166,7 @@ Once the Fulfiller has read the Coordination Task, it performs the FHIR queries 
 - `supplemental-resource`: a reference to a specific resource instance the Placer has identified, e.g. the trigger Observation behind a referral (TA NP's `read-available-resource`);
 - `supplemental-query`: an ad-hoc FHIR query that extends the dataset for this order only, e.g. `valueString = "Observation?category=laboratory&date=ge2026-01-01"` (TA NP's `query-available-resources`).
 
-Both are placed on the Task and not on the Request for two reasons. The Subscription is on Task, so adding an input is a Task update and notifies the Fulfiller; a change to the Request notifies nobody. And each candidate Fulfiller has its own Task, so the Placer can attach different resources per candidate while the Request stays shared. COW's guidance would put "why the order was authorized" on `Request.supportingInfo` and only "how to fulfil" on `Task.input`; this profile deviates for those two reasons. This is also where eOverdracht keeps everything.
+Both are placed on the Task and not on the Request for two reasons. The Subscription is on Task, so adding an input is a Task update and notifies the Fulfiller; a change to the Request notifies nobody. And each candidate Fulfiller has its own Task, so the Placer can attach different resources per candidate while the Request stays shared. COW also allows `Request.supportingInfo` for additional information. For the reasons above, and to keep the options limited, this profile does not use that field. This is also where eOverdracht keeps everything.
 
 **The Task is the only resource a Fulfiller has to watch.** The Placer signals every change the Fulfiller must act on by updating the Coordination Task: a new input, a changed order. Adding data to the workflow is a workflow change; changing data that was already added is not. A Fulfiller that wants to follow changes inside an attached resource or inside the Request subscribes to that resource itself, with a receiver-initiated Subscription (see [Subscription Topics Exploration](subscription-topics-exploration.html)). This is the working-group decision of May 2026. To see what an update added, the Fulfiller compares `Task.input` with its cached copy; Task history is not required.
 
@@ -193,7 +193,6 @@ The table lists every element a Placer or Fulfiller could use to add information
 | `Task.description`, `Task.note`         | Per Task                 | Either    | Allowed        | Free text for humans.                                                                                 |
 | `Task.reasonCode`, `.reasonReference`   | Per Task                 | Placer    | Not used       | The reason belongs to the order, so it is on the Request.                                             |
 | `notification-event.focus`              | Per Task                 | Placer    | Used           | The Task reference; the only content of an `id-only` notification.                                    |
-| `notification-authorization-hint`       | Per Task                 | Placer    | Not used       | The basis is recorded at the Placer, see [Authorization basis](#authorization-basis); the extension is an open question. |
 | `notification-event.additional-context` | Per Task                 | Placer    | Not used       | The notification carries the Task reference and nothing else; everything per order is on the Task.   |
 {:.grid .table-hover}
 
@@ -224,8 +223,8 @@ A candidate Fulfiller decides on an offer without the patient's BSN. It needs th
 This profile keeps the patient on the Coordination Task and lets the Placer decide, per Fulfiller and per phase, whether the BSN is on it:
 
 1. `Task.for` SHALL reference the `Patient` resource at the Placer. The Placer's access record decides whether a Fulfiller may read it.
-2. `Task.for.identifier` (system `http://fhir.nl/fhir/NamingSystem/bsn`) is optional. The Placer SHALL populate it when the Fulfiller may know the patient's BSN, and SHALL NOT before. The use case's information standard defines when that is: at creation for a Fulfiller with an existing treatment relationship, after selection in a solicitation.
-3. Adding the BSN later is a Task update and notifies the Fulfiller, like any other addition to the workflow.
+2. `Task.for.identifier` (system `http://fhir.nl/fhir/NamingSystem/bsn`) is populated by the Placer at the latest when it selects the Fulfiller: `businessStatus = selected` in a solicitation, otherwise on `accepted`. The Placer MAY populate it earlier where the use case allows it, for example for a Fulfiller with an existing treatment relationship. A Task SHALL NOT be set to `in-progress` without it (invariant `nl-cow-bsn-before-in-progress` on the profile).
+3. Adding the BSN later is a Task update and notifies the Fulfiller, like any other addition to the workflow. The Fulfiller waits for that update before it moves the Task to `in-progress`.
 4. `Request.subject` SHALL reference the Patient without an identifier. The Request is shared by all candidates and outlives the selection, so it carries no BSN.
 5. The BSN is not carried in the notification or in the access-control layer (TA NP's OAuth `patient` claim).
 
@@ -239,7 +238,7 @@ The Placer decides this basis when it creates the order and records it locally: 
 
 Nothing about the basis travels in the notification. This follows TTA Notifications v0.6, which verifies authorization at the Placer before activation, before each send and at the pull, and carries nothing else in an `id-only` notification.
 
-TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the notification Task, which the Fulfiller played back on token requests. The Backport IG's CI build (1.2.0-ballot, unpublished) has a trial extension, [`notification-authorization-hint`](https://build.fhir.org/ig/HL7/fhir-subscription-backport-ig/StructureDefinition-notification-authorization-hint.html), that could carry such a token on `notification-event`. It would matter where the authorization server is not the Placer's own. Whether the harmonized TA needs it is an open question; see [Open questions](#open-questions).
+TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the notification Task, which the Fulfiller played back on token requests. The Backport IG's CI build (1.2.0-ballot, unpublished) has a trial extension, [`notification-authorization-hint`](https://build.fhir.org/ig/HL7/fhir-subscription-backport-ig/StructureDefinition-notification-authorization-hint.html), that could carry such a token on `notification-event`. It is not in this profile; see [Open questions](#open-questions).
 
 ### Mapping: Twiin TA NP v1.0.1 to this profile
 
@@ -251,7 +250,7 @@ TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the no
 | Task.status = `received`                          | `received`, optional                                            |
 | Workflow Task                                     | Coordination Task (same role, COW-profiled)                     |
 | Task.input:authorization-base                     | Basis recorded at the Placer, see [Authorization basis](#authorization-basis) |
-| Task.input:query-available-resources              | `Task.input` supplemental-query (per order); the canonical dataset via a PlanDefinition on the Request |
+| Task.input:query-available-resources              | `Task.input` supplemental-query (per order); the canonical dataset from the dataset specification named by `Request.code` |
 | Task.input:read-available-resource                | `Task.input` supplemental-resource                              |
 | Task.input:get-workflow-task                      | Obsolete; the Coordination Task is always referenced            |
 | Task.for.identifier (BSN) or OAuth patient claim  | `Task.for.identifier`, populated once the Fulfiller may know the BSN; no OAuth claim |
@@ -265,7 +264,7 @@ TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the no
 |---------------------------------------------------|-----------------------------------------------------------------|
 | Empty POST to Task endpoint                       | Notification referencing a Coordination Task, see [Notification](notification.html) |
 | Task (STU3, Nictiz eOverdracht profile)           | Coordination Task + Request (COW-profiled, R4)                  |
-| Task.input:nursingHandoff (document reference)    | The dataset via Request.code and a PlanDefinition; the handoff document itself as `Task.input` supplemental-resource |
+| Task.input:nursingHandoff (document reference)    | The dataset from the specification named by `Request.code`; the handoff document itself as `Task.input` supplemental-resource |
 | One Task per candidate receiver                   | One Coordination Task per candidate, correlated on `Task.focus` |
 | BSN kept off the Task                             | `Task.for` references the Patient; `Task.for.identifier` absent until selection |
 | Task.status transitions gate access               | Coordination Task status transitions + access record at the Placer |
@@ -274,7 +273,45 @@ TA NP v1.0.1 carried the basis as an opaque `authorization-base` token in the no
 
 ### Open questions
 
-1. **Query list location.** The canonical query list is on the Request via a PlanDefinition, per-order additions are on `Task.input`. Open is whether TA NP wants the canonical list on the Task as well. To be decided by the working group.
+1. **Query list location.** The canonical query list comes from the dataset specification named by `Request.code` (a PlanDefinition is one way to publish it); per-order additions are on `Task.input`. Open is whether TA NP wants the canonical list on the Task as well, and how the information standard publishes it. To be decided by the working group.
 1. **SubscriptionTopic ownership.** Whether NL topics are published per dataset or per use case, and under which canonical base URL.
-1. **Authorization basis on the wire.** Whether the harmonized TA carries a basis to the Fulfiller (the `notification-authorization-hint` extension) in addition to the basis recorded at the Placer. TA Notifications v0.6 has no equivalent for TA NP's `authorization-base`; the working group's fit-gap analysis (August 2026) names the extension as a candidate.
+1. **Authorization basis on the wire.** Not in this profile. TA NP v1.0.1 carried an opaque `authorization-base` in the notification Task; TA Notifications v0.6 carries nothing. The Backport IG's unpublished `notification-authorization-hint` extension could carry a token if a use case needs one, for example where the authorization server is not the Placer's own. It is added only if a working-group member brings such a use case.
 1. **Patient identification / BSN placement.** This draft places the BSN on `Coordination Task.for.identifier`, populated per Fulfiller and per phase (see [Patient identification](#patient-identification)). Alternatives are carrying it via the access-control layer (the OAuth `patient` claim, as in TA NP v1.0.1), via a Patient resource reference only, or inside the notification itself. Needs working-group decision.
+
+### Appendix A: element rules
+
+The rules of the two profiles, one row per element. The FHIR profiles ([NlCowCoordinationTask](StructureDefinition-nl-cow-coordination-task.html), [NlCowCancellationRequestTask](StructureDefinition-nl-cow-cancellationrequest-task.html)) are these tables in validatable form; the tables are leading. Rows marked COW are inherited from the COW profiles and can be adopted by citing COW; rows marked NL are this profile's additions and narrowings.
+
+#### Coordination Task
+
+| Element                          | Card. | Rule                                                                                                     | Source |
+|----------------------------------|-------|----------------------------------------------------------------------------------------------------------|--------|
+| `Task.identifier`                | 1..*  | Business identifier of the order. The Placer SHALL populate it; the Fulfiller SHALL handle it.           | COW    |
+| `Task.status`                    | 1..1  | Full FHIR Task state machine; transitions with workflow meaning per [State machine](#state-machine).     | NL     |
+| `Task.businessStatus`            | 0..1  | Example binding to COW's business-status value set; both parties SHALL populate it if known and handle it. This profile defines `selected` (`http://fhir.nl/CodeSystem/nl-cow-business-status`). | COW, NL |
+| `Task.intent`                    | 1..1  | Fixed `order`.                                                                                           | NL     |
+| `Task.code`                      | 1..1  | Two codings: `http://hl7.org/fhir/CodeSystem/task-code#fulfill` and the use-case code the SubscriptionTopic narrows on. | COW (1..1), NL (codings) |
+| `Task.focus`                     | 1..1  | Reference to the Request: ServiceRequest, DeviceRequest, MedicationRequest, NutritionOrder, SupplyRequest or VisionPrescription. | COW    |
+| `Task.for`                       | 1..1  | Reference to the Patient at the Placer (`reference` 1..1).                                               | NL     |
+| `Task.for.identifier`            | 0..1  | BSN (`system` = `http://fhir.nl/fhir/NamingSystem/bsn`, `value` 1..1). Populated by the Placer at the latest on selection of the Fulfiller; required from `in-progress` on (invariant). See [Patient identification](#patient-identification). | NL     |
+| `Task.requester`                 | 1..1  | The Placer (organization, and acting practitioner where known).                                          | NL     |
+| `Task.owner`                     | 1..1  | The Fulfiller.                                                                                           | NL     |
+| `Task.restriction.period`        | 0..1  | Window during which the data remains available for pull.                                                 | NL     |
+| `Task.input` (slice supplemental-resource) | 0..* | `type` = `http://fhir.nl/fhir/NamingSystem/TaskParameter#supplemental-resource`; `valueReference` to a resource at the Placer. | NL |
+| `Task.input` (slice supplemental-query)    | 0..* | `type` = `http://fhir.nl/fhir/NamingSystem/TaskParameter#supplemental-query`; `valueString` holding a FHIR search. | NL |
+| `Task.input` (other)             | 0..*  | Open slicing; use cases MAY define further inputs.                                                       | NL     |
+| `Task.output`                    | 0..*  | References to outcomes hosted at the Fulfiller; see [Outputs and completion](#outputs-and-completion).   | COW    |
+{:.grid .table-hover}
+
+#### CancellationRequest Task
+
+| Element                          | Card. | Rule                                                                                                     | Source |
+|----------------------------------|-------|----------------------------------------------------------------------------------------------------------|--------|
+| `Task.code`                      | 1..1  | `http://hl7.org/fhir/CodeSystem/task-code#abort`.                                                        | COW    |
+| `Task.status`                    | 1..1  | `requested` when created by the Placer; `accepted` or `rejected` set by the Fulfiller.                   | NL     |
+| `Task.intent`                    | 1..1  | Fixed `order`.                                                                                           | NL     |
+| `Task.focus`                     | 1..1  | Reference to the Coordination Task being cancelled. COW also allows a Request as focus; this profile does not, see [Cancellation](#cancellation). | COW (1..1), NL (narrowing) |
+| `Task.for`                       | 1..1  | Same patient reference as the Coordination Task.                                                         | NL     |
+| `Task.requester`                 | 1..1  | The Placer.                                                                                              | NL     |
+| `Task.owner`                     | 1..1  | The Fulfiller.                                                                                           | NL     |
+{:.grid .table-hover}

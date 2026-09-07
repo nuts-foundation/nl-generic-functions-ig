@@ -32,7 +32,7 @@ placer --> fulfiller --: 200 OK\nTask
 placer -> fulfiller ++: POST notification Bundle\n(Task changed; Fulfiller ignores its own write)
 fulfiller --> placer --: 200 OK
 
-loop FHIR queries derived from Request (optional PlanDefinition)
+loop FHIR queries for the dataset (Request.code) and Task.input additions
   fulfiller -> placer ++: FHIR search / read
   placer --> fulfiller --: 200 OK\nBundle / resource
 end
