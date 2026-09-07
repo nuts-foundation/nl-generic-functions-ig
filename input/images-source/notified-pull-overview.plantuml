@@ -5,37 +5,37 @@
 @startuml notified-pull-overview
 autonumber
 
-title "Notified Pull — happy path"
+title "Notified Pull, data availability (fire-and-forget)"
 skinparam roundCorner 7
 skinparam sequenceGroupBorderThickness .5
 
-participant "Placer" as placer order 10
-participant "Fulfiller" as fulfiller order 20
+participant "Sender" as sender order 10
+participant "Receiver" as receiver order 20
 
 == Pre-coordination (once per partner) ==
 
-placer -> placer : Register Subscription for Fulfiller\n(broad, long-lived)
+sender -> sender : Register Subscription for Receiver
 
-== Notification ==
+== Data made available + notification ==
 
-placer -> placer : Create Request + Coordination Task\n(Task.status = requested)
-placer -> fulfiller ++: POST notification Bundle
-fulfiller --> placer --: 200 OK
+sender -> sender : Create or update clinical resource\nor container (List / Composition / DocumentReference)
+sender -> receiver ++: POST notification Bundle\n(focus references the resource or container,\noptional notification-authorization-hint)
+receiver --> sender --: 200 OK
 
-== Pull ==
+== Pull (whenever the Receiver decides) ==
 
-fulfiller -> placer ++: GET Coordination Task\n(_include Task.focus, Task.for)
-placer --> fulfiller --: 200 OK\nTask + Request + Patient
+note over receiver: time later, immediately,\nor never: the Sender does not require it
 
-fulfiller -> placer ++: PUT Coordination Task\n(Task.status = in-progress)
-placer --> fulfiller --: 200 OK\nTask
+receiver -> sender ++: GET focus resource\n(presents notification-authorization-hint if provided)
+sender --> receiver --: 200 OK + resource
 
-loop FHIR queries derived from Request (optional PlanDefinition)
-  fulfiller -> placer ++: FHIR search / read
-  placer --> fulfiller --: 200 OK\nBundle / resource
+opt If focus is a container, pull referenced entries
+  loop entries
+    receiver -> sender ++: GET entry
+    sender --> receiver --: 200 OK + resource
+  end
 end
 
-fulfiller -> placer ++: PUT Coordination Task\n(Task.status = completed)
-placer --> fulfiller --: 200 OK\nTask
+note over sender, receiver: Withdrawal is not announced separately.\nA later pull simply returns 410, 404, or 403.
 
 @enduml

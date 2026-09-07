@@ -1,0 +1,185 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml building-blocks
+title "Exchange building blocks: artifacts and composition"
+
+top to bottom direction
+skinparam roundCorner 7
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam nodesep 10
+skinparam ranksep 30
+hide circle
+hide empty members
+
+skinparam class {
+  BackgroundColor white
+  BorderColor #4a6c95
+  AttributeFontSize 11
+  StereotypeFontSize 10
+}
+skinparam note {
+  BackgroundColor #fafafa
+  BorderColor #999
+  FontSize 10
+}
+
+package "Transport (Notification)" #FFF2CC {
+
+  class Subscription {
+    status
+    criteria : SubscriptionTopic canonical
+    channel.type = rest-hook
+    channel.endpoint : url
+    channel.payload = id-only
+    channel.heartbeat-period
+  }
+  note right of Subscription
+    Creation mode (not a subtype):
+    - in-band: Client POSTs to Sender
+    - out-of-band: Sender creates;
+      channel.endpoint URL resolved
+      out-of-band from the addressing
+      function (Care Services Directory)
+  end note
+
+  class SubscriptionTopic {
+    url : canonical
+    resourceTrigger
+    canFilterBy
+  }
+  note right of SubscriptionTopic
+    Published per use case
+    (CW workflow channel,
+    NP data-availability channel, ...)
+  end note
+
+  class "Notification Bundle" as NBundle {
+    type = history
+  }
+  note right of NBundle
+    Variants (by SubscriptionStatus.type):
+    - event-notification
+    - handshake-notification
+    - heartbeat-notification
+  end note
+
+  class SubscriptionStatus {
+    subscription : Reference
+    status
+    type
+  }
+
+  class "notification-event" as NEvent {
+    event-number
+    timestamp
+    focus : Reference(Any)
+    additional-context : Reference[]
+  }
+
+  class "notification-\nauthorization-hint" as Hint <<extension>> {
+    opaque token from Sender
+  }
+
+  Subscription "1" ..> "1" SubscriptionTopic : criteria
+  NBundle "1" *-- "1" SubscriptionStatus : entry[0]
+  SubscriptionStatus "1" *-- "1..*" NEvent
+  NEvent "1" *-- "0..1" Hint : extension
+}
+
+package "Notified Pull (NP): focus targets" as NP #D5E8D4 {
+  class "single clinical\nresource" as ClinRes <<focus target>>
+  class List <<focus target / container>>
+  class Composition <<focus target / container>>
+  class DocumentReference <<focus target / container>>
+
+  note right of List
+    Flat list of concrete resource
+    references. The Sender resolves
+    all dataset queries (canonical
+    + per-case) into entries before
+    notifying.
+
+    Receiver behaviour:
+    - read focus, follow .entry / .section / .content
+    - Patient + BSN on .subject.identifier
+    - diff via _lastUpdated and _history
+    - withdrawal via HTTP 410 / 404 / 403
+  end note
+}
+
+package "Clinical Workflow (CW)" as CW #DAE8FC {
+
+  class "Coordination Task" as CTask <<focus target>> {
+    status (FHIR R4 normative)
+    businessStatus (COW phase)
+    intent = order
+    code (use case)
+    for.identifier (BSN)
+    requester (Placer)
+    owner (Fulfiller)
+    restriction.period
+    output (outcome document)
+  }
+  note right of CTask
+    Fulfiller PUTs status /
+    businessStatus back at the
+    Placer's FHIR endpoint
+    (CW write-back, not NP).
+  end note
+
+  class "CancellationRequest\nTask" as CRTask <<focus target>> {
+    status
+    code = abort
+  }
+  note right of CRTask
+    Created by Placer after the
+    Coordination Task reaches
+    in-progress.
+  end note
+
+  class "Request" as Req {
+    code
+    subject (Patient + BSN)
+    supportingInfo
+  }
+  note right of Req
+    ServiceRequest, MedicationRequest,
+    DeviceRequest, ... = the Order.
+  end note
+
+  class PlanDefinition <<at Nictiz>> {
+    url : canonical
+    action[].input
+  }
+  note right of PlanDefinition
+    Canonical definition of what
+    a BgZ / eOverdracht / ...
+    realization contains.
+    Used by the Placer to evaluate
+    its own data and assemble the
+    List. Informative for the
+    Receiver; the Receiver does
+    NOT execute these queries.
+  end note
+
+  CTask "1" --> "1" Req : focus
+  CRTask "1" --> "1" CTask : focus
+  Req "1" ..> "0..1" PlanDefinition : instantiatesCanonical\n(informative)
+}
+
+' Cross-layer: notification-event.focus targets sit in NP or CW
+NEvent ..> ClinRes : focus
+NEvent ..> List : focus
+NEvent ..> Composition : focus
+NEvent ..> DocumentReference : focus
+NEvent ..> CTask : focus (CW workflow channel)
+NEvent ..> CRTask : focus (CW cancellation)
+
+' Force the three building-block packages to stack vertically
+Hint -[hidden]down- List
+List -[hidden]down- CTask
+
+@enduml

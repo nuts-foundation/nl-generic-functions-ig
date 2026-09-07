@@ -36,6 +36,8 @@ publisher:
 dependencies:
   nictiz.fhir.nl.r4.nl-core: 0.12.0-beta.4
   nictiz.fhir.nl.r4.zib2020: 0.12.0-beta.4
+  # Clinical Order Workflows; parent of the Clinical Workflow profiles
+  hl7.fhir.uv.cow: 1.0.0-ballot
   # hl7.fhir.eu.base: 0.1.0-ballot # Depending on discussion with Nictiz if we want to base our profiles on this or not
 #
 #
@@ -124,8 +126,29 @@ pages:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
 
+  building-blocks.md:
+    title: Building blocks
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
+  notification.md:
+    title: Notification
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+
   notified-pull.md:
     title: Notified Pull
+    extension:
+        - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+          valueCode: draft
+    subscription-topics-exploration.md:
+      title: Subscription Topics Exploration
+      generation: markdown
+
+  clinical-workflow.md:
+    title: Clinical Workflow
     extension:
         - url: http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
           valueCode: draft
@@ -191,7 +214,12 @@ menu:
   Identification: identification.html
   Authentication: authentication.html
   Authorization: authorization.html
-  Notified Pull: notified-pull.html
+  Building blocks: building-blocks.html
+  Notification: notification.html
+  Notified Pull:
+    Notified Pull: notified-pull.html
+    Subscription Topics Exploration: subscription-topics-exploration.html
+  Clinical Workflow: clinical-workflow.html
   Credential Catalog: credential-catalog.html
   Artifacts: artifacts.html
   History: history.html

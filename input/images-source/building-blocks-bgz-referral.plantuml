@@ -1,0 +1,88 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: EUPL-1.2
+
+@startuml building-blocks-bgz-referral
+title "BGZ referral: building blocks stacked in a concrete exchange"
+autonumber
+skinparam roundCorner 7
+skinparam sequenceGroupBorderThickness .5
+
+participant "Placer\n(URA 11111111)" as P order 10
+participant "Fulfiller\n(URA 22222222)" as F order 20
+
+== Pre-coordination: two long-lived Subscriptions per partner pair ==
+note over P, F #FFF2CC
+  Workflow channel (Notification + NP):
+  Topic: Coordination Task changes.
+  Filter: Task?owner.identifier=URA|22222222.
+
+  Data channel (Notification + NP):
+  Topic: data offer changes.
+  Filter: List?intended-recipient.identifier=URA|22222222.
+
+  Both Subscriptions are hosted at the Placer and long-lived
+  with the partnership.
+end note
+
+== CW: Order placed at Placer ==
+P -> P : Create ServiceRequest (the Order, BgZ dataset)\n+ Coordination Task\n(Task.status = requested,\nTask.businessStatus = requested,\nTask.for.identifier = BSN 999911120)
+
+== Notification + NP on the Coordination Task ==
+P -> F ++: POST notification Bundle\nfocus = Coordination Task\nadditional-context = ServiceRequest (optional)
+F --> P --: 200 OK
+F -> P ++: GET Coordination Task\n(_include Task.focus = ServiceRequest)
+P --> F --: 200 OK\nTask + ServiceRequest
+note right of F #D5E8D4
+  NP pull on the workflow anchor.
+  BSN read from Task.for.identifier.
+  PlanDefinition canonical from
+  ServiceRequest.instantiatesCanonical
+  is informative only: it declares
+  which dataset to expect.
+  The Receiver does not run its queries.
+end note
+
+== CW: Fulfiller accepts (write-back to Placer) ==
+F -> P ++: PUT Coordination Task\n(Task.status = accepted,\nTask.businessStatus = accepted)
+P --> F --: 200 OK
+
+== Placer pre-resolves the dataset ==
+P -> P : Evaluate the BgZ PlanDefinition\n(and any per-case additions)\nagainst local data.\nAssemble a flat List of concrete references\n(Patient, Conditions, MedicationStatements,\nObservations, ...).\nSet List.intended-recipient = Fulfiller URA\nso the existing data Subscription matches.
+
+== Notification + NP on the dataset ==
+P -> F ++: POST notification Bundle\nfocus = List (BgZ snapshot)
+F --> P --: 200 OK
+F -> P ++: GET List with _include entries
+P --> F --: 200 OK\nList + BgZ resources
+note right of F #D5E8D4
+  NP pull on the data anchor.
+  The Receiver follows List.entry refs;
+  no query execution at the Receiver.
+  The Receiver dispatches the notification
+  to the right local Coordination Task
+  (one extra lookup under the broad
+  Subscription strategy).
+  notification-authorization-hint scopes
+  the pull to this patient + dataset.
+end note
+
+== CW: Fulfiller starts work (write-back) ==
+F -> P ++: PUT Coordination Task\n(Task.businessStatus = in-progress)
+P --> F --: 200 OK
+
+== Loop: BgZ updates during the workflow ==
+loop While the Coordination Task is in-progress
+  P -> P : BgZ data at the Placer changes;\nPlacer updates the List\n(entry added / removed / version bumped)
+  P -> F ++: POST notification Bundle\nfocus = List (event-number incremented)\nadditional-context = changed entries (optional)
+  F --> P --: 200 OK
+  F -> P ++: GET refreshed entries\n(or _lastUpdated-filtered against the List)
+  P --> F --: 200 OK
+end
+
+== CW: Fulfiller completes (write-back) ==
+F -> P ++: PUT Coordination Task\n(Task.status = completed,\nTask.businessStatus = completed,\nTask.output = outcome document)
+P --> F --: 200 OK
+note over P #FFF2CC: List for this offer may be retained for audit (later pulls return 410 when actually withdrawn)\nor deleted. Both Subscriptions remain active for the partnership.
+
+@enduml
