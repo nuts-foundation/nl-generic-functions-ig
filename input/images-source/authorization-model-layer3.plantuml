@@ -1,0 +1,83 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-layer3
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classFontStyle bold
+skinparam classBackgroundColor #E8F5E9
+skinparam classBorderColor #2E7D32
+skinparam nodesep 24
+skinparam ranksep 50
+hide circle
+
+' Layer 1 (Nictiz) entities referenced from this diagram (yellow)
+class Transaction <<information layer>> #FFF2CC ##D6B000 {
+  name
+}
+
+' Realisation-layer entities (green, like the OAuth artefacts):
+' the Operation is the AORTA interactietabel interactionId, not an
+' information-layer concept; FHIRResource is its FHIR realisation target.
+class Operation <<interactietabel>> {
+  verb
+  artifact
+  version
+}
+class FHIRResource <<FHIR>> {
+  resourceType
+}
+
+' Layer 2 entities referenced from this diagram (blue)
+abstract class IdentityClaim <<trust layer>> #E1F5FE ##0277BD {
+  type
+  value
+}
+class ServiceProvider <<trust layer>> #E1F5FE ##0277BD {
+  client_id
+}
+
+' Layer 3: OAuth wire artefacts
+class AccessTokenRequest {
+  tx
+  asserted_claims[]
+  patient
+}
+
+class AccessToken {
+  scope[]  [incl. tx identifier]
+  patient
+  claims[]
+}
+
+class SoFScope {
+  context
+  resource
+  crud
+}
+
+' === Wire-artefact row relations (horizontal, top row) ===
+ServiceProvider "1" -right-> "*" AccessTokenRequest : sends
+AccessTokenRequest "1" .right.> "1" AccessToken : results in (if approved)
+AccessToken "1" -right-> "*" SoFScope : carries
+
+' === Wire artefact -> referenced entity (down) ===
+AccessTokenRequest "*" -down-> "*" IdentityClaim : asserts
+AccessTokenRequest "*" -down-> "1" Transaction : names
+AccessToken "1" -down-> "*" IdentityClaim : carries
+AccessToken "1" -down-> "1" Transaction : authorizes
+SoFScope "*" -down-> "1" Operation : derived from
+SoFScope "*" -down-> "1" FHIRResource : resource references
+
+' === Catalogue row relations (horizontal, bottom row) ===
+' Realisation: operations are reusable realisation building blocks
+Operation "*" -left-> "*" Transaction : realises
+Operation "*" -right-> "1" FHIRResource : targets (fhir.resourceType)
+
+' === Layout rows (hidden, no semantics) ===
+IdentityClaim -[hidden]right- Transaction
+
+@enduml

@@ -1,0 +1,69 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-nictiz
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classBackgroundColor #FFF2CC
+skinparam classBorderColor #D6B000
+skinparam classFontStyle bold
+hide circle
+
+title Information layer (L1): the Nictiz information-standard model (functional core)
+
+class InformationStandard {
+  name
+  version
+}
+class Dataset {
+  name
+  version
+}
+class DatasetConcept {
+  name
+  type : group | item
+  valueDomain  [item only]
+  conformance  [baseline]
+  cardinality  [baseline]
+}
+class UseCase {
+  name
+  version
+}
+class TransactionGroup {
+  name
+}
+class Transaction {
+  name
+  version
+  type : initial | back | stationary
+}
+class BusinessRole {
+  name
+}
+class SystemRole {
+  name
+  kind
+}
+
+InformationStandard "1" -down-> "*" Dataset : defines (primary)
+InformationStandard "1" -down-> "*" UseCase : contains
+DatasetConcept "*" -up-> "1" Dataset : member of
+UseCase "1" -down-> "*" TransactionGroup : groups
+TransactionGroup "1" -down-> "*" Transaction : composed of
+Transaction "*" -up-> "*" DatasetConcept : selects + profiles
+DatasetConcept "group 1" o-- "*" DatasetConcept : contains (concept tree)
+Transaction "*" -down-> "*" BusinessRole : performed by
+Transaction "*" -down-> "0..*" SystemRole : involves (sender / receiver)
+
+note bottom of DatasetConcept
+  "selects + profiles" the transaction dataset:
+  the transaction picks a subset and restricts each
+  concept's baseline conformance / cardinality.
+  Dataset details are omitted here for brevity.
+end note
+
+@enduml

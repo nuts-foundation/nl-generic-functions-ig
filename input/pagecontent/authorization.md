@@ -17,6 +17,9 @@ This guide outlines the data requirements and principles underlying the GF Autho
 
 By adhering to these principles, this Implementation Guide supports consistent and secure authorization, fostering improved interoperability within the healthcare ecosystem.
 
+See [Authorization Information Model](authorization-model.html) for the proposed shared authorization model across trust frameworks, including the transaction scope convention for OAuth 2.0 access tokens. That proposal moves the identity and permission checks to token issuance and partly reworks the model on this page: the policy evaluation defined below remains as a runtime enforcement point, to which a trust framework can assign context checks and state rules.
+<!--  for policy makers -->
+
 ### Solution overview
 
 On a high level, a data access/operation authorization starts with a request from the requesting party, for example: a practitioner requesting data. This request, along with information of the requesting party and e.g. patient consent records form the *input data* for the process. This input is *evaluated by a policy* by a responding party; this could be a data holder. The outcome is a *decision* (allow or deny). Basically: Input --> policy evaluation --> Output

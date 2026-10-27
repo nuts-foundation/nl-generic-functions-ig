@@ -1,0 +1,70 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-role-resolution
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classFontStyle bold
+skinparam classBackgroundColor #E1F5FE
+skinparam classBorderColor #0277BD
+skinparam nodesep 30
+skinparam ranksep 40
+hide circle
+
+title Role resolution and permission: two parallel pipelines
+
+' === Shared input: the presented claims (mid-blue) ===
+class IdentityClaim #64B5F6 ##0D47A1
+
+' === Business-role pipeline (left) ===
+class RolePrerequisite
+class AuthorizationRole {
+  name
+}
+class PermissionMatrix {
+  allowed_combinations[]
+}
+
+' === System-role pipeline (right) ===
+class SystemRolePrerequisite
+class QualifiedSystemRole {
+  name
+}
+
+' === Layer 1 (Nictiz catalogue) - yellow ===
+class Transaction <<information layer>> #FFF2CC ##D6B000 {
+  name
+}
+class BusinessRole <<information layer>> #FFF2CC ##D6B000 {
+  name
+}
+class SystemRole <<information layer>> #FFF2CC ##D6B000 {
+  name
+}
+
+' === Business-role side: claims -> RolePrerequisite (OR) -> AuthorizationRole -> matrix ===
+RolePrerequisite "*" -up-> "*" IdentityClaim : requires
+RolePrerequisite "*" --> "1" AuthorizationRole : resolves to
+AuthorizationRole "*" --> "1" BusinessRole : refines
+PermissionMatrix "1" -up-> "*" AuthorizationRole : permits
+PermissionMatrix "1" --> "*" Transaction : for
+
+' === System-role side: claims -> SystemRolePrerequisite (OR) -> QualifiedSystemRole (no matrix) ===
+SystemRolePrerequisite "*" -up-> "*" IdentityClaim : requires
+SystemRolePrerequisite "*" --> "1" QualifiedSystemRole : resolves to
+QualifiedSystemRole "*" --> "1" SystemRole : refines
+QualifiedSystemRole "*" --> "1..*" Transaction : permits
+
+' === Catalogue coupling at the bottom ===
+Transaction "*" -left-> "*" BusinessRole : performed by
+Transaction "*" -right-> "0..*" SystemRole : involves
+
+' === Layout: two columns meeting at Transaction (hidden, no semantics) ===
+RolePrerequisite -[hidden]right- SystemRolePrerequisite
+AuthorizationRole -[hidden]right- QualifiedSystemRole
+PermissionMatrix -[hidden]right- Transaction
+
+@enduml

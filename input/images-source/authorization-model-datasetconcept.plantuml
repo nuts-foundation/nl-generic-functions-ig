@@ -1,0 +1,74 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-datasetconcept
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 5
+skinparam classFontStyle bold
+hide circle
+
+title What a transaction carries: DatasetConcept, inheritance and per-transaction restriction
+
+class Transaction #FFF2CC {
+  name
+  version
+  type : initial | back | stationary
+}
+
+class TransactionConcept #EEEEEE {
+  conformance?  [restricts baseline]
+  cardinality?  [restricts baseline]
+  condition?
+}
+note bottom of TransactionConcept
+  One entry of the transaction dataset.
+  Optional restriction; blank = inherit
+  the concept's baseline. A transaction
+  may only narrow, never loosen.
+end note
+
+class DatasetConcept #FFF2CC {
+  id : OID
+  effectiveDate
+  type : group | item
+  name
+  valueDomain    [item only]
+  conformance    [baseline]
+  cardinality    [baseline]
+}
+
+class Dataset #FFF2CC {
+  name
+  version
+  role : primary | building-block (zib)
+}
+
+class ValueSet #DAE8FC {
+  name
+  version
+}
+
+Transaction "*" - "*" DatasetConcept
+(Transaction, DatasetConcept) .. TransactionConcept
+
+DatasetConcept "group 1" o-- "* children" DatasetConcept : contains (concept tree)
+DatasetConcept "* derived" ..> "0..1 source" DatasetConcept : inherits / specialises
+DatasetConcept "*" --> "1" Dataset : member of
+Dataset "*" --> "*" Dataset : imports as building blocks
+DatasetConcept "*" --> "0..1" ValueSet : terminology binding (coded items)
+
+legend left
+  Cardinality + conformance live at BOTH levels:
+  - DatasetConcept = baseline (the general definition, shown in the dataset view)
+  - TransactionConcept = optional per-transaction restriction (shown in the transaction view)
+  --
+  Inheritance crosses datasets: a concept in a primary dataset inherits from a
+  concept in a building-block dataset. A zib is published as a building-block
+  Dataset; the inherited source concept carries the NL-CM id and drives the
+  FHIR / CDA representation. Inheritance is optional (query parameters have none).
+endlegend
+
+@enduml

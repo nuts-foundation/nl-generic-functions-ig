@@ -1,0 +1,93 @@
+' SPDX-FileCopyrightText: 2026 Steven van der Vegt
+'
+' SPDX-License-Identifier: CC-BY-SA-4.0
+
+@startuml authorization-model-evaluation
+
+skinparam defaultFontName Arial
+skinparam backgroundColor white
+skinparam roundcorner 10
+skinparam activity {
+  BackgroundColor #FFF2CC
+  BorderColor #D6B000
+}
+skinparam noteBackgroundColor #F8F8F8
+skinparam noteBorderColor #999999
+
+' Happy path. Any check failure results in rejection (not shown).
+
+legend top right
+  Input categories on each step:
+    **R**  Request inputs
+    **L1** information layer (catalogue)
+    **L2** trust layer (registry)
+    **L3** realisation layer (interactietabel)
+endlegend
+
+start
+
+:Receive AT request;
+note right
+  **R**: transaction identifier (tx),
+  asserted identity claims,
+  context claims
+end note
+
+:Look up the Transaction by tx;
+note right
+  **L1**: Transaction catalogue
+  (derives its SystemRole and UseCase)
+end note
+
+:Resolve the AuthorizationRole:
+a RolePrerequisite resolves the
+asserted identity claims;
+note right
+  **L2**: RolePrerequisites
+  **R**: asserted rolcode;
+  HCP-to-HCO delegation
+  (under mandate only)
+end note
+
+:Resolve the QualifiedSystemRole:
+the SystemRolePrerequisite resolves
+the ServiceProvider's claims and checks
+that it covers the Transaction;
+note right
+  **L2**: SystemRolePrerequisite,
+  QualifiedSystemRole coverage
+  **R**: Qualification and
+  ServiceProvider delegation
+end note
+
+:Check the PermissionMatrix permits
+(AuthorizationRole, Transaction);
+note right
+  **L2**: PermissionMatrix
+  (always present, may be trivial;
+  absent entry = deny)
+end note
+
+:Evaluate the context checks
+declared for issuance;
+note right
+  **L2**: context checks; each check's
+  enforcement point is declared
+  per use case
+  **R**: asserted context claims
+  (enrollment, consent, purpose)
+end note
+
+:Issue AccessToken with the tx
+identifier, granted SoF scopes,
+carried claims, patient context;
+note right
+  **L3**: Operation -> FHIR profile ->
+  resourceType (derives SoF scopes)
+end note
+
+:Return AccessToken;
+
+stop
+
+@enduml
